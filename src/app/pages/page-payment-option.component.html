@@ -1,0 +1,177 @@
+<header class="cms-page">
+        <div class="header-wrap-search">
+            <div class="header-top">
+                <header-checkout></header-checkout>
+            </div>
+           
+        </div>
+ </header>
+ <main>
+        <div class="about-wrap">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-md-3">
+                        <div class="sidebar-wrap d-none d-md-block">
+                             <myaccount-menu></myaccount-menu>
+                            <!--<div class="sb-logout-wrap">
+                                <a href="#" class="btn-main btn-logout-sidebar">Log out</a>
+                            </div>-->
+                        </div>
+
+                        <div class="page-active d-block d-md-none">
+                            <div class="title"><span>PAYMENT OPTIONS</span></div>
+                        </div>
+                        <div class="sidebar-wrap sidebar-mobile">
+                            <ul class="sidebar-top">
+                                <li><a href="06_Account.html"><span>My Profile</span></a></li>
+                                <li><a href="06_Account_02_Address.html"><span>Delivery Addresses</span></a></li>
+                                <li><a href="06_Account_03_OrderHistory.html"><span>Order History</span></a></li>
+                                <li><a href="06_Account_04_ReferFriends.html"><span>Refer Friends</span></a></li>
+                                <li><a href="#"><span>Settings</span></a></li>
+                                <li><a href="06_Account_05_Help.html"><span>Help</span></a></li>
+                            </ul>
+                            <div class="sb-logout-wrap">
+                                <a href="#" class="btn-main btn-logout-sidebar">Log out</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        <div class="cms-content">
+                            <h2 class="page-title">Payemnt Options</h2>
+                            <div *ngIf="isHaveData" class="payment-otpion-wrap">
+                                <div class="title">CREDIT/DEBIT CARDS <a (click)="showAddNewCard()" class="right">ADD A NEW CARD</a></div>
+                                <div class="payment-item"*ngFor="let item of this.allPaymentOption.CardListInfo;let i = index">
+                                            <input type="radio" id="card-{{i}}" name="payment" (click)="selectCardPayment(item.MaskedCardNumber,item.CardToken,item.CardHolderName,item.CardTypeIdValue,item.CardTypeIdImg)">
+                                            <label for="card-{{i}}">
+                                                <span class="img"><img src="{{item.CardTypeIdImg}}" alt="" width="63" height="40"></span>
+                                                <span class="inf">
+                                                   {{item.MaskedCardNumber}}<br>{{item.ExpiryDate}}
+                                                </span>
+                                                <span class="pay-wrap"><a href="#" class="pay">Pay</a></span>
+                                            </label>
+                                        </div>
+                                <!--<div class="payment-item">
+                                    <input type="radio" id="card2" name="payment-card">
+                                    <label for="card2">
+                                        <span class="img"><img src="assets/images/payment-master.png" alt=""></span>
+                                        <span class="inf">
+                                           **** **** **** 6789<br>05/2018
+                                        </span>
+                                        <span class="pay-wrap"><a href="#" class="pay">Pay</a></span>
+                                    </label>
+                                </div>-->
+                                <!--<div class="payment-item">
+                                    <input type="radio" id="card3" name="payment-card">
+                                    <label for="card3">
+                                        <span class="img"><img src="assets/images/payment-maestro.png" alt=""></span>
+                                        <span class="inf">
+                                           **** **** **** 6789<br>05/2018
+                                        </span>
+                                        <span class="pay-wrap"><a href="#" class="pay">Pay</a></span>
+                                    </label>
+                                </div>
+                                <div class="payment-item">
+                                    <input type="radio" id="card4" name="payment-card">
+                                    <label for="card4">
+                                        <span class="img"><img src="assets/images/payment-jcb.png" alt=""></span>
+                                        <span class="inf">
+                                           **** **** **** 6789<br>05/2018
+                                        </span>
+                                        <span class="pay-wrap"><a href="#" class="pay">Pay</a></span>
+                                    </label>
+                                </div>-->
+                            </div>
+                            <div class="payment-otpion-wrap">
+                                <div class="title">Ezl e-wallet</div>
+                                <div class="payment-item">
+                                    <input type="radio" id="wallet1" name="e-wallet">
+                                    <label for="wallet1">
+                                        <span class="img"><img src="assets/images/payment-ezlink.png" alt=""></span>
+                                        <span class="inf">
+                                           ****912K<br>S$30
+                                        </span>
+                                        <span class="pay-wrap"><a href="#" class="pay">Top up</a></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div *ngIf="isHaveData" class="payment-otpion-wrap">
+                                <div class="title">MEMBERSHIP CARDS</div>
+                               <div class="payment-item" *ngFor="let item of this.allPaymentOption.PrepaidWalletListInfo">
+                                            <input type="radio"(click)="selectWallet(item.WalletNo,'PO_WALLET',item.WalletName,item.MerchantIdImg)" id="member-{{i}}" name="payment">
+                                            <label for="member-{{i}}">
+                                                <span class="img"><img src="{{item.MerchantIdImg}}" width="55" height="55" alt=""></span>
+                                                <span class="inf">
+                                                   {{item.WalletName}}<br>{{item.BalanceDisplay}}
+                                                </span>
+                                                <span class="pay-wrap">
+                                                    <a href="#">Top up</a>
+                                                    <a href="#" class="transfer">Transfer</a>
+                                            <a href="#" class="pay">Pay</a>
+                                                </span>
+                                            </label>
+                                        </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                     <div id="payment-popup" class="payment-popup white-popup mfp-hide">
+                                <div class="title-popup">Payment Method</div>
+                               
+                               
+                                <div class="name-card">
+                                    <label for="credit-number-input">Name Card</label>
+                                    <input [(ngModel)]="this.addCardData.NameCard"  type="text" id="credit-number-input">
+                                </div>
+                                <div class="credit-number">
+                                    <label for="credit-number-input">Credit Card Number</label>
+                                    <input [(ngModel)]="this.addCardData.CardNumber"(keypress)="onChangeTxtCardNumber($event)" maxlength="30" type="text" id="credit-number-input">
+                                </div>
+                                
+                                <div class="card-info">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="select-option">
+                                                <select (change)="selectMonth($event.target.value)"  name="card-month">
+                                                    <option value="">Month</option>
+                                                    <option   *ngFor="let item of this.cadrMonth" value="{{item.value}}">{{item.label}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="select-option">
+                                                <select (change)="selectYear($event.target.value)" name="card-year">
+                                                    <option value="">Year</option>
+                                                    <option  *ngFor="let item of this.cardYear" value="{{item.value}}">{{item.label}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="cvv">
+                                                <input [(ngModel)]="this.addCardData.CardCVV" type="text" placeholder="CVV">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="save-info-card">
+                                    <div class="info-card">
+                                        <input type="checkbox" id="info-card">
+                                        <label for="info-card">Save credit card for future use.</label>
+                                    </div>
+                                </div>-->
+                                 <div class="issuing-country">
+                                    <div class="select-option">
+                                        <select (change)="selectContry($event.target.value)" name="payment-type">
+                                            <option value="0">Issuing country</option>
+                                            <option *ngFor="let item of  this.countrys" value="{{item.value}}">{{item.label}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="btn-selection-wrap">
+                                    <button (click)="confirmCard()"  class="btn-main btn-selection"><span>Confirm</span></button>
+                                </div>
+                            </div>
+                </div>
+            </div>
+        </div>
+    </main>
+ <gof3r-footer></gof3r-footer>

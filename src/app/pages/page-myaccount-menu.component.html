@@ -1,0 +1,10 @@
+<ul class="sidebar-top">
+    <li (click)=accountClick() [ngClass]="{active: isMyProfile===true}"><a><span>My Profile</span></a></li>
+    <li (click)="paymentOptionClick()" [ngClass]="{active: isPaymentOption===true}" ><a ><span>PAYMENT OPTIONS</span></a></li>
+    <li (click)="deliveryAddressClick()" [ngClass]="{active: isDeliveryAddress===true}"><a><span>Delivery Addresses</span></a></li>
+    <li (click)="orderHistoryClick()" [ngClass]="{active: isOrderHistory===true}"><a><span>Order History Delivery</span></a></li>
+    <li (click)="orderHistoryPickup()" [ngClass]="{active: isOrderHistoryPickup===true}"><a><span>Order History Pickup</span></a></li>
+    <li (click)="inviteFriendClick()" [ngClass]="{active: isReferFriend===true}"><a><span>Refer Friends</span></a></li>
+    <li><a href="#"><span>Settings</span></a></li>
+    <li (click)="helpClick()" [ngClass]="{active: isHelp===true}"><a><span>Help</span></a></li>
+</ul>

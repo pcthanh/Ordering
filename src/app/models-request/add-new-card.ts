@@ -1,0 +1,17 @@
+export class AddNewCardModel{
+    PaymentGatewayToken:string=""
+    CardTypeId:string=""
+    Bin:string=""
+    CardProductId:string=""
+    MaskedCardNumber:string=""
+    CustomerId:string=""
+    CardAlias:string=""
+    CardHolderName:string=""
+    IssuingCountryCode:string=""
+    Cvv2:string=""
+    RefNo:string=""
+    InvoiceNo:string=""
+    ApprovalCode:string=""
+    ExpiryDate:string=""
+    EncryptedCardInfo:string="00acxK7pgvE4ppQcryaYj/dhsIB8u/CgC/j7TnoVevk0Xdg+oplaModDD8d7cWfo16YR3WF8EC3AofZAML0EgU5qJ8kOuoCaeD5mGJMMmGI0jNrvnEW3wo/QDuBc96gAK0XbywX2hIZ3wYJHaVcaViBzzeB/8dd121kloEhEtv7xA6M=U2FsdGVkX18C3y+iLd0bSXWCpcb3gEWfqQ6Ri5GxG5ctq41oNGyX2bHac0po59g2"
+}

@@ -1,0 +1,262 @@
+<header class="cms-page">
+        <div class="header-wrap-search">
+            <div class="header-top">
+                <header-checkout></header-checkout>
+            </div>
+           
+        </div>
+ </header>
+    <main>
+        <div class="main-content-order main-delivery-checkout">
+            <div class="row no-gutters">
+                <div class="col-12 col-md-8 col-map-checkout">
+                    <div class="map-checkout">
+                        <div class="block-info">
+                            <div class="title">
+                                <span *ngIf="this.orderMain.OrderType==='DELIVERY'">Your Delivery</span>
+                                <span *ngIf="this.orderMain.OrderType==='PICKUP'">Your Pickup</span>
+                                <a [routerLink]="['/order']" class="right">GO BACK</a>
+                            </div>
+                            <div *ngIf="this.orderMain.OrderType==='DELIVERY'" class="info">
+                                <div class="time"><img src="assets/images/clock-2.png" alt=""> <span>{{this.orderMain.DeliveryOn}}</span></div>
+                                <div class="addr"><img src="assets/images/home-1.png" alt=""> <span>{{this.orderMain.DeliveryTo}}</span></div>
+                            </div>
+                            <div *ngIf="this.orderMain.OrderType==='PICKUP'" class="info">
+                                <div class="time"><img src="assets/images/clock-2.png" alt=""> <span>{{fromDate}} - {{toDate}}</span></div>
+                                <div class="addr"><img src="assets/images/home-1.png" alt=""> <span>{{this.outletInfo.OutletInfo[0].Address}}</span></div>
+                            </div>
+                            <div class="text">
+                                <div class="small">Delivery Instruction</div>
+                                <input class="order-note-1"[(ngModel)]="this.orderNote" type="text" id="order-note">
+                            </div>
+                        </div>
+                        <div class="map-info">
+                            <!--<div class="pin-home"><img src="assets/images/pin_home.png" alt=""></div>
+                            <div class="pin-food"><img src="assets/images/pin_food.png" alt=""></div>
+                             <img src="assets/images/img-map3.jpg" alt="" class="img-fluid">-->
+                            <!--<img src="https://maps.googleapis.com/maps/api/staticmap?size=953x563&center={{this.outletInfo.OutletInfo[0].GeoLocation}}&scale=0.2&markers=icon:https://demo.sandbox-technology.com:82/GOF3R/naviox/images/pin_food.png|{{this.outletInfo.OutletInfo[0].GeoLocation}}&markers=icon:https://demo.sandbox-technology.com:82/GOF3R/naviox/images/pin_home.png|{{this.geoHome}}&maptype=roadmap&format=png32&visual_refresh=true&zoom=13&style=feature:administrative%7Cvisibility:off&style=feature:transit%7Cvisibility:off&style=feature:landscape%7Celement:geometry.fill%7Ccolor:0xE8E4DBstyle=feature:landscape%7Celement:geometry.stroke%7Cvisibility:off&style=feature:landscape.natural%7Celement:geometry.fill%7Ccolor:0xF0ECE4&style=feature:poi%7Celement:geometry.fill%7Ccolor:0xF0ECE4&style=feature:poi%7Celement:geometry.stroke%7Cvisibility:off&style=feature:poi%7Celement:labels.text%7Cvisibility:off&style=feature:poi%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.text.fill%7Ccolor:0x635E5A&style=feature:road%7Celement:labels.text.stroke%7Ccolor:0xFFFFFF&style=feature:road%7Celement:geometry.fill%7Ccolor:0xFFFFFF&style=feature:road%7Celement:geometry.stroke%7Ccolor:0xDCD6CD&style=feature:road.local%7Celement:geometry.fill%7Ccolor:0xDCD6CD&style=feature:road.local%7Celement:geometry.stroke%7Cvisibility:off&style=feature:water%7Cvisibility:on&style=feature:water%7Celement:labels.text%7Cvisibility:off&style=feature:water%7Celement:geometry.fill%7Ccolor:0xC8D1DF&key=AIzaSyAVdsuXFE3Ca3vwy_lopgMUHTfJLdd3_Ck" alt="" class="img-fluid">-->
+                                <agm-map style="height: 650px" #agmMap [latitude]="this.lat"  [longitude]="this.lng" [zoom]="15"  [styles]="styles">
+                                <agm-marker *ngFor="let item of this.arrayLocation" [latitude]="item.lat" [longitude]="item.lng" [iconUrl]="item.icon"></agm-marker>
+                            </agm-map>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 col-cart">
+                    <div class="cart-sidebar-wrap">
+                        <div class="cart-sidebar">
+                            <div class="info-top">
+                                <div class="title">{{outletInfo.OutletInfo[0].MerchantOutletName}}</div>
+                                <div class="sub-total"><span class="inf">Food & Beverage Subtotal </span> <span class="price">{{this.orderMain.SubTotalStr}}</span></div>
+                                <div class="gst"><span class="inf">Service fee</span> <span class="price">{{this.orderMain.ServiceFee}}</span></div>
+                                <div *ngIf="this.orderMain.OrderType==='DELIVERY'"  class="delivery-fee"><span class="inf">Delivery Fee</span> <span class="price">{{this.orderMain.DeliveryFeeDisplay}}</span></div>
+                                <div *ngIf="this.orderMain.Surcharge!=0" class="gst"><span class="inf">Surchagre</span> <span class="price">{{this.orderMain.SurchargeDisplay}}</span></div>
+                                <div *ngIf="this.orderMain.OrderType==='DELIVERY'" class="gst"><span class="inf">Courier Tip</span> <span class="price">{{this.orderMain.RiderTipDisplay}}</span></div>
+                                <div *ngIf="this.orderMain.DiscountDisplay!=''" class="gst"><span class="inf">Discount</span> <span class="price">{{this.orderMain.DiscountDisplay}}</span></div>
+                                <div *ngIf="this.orderMain.OrderType==='DELIVERY'" class="courier-tip">
+                                    <div class="tip-title">Courier Tip</div>
+                                    <div class="tip tip1" *ngFor="let item of riderTip;let i = index">
+                                        <input (click)="riderTipClick(item.value,i,item.ck)"  value="{{i}}"  id="tip-{{i}}" type="radio" [checked]="item.ck"  name="courier-tip-input">
+                                        <label  for="tip-{{i}}">{{item.label}}</label>
+                                    </div>
+                                    
+                                    <div class="tip input-tip">
+                                        <input type="text" placeholder="$99.99">
+                                        <a href="#" class="close"><img src="assets/images/ico-close.png" alt=""></a>
+                                    </div>
+                                </div>
+
+                                <div  class="title">Total <span class="price">{{this.orderMain.TotalDisplay}}</span></div>
+                            </div>
+                            <div class="methods">
+                                 <div *ngIf="selectedCard" (click)="showPopup()" class="payment selected"><img src="{{this.selectMethod.CardTypeIdImg}}" alt="" width="39" height="28"><span> {{this.selectMethod.MaskingCardNumber}}</span> <span class="change">CHANGE</span></div>
+                                 <div *ngIf="!selectedCard" (click)="showPopup()" class="payment"><img src="assets/images/ico-payment.png" alt=""><span>Select Payment Method</span></div>
+                                <!--<div class="voucher" data-mfp-src="#voucher-popup"><img src="assets/images/ico-voucher.png" alt=""><span>Add Voucher</span></div>-->
+                                <div *ngIf="!selectedPromoCode" class="reward" (click)="showPopupPromoCode()" ><img src="assets/images/ico-reward.png" alt=""><span>{{this.selectPromoCodeModel.PromoCodeText}}</span></div>
+                                <!--<div *ngIf="selectedPromoCode" class="reward selected" (click)="showPopupPromoCode()"><img src="assets/images/ico-reward.png" alt=""><span></span><span class="change">CHANGE</span></div>-->
+                                <div *ngIf="selectedPromoCode"  class="payment selected"><img src="assets/images/ico-reward.png" alt=""><span (click)="showPopupPromoCode()"> {{this.selectPromoCodeModel.PromoCodeText}}</span> <span (click)="deletePromoCode()" class="change">DELETE</span></div>
+                                <div class="credit"><img src="assets/images/ico-dola.png" alt=""><span>{{creditDisplay}} credit available. Use it now</span><button (click)="applyCredit()" class="btn-apply">Apply</button></div>
+                            </div>
+
+                            <div *ngIf="allPaymentget" id="payment-otpion-popup" class="payment-otpion-popup white-popup mfp-hide">
+                                <div class="payment-otpion-popup-wrap">
+                                    <div class="payment-otpion-wrap">
+                                        <div class="title">CREDIT/DEBIT CARDS</div>
+                                        <div class="payment-item"*ngFor="let item of this.allPayment.CardListInfo;let i = index">
+                                            <input type="radio" id="card-{{i}}" name="payment" (click)="selectCardPayment(item.MaskedCardNumber,item.CardToken,item.CardHolderName,item.CardTypeIdValue,item.CardTypeIdImg)">
+                                            <label for="card-{{i}}">
+                                                <span class="img"><img src="{{item.CardTypeIdImg}}" alt="" width="63" height="40"></span>
+                                                <span class="inf">
+                                                   {{item.MaskedCardNumber}}<br>{{item.ExpiryDate}}
+                                                </span>
+                                            </label>
+                                        </div>
+                                        
+                                        <a style="color: #8e49fe" (click)="showPopupAddCard()" class="add-new-card">ADD A NEW CARD</a>
+                                    </div>
+                                    <div class="payment-otpion-wrap">
+                                        <div class="title">Ezl e-wallet</div>
+                                        <div class="payment-item">
+                                            <input type="radio" id="wallet1" name="payment">
+                                            <label for="wallet1">
+                                                <span class="img"><img src="assets/images/payment-ezlink.png" alt=""></span>
+                                                <span class="inf">
+                                                   ****912K<br>S$30
+                                                </span>
+                                                <span class="pay-wrap"><a href="#" class="pay">Top up</a></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="payment-otpion-wrap">
+                                        <div class="title">MEMBERSHIP CARDS</div>
+                                        <div class="payment-item" *ngFor="let item of this.allPayment.PrepaidWalletListInfo">
+                                            <input type="radio"(click)="selectWallet(item.WalletNo,'PO_WALLET',item.WalletName,item.MerchantIdImg)" id="member-{{i}}" name="payment">
+                                            <label for="member-{{i}}">
+                                                <span class="img"><img src="{{item.MerchantIdImg}}" alt=""></span>
+                                                <span class="inf">
+                                                   {{item.WalletName}}<br>{{item.BalanceDisplay}}
+                                                </span>
+                                                <span class="pay-wrap">
+                                                    <a href="#">Top up</a>
+                                                </span>
+                                            </label>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                                <div class="btn-selection-wrap">
+                                    <button (click)="confirmSelectPayment()" class="btn-main btn-selection"><span>Confirm</span></button>
+                                </div>
+                            </div>
+                            <div id="payment-popup" class="payment-popup white-popup mfp-hide">
+                                <div class="title-popup">Payment Method</div>
+                               
+                               
+                                <div class="name-card">
+                                    <label for="credit-number-input">Name Card</label>
+                                    <input [(ngModel)]="this.addCardData.NameCard"  type="text" id="credit-number-input">
+                                </div>
+                                <div class="credit-number">
+                                    <label for="credit-number-input">Credit Card Number</label>
+                                    <input [(ngModel)]="this.addCardData.CardNumber"(keypress)="onChangeTxtCardNumber($event)" maxlength="30" type="text" id="credit-number-input">
+                                </div>
+                                
+                                <div class="card-info">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="select-option">
+                                                <select (change)="selectMonth($event.target.value)"  name="card-month">
+                                                    <option value="">Month</option>
+                                                    <option   *ngFor="let item of this.cadrMonth" value="{{item.value}}">{{item.label}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="select-option">
+                                                <select (change)="selectYear($event.target.value)" name="card-year">
+                                                    <option value="">Year</option>
+                                                    <option  *ngFor="let item of this.cardYear" value="{{item.value}}">{{item.label}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="cvv">
+                                                <input [(ngModel)]="this.addCardData.CardCVV" type="text" placeholder="CVV">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="save-info-card">
+                                    <div class="info-card">
+                                        <input type="checkbox" id="info-card">
+                                        <label for="info-card">Save credit card for future use.</label>
+                                    </div>
+                                </div>-->
+                                 <div class="issuing-country">
+                                    <div class="select-option">
+                                        <select (change)="selectContry($event.target.value)" name="payment-type">
+                                            <option value="0">Issuing country</option>
+                                            <option *ngFor="let item of  this.countrys" value="{{item.value}}">{{item.label}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="btn-selection-wrap">
+                                    <button (click)="confirmCard()"  class="btn-main btn-selection"><span>Confirm</span></button>
+                                </div>
+                            </div>
+                          
+
+                            <div id="voucher-popup" class="voucher-popup white-popup mfp-hide">
+                                <div class="title-popup">Voucher Code</div>
+                                <div class="voucher-number">
+                                    <label for="voucher-number-input">Voucher code</label>
+                                    <input type="text" id="voucher-number-input">
+                                </div>
+                                <div class="btn-selection-wrap">
+                                    <button class="btn-main btn-selection btn-voucher"><span>REDEEM</span></button>
+                                </div>
+                            </div>
+
+                            
+
+                            <div id="reward-popup" class="reward-popup white-popup mfp-hide">
+                                <div class="title-popup">Choose Rewards</div>
+                                <div class="reward-choose-wrap" *ngIf="loadPromoCodeComplete">
+                                    <div class="reward-choose"*ngFor="let item of this.promoCodeList.PromoCodeList;let i = index">
+                                        <input type="radio" name="reward-input" id="reward-{{i}}" (click)="selectPromoCode(item.PromoCodeId,item.PromoCodeText,item.PromoCodeValue)">
+                                        <label for="reward-{{i}}"><span>{{item.PromoCodeValueDisplay}} Off</span> <span class="small">Expires {{item.PromoCodeExpiryDate}}</span></label>
+                                    </div>
+                                    
+                                </div>
+                                <div class="reward-number">
+                                    <label for="reward-number-input">Use Promo Code</label>
+                                    <input type="text" id="reward-number-input">
+                                </div>
+                                 <div *ngIf="noData" class="alert alert-danger" role="alert">
+                {{this.promoCodeMain.ResultDesc}}
+            </div>
+             
+                                <div class="btn-selection-wrap">
+                                    <button (click)="applyPromoCode()" class="btn-main btn-selection btn-reward"><span>Apply</span></button>
+                                </div>
+                            </div>
+
+                            
+
+                            <div class="btn-select-payment-wrap">
+                                <button (click)="placeOrder()"class="btn-main btn-select-payment"><span>Place order</span></button>
+                            </div>
+                            <div *ngIf="haveCart" class="nano-scroll nano">
+                                <div class="nano-content item-checkout-list no-delete">
+                                    <div class="item-checkout-wrap"*ngFor="let item of cart.Cart;let i=index">
+                                        <div class="item-checkout">
+                                            <div class="number">{{item.Qty}}</div>
+                                        <div class="title">{{item.Name}} <span class="price">{{item.TotalStr}}</span></div>
+                                            <ul class="item-info">
+                                                <div *ngFor="let itemOp of item.OptionList">
+                                                <div *ngFor="let itemOPD of itemOp.OptionItemList">
+                                                    <div *ngIf="itemOPD.isCheck==true">
+                                                        <li><span class="inf">• {{itemOPD.OptionItemName}}</span><span class="price">{{itemOPD.PriceDisplay}}</span></li>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+     <div id="success-popup" class="success-popup mfp-hide">
+            <div class="title">Payment Completed</div>
+            <div style="cursor: pointer" class="text-center" (click)="trackerOrder()" 
+            ><img src="assets/images/ico-succsess.png" alt=""></div>
+    </div>
+      <block-ui>
+      <!-- Your app markup here -->
+    </block-ui>
+    <gof3r-footer></gof3r-footer>

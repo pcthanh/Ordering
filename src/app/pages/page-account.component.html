@@ -1,0 +1,102 @@
+
+<header class="cms-page">
+        <div class="header-wrap">
+            <div class="header-top">
+                <header-checkout></header-checkout>
+            </div>
+           
+        </div>
+ </header>
+ <main>
+        <div class="about-wrap">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-md-3">
+                        <div class="sidebar-wrap d-none d-md-block">
+                            <myaccount-menu></myaccount-menu>
+                            <div class="sb-logout-wrap">
+                                <a href="#" class="btn-main btn-logout-sidebar">Log out</a>
+                            </div>
+                        </div>
+
+                        <div class="page-active d-block d-md-none">
+                            <div class="title"><span>My Profile</span></div>
+                        </div>
+                        <div class="sidebar-wrap sidebar-mobile">
+                            <ul class="sidebar-top">
+                                <li><a href="06_Account_01_PaymentOptions.html"><span>PAYMENT OPTIONS</span></a></li>
+                                <li><a href="06_Account_02_Address.html"><span>Delivery Addresses</span></a></li>
+                                <li><a href="06_Account_03_OrderHistory.html"><span>Order History</span></a></li>
+                                <li><a href="06_Account_04_ReferFriends.html"><span>Refer Friends</span></a></li>
+                                <li><a href="#"><span>Settings</span></a></li>
+                                <li><a href="06_Account_05_Help.html"><span>Help</span></a></li>
+                            </ul>
+                            <div class="sb-logout-wrap">
+                                <a href="#" class="btn-main btn-logout-sidebar">Log out</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        <div class="cms-content" *ngIf="isHaveDate">
+                            <h2 class="page-title">My Profile</h2>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="account-form">
+                                        <div class="acc-input">
+                                            <label for="acc-name"><span>Full Name</span> <span class="right">Required</span></label>
+                                            <input type="text" [(ngModel)]="this.customerInfoMain.CustomerInfo[0].CustomerName" id="acc-name">
+                                        </div>
+                                        <div class="acc-input">
+                                            <label for="acc-birth"><span>Birthday</span></label>
+                                            <input type="text" [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Dob" id="acc-birth">
+                                        </div>
+                                        <div class="acc-radio">
+                                            <div class="title">Gender</div>
+                                            <div class="acc-gender">
+                                                <input type="radio" id="acc-male"[checked]="this.customerInfoMain.CustomerInfo[0].Gender==M" name="acc-gender">
+                                                <label for="acc-male"><span>Male</span></label>
+                                            </div>
+
+                                            <div class="acc-gender">
+                                                <input type="radio" id="acc-fe" name="acc-gender">
+                                                <label for="acc-fe"><span>Female</span></label>
+                                            </div>
+                                        </div>
+                                        <div class="acc-input">
+                                            <label for="acc-phone"><span>Phone Number</span> <span class="right">Veirfied</span></label>
+                                            <input [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Mobile" type="text" id="acc-phone">
+                                        </div>
+                                        <div class="acc-input">
+                                            <label for="acc-email"><span>Email</span> <span class="right">Required</span></label>
+                                            <input [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Email" type="text" id="acc-email">
+                                        </div>
+                                        <div class="acc-input">
+                                            <label for="acc-pass"><span>Password</span> <a href="02_Login_03_ForgotPassword.html" class="right">Change Password Now?</a></label>
+                                            <input [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Password" type="password" id="acc-pass">
+                                        </div>
+                                        <button (click)="updateProfile()" class="btn-main btn-save-acc"><span>SAVE</span></button>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="link-social social-login">
+                                        <a href="#" class="link-fb fb-login"><span>Link Your Facebook Account</span></a>
+                                        <a href="#" class="link-fb gplus-login"><span>Link Your Google Account</span></a>
+                                    </div>
+                                    <div class="order-update-noti">
+                                        <div class="title">Order Update Notification:</div>
+                                        <div class="text">Track the progress of your order with instant updates.</div>
+                                    </div>
+                                    <div class="mess-update-wrap">
+                                        <input type="checkbox" id="mess-update" checked="checked">
+                                        <label for="mess-update">I want to receive <strong>Text Message</strong> updates*</label>
+                                        <div class="text">*Regular carrier charges may apply</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <gof3r-footer></gof3r-footer>

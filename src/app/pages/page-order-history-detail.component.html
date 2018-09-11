@@ -1,0 +1,190 @@
+<header class="cms-page">
+    <div class="header-wrap-search">
+        <div class="header-top">
+            <header-checkout></header-checkout>
+        </div>
+
+    </div>
+</header>
+<main>
+
+    <!--order for delivery-->
+        <div class="main-content-order" *ngIf="isOrderHistoryDetailDelivery">
+        <div class="row no-gutters">
+            <div class="col-12 col-md-8 col-map-checkout">
+                <div class="row no-gutters">
+                    <div class="col-12 col-md-2"></div>
+                    <div class="col-12 col-md-10">
+                        <div class="order-feedback-wrap">
+                            <div class="order-feedback-inner">
+                                <h2 class="title">Order Feedback</h2>
+                                <div class="feedback-content">
+                                    <div class="feedback-title">How was your order from {{deliveryOrder.DeliveryOrderDetail[0].MerchantOutletName}}
+                                        ?</div>
+                                    <div class="feedback-vote">
+                                        <a href="#" class="dislike"><img src="assets/images/ico-dislike.png" alt=""></a>
+                                        <a href="#" class="like"><img src="assets/images/ico-like.png" alt=""></a>
+                                    </div>
+                                </div>
+                                <div class="text">Restaurants are responsible for your order's preparation, accuracy, and packaging. Your review
+                                    is used to help set the Skip Score for {{deliveryOrder.DeliveryOrderDetail[0].MerchantOutletName}}.</div>
+                            </div>
+                            <div class="feedback-skip">
+                                <a href="#">SKIP TO COURIER FEEDBACK <img src="assets/images/ico-feedback-right.png" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 col-cart">
+                <div class="cart-sidebar-wrap">
+                    <div class="cart-sidebar">
+                        <div class="subtotal-wrap">
+                            <button class="btn-main btn-reorder"><span><img src="assets/images/ico-reorder.png" alt="">REORDER</span></button>
+                        </div>
+                        <div class="item-checkout-list no-delete">
+                            <div class="item-checkout-wrap" *ngFor="let item of deliveryOrder.DeliveryItemsPurchased">
+                                <div class="item-checkout">
+                                    <div class="number">{{item.OrderDetailQty}}</div>
+                                    <div class="title">{{item.ProductName}} <span class="price">{{item.OrderDtlDisplayPrice}}</span></div>
+                                    <ul class="item-info">
+                                        <!--<li><span class="inf">• Chicken</span></li>-->
+                                        <!--<li><span class="inf">• Garlic Paste</span></li>
+                                                            <li><span class="inf">• Donair Sauce (Tzatziki)</span></li>
+                                                            <li><span class="inf">• Lettuce</span></li>-->
+                                        <li *ngFor="let itemO of item.OrderOptions">
+                                            <span class="inf">• {{itemO.ProductOptionDetailName}}</span><span class="price">{{itemO.OrderOptionDtlDisplayPrice}}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="order-rec-info">
+                            <ul>
+                                                <li><span class="inf">Subtotal</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplaySubTotal}}</span></li>
+                                                <li *ngIf="this.deliveryOrder.DeliveryOrderDetail[0].DisplayServiceFee!=='FREE'"><span class="inf">Service fee</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplayServiceFee}}</span></li>
+                                                <li *ngIf="this.deliveryOrder.DeliveryOrderDetail[0].DisplayDeliveryFee!==''"><span class="inf">Delivery Fee</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplayDeliveryFee}}</span></li>
+                                                <li *ngIf="this.deliveryOrder.DeliveryOrderDetail[0].DisplaySurCharge!==''"><span class="inf">SurCharge</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplaySurCharge}}</span></li>
+                                                <li *ngIf="this.deliveryOrder.DeliveryOrderDetail[0].DisplayRiderTip!==''"><span class="inf">Rider tip</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplayRiderTip}}</span></li>
+                                                <li *ngIf="this.deliveryOrder.DeliveryOrderDetail[0].DisplayPromoCode!==''"><span class="inf">Promo code</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplayPromoCode}}</span></li>
+                                                <li *ngIf="this.deliveryOrder.DeliveryOrderDetail[0].DisplayCredit!==''"><span class="inf">Credit</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplayCredit}}</span></li>
+                                                <li *ngIf="this.deliveryOrder.DeliveryOrderDetail[0].DisplayDiscount!==''"><span class="inf">Discount</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplayDiscount}}</span></li>
+                                                <li *ngIf="this.deliveryOrder.DeliveryOrderDetail[0].DisplayTotal!==''"><span class="inf">Total</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplayTotal}}</span></li>
+                                                <!--<li><span class="inf">PST$</span> <span class="right">$1.25</span></li>-->
+                                            </ul>
+                                            <!--<ul>
+                                                <li><span class="inf">Courier Tip</span> <span class="right">$1.00</span></li>
+                                                <li><span class="inf"><strong>Total (CAD)</strong></span> <span class="right"><strong>$23.20</strong></span></li>
+                                            </ul>-->
+                                            <ul>
+                                                <li><span class="inf">Paid with</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].PaidBy}}</span></li>
+                                                <!--<li><span class="inf">Date</span> <span class="right">Apr 21, 2018 12:07 PM</span></li>-->
+                                            </ul>
+                            <!--<ul>
+                                    <li><span class="inf"><img src="assets/images/ico-order-car.png" alt=""><strong> Adedapo</strong></span></li>
+                                    <li><span class="inf"> 228 Orders Delivered</span></li>
+                                </ul>-->
+                            <ul>
+                                <li><span class="inf"><img src="assets/images/ico-order-home.png" alt=""><strong>{{this.deliveryOrder.DeliveryOrderDetail[0].DeliverTo}}</strong></span></li>
+                                <li><span class="inf">{{this.deliveryOrder.DeliveryOrderDetail[0].CurrentStatusDate}} <br>{{this.deliveryOrder.DeliveryOrderDetail[0].Note}}</span></li>
+                            </ul>
+                            <div>
+                                <a href="#" class="print">PRINT RECEIPT</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end order for delivery-->
+
+    <div class="main-content-order" *ngIf="ishaveOrderHistoryDetailPickup">
+        <div class="row no-gutters">
+            <div class="col-12 col-md-8 col-map-checkout">
+                <div class="row no-gutters">
+                    <div class="col-12 col-md-2"></div>
+                    <div class="col-12 col-md-10">
+                        <div class="order-feedback-wrap">
+                            <div class="order-feedback-inner">
+                                <h2 class="title">Order Feedback</h2>
+                                <div class="feedback-content">
+                                    <div class="feedback-title">How was your order from {{pickupOrderDatail.PickupOrderDetail[0].MerchantOutletName}}
+                                        ?</div>
+                                    <div class="feedback-vote">
+                                        <a href="#" class="dislike"><img src="assets/images/ico-dislike.png" alt=""></a>
+                                        <a href="#" class="like"><img src="assets/images/ico-like.png" alt=""></a>
+                                    </div>
+                                </div>
+                                <div class="text">Restaurants are responsible for your order's preparation, accuracy, and packaging. Your review
+                                    is used to help set the Skip Score for {{pickupOrderDatail.PickupOrderDetail[0].MerchantOutletName}}.</div>
+                            </div>
+                            <div class="feedback-skip">
+                                <a href="#">SKIP TO COURIER FEEDBACK <img src="assets/images/ico-feedback-right.png" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 col-cart">
+                <div class="cart-sidebar-wrap">
+                    <div class="cart-sidebar">
+                        <div class="subtotal-wrap">
+                            <button class="btn-main btn-reorder"><span><img src="assets/images/ico-reorder.png" alt="">REORDER</span></button>
+                        </div>
+                        <div class="item-checkout-list no-delete">
+                            <div class="item-checkout-wrap" *ngFor="let item of pickupOrderDatail.PickupItemsPurchased">
+                                <div class="item-checkout">
+                                    <div class="number">{{item.OrderDetailQty}}</div>
+                                    <div class="title">{{item.ProductName}} <span class="price">{{item.OrderDtlDisplayPrice}}</span></div>
+                                    <ul class="item-info">
+                                        <!--<li><span class="inf">• Chicken</span></li>-->
+                                        <!--<li><span class="inf">• Garlic Paste</span></li>
+                                                            <li><span class="inf">• Donair Sauce (Tzatziki)</span></li>
+                                                            <li><span class="inf">• Lettuce</span></li>-->
+                                        <li *ngFor="let itemO of item.OrderOptions">
+                                            <span class="inf">• {{itemO.ProductOptionDetailName}}</span><span class="price">{{itemO.OrderOptionDtlDisplayPrice}}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="order-rec-info">
+                            <ul>
+                                <li><span class="inf">Subtotal</span> <span class="right">{{this.pickupOrderDatail.PickupOrderDetail[0].DisplaySubTotal}}</span></li>
+                                <li *ngIf="this.pickupOrderDatail.PickupOrderDetail[0].DisplayServiceFee!=='FREE'"><span class="inf">Service fee</span> <span class="right">{{this.pickupOrderDatail.PickupOrderDetail[0].DisplayServiceFee}}</span></li>
+                                <li *ngIf="this.pickupOrderDatail.PickupOrderDetail[0].DisplayPromoCode!==''"><span class="inf">Promo code</span> <span class="right">{{this.pickupOrderDatail.PickupOrderDetail[0].DisplayPromoCode}}</span></li>
+                                <li *ngIf="this.pickupOrderDatail.PickupOrderDetail[0].DisplayCredit!==''"><span class="inf">Credit</span> <span class="right">{{this.pickupOrderDatail.PickupOrderDetail[0].DisplayCredit}}</span></li>
+                                <li *ngIf="this.pickupOrderDatail.PickupOrderDetail[0].DisplayDiscount!==''"><span class="inf">Discount</span> <span class="right">{{this.pickupOrderDatail.PickupOrderDetail[0].DisplayDiscount}}</span></li>
+                                <li *ngIf="this.pickupOrderDatail.PickupOrderDetail[0].DisplayTotal!==''"><span class="inf">Total</span> <span class="right">{{this.pickupOrderDatail.PickupOrderDetail[0].DisplayTotal}}</span></li>
+                                <!--<li><span class="inf">PST$</span> <span class="right">$1.25</span></li>-->
+                            </ul>
+                            <!--<ul>
+                                                <li><span class="inf">Courier Tip</span> <span class="right">$1.00</span></li>
+                                                <li><span class="inf"><strong>Total (CAD)</strong></span> <span class="right"><strong>$23.20</strong></span></li>
+                                            </ul>-->
+                            <ul>
+                                <li><span class="inf">Paid with</span> <span class="right">{{this.pickupOrderDatail.PickupOrderDetail[0].PaidBy}}</span></li>
+                                <!--<li><span class="inf">Date</span> <span class="right">Apr 21, 2018 12:07 PM</span></li>-->
+                            </ul>
+                            <!--<ul>
+                                    <li><span class="inf"><img src="assets/images/ico-order-car.png" alt=""><strong> Adedapo</strong></span></li>
+                                    <li><span class="inf"> 228 Orders Delivered</span></li>
+                                </ul>-->
+                            <ul>
+                                <li><span class="inf"><img src="assets/images/ico-order-home.png" alt=""><strong>{{this.pickupOrderDatail.PickupOrderDetail[0].PickUpAt}}</strong></span></li>
+                                <li><span class="inf">{{this.pickupOrderDatail.PickupOrderDetail[0].CurrentStatusDate}} <br>{{this.pickupOrderDatail.PickupOrderDetail[0].Note}}</span></li>
+                            </ul>
+                            <div>
+                                <a href="#" class="print">PRINT RECEIPT</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<gof3r-footer></gof3r-footer>

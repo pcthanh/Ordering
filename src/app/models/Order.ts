@@ -1,0 +1,56 @@
+import { ProductDetailParseModel } from "../models/ProductDetailParse";
+export class OrderModel{
+    MerchantId:string="";
+    MerchantOutletId:string="";
+    SubTotal:number=0;;
+    SubTotalStr:string="";
+    DiscountProgramId:string=""
+    DiscountProgramAmount:number=0
+    Discount:number=0;
+    DiscountDisplay:string;
+    PromoCodeDisPlay:string="";
+    PrmoCodeID:string=""
+    PromoCodeValue:number=0;
+    PickupAt:string="";
+    PickupDateFrom:string="";
+    PickupTimeFrom:string=""
+    PickupDateTo:string=""
+    PickupTime:string=""
+    PickupTimeTo:string="";
+    IsGroupOrder:string='N'
+    AnyExtra:string="";
+    ServiceFee:string="";
+    ServiceFeeValue:number=0;
+    Surcharge:number=0;
+    SurchargeDisplay:string=""
+    Voucher:string="";
+    CreditDisplay:string="";
+    Credit:number=0;
+    Total:number=0
+    TotalDisplay:string="";
+    CurrencyCode:string="";
+    CustomerId:number=0;
+    DeliveryTo:string="";
+    DeliveryOn:string="";
+    DeliveryOnRequest:string=""
+    DeliveryId:string=""
+    OrderType:string=""
+    MerchantAbsorbPercentage:string=""
+    OrderingMerchantOutletId:string=""
+    OrderingTerminalId:string=""
+    OrderPaymentDescription:string=""
+    FeeWaiverType:string=""
+    FeeWaiverProgramId:string=""
+    HasFeeWaiverProgram:string=""
+    DeliveryFee:number=0
+    DeliveryFeeDisplay:string=""
+    RiderTip:number=0;
+    RiderTipDisplay:string="S$ 0.00"
+    MaskingCardNumber:string=""
+    CardToken:string=""
+    CardHoldName:string=""
+    CardTypeValue:string=""
+    ArrayItem:ProductDetailParseModel[]=[]
+    PaymentOptions:string=""
+    EstimatedPickupTime:string=""
+}

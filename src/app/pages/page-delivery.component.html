@@ -1,0 +1,88 @@
+<header class="cms-page">
+    <div class="header-wrap-search">
+        <div class="header-top">
+            <header-checkout></header-checkout>
+        </div>
+
+    </div>
+</header>
+<main>
+    <div class="about-wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-3">
+                    <div class="sidebar-wrap d-none d-md-block">
+                        <myaccount-menu></myaccount-menu>
+                        <!--<div class="sb-logout-wrap">
+                                <a href="#" class="btn-main btn-logout-sidebar">Log out</a>
+                            </div>-->
+                    </div>
+
+                    <div class="page-active d-block d-md-none">
+                        <div class="title"><span>Delivery Addresses</span></div>
+                    </div>
+                    <div class="sidebar-wrap sidebar-mobile">
+                        <ul class="sidebar-top">
+                            <li><a href="06_Account.html"><span>My Profile</span></a></li>
+                            <li><a href="06_Account_01_PaymentOptions.html"><span>PAYMENT OPTIONS</span></a></li>
+                            <li><a href="06_Account_03_OrderHistory.html"><span>Order History</span></a></li>
+                            <li><a href="06_Account_04_ReferFriends.html"><span>Refer Friends</span></a></li>
+                            <li><a href="#"><span>Settings</span></a></li>
+                            <li><a href="06_Account_05_Help.html"><span>Help</span></a></li>
+                        </ul>
+                        <div class="sb-logout-wrap">
+                            <a href="#" class="btn-main btn-logout-sidebar">Log out</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-9">
+                    <div class="cms-content">
+                        <h2 class="page-title">Delivery Addresses</h2>
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <div class="delivery-address-wrap">
+                                    <div class="title">Add New Address</div>
+                                    <input id="input-address-1" class="new-address" type="text" placeholder="Enter your Address" #search [formControl]="searchControl">
+                                    <div class="map-address">
+                                        <div class="location-add">
+                                            <div><strong>Is this your location?</strong><br>If needed, drag pin to exact location</div>
+                                            <button (click)="addDeliveryAddress()" class="btn-main btn-add-this"><span>ADD THIS ADDRESS</span></button>
+                                        </div>
+                                        <img class="img-fluid" src="https://maps.googleapis.com/maps/api/staticmap?size=358x297&scale=1&center={{this.lat}},{{this.lng}}&markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C{{this.lat}},{{this.lng}}&maptype=roadmap&format=png32&visual_refresh=true&zoom=16&style=feature:administrative%7Cvisibility:off&style=feature:transit%7Cvisibility:off&style=feature:landscape%7Celement:geometry.fill%7Ccolor:0xE8E4DBstyle=feature:landscape%7Celement:geometry.stroke%7Cvisibility:off&style=feature:landscape.natural%7Celement:geometry.fill%7Ccolor:0xF0ECE4&style=feature:poi%7Celement:geometry.fill%7Ccolor:0xF0ECE4&style=feature:poi%7Celement:geometry.stroke%7Cvisibility:off&style=feature:poi%7Celement:labels.text%7Cvisibility:off&style=feature:poi%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.text.fill%7Ccolor:0x635E5A&style=feature:road%7Celement:labels.text.stroke%7Ccolor:0xFFFFFF&style=feature:road%7Celement:geometry.fill%7Ccolor:0xFFFFFF&style=feature:road%7Celement:geometry.stroke%7Ccolor:0xDCD6CD&style=feature:road.local%7Celement:geometry.fill%7Ccolor:0xDCD6CD&style=feature:road.local%7Celement:geometry.stroke%7Cvisibility:off&style=feature:water%7Cvisibility:on&style=feature:water%7Celement:labels.text%7Cvisibility:off&style=feature:water%7Celement:geometry.fill%7Ccolor:0xC8D1DF&key=AIzaSyAVdsuXFE3Ca3vwy_lopgMUHTfJLdd3_Ck"
+                                            alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="delivery-address-wrap">
+                                    <div class="title">Saved Addresses</div>
+                                    <div *ngFor="let item of this.listDeliveryAddress.DeliveryAddressList" class="saved-address">
+                                        <span>{{item.Address}}</span>
+                                        <a (click)="deleteAddress(item.Address,item.AddressId)" class="remove"><img src="assets/images/ico-close.png" alt=""></a>
+                                    </div>
+                                    <!--<div class="saved-address">
+                                            <span>510 Burrard Street, Vancouver, BC, Canada</span>
+                                            <a href="#" class="remove"><img src="assets/images/ico-close.png" alt=""></a>
+                                        </div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div id="delete-address" class="success-popup mfp-hide">
+    <div class="title">Do you want delete address?</div>
+    <div class="row">
+        <div class="col-6">
+            <button (click)="cancelDelete()" style="background-color: #dc3545 !important" class="btn-main btn-delivery btc-delete-address"><span>Cancel</span></button>
+        </div>
+        <div class="col-6">
+            <button (click)="acceptedDelete()" class="btn-main btn-pickup btc-delete-address"><span>OK</span></button>
+        </div>
+    </div>
+</div>
+<gof3r-footer></gof3r-footer>

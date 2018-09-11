@@ -1,0 +1,18 @@
+export class UpdateProfileRequest{
+    CityCode:string=""
+    Email:string=""
+    Address:string=""
+    IdNumber:string=""
+    DisabledMerchantCategoryList:string=""
+    CustomerId:string=""
+    Gender:string=""
+    Mobile:string=""
+    MaritalStatus:string=""
+    Dob:string=""
+    CustomerName:string=""
+    EnabledMerchantCategoryList:string=""
+    CountryCode:string=""
+    ProfileImageURL:string=""
+    OTP:string=""
+    PostalCode:string=""
+}

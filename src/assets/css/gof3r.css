@@ -1,0 +1,204 @@
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+
+}
+
+#address-section
+{
+    height: 700px;
+    background-image: url("../images/gof3r_background.jpg");
+    background-size: cover;
+    background-position: center;
+    
+}
+.nodata{
+  border: 1px solid red !important
+}
+.active-button{
+  border-color: #8e49fe !important;
+  background-color: #8e49fe !important;
+  color: #fff !important
+}
+.cms-page .main-menu {
+    background: #8e49fe;
+    vertical-align: top;
+}
+.login-dropdown-step2 {
+  width: 342px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  padding-top: 22px;
+  z-index: 101;
+  display: none;
+}
+.acc-top .login-dropdown-step2 {
+    right: -25px;
+}
+
+.login-dropdown-step3 {
+  width: 342px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  padding-top: 22px;
+  z-index: 101;
+  display: none;
+}
+
+.login-dropdown-had {
+  width: 342px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  padding-top: 22px;
+  z-index: 101;
+  display: none;
+}
+.login-dropdown-otp {
+  width: 342px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  padding-top: 22px;
+  z-index: 101;
+  display: none;
+}
+.acc-top .login-dropdown-step3 {
+    right: -25px;
+}
+.map-icon-center{
+    background-image: url('/assets/images/house-black.png');
+    position: absolute;
+    z-index: 100;
+    background-size: 100%;
+    top: 50%;
+    left: 50%;
+    margin-left: -28px;
+    margin-top: -41px;
+    width: 56px;
+    height: 63px;
+}
+.map-wrap >img
+{
+    width: 100%;
+}
+
+.div-left{
+  height: 50px;
+  background-color: green;
+  margin-top: 5px;
+  
+}
+.center-content{
+  height: 550px;
+  background-color: teal;
+  width: 100%
+}
+.map-icon img{
+  width: 100%;
+}
+.food-title-1 a{
+      font-size: 18px;
+    font-weight: 500;
+    color: #2e3333;
+}
+.food-detail-1 .rating-star {
+  margin-top: -5px
+}
+.signup-dropdown-otp {
+  display: none;
+}
+.reset-form .input-reset-wrap input[type="password"]{
+    width: 100%;
+    height: 40px;
+    border-radius: 3px;
+    padding: 0 15px;
+    border: 1px solid #ccc;
+}
+.gof3r-error{
+  color: #dc3545 !important;
+}
+.alert-error{
+
+    box-shadow: none;
+    border: none;
+    outline: none;
+    color: #721c24;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 50px;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 3px;
+    padding: 0 15px;
+    width: 100%;
+    margin-top: 20px;
+}
+.select-location{
+  max-height: 400px;
+  overflow: auto
+}
+.btn-changeaddres{
+  width: 100%;
+  border-radius: 0px
+}
+.order-note-1{
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+}
+.order-history-wrap > div > div {
+  padding: 8px !important;
+}
+.name-card input {
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    padding: 5px 0;
+    padding-right: 40px;
+}
+.name-card {
+    padding: 0 20px;
+    margin-bottom: 30px;
+}
+.issuing-country select{
+  
+  
+    font-weight: 500;
+}
+.issuing-country{
+   padding: 0 20px;
+    margin-bottom: 30px;
+}
+.map-address .location-add {
+   
+    top: 1% !important;
+   
+}
+.btc-delete-address{
+  width: 100%;
+}

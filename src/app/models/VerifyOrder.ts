@@ -1,0 +1,21 @@
+export class VerifyOrderModel{
+    DeliveryFee:string;
+    DeliveryFeeDisplay:string;
+    DiscountAmount:string;
+    DiscountAmountDisplay:string;
+    DiscountAmountMessage:string;
+    DiscountProgramId:string;
+    FeeWaiverProgramId:string;
+    FeeWaiverType:string;
+    HasFeeWaiverProgram:string;
+    MerchantAbsorbPercentage:string;
+    OrderPaymentDescription:string;
+    OrderingMerchantOutletId:string;
+    OrderingTerminalId:string;
+    ServiceFee:string;
+    ServiceFeeDisplay:string;
+    ServiceFeeMessage:string;
+    Surcharge:string;
+    SurchargeDisplay:string;
+    SurchargeMessage:string;
+}

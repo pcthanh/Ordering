@@ -1,0 +1,348 @@
+<header class="cms-page">
+        <div class="header-wrap-search">
+            <div class="header-top">
+                <header-checkout></header-checkout>
+            </div>
+           
+        </div>
+ </header>
+ <main>
+        <div class="main-content-order main-delivery-checkout">
+            <div class="row no-gutters">
+                <div class="col-12 col-md-8 col-map-checkout">
+                    <div class="map-checkout">
+                        <!--<img src="assets/images/img-map4.jpg" alt="" class="img-fluid">-->
+                        <agm-map style="height: 650px" #agmMap [latitude]="this.lat" [longitude]="this.lng" [zoom]="15" [styles]="styles">
+                                <agm-marker *ngFor="let item of locations" [latitude]="item.lat" [longitude]="item.lng" [iconUrl]="item.icon"></agm-marker>
+                            </agm-map>
+                    </div>
+                </div>
+                <div *ngIf="this.isHaveData" class="col-12 col-md-4 col-cart">
+                    <div class="cart-sidebar-wrap">
+                        <div class="cart-sidebar tracker-wrap">
+                            <div class="tracker-content">
+                                <div class="info-text">{{deliveryOrder.DeliveryOrderDetail[0].MerchantOutletName}} is confriming your order.</div>
+                            </div>
+                            <div class="tracker-tab-wrap">
+                                <ul class="nav nav-tabs" id="tracker" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="tracker1-tab" data-toggle="tab" href="#tracker1" role="tab" aria-controls="tracker1" aria-selected="true">TRACKER</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="tracker2-tab" data-toggle="tab" href="#tracker2" role="tab" aria-controls="tracker2" aria-selected="false">DETAILS</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="tracker3-tab" data-toggle="tab" href="#tracker3" role="tab" aria-controls="tracker3" aria-selected="false">RECEIPT</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="trackerContent">
+                                    <div class="tab-pane fade show active" id="tracker1" role="tabpanel" aria-labelledby="tracker1-tab">
+                                        <div class="tracker-progress">
+                                            <ul>
+                                                <li class="completed"><span class="step"></span><span class="inf">Processing Payment</span> <span class="time">{{this.deliveryOrder.DeliveryOrderDetail[0].CurrentStatusDate}}</span></li>
+                                                <li [ngClass]="{completed: isOnTheWay===true,progressing:isOnTheWay===false}"><span class="step"></span><span class="inf">On_The_Way</span><span *ngIf="isOnTheWay" class="time">{{this.deliveryOrder.DeliveryOrderDetail[0].CurrentStatusDate}}</span></li>
+                                                <li [ngClass]="{completed: isDelivered===true,last:isDelivered===true,progressing:isShowProcessingDilivered==true}"><span class="step"></span><span class="inf">Delivered</span><span *ngIf="isDelivered" class="time">{{this.deliveryOrder.DeliveryOrderDetail[0].CurrentStatusDate}}</span></li>
+                                                <!--<li><span class="step"></span><span class="inf">Collecting Your Order</span></li>
+                                                <li class="last"><span class="step"></span><span class="inf">Delivering Your Order</span></li>-->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tracker2" role="tabpanel" aria-labelledby="tracker2-tab">
+                                        <div class="tracker-detail-wrap">
+                                            <div class="tracker-detail">
+                                                <div class="info">
+                                                    <img src="assets/images/ico-tracker-food.png" alt="">
+                                                </div>
+                                                <div class="info">
+                                                    <div class="title">{{deliveryOrder.DeliveryOrderDetail[0].MerchantOutletName}}</div>
+                                                    <div>Joined GOF3R: {{deliveryOrder.DeliveryOrderDetail[0].OutletJoinedDate}}</div>
+                                                    <div>The Restaurant confirmed your order</div>
+                                                </div>
+                                            </div>
+                                            <div class="tracker-detail">
+                                                <div class="info">
+                                                    <img src="assets/images/ico-tracker-home.png" alt="">
+                                                </div>
+                                                <div class="info">
+                                                    <div class="title">YOUR LOCATION</div>
+                                                    <div>{{deliveryOrder.DeliveryOrderDetail[0].DeliverTo}}</div>
+                                                </div>
+                                            </div>
+                                            <div class="tracker-detail">
+                                                <div class="info">
+                                                    <img src="assets/images/ico-tracker-car.png" alt="">
+                                                </div>
+                                                <div class="info">
+                                                    <div>Your courier will be matched closer to when your order will be ready.</div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tracker3" role="tabpanel" aria-labelledby="tracker3-tab">
+                                        <div class="order-id-title">
+                                            <span>Order ({{deliveryOrder.DeliveryOrderDetail[0].CustomerOrderNumber}})</span>
+                                        </div>
+                                        <div class="order-note">
+                                            {{deliveryOrder.DeliveryOrderDetail[0].Note}}
+                                        </div>
+                                        <div class="nano-scroll nano">
+                                            <div class="nano-content item-checkout-list no-delete">
+                                                <div class="item-checkout-wrap"*ngFor="let item of deliveryOrder.DeliveryItemsPurchased">
+                                                    <div class="item-checkout">
+                                                        <div class="number">{{item.OrderDetailQty}}</div>
+                                                        <div class="title">{{item.ProductName}} <span class="price">{{item.OrderDtlDisplayPrice}}</span></div>
+                                                        <ul class="item-info">
+                                                            <!--<li><span class="inf">• Chicken</span></li>-->
+                                                            <!--<li><span class="inf">• Garlic Paste</span></li>
+                                                            <li><span class="inf">• Donair Sauce (Tzatziki)</span></li>
+                                                            <li><span class="inf">• Lettuce</span></li>-->
+                                                            <li *ngFor="let itemO of item.OrderOptions">
+                                                                <span class="inf">• {{itemO.ProductOptionDetailName}}</span><span class="price">{{itemO.OrderOptionDtlDisplayPrice}}</span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!--<div class="item-checkout-wrap">
+                                                    <div class="item-checkout">
+                                                        <div class="number">9</div>
+                                                        <div class="title">Donair Rice Plate <span class="price">$18.08</span></div>
+                                                        <div class="inf-add">“udjhgjhdfghfdjhbjfhbfdbdfdfdgfhgd”<br/><br/>
+                                                
+                                                        </div>
+                                                        <ul class="item-info">
+                                                            <li><span class="inf">• Beef (Halal)</span></li>
+                                                            <li><span class="inf">• Roasted Red Pepper Hummus</span></li>
+                                                            <li><span class="inf">• Choban Salad </span> <span class="price">$1.25</span></li>
+                                                            <li><span class="inf">• Halifax (Sweet) Sauce</span></li>
+                                                            <li><span class="inf">• Add Extra Meat</span></li>
+                                                            <li><span class="inf">• Add Red Pepper Paste (1.5 oz) </span> <span class="price">$1.10</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="item-checkout-wrap">
+                                                    <div class="item-checkout">
+                                                        <div class="number">8</div>
+                                                        <div class="title">Number of Plastic Cutlery <span class="price">$13.24</span></div>
+                                                        <ul class="item-info">
+                                                            <li><span class="inf">• Chicken</span></li>
+                                                            <li><span class="inf">• Garlic Paste</span></li>
+                                                            <li><span class="inf">• Donair Sauce (Tzatziki)</span></li>
+                                                            <li><span class="inf">• Lettuce</span></li>
+                                                            <li><span class="inf">• Add Feta Chees</span><span class="price">$1.25</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="order-rec-info">
+                                            <ul>
+                                                <li><span class="inf">Subtotal</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplaySubTotal}}</span></li>
+                                                <li *ngIf="this.deliveryOrder.DeliveryOrderDetail[0].DisplayServiceFee!=='FREE'"><span class="inf">Service fee</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplayServiceFee}}</span></li>
+                                                <li *ngIf="this.deliveryOrder.DeliveryOrderDetail[0].DisplayDeliveryFee!==''"><span class="inf">Delivery Fee</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplayDeliveryFee}}</span></li>
+                                                <li *ngIf="this.deliveryOrder.DeliveryOrderDetail[0].DisplaySurCharge!==''"><span class="inf">SurCharge</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplaySurCharge}}</span></li>
+                                                <li *ngIf="this.deliveryOrder.DeliveryOrderDetail[0].DisplayRiderTip!==''"><span class="inf">Rider tip</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplayRiderTip}}</span></li>
+                                                <li *ngIf="this.deliveryOrder.DeliveryOrderDetail[0].DisplayPromoCode!==''"><span class="inf">Promo code</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplayPromoCode}}</span></li>
+                                                <li *ngIf="this.deliveryOrder.DeliveryOrderDetail[0].DisplayCredit!==''"><span class="inf">Credit</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplayCredit}}</span></li>
+                                                <li *ngIf="this.deliveryOrder.DeliveryOrderDetail[0].DisplayDiscount!==''"><span class="inf">Discount</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplayDiscount}}</span></li>
+                                                <li *ngIf="this.deliveryOrder.DeliveryOrderDetail[0].DisplayTotal!==''"><span class="inf">Total</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].DisplayTotal}}</span></li>
+                                                <!--<li><span class="inf">PST$</span> <span class="right">$1.25</span></li>-->
+                                            </ul>
+                                            <!--<ul>
+                                                <li><span class="inf">Courier Tip</span> <span class="right">$1.00</span></li>
+                                                <li><span class="inf"><strong>Total (CAD)</strong></span> <span class="right"><strong>$23.20</strong></span></li>
+                                            </ul>-->
+                                            <ul>
+                                                <li><span class="inf">Paid with</span> <span class="right">{{this.deliveryOrder.DeliveryOrderDetail[0].PaidBy}}</span></li>
+                                                <!--<li><span class="inf">Date</span> <span class="right">Apr 21, 2018 12:07 PM</span></li>-->
+                                            </ul>
+                                            <!--<ul>
+                                                <li><span class="inf">Amount</span> <span class="right">$23.20</span></li>
+                                                <li><span class="inf">Transaction Type</span> <span class="right">Purchase</span></li>
+                                                <li><span class="inf">Reference Number</span> <span class="right">664178360011228950</span></li>
+                                                <li><span class="inf">Authorization Code</span> <span class="right">508729</span></li>
+                                                <li><span class="inf">Response/ISO Code</span> <span class="right">027/ 01</span></li>
+                                                <li><span class="inf">Message</span> <span class="right">APPROVED * =</span></li>
+                                            </ul>
+                                            <div>
+                                                <a href="#" class="print">PRINT RECEIPT</a>
+                                            </div>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="new-invite">
+                                <a href="#"><span class="btn-main">NEW</span> <span class="text">Invite friends, earn GOF3R Credits</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--start order for pickup-->
+                <div *ngIf="this.isHaveDataPickup" class="col-12 col-md-4 col-cart">
+                    <div class="cart-sidebar-wrap">
+                        <div class="cart-sidebar tracker-wrap">
+                            <div class="tracker-content">
+                                <div class="info-text">{{this.pickupOrderDatail.PickupOrderDetail[0].MerchantOutletName}} is confriming your order.</div>
+                            </div>
+                            <div class="tracker-tab-wrap">
+                                <ul class="nav nav-tabs" id="tracker" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="tracker1-tab" data-toggle="tab" href="#tracker1" role="tab" aria-controls="tracker1" aria-selected="true">TRACKER</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="tracker2-tab" data-toggle="tab" href="#tracker2" role="tab" aria-controls="tracker2" aria-selected="false">DETAILS</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="tracker3-tab" data-toggle="tab" href="#tracker3" role="tab" aria-controls="tracker3" aria-selected="false">RECEIPT</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="trackerContent">
+                                    <div class="tab-pane fade show active" id="tracker1" role="tabpanel" aria-labelledby="tracker1-tab">
+                                        <div class="tracker-progress">
+                                            <ul>
+                                                <li class="completed"><span class="step"></span><span class="inf">Processing Payment</span> <span class="time">{{this.pickupOrderDatail.PickupOrderDetail[0].CurrentStatusDate}}</span></li>
+                                                <li [ngClass]="{completed: isReadyForPickup===true,progressing:isReadyForPickup===false}"><span class="step"></span><span class="inf">READY_FOR_PICK_UP</span><span *ngIf="isOnTheWay" class="time">{{this.pickupOrderDatail.PickupOrderDetail[0].CurrentStatusDate}}</span></li>
+                                                <li [ngClass]="{completed: isPikcuped===true,last:isPikcuped===true,progressing:isShowProcessingPikuped==true}"><span class="step"></span><span class="inf">PICKED_UP</span><span *ngIf="isDelivered" class="time">{{this.pickupOrderDatail.PickupOrderDetail[0].CurrentStatusDate}}</span></li>
+                                                <!--<li><span class="step"></span><span class="inf">Collecting Your Order</span></li>
+                                                <li class="last"><span class="step"></span><span class="inf">Delivering Your Order</span></li>-->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tracker2" role="tabpanel" aria-labelledby="tracker2-tab">
+                                        <div class="tracker-detail-wrap">
+                                            <div class="tracker-detail">
+                                                <div class="info">
+                                                    <img src="assets/images/ico-tracker-food.png" alt="">
+                                                </div>
+                                                <div class="info">
+                                                    <div class="title">{{pickupOrderDatail.PickupOrderDetail[0].MerchantOutletName}}</div>
+                                                    <div>Joined GOF3R: Nov 2014</div>
+                                                    <div>The Restaurant confirmed your order</div>
+                                                </div>
+                                            </div>
+                                            <div class="tracker-detail">
+                                                <div class="info">
+                                                    <img src="assets/images/ico-tracker-home.png" alt="">
+                                                </div>
+                                                <div class="info">
+                                                    <div class="title">YOUR LOCATION</div>
+                                                    <div>{{pickupOrderDatail.PickupOrderDetail[0].PickUpAt}}</div>
+                                                </div>
+                                            </div>
+                                            <div class="tracker-detail">
+                                                <div class="info">
+                                                    <img src="assets/images/ico-tracker-car.png" alt="">
+                                                </div>
+                                                <div class="info">
+                                                    <div>Your courier will be matched closer to when your order will be ready.</div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tracker3" role="tabpanel" aria-labelledby="tracker3-tab">
+                                        <div class="order-id-title">
+                                            <span>Order ({{pickupOrderDatail.PickupOrderDetail[0].CustomerOrderNumber}})</span>
+                                        </div>
+                                        <div class="order-note">
+                                            {{pickupOrderDatail.PickupOrderDetail[0].Note}}
+                                        </div>
+                                        <div class="nano-scroll nano">
+                                            <div class="nano-content item-checkout-list no-delete">
+                                                <div class="item-checkout-wrap"*ngFor="let item of pickupOrderDatail.PickupItemsPurchased">
+                                                    <div class="item-checkout">
+                                                        <div class="number">{{item.OrderDetailQty}}</div>
+                                                        <div class="title">{{item.ProductName}} <span class="price">{{item.OrderDtlDisplayPrice}}</span></div>
+                                                        <ul class="item-info">
+                                                            <!--<li><span class="inf">• Chicken</span></li>-->
+                                                            <!--<li><span class="inf">• Garlic Paste</span></li>
+                                                            <li><span class="inf">• Donair Sauce (Tzatziki)</span></li>
+                                                            <li><span class="inf">• Lettuce</span></li>-->
+                                                            <li *ngFor="let itemO of item.OrderOptions">
+                                                                <span class="inf">• {{itemO.ProductOptionDetailName}}</span><span class="price">{{itemO.OrderOptionDtlDisplayPrice}}</span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!--<div class="item-checkout-wrap">
+                                                    <div class="item-checkout">
+                                                        <div class="number">9</div>
+                                                        <div class="title">Donair Rice Plate <span class="price">$18.08</span></div>
+                                                        <div class="inf-add">“udjhgjhdfghfdjhbjfhbfdbdfdfdgfhgd”<br/><br/>
+                                                
+                                                        </div>
+                                                        <ul class="item-info">
+                                                            <li><span class="inf">• Beef (Halal)</span></li>
+                                                            <li><span class="inf">• Roasted Red Pepper Hummus</span></li>
+                                                            <li><span class="inf">• Choban Salad </span> <span class="price">$1.25</span></li>
+                                                            <li><span class="inf">• Halifax (Sweet) Sauce</span></li>
+                                                            <li><span class="inf">• Add Extra Meat</span></li>
+                                                            <li><span class="inf">• Add Red Pepper Paste (1.5 oz) </span> <span class="price">$1.10</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="item-checkout-wrap">
+                                                    <div class="item-checkout">
+                                                        <div class="number">8</div>
+                                                        <div class="title">Number of Plastic Cutlery <span class="price">$13.24</span></div>
+                                                        <ul class="item-info">
+                                                            <li><span class="inf">• Chicken</span></li>
+                                                            <li><span class="inf">• Garlic Paste</span></li>
+                                                            <li><span class="inf">• Donair Sauce (Tzatziki)</span></li>
+                                                            <li><span class="inf">• Lettuce</span></li>
+                                                            <li><span class="inf">• Add Feta Chees</span><span class="price">$1.25</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="order-rec-info">
+                                            <ul>
+                                                <li><span class="inf">Subtotal</span> <span class="right">{{this.pickupOrderDatail.PickupOrderDetail[0].DisplaySubTotal}}</span></li>
+                                                <li *ngIf="this.pickupOrderDatail.PickupOrderDetail[0].DisplayServiceFee!=='FREE'"><span class="inf">Service fee</span> <span class="right">{{this.pickupOrderDatail.PickupOrderDetail[0].DisplayServiceFee}}</span></li>
+                                                <li *ngIf="this.pickupOrderDatail.PickupOrderDetail[0].DisplayPromoCode!==''"><span class="inf">Promo code</span> <span class="right">{{this.pickupOrderDatail.PickupOrderDetail[0].DisplayPromoCode}}</span></li>
+                                                <li *ngIf="this.pickupOrderDatail.PickupOrderDetail[0].DisplayCredit!==''"><span class="inf">Credit</span> <span class="right">{{this.pickupOrderDatail.PickupOrderDetail[0].DisplayCredit}}</span></li>
+                                                <li *ngIf="this.pickupOrderDatail.PickupOrderDetail[0].DisplayDiscount!==''"><span class="inf">Discount</span> <span class="right">{{this.pickupOrderDatail.PickupOrderDetail[0].DisplayDiscount}}</span></li>
+                                                <li *ngIf="this.pickupOrderDatail.PickupOrderDetail[0].DisplayTotal!==''"><span class="inf">Total</span> <span class="right">{{this.pickupOrderDatail.PickupOrderDetail[0].DisplayTotal}}</span></li>
+                                                <!--<li><span class="inf">PST$</span> <span class="right">$1.25</span></li>-->
+                                            </ul>
+                                            <!--<ul>
+                                                <li><span class="inf">Courier Tip</span> <span class="right">$1.00</span></li>
+                                                <li><span class="inf"><strong>Total (CAD)</strong></span> <span class="right"><strong>$23.20</strong></span></li>
+                                            </ul>-->
+                                            <ul>
+                                                <li><span class="inf">Paid with</span> <span class="right">{{this.pickupOrderDatail.PickupOrderDetail[0].PaidBy}}</span></li>
+                                                <!--<li><span class="inf">Date</span> <span class="right">Apr 21, 2018 12:07 PM</span></li>-->
+                                            </ul>
+                                            <!--<ul>
+                                                <li><span class="inf">Amount</span> <span class="right">$23.20</span></li>
+                                                <li><span class="inf">Transaction Type</span> <span class="right">Purchase</span></li>
+                                                <li><span class="inf">Reference Number</span> <span class="right">664178360011228950</span></li>
+                                                <li><span class="inf">Authorization Code</span> <span class="right">508729</span></li>
+                                                <li><span class="inf">Response/ISO Code</span> <span class="right">027/ 01</span></li>
+                                                <li><span class="inf">Message</span> <span class="right">APPROVED * =</span></li>
+                                            </ul>
+                                            <div>
+                                                <a href="#" class="print">PRINT RECEIPT</a>
+                                            </div>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="new-invite">
+                                <a href="#"><span class="btn-main">NEW</span> <span class="text">Invite friends, earn GOF3R Credits</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end order for pikcup-->
+            </div>
+        </div>
+    </main>
+         <block-ui>
+      <!-- Your app markup here -->
+    </block-ui>
+     <gof3r-footer></gof3r-footer>

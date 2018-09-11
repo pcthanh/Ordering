@@ -1,0 +1,285 @@
+<header class="cms-page">
+    <div class="header-wrap-search">
+        <div class="header-top">
+            <header-gof3r></header-gof3r>
+        </div>
+
+    </div>
+</header>
+<main>
+    <div class="main-content-order">
+        <div class="row no-gutters">
+            <div class="col-12 col-md-8 col-map-checkout">
+                <div class="main-top">
+                    <div class="row no-gutters">
+                        <div class="col-12 col-md-1"></div>
+                        <div class="col-12 col-md-11" *ngIf="haveDataOutlet">
+                            <div class="title-to"> {{outletInfo.OutletInfo[0].MerchantOutletName}} <span class="rate">7.0</span></div>
+                            <div class="name">Abbott St.</div>
+                            <div *ngIf=" this.OrderType==='DELIVERY'" class="time-rate">{{this.outletInfo.OutletInfo[0].EstimatedDeliveryDateTimeDisplay}} <img src="assets/images/ico-more-top.png"
+                                    alt=""></div>
+                            <div *ngIf=" this.OrderType==='PICKUP'" class="time-rate">{{this.outletInfo.OutletInfo[0].EstimatedPickupTime}} <img src="assets/images/ico-more-top.png"
+                                    alt=""></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col-12 col-md-1"></div>
+                    <div class="col-12 col-md-11">
+                        <div class="order-content-wrap">
+                            <div class="order-content">
+                                <div class="row">
+                                    <div class="col-12 col-md-4">
+                                        <div class="order-catalog" *ngIf="haveDataOutlet && this.haveDepartment==='Y'">
+                                            <ul>
+                                                <li class="active" (click)="loadItemOfCategory('ALL',this.productList.IsHavingDepartment)"><a>All</a></li>
+                                                <li *ngFor="let item of this.outletInfo.OutletInfo[0].DepartmentCategoryList;let i = index" id="{{item.DepartmentId}}" (click)="loadItemOfCategory(item.DepartmentId,this.productList.IsHavingDepartment,i)"
+                                                    [ngClass]="{'menu-item-all': this.addClass===i}"><a>{{item.DepartmentName}}</a></li>
+
+                                            </ul>
+                                        </div>
+
+                                        <div class="order-catalog" *ngIf="haveDataOutlet && this.haveDepartment==='N'">
+                                            <ul>
+                                                <li class="active" (click)="loadItemOfCategory('ALL',this.productList.IsHavingDepartment)"><a>All</a></li>
+                                                <li *ngFor="let item of this.outletInfo.OutletInfo[0].DepartmentCategoryList[0].CategoryList;let i = index" id="{{item.CategoryId}}"
+                                                    (click)="loadItemOfCategory(item.CategoryId,this.productList.IsHavingDepartment,i)"
+                                                    [ngClass]="{'active': this.addClass===i}"><a>{{item.CategoryName}}</a></li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-8">
+                                        <div class="order-info-wrap">
+                                            <!--<div class="order-title no-border">Place Settings</div>-->
+                                            <!--<div class="text-info-wrap">
+                                                <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+                                            </div>-->
+                                            <!--<div class="text-info-wrap" data-mfp-src="#numberof-popup" id="numberof">
+                                                <div class="text-strong">Number of Plastic Cutlery <span class="right">see item</span></div>
+                                                <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+
+                                                <div id="numberof-popup" class="white-popup mfp-hide">
+                                                    <div class="title-popup">Number of Chopsticks</div>
+                                                    <div class="text-popup">How many people will be eating from this order?</div>
+
+                                                    <div class="btn-add-special-wrap">
+                                                        <div class="btn-add-special-inner">
+                                                            <button class="btn-add-special"><span>Add Special instructions for the Restaurant (Optional)</span></button>
+                                                            <textarea name="" class="text-special" style="display: none;"></textarea>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <div class="handle-bottom">
+                                                        <a href="#" class="feedback">Send Menu Feeback</a>
+                                                        <div class="handle-counter" id="numberCounter">
+                                                            <button class="counter-minus"><span>_</span></button>
+                                                            <input type="text" value="1">
+                                                            <button class="counter-plus">+</button>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="btn-selection-wrap">
+                                                        <button class="btn-main btn-selection"><span>Add to order</span></button>
+                                                        <div class="price">$00.00</div>
+                                                    </div>
+                                                </div>
+
+                                            </div>-->
+                                            
+                                            
+                                            <div *ngIf="haveData">
+
+                                          
+                                                <div *ngFor="let item of productList.ProductList">
+                                                    <div class="order-title">{{item.Group}}</div>
+                                                    <!--<div class="text-info-wrap" data-mfp-src="#chicken-popup" id="chicken-beef"></div>-->
+                                                    <div *ngFor="let itemP of item.Produtcs">
+
+                                                        <div class="text-info-wrap chicken-beef" (click)="showProductDetail(itemP.Id)">
+                                                            
+
+                                                            <div class="text-strong"> {{itemP.Name}} <span class="right">{{itemP.PriceDisplay}}</span></div>
+                                                            <div class="text">{{itemP.Description}}.</div>
+
+                                                        </div>
+
+                                                    </div>
+
+
+
+                                                </div>
+
+                                                <!--start popup when click product-->
+                                                <div id="" #closeModal class="chicken-popup white-popup mfp-hide">
+                                                    <div class="title-popup">{{productDetailParse.Name}}</div>
+                                                    <div class="text-popup">{{productDetailParse.Description}}</div>
+                                                    <div *ngFor="let itemOptions of productDetailParse.OptionList">
+                                                        <div class="title-choose">{{itemOptions.OptionName}}</div>
+                                                        <div class="text-small" *ngIf="itemOptions.MinOptionItemSelectionRequired>0">Choose One <span class="not">Required</span></div>
+                                                        <div class="input-choose" *ngFor="let itemOptionItem of itemOptions.OptionItemList;let i=index">
+                                                            <input type="checkbox" name="" id="id-select-{{itemOptions.OptionName}}-{{i}}" [disabled]="itemOptionItem.isLock" [checked]="itemOptionItem.isCheck"
+                                                                (change)="checkOptionItem(itemOptionItem.OptionItemId,itemOptions.OptionId,i)">
+                                                            <label for="id-select-{{itemOptions.OptionName}}-{{i}}">{{itemOptionItem.OptionItemName}} {{itemOptionItem.PriceDisplay}}</label>
+                                                        </div>
+
+                                                    </div>
+
+
+
+
+                                                    <div class="btn-add-special-wrap">
+                                                        <div class="btn-add-special-inner">
+                                                            <button (click)="showAddSpecial()" class="btn-add-special"><span>Add Special instructions for the Restaurant (Optional)</span></button>
+                                                            <textarea name="" [(ngModel)]="specialRequest" class="text-special" style="display: none;"></textarea>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <div class="handle-bottom">
+                                                        <a href="#" class="feedback">Send Menu Feeback</a>
+                                                        <div class="handle-counter" id="handleCounter">
+                                                            <button (click)="SubtractionItem()" class="counter-minus"><span>_</span></button>
+                                                            <input type="text" value="{{productDetailParse.Qty}}">
+                                                            <button (click)="AdditionQtyItem()" class="counter-plus">+</button>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="btn-selection-wrap">
+                                                        <button (click)="addToCart()" class="btn-main btn-selection"><span>selections required</span></button>
+                                                        <div class="price">{{productDetailParse.TotalStr}}</div>
+                                                    </div>
+                                                </div>
+                                                <!--end popup when click product-->
+
+
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--start cart empty-->
+            <div *ngIf="!haveCart" class="col-12 col-md-4 col-cart">
+                <div class="cart-sidebar-wrap">
+                    <div class="cart-sidebar">
+                        <img src="assets/images/ico-cart-empty.png" alt="" class="img-cart-empty img-fluid">
+                    </div>
+                </div>
+            </div>
+            <!--start show popup when add product difference-->
+            <div id="cart-popup" class="cart-popup white-popup mfp-hide">
+                <div class="title-popup">{{this.errorCart}}</div>
+
+
+
+
+                <div class="btn-selection-wrap">
+                    <button (click)="deleteCartOld()" class="btn-main btn-selection"><span>Confirm</span></button>
+                </div>
+            </div>
+            <!--end show popup when add product difference-->
+            <!--start show popup when not select date pickup-->
+            <div id="pickup-date" class="pickup-date white-popup mfp-hide">
+                <div class="title-popup">{{this.errorCart}}</div>
+
+
+
+
+                <div class="btn-selection-wrap">
+                    <button (click)="closePopupSelectTimes()" class="btn-main btn-selection"><span>CLOSE</span></button>
+                </div>
+            </div>
+            <!--end show popup when not select date pickup-->
+            <!--end cart empty-->
+
+            <!--start popup update product in cart-->
+            <div id="" *ngIf="showUpdateProduct" class="chicken-popup-update white-popup mfp-hide">
+                <div class="title-popup">{{this.cart.Cart[IndexItemCartUpdate].Name}}</div>
+                <div class="text-popup">{{this.cart.Cart[IndexItemCartUpdate].Description}}</div>
+                <div *ngFor="let itemOptions of this.cart.Cart[IndexItemCartUpdate].OptionList">
+                    <div class="title-choose">{{itemOptions.OptionName}}</div>
+                    <div class="text-small" *ngIf="itemOptions.MinOptionItemSelectionRequired>0">Choose One <span class="not">Required</span></div>
+                    <div class="input-choose" *ngFor="let itemOptionItem of itemOptions.OptionItemList;let i=index">
+                        <input type="checkbox" name="" id="id-select-{{itemOptions.OptionName}}-{{i}}" [disabled]="itemOptionItem.isLock" [checked]="itemOptionItem.isCheck"
+                            (change)="checkOptionItemUpdate(itemOptionItem.OptionItemId,itemOptions.OptionId,i)">
+                        <label for="id-select-{{itemOptions.OptionName}}-{{i}}">{{itemOptionItem.OptionItemName}} {{itemOptionItem.PriceDisplay}}</label>
+                    </div>
+
+                </div>
+                <div class="btn-add-special-wrap">
+                    <div class="btn-add-special-inner">
+                        <button (click)="showAddSpecial()" class="btn-add-special"><span>Add Special instructions for the Restaurant (Optional)</span></button>
+                        <textarea name="" [(ngModel)]="specialRequest" class="text-special" style="display: none;"></textarea>
+                    </div>
+
+
+                </div>
+
+                <div class="handle-bottom">
+                    <a href="#" class="feedback">Send Menu Feeback</a>
+                    <div class="handle-counter" id="handleCounter">
+                        <button (click)="SubtractionItemUpdate()" class="counter-minus"><span>_</span></button>
+                        <input type="text" value="{{this.cart.Cart[IndexItemCartUpdate].Qty}}">
+                        <button (click)="AdditionQtyItemUpdate()" class="counter-plus">+</button>
+                    </div>
+
+                </div>
+                <div class="btn-selection-wrap">
+                    <button (click)="UpadteCartAndClose()" class="btn-main btn-selection"><span>selections required</span></button>
+                    <div class="price">{{this.cart.Cart[IndexItemCartUpdate].TotalStr}}</div>
+                </div>
+            </div>
+            <!--end popup update product in cart-->
+
+            <!--start have cart-->
+            <div *ngIf="haveCart" class="col-12 col-md-4 col-cart">
+                <div class="cart-sidebar-wrap">
+                    <div class="cart-sidebar">
+                        <div *ngIf=" this.OrderType==='DELIVERY'" class="delivery-info"><span>Delivery is now free!</span></div>
+                        <div class="subtotal-wrap">
+                            <div class="title-sub">Food & Beverage Subtotal <span class="price">{{this.orderMain.SubTotalStr}}</span></div>
+                            <button (click)="checkOut()" class="btn-main btn-checkout"><span>Checkout</span></button>
+                        </div>
+                        <div class="nano-scroll nano">
+                            <div class="nano-content item-checkout-list">
+                                <div class="item-checkout-wrap" *ngFor="let item of cart.Cart;let i=index">
+                                    <div (click)="upadteProduct(i)" style="cursor: pointer" class="item-checkout">
+                                        <div class="number">{{item.Qty}}</div>
+                                        <div class="title">{{item.Name}} <span class="price">{{item.TotalStr}}</span></div>
+                                        <a (click)="removeCart(i)" class="btn-delete"><img src="assets/images/ico-close.png" alt=""></a>
+                                        <ul class="item-info">
+
+                                            <div *ngFor="let itemOp of item.OptionList">
+                                                <div *ngFor="let itemOPD of itemOp.OptionItemList">
+                                                    <div *ngIf="itemOPD.isCheck==true">
+                                                        <li><span class="inf">• {{itemOPD.OptionItemName}}</span><span class="price">{{itemOPD.PriceDisplay}}</span></li>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end have cart-->
+        </div>
+    </div>
+</main>
+<block-ui>
+    <!-- Your app markup here -->
+</block-ui>
+<gof3r-footer></gof3r-footer>

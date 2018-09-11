@@ -1,0 +1,211 @@
+<header class="cms-page">
+    <div class="header-wrap-search">
+        <div class="header-top">
+            <header-gof3r></header-gof3r>
+        </div>
+        <div class="search-sort-form">
+            <form action="#" class="form-search-item">
+                <input class="search-input" type="text" placeholder="Search">
+            </form>
+            <a href="#" class="sort-item"><span class="d-none d-md-inline-block">Sort</span>&nbsp;</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="main-content">
+        <div class="container">
+            <!--<div class="special-offers food-slide">
+                    <h2 class="title">Special Offers</h2>
+                    <div class="owl-carousel" id="specialoffer">
+                        <div class="food-item">
+                            <a href="#" class="img-block">
+                                <img class="img-fluid" src="assets/images/img-product1.jpg" alt="">
+                                <span class="label">Free gift</span>
+                                <span class="countdown">
+                                    <span class='cd-sale minute'><span class='num'>25</span><span class='unit'>min</span></span>
+                                </span>
+                            </a>
+                            <div class="food-detail">
+                                <h3 class="food-title"><a href="#">King bbq</a></h3>
+                                <div class="rating-star">
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star"></span>
+                                </div>
+                                <div class="info">Drink • Fastfood</div>
+                            </div>
+                        </div>
+                        <div class="food-item">
+                            <a href="#" class="img-block">
+                                <img class="img-fluid" src="assets/images/img-product2.jpg" alt="">
+                                <span class="label">Free delivery</span>
+                                <span class="countdown">
+                                    <span class='cd-sale minute'><span class='num'>25</span><span class='unit'>min</span></span>
+                                </span>
+                            </a>
+                            <div class="food-detail">
+                                <h3 class="food-title"><a href="#">King bbq</a></h3>
+                                <div class="rating-star">
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star"></span>
+                                </div>
+                                <div class="info">Drink • Fastfood</div>
+                            </div>
+                        </div>
+                        <div class="food-item">
+                            <a href="#" class="img-block">
+                                <img class="img-fluid" src="assets/images/img-product3.jpg" alt="">
+                                <span class="countdown">
+                                    <span class='cd-sale minute'><span class='num'>25</span><span class='unit'>min</span></span>
+                                </span>
+                            </a>
+                            <div class="food-detail">
+                                <h3 class="food-title"><a href="#">King bbq</a></h3>
+                                <div class="rating-star">
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star"></span>
+                                </div>
+                                <div class="info">Drink • Fastfood</div>
+                            </div>
+                        </div>
+                        <div class="food-item">
+                            <a href="#" class="img-block">
+                                <img class="img-fluid" src="assets/images/img-product4.jpg" alt="">
+                                <span class="countdown">
+                                    <span class='cd-sale minute'><span class='num'>25</span><span class='unit'>min</span></span>
+                                </span>
+                            </a>
+                            <div class="food-detail">
+                                <h3 class="food-title"><a href="#">King bbq</a></h3>
+                                <div class="rating-star">
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star"></span>
+                                </div>
+                                <div class="info">Drink • Fastfood</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>-->
+                
+            <div class="popular-near food-slide" *ngIf="haveOffer">
+                <h2 *ngIf="haveOffer" class="title">Special Offers</h2>
+                <div class="row">
+                    <div class="col-6 col-md-3" *ngFor="let item of this.OfferList.OffersList">
+                        <div class="food-item wow slideInUp" data-wow-duration="0.5s">
+                            <a class="img-block">
+                                    <img  style="width: 100%;height: 182px"
+                                     class="img-fluid" src="{{item.AdImageURL}}" alt="">
+                                    <!--<span class="label">Free gift</span>-->
+                                    <!--<span class="countdown">
+                                        <span class='cd-sale minute'style=" "><span class='unit'>{{item.EstimatedDeliveryTime}}</span></span>
+                                    </span>-->
+                                </a>
+                            <!--<div class="food-detail-1">
+                                <h3 class="food-title-1"><a href="#">{{item.MerchantOutletName}}</a></h3>
+
+                                <div class="rating-star">
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star"></span>
+                                </div>
+                                <div class="info-1">
+                                    <span *ngFor="let itemSub of item.SubCategoryList">
+                                            {{itemSub.SubCategoryName}}
+                                        </span>
+
+                                </div>
+                            </div>-->
+                        </div>
+                    </div>
+
+                </div>
+                <!--<div class="owl-carousel" id="popularcarousel">
+                    
+                            <div class="owl-item" *ngFor="let item of this.OfferList.OffersList" style="width: 225px; margin-right: 30px;">
+                                <div class="food-item">
+                                    <a href="#" class="img-block">
+                                <img class="img-fluid" src="{{item.AdImageURL}}" alt="" style="height: 131px">
+                                <span class="label">Free gift</span>-->
+                                <!--<span class="countdown">
+                                    <span class='cd-sale minute'><span class='num'>25</span><span class='unit'>min</span></span>
+                                </span>-->
+                            
+                                    <!--<div class="food-detail">
+                                        <h3 class="food-title"><a href="#">King bbq</a></h3>
+                                        <div class="rating-star">
+                                            <span class="go-star checked"></span>
+                                            <span class="go-star checked"></span>
+                                            <span class="go-star checked"></span>
+                                            <span class="go-star checked"></span>
+                                            <span class="go-star"></span>
+                                        </div>
+                                        <div class="info">Drink • Fastfood</div>
+                                    </div>-->
+                                </div>
+                       
+
+            
+            
+            <div class="all-restaurants food-slide" *ngIf="haveData">
+                <h2 class="title">Popular near you</h2>
+                <div class="row">
+                    <div class="col-6 col-md-3" *ngFor="let item of getAllOutletListV2.MerchantOutletListInfo">
+                        <div class="food-item wow slideInUp" data-wow-duration="0.5s">
+                            <a class="img-block">
+                                    <img (click)="enterOrder(item.MerchantOutletId)" style="width: 100%;height: 182px"
+                                     class="img-fluid" src="{{item.MerchantOutletImage}}" alt="">
+                                    <!--<span class="label">Free gift</span>-->
+                                    <span class="countdown">
+                                        <span *ngIf="this.orderType==='DELIVERY'" class='cd-sale minute'style=" "><span class='unit'>{{item.EstimatedDeliveryTime}}</span></span>
+                                        <span *ngIf="this.orderType==='PICKUP'" class='cd-sale minute'style=" "><span class='unit'>{{item.EstimatedPickupTime}}</span></span>
+                                    </span>
+                                </a>
+                            <div class="food-detail-1">
+                                <h3 class="food-title-1"><a href="#">{{item.MerchantOutletName}}</a></h3>
+
+                                <div class="rating-star">
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star checked"></span>
+                                    <span class="go-star"></span>
+                                </div>
+                                <div class="info-1">
+                                    <span *ngFor="let itemSub of item.SubCategoryList">
+                                            {{itemSub.SubCategoryName}}
+                                        </span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--start no data-->
+            <div *ngIf="noData" class="alert alert-danger" role="alert">
+                {{this.getAllOutletListV2.NoMessageDataForOutletList}}
+            </div>
+            <!--end no data-->
+        </div>
+    </div>
+</main>
+     <block-ui>
+      <!-- Your app markup here -->
+    </block-ui>
+<gof3r-footer></gof3r-footer>
