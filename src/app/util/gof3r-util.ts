@@ -1,5 +1,5 @@
 import * as CryptoJS from 'crypto-js';
-import { UUID } from "angular-uuid";
+
 
 export class Gof3rUtil {
     encrypt(data: string) {
