@@ -77,6 +77,7 @@ export class Gof3rHomeComponent implements OnInit {
     addressList: AddressListModel;
     listDeliveryAddressShow: ListDeliveryAddress
     listDeliveryAddress: ListDeliveryAddress;
+    showListSelectAddress:boolean=false;
     @ViewChild(NgAutocompleteComponent) public completer: NgAutocompleteComponent;
     
     public list1 = 
@@ -566,6 +567,8 @@ export class Gof3rHomeComponent implements OnInit {
     }
     deleteAddress() {
         this.inputAddress = ""
+        this.list=[]
+        this.showListSelectAddress=false;
     }
     getCurrentLocation() {
         if (window.navigator && window.navigator.geolocation) {
@@ -586,6 +589,8 @@ export class Gof3rHomeComponent implements OnInit {
                         localStorage.setItem('lat', this.lat + '');
                         localStorage.setItem('long', this.lng + '');
                         localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
+                        this.list=[];
+                        this.showListSelectAddress=false;
                         this.blockUI.stop();
                         //this.locationrequest =this.lang+","+this.long+"#_#_";
                         // console.log('xxx:'+ this.locationrequest)
@@ -797,17 +802,13 @@ export class Gof3rHomeComponent implements OnInit {
         let request_data_json = JSON.stringify(data_request);
         this._pickupService.SearchSingaporeAddress(common_data_json,request_data_json).then(data=>{
             console.log("addPostal:"+ JSON.stringify(data))
-            this.list=[]
-            for(let i = 0; i< data.AddressList.length; i++){
-                this.list.push({name:data.AddressList[i].PostalCode,postalCode:data.AddressList[i].Address,lat:data.AddressList[i].Latitude,lng:data.AddressList[i].Longitude})
+            this.list=data;
+            this.showListSelectAddress=true;
+            // for(let i = 0; i< data.AddressList.length; i++){
+            //     this.list.push({name:data.AddressList[i].Address,postalCode:data.AddressList[i].PostalCode,lat:data.AddressList[i].Latitude,lng:data.AddressList[i].Longitude})
                 
-            }
-            console.log("list:"+ JSON.stringify(this.list));
-                setTimeout(()=>{
-                    this.setList(this.list);
-                },50)
-                 
-           
+            // }
+            
         })
     }
     Selected(item: SelectedAutocompleteItem) {
@@ -817,5 +818,10 @@ export class Gof3rHomeComponent implements OnInit {
           this.autoCompleteService.setDynamicList(list);
           // this will log in console if your list is empty.
       }
+    selectAddress(addres:string, lat:string, lng:string){
+        this.list=[];
+        this.showListSelectAddress=false;
+        this.inputAddress=addres;
+    }
 
 }

@@ -1,11 +1,11 @@
- <header>
-        <div class="header-wrap">
-            <div class="header-top">
-                <div class="main-menu">
-                    <h1 class="logo text-hide"><a href=""><img src="assets/images/logo.png" alt=""><span>GOF3R</span></a></h1>
-                    <div class="top-action">
-                        <!--<a [routerLink]="['/become-courier']"
-                         class="become-courier">Become a courier</a>--thanh>
+<header>
+    <div class="header-wrap">
+        <div class="header-top">
+            <div class="main-menu">
+                <h1 class="logo text-hide"><a href=""><img src="assets/images/logo.png" alt=""><span>GOF3R</span></a></h1>
+                <div class="top-action">
+                    <!--<a [routerLink]="['/become-courier']"
+                         class="become-courier">Become a courier</a>thanh>
                         <div class="user-login user-account">
                             <div class="account d-none d-md-block">Account</div>
                             <div class="login-wrap">
@@ -36,296 +36,330 @@
                                         </svg>
                                     </div>
                                 </div>
-                                <!--start drop down user not login-->
-                                <div class="login-dropdown">
-                                    <div class="login-dropdown-content loginform-dropdown">
-                                        <div class="login-form">
-                                            <form action="">
-                                                <input type="text" [(ngModel)]="userName" name="email-login" placeholder="Email Address">
-                                                <input type="password" [(ngModel)]="passWord" name="pass-login" placeholder="Password">
-                                                <button class="btn-main btn-login" (click)="userLogin()">LOG IN</button>
-                                                <a href="02_Login_03_ForgotPassword.html" class="forgot-pass" [routerLink]="['/forgot-password']">Forgot your password?</a>
-                                            </form>
-                                        </div>
-                                        <div class="social-login">
-                                            <span class="or"><span>Or</span></span>
-                                            <a href="#" class="fb-login"><span>Log in with Facebook</span></a>
-                                            <a href="#" class="gplus-login"><span>Log in with Google</span></a>
-                                        </div>
-                                        <div class="sign-up">
-                                            <a href="02_Login_01_SignUp.html">Need an account? Sign up</a>
-                                        </div>
-                                        <!--<div class="btn-chat">
+                                <!start drop down user not login-->
+                    <div class="login-dropdown">
+                        <div class="login-dropdown-content loginform-dropdown">
+                            <div class="login-form">
+                                <form action="">
+                                    <input type="text" [(ngModel)]="userName" name="email-login" placeholder="Email Address">
+                                    <input type="password" [(ngModel)]="passWord" name="pass-login" placeholder="Password">
+                                    <button class="btn-main btn-login" (click)="userLogin()">LOG IN</button>
+                                    <a href="02_Login_03_ForgotPassword.html" class="forgot-pass" [routerLink]="['/forgot-password']">Forgot your password?</a>
+                                </form>
+                            </div>
+                            <div class="social-login">
+                                <span class="or"><span>Or</span></span>
+                                <a href="#" class="fb-login"><span>Log in with Facebook</span></a>
+                                <a href="#" class="gplus-login"><span>Log in with Google</span></a>
+                            </div>
+                            <div class="sign-up">
+                                <a href="02_Login_01_SignUp.html">Need an account? Sign up</a>
+                            </div>
+                            <!--<div class="btn-chat">
                                             <button>Chat with support</button>
                                         </div>
                                         <div class="info-login">RESTAURANT LOGIN</div>-->
-                                    </div>
-                                    <div class="login-dropdown-content signup-dropdown">
-                                        <div class="login-form signup-form">
-                                            <div class="title-top">
-                                                <div class="title">Sign Up</div>
-                                                <a href="02_Login.html" class="back-login"><span>LOGIN</span></a>
-                                            </div>
-                                            <form>
-                                                <input type="text"[(ngModel)]="this.signUp.FullName" name="name-signup" placeholder="Full Name">
-                                                <input type="text" [(ngModel)]="this.signUp.PhoneNumber" name="phone-signup" placeholder="Phone Number">
-                                                <input type="text" [(ngModel)]="this.signUp.Email" name="email-signup" placeholder="Email Address">
-                                                <input type="password" [(ngModel)]="this.signUp.Password" name="pass-signup" placeholder="Password">
-                                                <input type="password" [(ngModel)]="this.signUp.ConfrimPassword" name="pass-confirm-signup" placeholder="Confirm Password">
-                                                <button (click)="RegisterOPT()" class="btn-main btn-login btn-signup">SIGN UP</button>
-                                            </form>
-                                        </div>
-                                        <div class="social-login">
-                                            <span class="or"><span>Or</span></span>
-                                            <a href="#" class="fb-login"><span>Log in with Facebook</span></a>
-                                            <a href="#" class="gplus-login"><span>Log in with Google</span></a>
-                                        </div>
-                                    </div>
-                                    <div class="login-dropdown-content signup-dropdown-otp">
-                                        <div class="verifi-code">
-                                            <div class="title">Enter Your Code</div>
-                                            <div class="text">We sent a verification code to you at +650 123456</div>
-                                            <div class="code">
-                                                <input type="text" [(ngModel)]="inputOTPStr" (keyup)="inputOTP($event)" maxlength="6">
-                                                <div class="row">
-                                                    <div class="col-2"><div class="bor"></div></div>
-                                                    <div class="col-2"><div class="bor"></div></div>
-                                                    <div class="col-2"><div class="bor"></div></div>
-                                                    <div class="col-2"><div class="bor"></div></div>
-                                                    <div class="col-2"><div class="bor"></div></div>
-                                                    <div class="col-2"><div class="bor"></div></div>
-                                                </div>
-                                                <button class="btn-sendcode"><span class="per" style="width: 40%;"></span><span class="send">RESEND CODE</span></button>
-                                                <div class="get-sms"><a href="#">Didn’t get the SMS?</a></div>
-                                            </div>
-                                        </div>
-                                    </div>
+                        </div>
+                        <div class="login-dropdown-content signup-dropdown">
+                            <div class="login-form signup-form">
+                                <div class="title-top">
+                                    <div class="title">Sign Up</div>
+                                    <a href="02_Login.html" class="back-login"><span>LOGIN</span></a>
                                 </div>
-                                <!--end drop down user not login-->
+                                <form>
+                                    <input type="text" [(ngModel)]="this.signUp.FullName" name="name-signup" placeholder="Full Name">
+                                    <input type="text" [(ngModel)]="this.signUp.PhoneNumber" name="phone-signup" placeholder="Phone Number">
+                                    <input type="text" [(ngModel)]="this.signUp.Email" name="email-signup" placeholder="Email Address">
+                                    <input type="password" [(ngModel)]="this.signUp.Password" name="pass-signup" placeholder="Password">
+                                    <input type="password" [(ngModel)]="this.signUp.ConfrimPassword" name="pass-confirm-signup" placeholder="Confirm Password">
+                                    <button (click)="RegisterOPT()" class="btn-main btn-login btn-signup">SIGN UP</button>
+                                </form>
+                            </div>
+                            <div class="social-login">
+                                <span class="or"><span>Or</span></span>
+                                <a href="#" class="fb-login"><span>Log in with Facebook</span></a>
+                                <a href="#" class="gplus-login"><span>Log in with Google</span></a>
+                            </div>
+                        </div>
+                        <div class="login-dropdown-content signup-dropdown-otp">
+                            <div class="verifi-code">
+                                <div class="title">Enter Your Code</div>
+                                <div class="text">We sent a verification code to you at +650 123456</div>
+                                <div class="code">
+                                    <input type="text" [(ngModel)]="inputOTPStr" (keyup)="inputOTP($event)" maxlength="6">
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <div class="bor"></div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="bor"></div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="bor"></div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="bor"></div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="bor"></div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="bor"></div>
+                                        </div>
+                                    </div>
+                                    <button class="btn-sendcode"><span class="per" style="width: 40%;"></span><span class="send">RESEND CODE</span></button>
+                                    <div class="get-sms"><a href="#">Didn’t get the SMS?</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end drop down user not login-->
 
-                                <!--start drop down user login-->
-                                <div class="login-dropdown-had">
-                                    <div class="account-info">
-                                        <ul>
-                                            <li>
-                                                <div  class="title">My Account</div>
-                                                <a [routerLink]="['/account']"
-                                                 class="link">View or edit your account details</a>
-                                            </li>
-                                            <li (click)="orderHistoryClick()">
-                                                <div  class="title">Order History</div>
-                                                <a  class="link">View all your past orders</a>
-                                            </li>
-                                            <!--<li>
+                    <!--start drop down user login-->
+                    <div class="login-dropdown-had">
+                        <div class="account-info">
+                            <ul>
+                                <li>
+                                    <div class="title">My Account</div>
+                                    <a [routerLink]="['/account']" class="link">View or edit your account details</a>
+                                </li>
+                                <li (click)="orderHistoryClick()">
+                                    <div class="title">Order History</div>
+                                    <a class="link">View all your past orders</a>
+                                </li>
+                                <!--<li>
                                                 <div class="title">Gift Cards</div>
                                                 <a href="#" class="link">Purchase a GOF3R Gift Card</a>
                                             </li>-->
-                                            <li (click)="inviteFriend()">
-                                                <div  class="title">Invite Friends</div>
-                                                <a  class="link">Invite your friends, earn credits!</a>
-                                            </li>
-                                            <li (click)="help()">
-                                                <div class="title">Help & Feedback</div>
-                                                <a  class="link">Chat with our support team</a>
-                                            </li>
-                                        </ul>
-                                        <div class="btn-logout-wrap">
-                                            <button (click)="logOutUser(userNameLogOut)" class="btn-main btn-logout"><span>LOG OUT</span></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--end drop down user login-->
-                                <!--start drop down OTP-->
-                                 <div class="login-dropdown-otp">
-                                    <div class="login-dropdown-content signup-dropdown">
-                                        <div class="verifi-code">
-                                            <div class="title">Enter Your Code</div>
-                                            <div class="text">We sent a verification code to you at +650 123456</div>
-                                            <div class="code">
-                                                <input type="text" maxlength="6">
-                                                <div class="row">
-                                                    <div class="col-2"><div class="bor"></div></div>
-                                                    <div class="col-2"><div class="bor"></div></div>
-                                                    <div class="col-2"><div class="bor"></div></div>
-                                                    <div class="col-2"><div class="bor"></div></div>
-                                                    <div class="col-2"><div class="bor"></div></div>
-                                                    <div class="col-2"><div class="bor"></div></div>
-                                                </div>
-                                                <button class="btn-sendcode"><span class="per" style="width: 40%;"></span><span class="send">RESEND CODE</span></button>
-                                                <div class="get-sms"><a href="#">Didn’t get the SMS?</a></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--end drop down OTP-->
+                                <li (click)="inviteFriend()">
+                                    <div class="title">Invite Friends</div>
+                                    <a class="link">Invite your friends, earn credits!</a>
+                                </li>
+                                <li (click)="help()">
+                                    <div class="title">Help & Feedback</div>
+                                    <a class="link">Chat with our support team</a>
+                                </li>
+                            </ul>
+                            <div class="btn-logout-wrap">
+                                <button (click)="logOutUser(userNameLogOut)" class="btn-main btn-logout"><span>LOG OUT</span></button>
                             </div>
                         </div>
                     </div>
+                    <!--end drop down user login-->
+                    <!--start drop down OTP-->
+                    <div class="login-dropdown-otp">
+                        <div class="login-dropdown-content signup-dropdown">
+                            <div class="verifi-code">
+                                <div class="title">Enter Your Code</div>
+                                <div class="text">We sent a verification code to you at +650 123456</div>
+                                <div class="code">
+                                    <input type="text" maxlength="6">
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <div class="bor"></div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="bor"></div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="bor"></div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="bor"></div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="bor"></div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="bor"></div>
+                                        </div>
+                                    </div>
+                                    <button class="btn-sendcode"><span class="per" style="width: 40%;"></span><span class="send">RESEND CODE</span></button>
+                                    <div class="get-sms"><a href="#">Didn’t get the SMS?</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end drop down OTP-->
                 </div>
             </div>
-            <div class="header-content">
-                <div class="slogan-form">
-                    <h2 class="large wow fadeIn" data-wow-duration="1s">A Better Way to Get Your Food</h2>
-                    <div class="small wow fadeIn" data-wow-duration="2s">Order From Local Restautants You Love</div>
-                    <div class="form-map">
-                        <div class="form-search">
-                            <form class="form">
-                                <div class="input-search">
-                                    <input (keyup)="checkInputPostalCode($event)" name="address-input" [(ngModel)]="inputAddress" [ngClass]="{nodata: haveData==0}" type="text" placeholder="Get started by entering your postal code" id="list" [ng4-auto-complete]="list" filterName="name" > 
-                                    <!--<ng-autocomplete (selected)="Selected($event)" [classes]="['']" [group]="group"></ng-autocomplete>-->
-                                    <!--<input [(ngModel)]="this.inputAddress" [ngClass]="{nodata: haveData==0}" type="text" placeholder="Get started by entering your postal code" id="search_place">-->
-                                    <a  class="act-clear"><img  (click)="deleteAddress()"src="assets/images/ico-close.png" alt=""></a>
-                                    <a  class="atc-pickup"><img (click)="getCurrentLocation()" src="assets/images/ico-pickup.png" alt=""></a>
-                                </div>
-                                <div class="act-btn">
-                                    <div>
-                                        <button (click)="deliveryClick()" [ngClass]="{active: actionClickDlivery==1}" class="delivery active-button"><span>Delivery</span></button>
-                                    </div>
-                                    <div>
-                                        <button (click)="pikcupClick()" [ngClass]="{active: actionClickPickup==1}"class="pickup active-button"><span>Pickup</span></button>
-                                    </div>
-                                </div>
-                            </form>
+        </div>
+
+    </div>
+    <div class="header-content">
+        <div class="slogan-form">
+            <h2 class="large wow fadeIn" data-wow-duration="1s">A Better Way to Get Your Food</h2>
+            <div class="small wow fadeIn" data-wow-duration="2s">Order From Local Restautants You Love</div>
+            <div class="form-map">
+                <div class="form-search">
+                    <form class="form">
+                        <div class="input-search">
+                            <input (keyup)="checkInputPostalCode($event)" name="address-input" [(ngModel)]="inputAddress" [ngClass]="{nodata: haveData==0}"
+                                type="text" placeholder="Get started by entering your postal code" >
+                            <!--<ng-autocomplete (selected)="Selected($event)" [classes]="['']" [group]="group"></ng-autocomplete>-->
+                            <!--<input [(ngModel)]="this.inputAddress" [ngClass]="{nodata: haveData==0}" type="text" placeholder="Get started by entering your postal code" id="search_place">-->
+                            <a class="act-clear"><img  (click)="deleteAddress()"src="assets/images/ico-close.png" alt=""></a>
+                            <a class="atc-pickup"><img (click)="getCurrentLocation()" src="assets/images/ico-pickup.png" alt=""></a>
                         </div>
-                        <div class="map-wrap" style="display: none">
-                            <!--<div class="map-icon-center">
+                        <div class="act-btn">
+                            <div>
+                                <button (click)="deliveryClick()" [ngClass]="{active: actionClickDlivery==1}" class="delivery active-button"><span>Delivery</span></button>
+                            </div>
+                            <div>
+                                <button (click)="pikcupClick()" [ngClass]="{active: actionClickPickup==1}" class="pickup active-button"><span>Pickup</span></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div *ngIf="showListSelectAddress" class="add-wrap">
+                    <ul class="list-group">
+                        <li style="cursor: pointer" *ngFor="let item of list.AddressList" (click)="selectAddress(item.Address,item.Latitude,item.Longitude)" class="list-group-item">{{item.Address}}</li>
+                        
+                    </ul>
+                </div>
+                <div class="map-wrap" style="display: none">
+                    <!--<div class="map-icon-center">
 
                             </div>-->
-                            <div class="map-icon" >
-                                <img class="img-fluid" src="https://maps.googleapis.com/maps/api/staticmap?size=751x270&scale=1&center={{this.lat}},{{this.lng}}&maptype=roadmap&format=png32&visual_refresh=true&zoom=16&style=feature:administrative%7Cvisibility:off&style=feature:transit%7Cvisibility:off&style=feature:landscape%7Celement:geometry.fill%7Ccolor:0xE8E4DBstyle=feature:landscape%7Celement:geometry.stroke%7Cvisibility:off&style=feature:landscape.natural%7Celement:geometry.fill%7Ccolor:0xF0ECE4&style=feature:poi%7Celement:geometry.fill%7Ccolor:0xF0ECE4&style=feature:poi%7Celement:geometry.stroke%7Cvisibility:off&style=feature:poi%7Celement:labels.text%7Cvisibility:off&style=feature:poi%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.text.fill%7Ccolor:0x635E5A&style=feature:road%7Celement:labels.text.stroke%7Ccolor:0xFFFFFF&style=feature:road%7Celement:geometry.fill%7Ccolor:0xFFFFFF&style=feature:road%7Celement:geometry.stroke%7Ccolor:0xDCD6CD&style=feature:road.local%7Celement:geometry.fill%7Ccolor:0xDCD6CD&style=feature:road.local%7Celement:geometry.stroke%7Cvisibility:off&style=feature:water%7Cvisibility:on&style=feature:water%7Celement:labels.text%7Cvisibility:off&style=feature:water%7Celement:geometry.fill%7Ccolor:0xC8D1DF&key=AIzaSyAVdsuXFE3Ca3vwy_lopgMUHTfJLdd3_Ck" alt="">
-                                <!--<img class="img-fluid" src="https://maps.googleapis.com/maps/api/staticmap?size=600x400&markers=icon%3Ahttp%3A%2F%2Fwww.google.com%2Fmapfiles%2Farrow.png%7C41.39479%2C2.148768&visible=41.320004%2C2.069526%7C41.469576%2C2.22801&key=AIzaSyDztlrk_3CnzGHo7CFvLFqE_2bUKEq1JEU" alt="">-->
-                                <img src="assets/images/ico-pin.svg" alt="" class="ico-map">
-                                <!--<img class="img-fluid" src="http://maps.googleapis.com/maps/api/staticmap?zoom=17&size=512x512&maptype=roadmap&markers=icon:https://upnhanh.mobi//thumbs/e540f35335e1da90278bd07be33b5ed07c6160ac.jpg|10.7787147,106.6651163000000" alt="">-->
-                            </div>
-                            <!--<img class="img-fluid" src="https://maps.googleapis.com/maps/api/staticmap?size=751x270&scale=1&center=10.778229399999999,106.66520179999999&maptype=roadmap&format=png32&visual_refresh=true&zoom=16&style=feature:administrative%7Cvisibility:off&style=feature:transit%7Cvisibility:off&style=feature:landscape%7Celement:geometry.fill%7Ccolor:0xE8E4DBstyle=feature:landscape%7Celement:geometry.stroke%7Cvisibility:off&style=feature:landscape.natural%7Celement:geometry.fill%7Ccolor:0xF0ECE4&style=feature:poi%7Celement:geometry.fill%7Ccolor:0xF0ECE4&style=feature:poi%7Celement:geometry.stroke%7Cvisibility:off&style=feature:poi%7Celement:labels.text%7Cvisibility:off&style=feature:poi%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.text.fill%7Ccolor:0x635E5A&style=feature:road%7Celement:labels.text.stroke%7Ccolor:0xFFFFFF&style=feature:road%7Celement:geometry.fill%7Ccolor:0xFFFFFF&style=feature:road%7Celement:geometry.stroke%7Ccolor:0xDCD6CD&style=feature:road.local%7Celement:geometry.fill%7Ccolor:0xDCD6CD&style=feature:road.local%7Celement:geometry.stroke%7Cvisibility:off&style=feature:water%7Cvisibility:on&style=feature:water%7Celement:labels.text%7Cvisibility:off&style=feature:water%7Celement:geometry.fill%7Ccolor:0xC8D1DF&key=AIzaSyBKJ9o2hRIlAoUFyuu91HnzK8KTqZsRgPQ" alt="">-->
-                            <!--<agm-map style="height: 300px" #agmMap [latitude]="this.lat" [longitude]="this.lng" [zoom]="15">
+                    <div class="map-icon">
+                        <img class="img-fluid" src="https://maps.googleapis.com/maps/api/staticmap?size=751x270&scale=1&center={{this.lat}},{{this.lng}}&maptype=roadmap&format=png32&visual_refresh=true&zoom=16&style=feature:administrative%7Cvisibility:off&style=feature:transit%7Cvisibility:off&style=feature:landscape%7Celement:geometry.fill%7Ccolor:0xE8E4DBstyle=feature:landscape%7Celement:geometry.stroke%7Cvisibility:off&style=feature:landscape.natural%7Celement:geometry.fill%7Ccolor:0xF0ECE4&style=feature:poi%7Celement:geometry.fill%7Ccolor:0xF0ECE4&style=feature:poi%7Celement:geometry.stroke%7Cvisibility:off&style=feature:poi%7Celement:labels.text%7Cvisibility:off&style=feature:poi%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.text.fill%7Ccolor:0x635E5A&style=feature:road%7Celement:labels.text.stroke%7Ccolor:0xFFFFFF&style=feature:road%7Celement:geometry.fill%7Ccolor:0xFFFFFF&style=feature:road%7Celement:geometry.stroke%7Ccolor:0xDCD6CD&style=feature:road.local%7Celement:geometry.fill%7Ccolor:0xDCD6CD&style=feature:road.local%7Celement:geometry.stroke%7Cvisibility:off&style=feature:water%7Cvisibility:on&style=feature:water%7Celement:labels.text%7Cvisibility:off&style=feature:water%7Celement:geometry.fill%7Ccolor:0xC8D1DF&key=AIzaSyAVdsuXFE3Ca3vwy_lopgMUHTfJLdd3_Ck"
+                            alt="">
+                        <!--<img class="img-fluid" src="https://maps.googleapis.com/maps/api/staticmap?size=600x400&markers=icon%3Ahttp%3A%2F%2Fwww.google.com%2Fmapfiles%2Farrow.png%7C41.39479%2C2.148768&visible=41.320004%2C2.069526%7C41.469576%2C2.22801&key=AIzaSyDztlrk_3CnzGHo7CFvLFqE_2bUKEq1JEU" alt="">-->
+                        <img src="assets/images/ico-pin.svg" alt="" class="ico-map">
+                        <!--<img class="img-fluid" src="http://maps.googleapis.com/maps/api/staticmap?zoom=17&size=512x512&maptype=roadmap&markers=icon:https://upnhanh.mobi//thumbs/e540f35335e1da90278bd07be33b5ed07c6160ac.jpg|10.7787147,106.6651163000000" alt="">-->
+                    </div>
+                    <!--<img class="img-fluid" src="https://maps.googleapis.com/maps/api/staticmap?size=751x270&scale=1&center=10.778229399999999,106.66520179999999&maptype=roadmap&format=png32&visual_refresh=true&zoom=16&style=feature:administrative%7Cvisibility:off&style=feature:transit%7Cvisibility:off&style=feature:landscape%7Celement:geometry.fill%7Ccolor:0xE8E4DBstyle=feature:landscape%7Celement:geometry.stroke%7Cvisibility:off&style=feature:landscape.natural%7Celement:geometry.fill%7Ccolor:0xF0ECE4&style=feature:poi%7Celement:geometry.fill%7Ccolor:0xF0ECE4&style=feature:poi%7Celement:geometry.stroke%7Cvisibility:off&style=feature:poi%7Celement:labels.text%7Cvisibility:off&style=feature:poi%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.text.fill%7Ccolor:0x635E5A&style=feature:road%7Celement:labels.text.stroke%7Ccolor:0xFFFFFF&style=feature:road%7Celement:geometry.fill%7Ccolor:0xFFFFFF&style=feature:road%7Celement:geometry.stroke%7Ccolor:0xDCD6CD&style=feature:road.local%7Celement:geometry.fill%7Ccolor:0xDCD6CD&style=feature:road.local%7Celement:geometry.stroke%7Cvisibility:off&style=feature:water%7Cvisibility:on&style=feature:water%7Celement:labels.text%7Cvisibility:off&style=feature:water%7Celement:geometry.fill%7Ccolor:0xC8D1DF&key=AIzaSyBKJ9o2hRIlAoUFyuu91HnzK8KTqZsRgPQ" alt="">-->
+                    <!--<agm-map style="height: 300px" #agmMap [latitude]="this.lat" [longitude]="this.lng" [zoom]="15">
                                 <agm-marker [latitude]="this.lat" [longitude]="this.lng" [iconUrl]="makeIconURL()"></agm-marker>
                             </agm-map>-->
-                            <div class="btn-find-wrap">
-                                <button (click)="findRestaurants()" class="btn-main btn-find"><span>FIND RESTAURANTS</span></button>
-                            </div>
-                        </div>  
+                    <div class="btn-find-wrap">
+                        <button (click)="findRestaurants()" class="btn-main btn-find"><span>FIND RESTAURANTS</span></button>
                     </div>
                 </div>
             </div>
-            <div class="go-down"></div>
         </div>
-    </header>
-    <main>
-        <div class="block-info-wrap">
+    </div>
+    <div class="go-down"></div>
+
+</header>
+<main>
+    <div class="block-info-wrap">
+        <div class="container">
+            <div class="row">
+                <div class="block-info-content col-12 col-md-3">
+                    <div class="block-info-top wow slideInUp" data-wow-duration="0.5s">
+                        <h3 class="title">Food</h3>
+                        <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac suscipit lorem augue ante.</div>
+                    </div>
+                </div>
+                <div class="block-info-content col-12 col-md-3">
+                    <div class="block-info-top wow slideInUp" data-wow-duration="1s">
+                        <h3 class="title">Groceries</h3>
+                        <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac suscipit lorem augue ante.</div>
+                    </div>
+                </div>
+                <div class="block-info-content col-12 col-md-3">
+                    <div class="block-info-top wow slideInUp" data-wow-duration="1.5s">
+                        <h3 class="title">Retail</h3>
+                        <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac suscipit lorem augue ante.</div>
+                    </div>
+                </div>
+                <div class="block-info-content col-12 col-md-3">
+                    <div class="block-info-top wow slideInUp" data-wow-duration="2s">
+                        <h3 class="title">Others</h3>
+                        <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac suscipit lorem augue ante.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="download-app-wrap">
+        <div class="download-app-inner">
             <div class="container">
                 <div class="row">
-                    <div class="block-info-content col-12 col-md-3">
-                        <div class="block-info-top wow slideInUp" data-wow-duration="0.5s">
-                            <h3 class="title">Food</h3>
-                            <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac suscipit lorem augue ante.</div>
-                        </div>
-                    </div>
-                    <div class="block-info-content col-12 col-md-3">
-                        <div class="block-info-top wow slideInUp" data-wow-duration="1s">
-                            <h3 class="title">Groceries</h3>
-                            <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac suscipit lorem augue ante.</div>
-                        </div>
-                    </div>
-                    <div class="block-info-content col-12 col-md-3">
-                        <div class="block-info-top wow slideInUp" data-wow-duration="1.5s">
-                            <h3 class="title">Retail</h3>
-                            <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac suscipit lorem augue ante.</div>
-                        </div>
-                    </div>
-                    <div class="block-info-content col-12 col-md-3">
-                        <div class="block-info-top wow slideInUp" data-wow-duration="2s">
-                            <h3 class="title">Others</h3>
-                            <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac suscipit lorem augue ante.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-         <div class="download-app-wrap">
-            <div class="download-app-inner">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-11 col-md-6">
-                            <div class="download-content wow slideInLeft" data-wow-duration="1s">
-                                <div class="download-info">
-                                    <h3 class="title">Download GOF3r app</h3>
-                                    <div class="text">It's all at your fingertips -- the restaurants you love.<br/>
-                                        <br/>Go ahead, download us.</div>
-                                    <div class="app-link">
-                                        <div class="gplay"><a href="#"><img src="assets/images/app-google-play.png" alt=""></a></div>
-                                        <div class="appstore"><a href="#"><img src="assets/images/app-app-store.png" alt=""></a></div>
-                                    </div>
+                    <div class="col-11 col-md-6">
+                        <div class="download-content wow slideInLeft" data-wow-duration="1s">
+                            <div class="download-info">
+                                <h3 class="title">Download GOF3r app</h3>
+                                <div class="text">It's all at your fingertips -- the restaurants you love.<br/>
+                                    <br/>Go ahead, download us.</div>
+                                <div class="app-link">
+                                    <div class="gplay"><a href="#"><img src="assets/images/app-google-play.png" alt=""></a></div>
+                                    <div class="appstore"><a href="#"><img src="assets/images/app-app-store.png" alt=""></a></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-1 col-md-6">
-                            <div class="img-app wow fadeIn" data-wow-duration="3s">
-                                <img class="img-fluid" src="assets/images/mobiles.png" alt="">
-                            </div>
+                    </div>
+                    <div class="col-1 col-md-6">
+                        <div class="img-app wow fadeIn" data-wow-duration="3s">
+                            <img class="img-fluid" src="assets/images/mobiles.png" alt="">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="blog-post-wrap">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 col-md-4">
-                        <div class="blog-post wow slideInLeft" data-wow-duration="1s">
-                            <div class="img-blog">
-                                <img src="assets/images/post1.jpg" alt="">
-                                <h3 class="title">DRIVE WITH US</h3>
-                            </div>
-                            <div class="text-wrap">
-                                <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non bibendum enim, eget tempus neque. Donec a tellus aliquet, suscipit urna sodales, venenatis massa.</div>
-                                <a href="#" class="btn-main btn-join">JOIN NOW</a>
-                            </div>
+    </div>
+    <div class="blog-post-wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <div class="blog-post wow slideInLeft" data-wow-duration="1s">
+                        <div class="img-blog">
+                            <img src="assets/images/post1.jpg" alt="">
+                            <h3 class="title">DRIVE WITH US</h3>
+                        </div>
+                        <div class="text-wrap">
+                            <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non bibendum enim, eget tempus neque.
+                                Donec a tellus aliquet, suscipit urna sodales, venenatis massa.</div>
+                            <a href="#" class="btn-main btn-join">JOIN NOW</a>
                         </div>
                     </div>
-                    <div class="col-12 col-md-4">
-                        <div class="blog-post wow slideInUp" data-wow-duration="2s">
-                            <div class="img-blog">
-                                <img src="assets/images/post2.jpg" alt="">
-                                <h3 class="title">PARTNER WITH US</h3>
-                            </div>
-                            <div class="text-wrap">
-                                <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non bibendum enim, eget tempus neque. Donec a tellus aliquet, suscipit urna sodales, venenatis massa.</div>
-                                <a href="#" class="btn-main btn-join">JOIN NOW</a>
-                            </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="blog-post wow slideInUp" data-wow-duration="2s">
+                        <div class="img-blog">
+                            <img src="assets/images/post2.jpg" alt="">
+                            <h3 class="title">PARTNER WITH US</h3>
+                        </div>
+                        <div class="text-wrap">
+                            <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non bibendum enim, eget tempus neque.
+                                Donec a tellus aliquet, suscipit urna sodales, venenatis massa.</div>
+                            <a href="#" class="btn-main btn-join">JOIN NOW</a>
                         </div>
                     </div>
-                    <div class="col-12 col-md-4">
-                        <div class="blog-post wow slideInUp" data-wow-duration="1s">
-                            <div class="img-blog">
-                                <img src="assets/images/post3.jpg" alt="">
-                                <h3 class="title">CAREERS AT US</h3>
-                            </div>
-                            <div class="text-wrap">
-                                <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non bibendum enim, eget tempus neque. Donec a tellus aliquet, suscipit urna sodales, venenatis massa.</div>
-                                <a href="#" class="btn-main btn-join">JOIN NOW</a>
-                            </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="blog-post wow slideInUp" data-wow-duration="1s">
+                        <div class="img-blog">
+                            <img src="assets/images/post3.jpg" alt="">
+                            <h3 class="title">CAREERS AT US</h3>
+                        </div>
+                        <div class="text-wrap">
+                            <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non bibendum enim, eget tempus neque.
+                                Donec a tellus aliquet, suscipit urna sodales, venenatis massa.</div>
+                            <a href="#" class="btn-main btn-join">JOIN NOW</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="country-tab-wrap">
-            <div class="container">
-                <h3 class="title-serving wow fadeInUp" data-wow-duration="0.5s">Now Serving</h3>
-                <ul class="nav nav-tabs wow fadeInUp" data-wow-duration="1s" id="countryTab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="singapore-tab" data-toggle="tab" href="#singapore" role="tab" aria-controls="singapore" aria-selected="true">SINGAPORE</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="vietnam-tab" data-toggle="tab" href="#vietnam" role="tab" aria-controls="vietnam" aria-selected="false">VIETNAM</a>
-                    </li>
-                </ul>
-                <div class="tab-content wow fadeInUp" data-wow-duration="1.5s" id="countryTabContent">
-                    <div class="tab-pane fade show active" id="singapore" role="tabpanel" aria-labelledby="singapore-tab">
-                        <div class="map-svg d-none d-md-block">    
-                            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                 width="1170px" height="606px" viewBox="0 0 1170 606" enable-background="new 0 0 1170 606" xml:space="preserve">
+    </div>
+    <div class="country-tab-wrap">
+        <div class="container">
+            <h3 class="title-serving wow fadeInUp" data-wow-duration="0.5s">Now Serving</h3>
+            <ul class="nav nav-tabs wow fadeInUp" data-wow-duration="1s" id="countryTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="singapore-tab" data-toggle="tab" href="#singapore" role="tab" aria-controls="singapore" aria-selected="true">SINGAPORE</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="vietnam-tab" data-toggle="tab" href="#vietnam" role="tab" aria-controls="vietnam" aria-selected="false">VIETNAM</a>
+                </li>
+            </ul>
+            <div class="tab-content wow fadeInUp" data-wow-duration="1.5s" id="countryTabContent">
+                <div class="tab-pane fade show active" id="singapore" role="tabpanel" aria-labelledby="singapore-tab">
+                    <div class="map-svg d-none d-md-block">
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                            width="1170px" height="606px" viewBox="0 0 1170 606" enable-background="new 0 0 1170 606" xml:space="preserve">
                             <g id="Jurong_West">
                                 <path fill="#712FDB" stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" d="M255.385,287.839c0,0,0.702-6.082-8.187-5.38
                                     c-8.888,0.702-10.525,4.621-12.864,2.661s-6.549-7.34-15.671-7.34s-15.671,2.807-16.139,0s1.17-8.654,2.573-14.267
@@ -356,9 +390,10 @@
                                     c-0.103-3.275-4.313-4.912-5.482-11.227c-1.17-6.315-3.508-17.309-2.573-20.349c0.937-3.04,6.083-5.847,3.743-10.057
                                     c-2.339-4.21-0.702-3.04-6.315-5.613c-5.614-2.573-4.21-2.573-9.59-3.275s-9.356-2.339-15.203-1.871
                                     c-5.847,0.468-13.566-3.976-17.309-3.976c-3.742,0-7.719-7.952-13.098-10.759c-5.38-2.807-10.993-2.573-5.614-8.42
-                                    c5.38-5.847,7.485-8.654,9.824-10.292C253.981,292.049,255.385,287.839,255.385,287.839z"/>
+                                    c5.38-5.847,7.485-8.654,9.824-10.292C253.981,292.049,255.385,287.839,255.385,287.839z"
+                                />
                                 <text transform="matrix(1 0 0 1 133.2906 391.4559)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">JURONG WEST</text>
-                                <path fill="none" stroke="#000000" stroke-miterlimit="10" d="M335.845,508.17"/>
+                                <path fill="none" stroke="#000000" stroke-miterlimit="10" d="M335.845,508.17" />
                             </g>
                             <g id="LCK_x2F_CCK">
                                 <path fill="#8E49FE" stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" d="M259.01,147.033
@@ -376,7 +411,7 @@
                                     c-0.934-1.059-1.913-3.643,0.565-11.064c2.478-7.42,2.595-9.76,3.179-15.724c0.584-5.964,3.508-15.437,5.146-23.857
                                     c1.637-8.42,3.976-16.373,5.613-26.664c1.637-10.292,6.082-17.074,4.21-25.027c-1.871-7.952-6.082-9.824-3.976-15.671
                                     c2.105-5.847,3.04-10.993,5.614-16.373c2.573-5.38,6.549-7.719,9.59-7.719c3.04,0,5.614-2.339,10.292,1.637
-                                    C248.368,142.355,246.496,146.8,259.01,147.033z"/>
+                                    C248.368,142.355,246.496,146.8,259.01,147.033z" />
                                 <text transform="matrix(1 0 0 1 253.4763 216.8524)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">LIM CHU KANG</text>
                                 <text transform="matrix(1 0 0 1 247.4996 232.0086)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">CHUA CHU KANG</text>
                             </g>
@@ -392,7 +427,8 @@
                                     s1.521,3.976,4.561,3.976c3.04,0,9.005,1.988,16.958,6.666c7.952,4.678,11.578,5.964,14.034,8.069s6.315,3.508,11.227,1.871
                                     s6.082-1.17,11.344-4.795c5.263-3.625,9.005-6.783,12.397-7.251c3.391-0.468,4.21-0.585,4.21-0.585s-2.105-4.093,2.456-8.654
                                     c4.561-4.561,5.496-5.38,8.654-7.134c3.158-1.754,3.04-3.508,5.38-3.158c2.34,0.35,2.924,0,4.912-1.403s4.444-3.977,6.432-5.847
-                                    c1.988-1.871,4.327-5.029,6.315-6.432C482.031,347.95,483.875,347.077,482.966,345.144z"/>
+                                    c1.988-1.871,4.327-5.029,6.315-6.432C482.031,347.95,483.875,347.077,482.966,345.144z"
+                                />
                                 <text transform="matrix(1 0 0 1 357.5983 331.1102)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">BUKIT BATOK</text>
                             </g>
                             <g id="Jurong_East">
@@ -416,7 +452,7 @@
                                     c-2.105-3.158-3.333-6.315-5.614-7.192s-5.263-4.736-10.174-7.719c-4.912-2.982-6.841-6.315-5.614-10.525s6.315-14.56,6.315-20.7
                                     s-2.807-14.385,0-15.262s3.333-1.228,6.315,2.456s5.438,3.508,9.648,4.561c4.21,1.052,4.561,1.403,6.841,3.859
                                     c2.281,2.456,7.368,2.281,15.788,2.807s8.947,0.702,12.455,2.105s0.877,4.21,4.21,6.666c3.333,2.456,3.684,1.754,6.14,5.087
-                                    C388.119,441.388,387.302,443.79,389.641,444.433z"/>
+                                    C388.119,441.388,387.302,443.79,389.641,444.433z" />
                                 <text transform="matrix(1 0 0 1 314.59 401.5721)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">JURONG EAST</text>
                             </g>
                             <g id="Pasir_Panjang">
@@ -436,9 +472,10 @@
                                     c-2.807-2.456-12.981-15.963-16.665-21.402c-3.684-5.438-7.017-11.052-9.824-11.227s-4.035,0.909-6.491,1.594
                                     c-2.456,0.686-1.228-1.243-4.21-1.594s-5.789,0.702-6.841-1.228s-1.052-1.754-3.859-2.982s-4.561-4.386-6.841-7.368
                                     c-2.281-2.982-2.456-8.069-5.087-10.35c-2.631-2.28-2.28-3.508-4.561-7.017c-2.281-3.508-3.684-9.297-6.315-11.929
-                                    c-2.631-2.631-6.315-7.719-9.473-10.701C380.579,462.092,379.175,459.987,379.175,459.987z"/>
-                                
-                                    <text transform="matrix(0.7329 0.6803 -0.6803 0.7329 355.9987 433.834)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6301">PASIR PANJANG</text>
+                                    c-2.631-2.631-6.315-7.719-9.473-10.701C380.579,462.092,379.175,459.987,379.175,459.987z"
+                                />
+
+                                <text transform="matrix(0.7329 0.6803 -0.6803 0.7329 355.9987 433.834)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6301">PASIR PANJANG</text>
                             </g>
                             <g id="Clementi">
                                 <path fill="#8E49FE" stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" d="M477.587,388.415c0,0-9.59,0.935-13.8,0
@@ -454,7 +491,7 @@
                                     c1.93-0.877,2.631-1.228,4.912-5.263c2.28-4.035,5.438-10.525,7.543-11.753c2.105-1.228,4.386-3.333,4.386-3.333l3.158-2.105
                                     c0,0-7.017-1.579-9.122-3.333s-2.982-1.403-5.789-2.28s-4.736-3.333-6.491-4.21c-1.754-0.877-7.017-0.172-8.42-1.226
                                     c-1.403-1.054-3.158-3.51-7.543-4.212c-4.386-0.702-10.174-5.614-14.735-9.122s-9.824-5.614-11.227-6.14
-                                    C478.989,389.817,480.052,388.219,477.587,388.415z"/>
+                                    C478.989,389.817,480.052,388.219,477.587,388.415z" />
                                 <text transform="matrix(1 0 0 1 431.4503 416.659)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">CLEMENTI</text>
                             </g>
                             <g id="Bukit_Timah">
@@ -474,7 +511,7 @@
                                     s-4.776-2.79-5.601-3.355c-0.824-0.565-2.462-2.037-2.462-2.037l-1.988,2.456c0,0-1.424-1.733-0.232-4.292
                                     c1.191-2.559,6.196-7.94,7.479-8.928c1.283-0.988,5.084-3.24,5.977-4.092c0.893-0.853,1.078-1.688,3.266-1.633
                                     c2.187,0.055,7.418-3.464,9.381-5.357s4.6-4.775,5.683-5.899s3.069-2.649,4.016-3.403
-                                    C482.407,347.625,482.833,347.693,483.192,345.951z"/>
+                                    C482.407,347.625,482.833,347.693,483.192,345.951z" />
                                 <text transform="matrix(1 0 0 1 516.8814 408.5311)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">BUKIT TIMAH</text>
                             </g>
                             <g id="Woodlands">
@@ -508,7 +545,8 @@
                                     s0.247-2.894,2.089-5.175s2.456-3.947,4.824-5.789c2.368-1.842,2.807-2.719,4.298-3.947c1.491-1.228,2.456-1.667,3.859-3.245
                                     s3.596-3.947,5.614-5.789c2.017-1.842,1.228-2.544,2.631-3.333s2.28-3.245,2.982-4.386c0.702-1.14,3.772-2.193,5.438-3.333
                                     c1.667-1.14,2.982-5.614,4.473-7.105s5.175-8.859,6.754-11.841s0.877-7.455,2.017-10.525s3.596-8.069,3.596-10.613
-                                    s0.263-12.455-0.789-15.525c-1.053-3.07-2.631-9.911-3.684-13.157c-1.052-3.245-1.228-7.543-2.193-8.508L536.762,21.899z"/>
+                                    s0.263-12.455-0.789-15.525c-1.053-3.07-2.631-9.911-3.684-13.157c-1.052-3.245-1.228-7.543-2.193-8.508L536.762,21.899z"
+                                />
                                 <text transform="matrix(1 0 0 1 425.3116 208.6414)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">WOODLANDS</text>
                             </g>
                             <g id="Yishun">
@@ -539,7 +577,7 @@
                                     c-4.678,2.339-8.654,5.847-10.057,8.42s-0.935,4.444-3.04,6.082c-2.105,1.637-5.614,2.105-6.783,4.444
                                     c-1.17,2.339-3.508,5.38-3.508,5.38s-3.04-2.339-5.847-3.275c-2.807-0.935-3.04,1.17-7.251-1.871s-17.074-10.993-21.284-15.437
                                     s-7.719-6.082-7.719-6.082s-1.559-1.871-4.405-3.742s-9.863-10.057-12.202-11.227s-6.315-6.082-7.251-7.952
-                                    C626.812,85.986,626.462,84.934,624.415,83.355z"/>
+                                    C626.812,85.986,626.462,84.934,624.415,83.355z" />
                                 <text transform="matrix(1 0 0 1 599.9146 170.4237)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">YISHUN</text>
                             </g>
                             <g id="Queens_Town">
@@ -554,9 +592,10 @@
                                     c1.297,1.335,4.2,3.841,5.346,5.074c1.147,1.233,3.476,4.13,5.132,4.936c1.656,0.806,2.207,0.975,4.759,0.746
                                     s3.478-0.982,4.734,0.145c1.256,1.128,5.767,5.47,8.672,7.208c2.906,1.738,10.012,4.032,11.37,5.341
                                     c1.358,1.309,1.449,1.902,0.812,2.41c-0.637,0.508-0.067,1.443,1.599,1.443c1.666,0,1.579,2.631,3.508,2.982
-                                    c1.93,0.351,2.631,0,4.649,1.667c2.017,1.667,6.052,5.877,8.508,7.719C484.776,516.912,487.761,521.122,491.094,520.508z"/>
-                                
-                                    <text transform="matrix(0.7991 0.6012 -0.6012 0.7991 423.7999 451.6173)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">QUEENS TOWN</text>
+                                    c1.93,0.351,2.631,0,4.649,1.667c2.017,1.667,6.052,5.877,8.508,7.719C484.776,516.912,487.761,521.122,491.094,520.508z"
+                                />
+
+                                <text transform="matrix(0.7991 0.6012 -0.6012 0.7991 423.7999 451.6173)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">QUEENS TOWN</text>
                             </g>
                             <g id="Tiong_Bahru">
                                 <path fill="#8E49FE" stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" d="M541.206,510.275
@@ -579,7 +618,7 @@
                                     c0.317-1.169,1.086-3.534,2.041-5.468c0.956-1.935,2.776-4.687,3.099-6.16s1.207-4.984,1.461-6.171
                                     c0.254-1.187,0.368-4.188,1.139-5.211c0.77-1.022,1.735-2.352,1.798-3.086c0.064-0.734-0.151-2.638-0.151-2.638
                                     s2.281,0.053,3.772,2.772c1.491,2.719,0.877,4.035,1.667,5.175s2.894,1.754,4.473,3.333s4.035,3.684,5.35,6.754
-                                    s3.596,3.772,6.666,5.877s7.631,2.193,7.806,2.193S540.73,510.006,541.206,510.275z"/>
+                                    s3.596,3.772,6.666,5.877s7.631,2.193,7.806,2.193S540.73,510.006,541.206,510.275z" />
                                 <text transform="matrix(1 0 0 1 506.0064 546.6464)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">TIONG BAHRU</text>
                             </g>
                             <g id="Orchard">
@@ -602,7 +641,7 @@
                                     c3.122-0.935,6.009-1.978,6.297-1.869c0.289,0.109,1.111,0.116,2.748-1.931c1.638-2.047,2.047-5.438,3.45-8.596s0-9.297,0-12.455
                                     s-1.228-9.579-1.052-9.789c0.175-0.21-5.087-4.069-7.017-5.999c-1.93-1.93-2.105-4.561-1.403-7.192
                                     c0.702-2.631,3.542-5.789,4.666-8.947c1.123-3.158,3.755-4.561,1.299-6.491s-4.068-0.351-6.683-1.053s-2.088-2.807-1.737-4.561
-                                    s-1.579-5.263-2.631-6.14C617.749,442.796,615.585,441.159,615.585,441.159z"/>
+                                    s-1.579-5.263-2.631-6.14C617.749,442.796,615.585,441.159,615.585,441.159z" />
                                 <text transform="matrix(1 0 0 1 540.7398 479.284)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">ORCHARD</text>
                             </g>
                             <g id="City">
@@ -623,7 +662,8 @@
                                     s-7.952-0.117-10.876,1.871c-2.924,1.988-6.432,3.04-6.9,3.04s-2.339,1.521-2.807,1.403c-0.468-0.117-1.403-5.263-1.521-9.356
                                     c-0.117-4.093-0.702-7.368,1.871-10.292s5.847-3.626,9.239-6.549c3.391-2.924,8.771-4.444,11.812-7.368s7.134-11.11,7.134-11.11
                                     l1.17-3.742c0,0-7.251,2.807-11.695,2.339c-4.444-0.468-7.601-1.637-11.227,0.702s-6.315,3.974-9.356,6.021
-                                    c-3.04,2.047-5.964,5.44-9.239,7.895c-3.275,2.456-5.146,5.448-5.847,6.057C668.68,484.663,666.166,487.353,666.166,487.353z"/>
+                                    c-3.04,2.047-5.964,5.44-9.239,7.895c-3.275,2.456-5.146,5.448-5.847,6.057C668.68,484.663,666.166,487.353,666.166,487.353z"
+                                />
                                 <text transform="matrix(1 0 0 1 657.92 534.0155)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">CITY</text>
                             </g>
                             <g id="JLN_Besar">
@@ -644,7 +684,7 @@
                                     c0.411,1.319,1.208,5.329,2.689,6.985s2.967,2.976,2.967,2.976s4.005-4.247,4.725-5.096c0.72-0.85,3.213-3.37,4.339-4.259
                                     s3.728-3.195,4.551-3.955s5.957-4.785,5.957-4.785l-0.448-0.85l-3.859-3.684l-4.824-3.684c0,0-1.93-1.842,0-4.122
                                     c1.93-2.281,7.982-9.999,9.648-12.981s2.894-3.596,6.227-7.631s6.14-9.999,7.456-12.718s3.158-6.841,4.298-8.947
-                                    C705.373,412.535,707.244,410.518,707.624,408.764z"/>
+                                    C705.373,412.535,707.244,410.518,707.624,408.764z" />
                                 <text transform="matrix(1 0 0 1 617.502 432.2713)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">JLN BESAR</text>
                             </g>
                             <g id="Janjong_Katong">
@@ -661,7 +701,8 @@
                                     s10.613-1.403,15.7-3.772c5.087-2.368,10.174-2.105,11.929-2.982c1.754-0.877,5.35-3.245,8.508-4.035
                                     c3.158-0.789,6.666-0.439,8.947-0.877s2.368-2.807,5-3.772c2.631-0.965,7.105-0.789,7.105-0.789s-0.439-2.105,0-4.298
                                     c0.438-2.193-1.491-3.508-1.93-5.35c-0.439-1.842-0.526-4.561-0.789-7.017s-3.772-6.491-4.21-8.42
-                                    c-0.439-1.93-0.789-4.122-2.807-6.754c-2.017-2.631-5.35-7.719-6.052-10.525S810.714,434.375,810.714,434.375z"/>
+                                    c-0.439-1.93-0.789-4.122-2.807-6.754c-2.017-2.631-5.35-7.719-6.052-10.525S810.714,434.375,810.714,434.375z"
+                                />
                                 <text transform="matrix(1 0 0 1 714.0567 479.1971)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">JANJONG KATONG</text>
                             </g>
                             <g id="Geylang">
@@ -681,7 +722,8 @@
                                     c0,0,0.526-8.537,1.17-10.934c0.644-2.398,0.702-6.549,0.702-6.549l-0.585-1.988c0,0-1.988,3.391-3.275,3.626
                                     c-1.286,0.234-5.029,1.871-6.783,1.754s-10.057,0.468-13.332,0.585s-10.525,1.286-13.8,1.988
                                     c-3.275,0.702-11.578,0.351-14.151,0.468s-4.444,0.702-4.444,0.702s-2.924,2.924-3.275,2.924s-4.678-0.585-7.836,1.053
-                                    c-3.158,1.637-9.473,3.742-9.824,3.626C735.223,430.751,733.002,432.27,733.002,432.27z"/>
+                                    c-3.158,1.637-9.473,3.742-9.824,3.626C735.223,430.751,733.002,432.27,733.002,432.27z"
+                                />
                                 <text transform="matrix(1 0 0 1 698.8516 444.6982)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">GEYLANG</text>
                             </g>
                             <g id="Paya_Lebar">
@@ -700,7 +742,7 @@
                                     c-1.93-1.93-5.438-4.386-5.438-4.386l-2.807-0.263l-3.508-6.052c0,0-2.719-2.894-4.386-3.684c-1.667-0.789-5.438-5.263-7.192-6.403
                                     s-4.386-4.649-4.386-4.649s-3.684-10.701-3.158-15.613s1.316-10.964,4.21-17.279c2.894-6.315,3.684-10.525,5.087-12.28
                                     c1.403-1.754,1.754-7.368,1.93-9.736c0.175-2.368-0.526-5.701-0.526-5.701s-5.438-4.21-7.631-5.526s-7.806-6.491-9.034-8.333
-                                    S761.975,285.412,760.602,285.033z"/>
+                                    S761.975,285.412,760.602,285.033z" />
                                 <text transform="matrix(1 0 0 1 691.2501 355.7869)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">PAYA LEBAR</text>
                             </g>
                             <g id="Tampines">
@@ -721,7 +763,8 @@
                                     c5.38-3.275,7.952-7.485,9.824-8.888c1.871-1.403,6.315-4.21,6.315-4.21s9.356-8.42,12.864-10.759s8.187-9.824,16.373-19.647
                                     c8.187-9.824,10.057-16.139,11.227-24.091c1.17-7.952,5.38-16.139,8.654-16.607c3.275-0.468,13.566-3.508,15.203-4.21
                                     s9.356-1.637,8.888-5.614c-0.468-3.976-4.912-3.742-11.227-7.017s-20.583-4.678-28.068,3.742s-12.864,21.752-25.027,22.922
-                                    c-12.162,1.17-37.658,6.082-41.868,4.678c-4.21-1.403-13.8-8.42-18.01-8.42S920.831,254.701,917.546,252.287z"/>
+                                    c-12.162,1.17-37.658,6.082-41.868,4.678c-4.21-1.403-13.8-8.42-18.01-8.42S920.831,254.701,917.546,252.287z"
+                                />
                                 <text transform="matrix(1 0 0 1 852.9903 315.4403)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">TAMPINES</text>
                             </g>
                             <g id="Bedok">
@@ -743,7 +786,7 @@
                                     c0.969-0.335,6.926-2.972,9.288-5.019c2.363-2.047,4.638-4.005,5.117-6.778s1.265-6.08,1.265-6.08l1.023-3.56
                                     c0,0,3.686-1.688,4.597-2.217s4.846-3.096,5.621-3.775s5.383-5.482,5.383-5.482l0.479-0.471l1.462,4.723
                                     c0,0,1.871,2.076,3.742,7.923s3.04,8.888,6.783,19.881c3.742,10.993,15.905,25.261,15.905,25.261s12.397,5.847,14.268,6.315
-                                    s5.38,3.508,5.38,3.508l7.017,1.871L1027.361,390.169z"/>
+                                    s5.38,3.508,5.38,3.508l7.017,1.871L1027.361,390.169z" />
                                 <text transform="matrix(1 0 0 1 904.9151 416.659)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">BEDOK</text>
                             </g>
                             <g id="Ang_Mo_Kio">
@@ -776,7 +819,7 @@
                                     c1.605-2.617,8.483-14.125,8.483-14.125s2.538-4.818,3.213-7.737c0.675-2.918,2.397-10.033,3.219-10.931s3.652-3.386,8.594-4.823
                                     c4.941-1.437,8.262-1.397,10.387-1.626c2.126-0.229,11.423-0.978,12.096-0.931c0.672,0.048,6.244,0.944,7.639,1.011
                                     c1.396,0.067,3.015-0.222,3.817-0.495s2.052-0.974,2.052-0.974s2.544-10.613,2.719-14.911
-                                    C732.127,263.338,731.949,257.374,731.949,257.374z"/>
+                                    C732.127,263.338,731.949,257.374,731.949,257.374z" />
                                 <text transform="matrix(1 0 0 1 605.9968 282.8104)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">ANG MO KIO</text>
                             </g>
                             <g id="Hougang">
@@ -800,7 +843,7 @@
                                     c-0.602-0.97-1.673-3.348-1.673-3.348s6.211-7.463,8.342-10.074s8.401-11.431,9.441-12.96c1.039-1.53,5.914-8.548,6.462-9.246
                                     s3.162-3.56,7.98-4.047s3.558,0.258,4.503-0.33s2.926-2.487,3.722-2.638s1.761-0.968,2.266-1.659s1.843-2.784,1.843-2.784
                                     l0.935-3.742l0.877-3.158l-1.462-3.158c0,0-7.66-5.731-9.356-7.251c-1.696-1.521-5.672-6.9-7.134-8.187
-                                    c-1.462-1.286-5.496-3.567-5.496-3.567l-2.456-1.637l0.058-3.45L858.429,159.664z"/>
+                                    c-1.462-1.286-5.496-3.567-5.496-3.567l-2.456-1.637l0.058-3.45L858.429,159.664z" />
                                 <text transform="matrix(1 0 0 1 774.8682 221.4129)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">HOUGANG</text>
                             </g>
                             <g id="Changi" class="deactivate">
@@ -819,672 +862,673 @@
                                     s9.59,3.275,13.8,5.614c4.21,2.339,15.437,4.21,18.01,6.783s15.203,8.888,18.478,9.356s11.929-1.871,16.841-4.678
                                     s10.292-4.444,14.969-7.485c4.678-3.04,10.759-10.292,10.759-10.292s10.057-28.301,13.332-34.383s6.315-19.414,11.461-26.898
                                     c5.146-7.485,9.122-20.115,9.356-24.091s2.807-2.105-2.807-6.783s-17.776-7.485-24.091-10.993s-25.963-9.122-30.406-11.695
-                                    c-4.444-2.573-3.976-0.936-6.549-4.912C1093.436,296.493,1094.723,293.687,1094.723,293.687z"/>
+                                    c-4.444-2.573-3.976-0.936-6.549-4.912C1093.436,296.493,1094.723,293.687,1094.723,293.687z"
+                                />
                                 <text transform="matrix(1 0 0 1 1049.6973 350.2908)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">CHANGI</text>
                             </g>
-                            </svg>
-                        </div>
-                        <ul class="country-list d-block d-md-none">
-                            <li><a href="#">South west</a></li>
-                            <li><a href="#">North west</a></li>
-                            <li><a href="#">Central</a></li>
-                            <li><a href="#">North east</a></li>
-                            <li><a href="#">South east</a></li>
-                        </ul>
+                        </svg>
+                    </div>
+                    <ul class="country-list d-block d-md-none">
+                        <li><a href="#">South west</a></li>
+                        <li><a href="#">North west</a></li>
+                        <li><a href="#">Central</a></li>
+                        <li><a href="#">North east</a></li>
+                        <li><a href="#">South east</a></li>
+                    </ul>
 
-                        <div class="mapContent-wrap">
-                            <div id="mapContent_Jurong_West" class="mapContent_Jurong_West active map-list wow fadeIn text-left" data-wow-duration="3s">
-                                <div class="title">JURONG WEST</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                    <div class="mapContent-wrap">
+                        <div id="mapContent_Jurong_West" class="mapContent_Jurong_West active map-list wow fadeIn text-left" data-wow-duration="3s">
+                            <div class="title">JURONG WEST</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_LCK_x2F_CCK" class="mapContent_LCK_x2F_CCK map-list">
-                                <div class="title">LIM CHU KANGCHUA CHU KANG</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_LCK_x2F_CCK" class="mapContent_LCK_x2F_CCK map-list">
+                            <div class="title">LIM CHU KANGCHUA CHU KANG</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Bukit_Batok" class="mapContent_Bukit_Batok map-list">
-                                <div class="title">BUKIT BATOK</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Bukit_Batok" class="mapContent_Bukit_Batok map-list">
+                            <div class="title">BUKIT BATOK</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Jurong_East" class="mapContent_Jurong_East map-list">
-                                <div class="title">JURONG EAST</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Jurong_East" class="mapContent_Jurong_East map-list">
+                            <div class="title">JURONG EAST</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Pasir_Panjang" class="mapContent_Pasir_Panjang map-list">
-                                <div class="title">Pasir Panjang</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Pasir_Panjang" class="mapContent_Pasir_Panjang map-list">
+                            <div class="title">Pasir Panjang</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Clementi" class="mapContent_Clementi map-list">
-                                <div class="title">Clementi</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Clementi" class="mapContent_Clementi map-list">
+                            <div class="title">Clementi</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Bukit_Timah" class="mapContent_Bukit_Timah map-list">
-                                <div class="title">Bukit Timah</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Bukit_Timah" class="mapContent_Bukit_Timah map-list">
+                            <div class="title">Bukit Timah</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Woodlands" class="mapContent_Woodlands map-list">
-                                <div class="title">Woodlands</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Woodlands" class="mapContent_Woodlands map-list">
+                            <div class="title">Woodlands</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Yishun" class="mapContent_Yishun map-list">
-                                <div class="title">Yishun</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Yishun" class="mapContent_Yishun map-list">
+                            <div class="title">Yishun</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Queens_Town" class="mapContent_Queens_Town map-list">
-                                <div class="title">Queens Town</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Queens_Town" class="mapContent_Queens_Town map-list">
+                            <div class="title">Queens Town</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Tiong_Bahru" class="mapContent_Tiong_Bahru map-list">
-                                <div class="title">Tiong Bahru</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Tiong_Bahru" class="mapContent_Tiong_Bahru map-list">
+                            <div class="title">Tiong Bahru</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Orchard" class="mapContent_Orchard map-list">
-                                <div class="title">Orchard</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Orchard" class="mapContent_Orchard map-list">
+                            <div class="title">Orchard</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_City" class="mapContent_City map-list">
-                                <div class="title">City</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_City" class="mapContent_City map-list">
+                            <div class="title">City</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_JLN_Besar" class="mapContent_JLN_Besar map-list">
-                                <div class="title">JLN Besar</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_JLN_Besar" class="mapContent_JLN_Besar map-list">
+                            <div class="title">JLN Besar</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Janjong_Katong" class="mapContent_Janjong_Katong map-list">
-                                <div class="title">Janjong Katong</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Janjong_Katong" class="mapContent_Janjong_Katong map-list">
+                            <div class="title">Janjong Katong</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Geylang" class="mapContent_Geylang map-list">
-                                <div class="title">Geylang</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Geylang" class="mapContent_Geylang map-list">
+                            <div class="title">Geylang</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Paya_Lebar" class="mapContent_Paya_Lebar map-list">
-                                <div class="title">Paya Lebar</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Paya_Lebar" class="mapContent_Paya_Lebar map-list">
+                            <div class="title">Paya Lebar</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Tampines" class="mapContent_Tampines map-list">
-                                <div class="title">Tampines</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Tampines" class="mapContent_Tampines map-list">
+                            <div class="title">Tampines</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Bedok" class="mapContent_Bedok map-list">
-                                <div class="title">Bedok</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Bedok" class="mapContent_Bedok map-list">
+                            <div class="title">Bedok</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Ang_Mo_Kio" class="mapContent_Ang_Mo_Kio map-list">
-                                <div class="title">Ang Mo Kio</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Ang_Mo_Kio" class="mapContent_Ang_Mo_Kio map-list">
+                            <div class="title">Ang Mo Kio</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Hougang" class="mapContent_Hougang map-list">
-                                <div class="title">Hougang</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Hougang" class="mapContent_Hougang map-list">
+                            <div class="title">Hougang</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div id="mapContent_Changi" class="mapContent_Changi disable map-list">
-                                <div class="title">Changi</div>
-                                <div class="row">
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Lim Chu Kang</span></li>
-                                            <li><span>Western Water Catchment</span></li>
-                                            <li><span>Tuas</span></li>
-                                            <li><span>Choa Chu Kang</span></li>
-                                            <li><span>Tengah</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Bukit Batok</span></li>
-                                            <li><span>Jurong West</span></li>
-                                            <li><span>Pioneer</span></li>
-                                            <li><span>Boon Lay</span></li>
-                                            <li><span>Jurong East</span></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-sm-4 col-xl-3">
-                                        <ul class="item">
-                                            <li><span>Clementi</span></li>
-                                            <li><span>Queenstown</span></li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <div id="mapContent_Changi" class="mapContent_Changi disable map-list">
+                            <div class="title">Changi</div>
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Lim Chu Kang</span></li>
+                                        <li><span>Western Water Catchment</span></li>
+                                        <li><span>Tuas</span></li>
+                                        <li><span>Choa Chu Kang</span></li>
+                                        <li><span>Tengah</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Bukit Batok</span></li>
+                                        <li><span>Jurong West</span></li>
+                                        <li><span>Pioneer</span></li>
+                                        <li><span>Boon Lay</span></li>
+                                        <li><span>Jurong East</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-sm-4 col-xl-3">
+                                    <ul class="item">
+                                        <li><span>Clementi</span></li>
+                                        <li><span>Queenstown</span></li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="tab-pane fade" id="vietnam" role="tabpanel" aria-labelledby="vietnam-tab">
-                        <div class="map-img d-none d-md-block">
-                            <img class="img-fluid" src="assets/images/map2.png" alt="">
-                        </div>
+                <div class="tab-pane fade" id="vietnam" role="tabpanel" aria-labelledby="vietnam-tab">
+                    <div class="map-img d-none d-md-block">
+                        <img class="img-fluid" src="assets/images/map2.png" alt="">
                     </div>
                 </div>
             </div>
         </div>
-    </main>
-     <block-ui>
-      <!-- Your app markup here -->
-    </block-ui>
+    </div>
+</main>
+<block-ui>
+    <!-- Your app markup here -->
+</block-ui>
 
 <gof3r-footer></gof3r-footer>
