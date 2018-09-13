@@ -28,4 +28,6 @@ export class MerchantOutletListInfoModel{
     ResultCode:string="";
     CurrencyCode:string=""
     EstimatedPickupTime:string=""
+    subCatgoryTemp:string="";
+    Rating:string=""
 ;}

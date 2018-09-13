@@ -1,4 +1,4 @@
-import { Component, OnInit,Renderer2,Inject } from '@angular/core';
+import { Component, OnInit, Renderer2, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/platform-browser';
 import { PickupService } from "../services/pickup.service";
 import { CommonDataRequest } from "../models-request/request-comon-data";
@@ -45,37 +45,37 @@ export class SearchResultComponent implements OnInit {
     addressShowDiplay: AddressListModel;
     @BlockUI() blockUI: NgBlockUI;
     isShowAdd: boolean = false
-    script:string="";
+    script: string = "";
     getCurrentTime: GetCurrentSystemTimeModel;
     customerInfo: CustomerInfoMainModel = new CustomerInfoMainModel();
-    constructor(private _gof3rModule:Gof3rModule,private _renderer2: Renderer2, @Inject(DOCUMENT) private _document,private router: Router, private active_router: ActivatedRoute, private _pickupService: PickupService, private _gof3rUtil: Gof3rUtil, private _instanceService: EventSubscribeService) {
-        
-        
+    constructor(private _gof3rModule: Gof3rModule, private _renderer2: Renderer2, @Inject(DOCUMENT) private _document, private router: Router, private active_router: ActivatedRoute, private _pickupService: PickupService, private _gof3rUtil: Gof3rUtil, private _instanceService: EventSubscribeService) {
+
+
         this._instanceService.$getEventSubject.subscribe(data => {
             let dataParse = data;
             console.log('a:' + dataParse)
             if (dataParse.function === 'changeAddressV2') {
-                
+
                 console.log('changeAddressV2:' + dataParse.la)
                 let lacation = dataParse.la;
-                this.GetAllOutletListV2(lacation, "","")
+                this.GetAllOutletListV2(lacation, "", "")
                 this.getTopOffers()
                 this.initJQuery()
             }
             if (dataParse.function === 'Delivery') {
                 this.initJQuery()
-                this.GetAllOutletListV2("", dataParse.type,"");
+                this.GetAllOutletListV2("", dataParse.type, "");
                 //this.getTopOffers();
-                
+
             }
             if (dataParse.function === 'Pickup') {
                 this.initJQuery()
-                this.GetAllOutletListV2("", dataParse.type,"");
+                this.GetAllOutletListV2("", dataParse.type, "");
                 //this.getTopOffers();
-                
+
             }
-            if(dataParse.function==='changeTime'){
-                this.GetAllOutletListV2("","",dataParse.date);
+            if (dataParse.function === 'changeTime') {
+                this.GetAllOutletListV2("", "", dataParse.date);
             }
         })
         if (localStorage.getItem('cus') != null) {
@@ -107,17 +107,17 @@ export class SearchResultComponent implements OnInit {
 
 
     ngOnInit() {
-      
+
         this.initJQuery()
         console.log(this.script)
-        
+
         this.GetCurrentSystemTime();
-      
+
         //this.GetAllOutletListV2("", "");
-         //this.initSlider()
+        //this.initSlider()
     }
-    
-    
+
+
 
     initJQuery() {
         $(".special-offers .owl-carousel").owlCarousel({
@@ -181,8 +181,8 @@ export class SearchResultComponent implements OnInit {
         // }, 3500)
 
     }
-    GetAllOutletListV2(location: string, orderMethod: string,orderFor:string) {
-this.blockUI.start()
+    GetAllOutletListV2(location: string, orderMethod: string, orderFor: string) {
+        this.blockUI.start()
         let common_data = new CommonDataRequest();
         if (location === '') {
             var _location = localStorage.getItem("la");
@@ -210,11 +210,11 @@ this.blockUI.start()
         if (request_data.OrderType === ORDER_PICKUP) {
             request_data.OrderFor = "";
         } else if (request_data.OrderType === ORDER_DELIVERY) {
-            request_data.OrderFor =orderFor
+            request_data.OrderFor = orderFor
         }
         //request_data.OrderFor = ""
-       
-        if (localStorage.getItem('cus') != null){
+
+        if (localStorage.getItem('cus') != null) {
             this.customerInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem('cus')));
             request_data.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + '';
         }
@@ -234,11 +234,21 @@ this.blockUI.start()
 
             console.log('test:' + JSON.stringify(data));
             this.getAllOutletListV2 = data;
-           
-            if (this.getAllOutletListV2.MerchantOutletListInfo.length>0) {
+            let strTemp: string = ""
+            for (let i = 0; i < this.getAllOutletListV2.MerchantOutletListInfo.length; i++) {
+                for (let j = 0; j < this.getAllOutletListV2.MerchantOutletListInfo[i].SubCategoryList.length; j++) {
+                    strTemp = strTemp + this.getAllOutletListV2.MerchantOutletListInfo[i].SubCategoryList[j].SubCategoryName + " • "
+                }
+                let rating = this.getStars((parseInt(this.getAllOutletListV2.MerchantOutletListInfo[i].MerchantOutletRating) / 100));
+                console.log("rating:" + rating)
+                this.getAllOutletListV2.MerchantOutletListInfo[i].Rating = rating;
+                this.getAllOutletListV2.MerchantOutletListInfo[i].subCatgoryTemp = strTemp.substring(0, strTemp.length - 2)
+            }
+
+            if (this.getAllOutletListV2.MerchantOutletListInfo.length > 0) {
                 // this.noData=true;
-                 this.haveData=true;
-                 this.noData=false
+                this.haveData = true;
+                this.noData = false
             }
             else {
                 this.noData = true;
@@ -249,14 +259,14 @@ this.blockUI.start()
         })
     }
     GetCurrentSystemTime() {
-        
-        
+
+
         let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
         common_data.Location = _location
         common_data.ServiceName = "GetCurrentSystemTime";
         let common_data_json = JSON.stringify(common_data);
-        let strDatime:string=""
+        let strDatime: string = ""
         let dataRequest = new GetCurrentSystemTimeRequest();
         let dataRequestJson = JSON.stringify(dataRequest);
         this._pickupService.GetCurrentSystemTime(common_data_json, dataRequestJson).then(data => {
@@ -266,15 +276,15 @@ this.blockUI.start()
             let time = d.toLocaleTimeString();
             // this.getCurrentTime.CurrentData = date;
             // this.getCurrentTime.CurrentTime = moment_(d.getTime()).format("HH:mm:ss")
-            strDatime = date +" "+ moment_(d.getTime()).format("HH:mm:ss")
-            this.GetAllOutletListV2("","",strDatime)
+            strDatime = date + " " + moment_(d.getTime()).format("HH:mm:ss")
+            this.GetAllOutletListV2("", "", strDatime)
             //this.orderMain.PickupTime = this.getCurrentTime.CurrentTime + " - " + this.getCurrentTime.CurrentTimeTo;
             // this.orderMain.PickupDate = "select pick up time";
             // let nowDate = this.getCurrentTime.CurrentTime;
             // this.createTimes(nowDate, END_TIME_LIMIT)
 
         })
-       
+
     }
     getTopOffers() {
 
@@ -295,11 +305,11 @@ this.blockUI.start()
         console.log(requestDataJson)
         this._pickupService.GetTopOffers(comomDataJson, requestDataJson).then(data => {
             this.OfferList = data;
-            if(this.OfferList.OffersList.length>0){
-                this.haveOffer=true
+            if (this.OfferList.OffersList.length > 0) {
+                this.haveOffer = true
             }
-            else{
-                this.haveOffer=false
+            else {
+                this.haveOffer = false
             }
 
             console.log("topoffer:" + JSON.stringify(this.OfferList))
@@ -310,6 +320,26 @@ this.blockUI.start()
         localStorage.setItem("out", outletId);
         console.log('outletid:' + outletId)
         this.router.navigateByUrl("/order")
+    }
+    getStars(rating) {
+
+        // Round to nearest half
+        rating = Math.round(rating * 2) / 2;
+        let output = [];
+
+        // Append all the filled whole stars
+        for (var i = rating; i >= 1; i--)
+            output.push('<i style="color: #8e49fe;" class="fa fa-star" ></i>&nbsp;');
+
+        // If there is a half a star, append it
+        if (i == .5) output.push('<i class="fa fa-star-half-o"  style="color: #8e49fe;"></i>&nbsp;');
+
+        // Fill the empty stars
+        for (let i = (5 - rating); i >= 1; i--)
+            output.push('<i class="fa fa-star-o" style="color: #8e49fe;"></i>&nbsp;');
+
+        return output.join('');
+
     }
 
 }

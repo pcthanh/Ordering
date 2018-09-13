@@ -364,7 +364,7 @@ export class Gof3rHomeComponent implements OnInit {
                 });;
             } else {
                 var valueCheckUser = $('#check-user').text();
-
+                
                 if (valueCheckUser === 'true') {
 
                     $(this).parents('.login-wrap').find('.login-dropdown-had').slideDown();
@@ -822,6 +822,12 @@ export class Gof3rHomeComponent implements OnInit {
         this.list=[];
         this.showListSelectAddress=false;
         this.inputAddress=addres;
+        console.log("thanh tet:" +lat +"-"+ lng)
+        this.lat= Number.parseFloat(lat);
+        this.lng = Number.parseFloat(lng);
+        localStorage.setItem('lat', this.lat + '');
+        localStorage.setItem('long', this.lng + '');
+        localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
     }
 
 }

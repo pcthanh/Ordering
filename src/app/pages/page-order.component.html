@@ -14,7 +14,7 @@
                     <div class="row no-gutters">
                         <div class="col-12 col-md-1"></div>
                         <div class="col-12 col-md-11" *ngIf="haveDataOutlet">
-                            <div class="title-to"> {{outletInfo.OutletInfo[0].MerchantOutletName}} <span class="rate">7.0</span></div>
+                            <div class="title-to"> {{outletInfo.OutletInfo[0].MerchantOutletName}} <span [innerHtml]="this.outletInfo.OutletInfo[0].Rating" class="rate-gof3r"></span></div>
                             <div class="name">Abbott St.</div>
                             <div *ngIf=" this.OrderType==='DELIVERY'" class="time-rate">{{this.outletInfo.OutletInfo[0].EstimatedDeliveryDateTimeDisplay}} <img src="assets/images/ico-more-top.png"
                                     alt=""></div>

@@ -206,3 +206,12 @@
   background-color: #fff;
   text-align: left;
 }
+.rate-gof3r{
+    border-radius: 3px;
+    color: #8e49fe;
+    padding: 0 10px;
+    display: inline-block;
+    font-size: 14px;
+    /* border: 1px solid #fff; */
+    vertical-align: middle;
+}

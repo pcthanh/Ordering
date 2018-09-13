@@ -7,7 +7,7 @@
             <form action="#" class="form-search-item">
                 <input class="search-input" type="text" placeholder="Search">
             </form>
-            <a href="#" class="sort-item"><span class="d-none d-md-inline-block">Sort</span>&nbsp;</a>
+            <!--<a href="#" class="sort-item"><span class="d-none d-md-inline-block">Sort</span>&nbsp;</a>-->
         </div>
     </div>
 </header>
@@ -178,17 +178,21 @@
                             <div class="food-detail-1">
                                 <h3 class="food-title-1"><a href="#">{{item.MerchantOutletName}}</a></h3>
 
-                                <div class="rating-star">
+                                <div [innerHtml]="item.Rating" style="color: #8e49fe" class="rating-star">
+                                
+                                    <!--<span class="go-star checked"></span>
                                     <span class="go-star checked"></span>
                                     <span class="go-star checked"></span>
                                     <span class="go-star checked"></span>
-                                    <span class="go-star checked"></span>
-                                    <span class="go-star"></span>
+                                    <span class="go-star"></span>-->
                                 </div>
                                 <div class="info-1">
-                                    <span *ngFor="let itemSub of item.SubCategoryList">
-                                            {{itemSub.SubCategoryName}}
-                                        </span>
+                                    <!--<span style="color: #7d7d7d" class="info" *ngFor="let itemSub of item.SubCategoryList">
+                                            {{itemSub.SubCategoryName}} •
+                                        </span> -->
+                                        <span style="color: #7d7d7d" class="info">
+                                            {{item.subCatgoryTemp}}
+                                        </span> 
 
                                 </div>
                             </div>

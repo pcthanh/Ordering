@@ -5,7 +5,7 @@
                 <h1 class="logo text-hide"><a href=""><img src="assets/images/logo.png" alt=""><span>GOF3R</span></a></h1>
                 <div class="top-action">
                     <!--<a [routerLink]="['/become-courier']"
-                         class="become-courier">Become a courier</a>thanh>
+                         class="become-courier">Become a courier</a>thanh>-->
                         <div class="user-login user-account">
                             <div class="account d-none d-md-block">Account</div>
                             <div class="login-wrap">
@@ -36,7 +36,9 @@
                                         </svg>
                                     </div>
                                 </div>
-                                <!start drop down user not login-->
+                            
+                        
+                                <!--start drop down user not login-->
                     <div class="login-dropdown">
                         <div class="login-dropdown-content loginform-dropdown">
                             <div class="login-form">
@@ -184,7 +186,7 @@
                 </div>
             </div>
         </div>
-
+            </div>
     </div>
     <div class="header-content">
         <div class="slogan-form">
@@ -240,7 +242,7 @@
         </div>
     </div>
     <div class="go-down"></div>
-
+        </div>
 </header>
 <main>
     <div class="block-info-wrap">
@@ -284,8 +286,8 @@
                                 <div class="text">It's all at your fingertips -- the restaurants you love.<br/>
                                     <br/>Go ahead, download us.</div>
                                 <div class="app-link">
-                                    <div class="gplay"><a href="#"><img src="assets/images/app-google-play.png" alt=""></a></div>
-                                    <div class="appstore"><a href="#"><img src="assets/images/app-app-store.png" alt=""></a></div>
+                                    <div class="gplay"><a onclick="Redirect()"><img src="assets/images/app-google-play.png" alt=""></a></div>
+                                    <div class="appstore"><a onclick="Redirect()"><img src="assets/images/app-app-store.png" alt=""></a></div>
                                 </div>
                             </div>
                         </div>
@@ -306,12 +308,12 @@
                     <div class="blog-post wow slideInLeft" data-wow-duration="1s">
                         <div class="img-blog">
                             <img src="assets/images/post1.jpg" alt="">
-                            <h3 class="title">DRIVE WITH US</h3>
+                            <h3 class="title">RIDE WITH US</h3>
                         </div>
                         <div class="text-wrap">
                             <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non bibendum enim, eget tempus neque.
                                 Donec a tellus aliquet, suscipit urna sodales, venenatis massa.</div>
-                            <a href="#" class="btn-main btn-join">JOIN NOW</a>
+                            <a  class="btn-main btn-join">RIDE WITH GOF3R - JOIN NOW</a>
                         </div>
                     </div>
                 </div>
@@ -324,7 +326,7 @@
                         <div class="text-wrap">
                             <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non bibendum enim, eget tempus neque.
                                 Donec a tellus aliquet, suscipit urna sodales, venenatis massa.</div>
-                            <a href="#" class="btn-main btn-join">JOIN NOW</a>
+                            <a  class="btn-main btn-join">PARTNER WITH GOF3R - LEARN MORE</a>
                         </div>
                     </div>
                 </div>
@@ -337,7 +339,7 @@
                         <div class="text-wrap">
                             <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non bibendum enim, eget tempus neque.
                                 Donec a tellus aliquet, suscipit urna sodales, venenatis massa.</div>
-                            <a href="#" class="btn-main btn-join">JOIN NOW</a>
+                            <a style="background-color: #e7e7e7; color: #fff" class="btn-main btn-join">CAREERS AT GOF3R - APPLY TODAY</a>
                         </div>
                     </div>
                 </div>
@@ -351,9 +353,9 @@
                 <li class="nav-item">
                     <a class="nav-link active" id="singapore-tab" data-toggle="tab" href="#singapore" role="tab" aria-controls="singapore" aria-selected="true">SINGAPORE</a>
                 </li>
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a class="nav-link" id="vietnam-tab" data-toggle="tab" href="#vietnam" role="tab" aria-controls="vietnam" aria-selected="false">VIETNAM</a>
-                </li>
+                </li>-->
             </ul>
             <div class="tab-content wow fadeInUp" data-wow-duration="1.5s" id="countryTabContent">
                 <div class="tab-pane fade show active" id="singapore" role="tabpanel" aria-labelledby="singapore-tab">

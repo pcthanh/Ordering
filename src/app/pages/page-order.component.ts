@@ -143,6 +143,7 @@ export class PageOrderComponent implements OnInit {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
             localStorage.setItem('ot', this._util.encryptParams(JSON.stringify(data)));//set outlet info
             this.outletInfo = data;
+            this.outletInfo.OutletInfo[0].Rating=this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating)/100));
             this.haveDataOutlet = true
             this.loadCart();
             this.GetProductList("", "");
@@ -1000,6 +1001,26 @@ export class PageOrderComponent implements OnInit {
     }
     closePopupSelectTimes(){
         $.magnificPopup.close()
+    }
+    getStars(rating) {
+
+        // Round to nearest half
+        rating = Math.round(rating * 2) / 2;
+        let output = [];
+
+        // Append all the filled whole stars
+        for (var i = rating; i >= 1; i--)
+            output.push('<i style="color: #8e49fe;" class="fa fa-star" ></i>&nbsp;');
+
+        // If there is a half a star, append it
+        if (i == .5) output.push('<i class="fa fa-star-half-o"  style="color: #8e49fe;"></i>&nbsp;');
+
+        // Fill the empty stars
+        for (let i = (5 - rating); i >= 1; i--)
+            output.push('<i class="fa fa-star-o" style="color: #8e49fe;"></i>&nbsp;');
+
+        return output.join('');
+
     }
 
 }
