@@ -58,6 +58,7 @@ import { OrderHistoryDetailComponent } from "./pages/page-order-history-detail.c
 import { LocationStrategy,HashLocationStrategy } from "@angular/common";
 import {NgAutoCompleteModule} from "ng-auto-complete";
 import { AutoCompleteModule } from 'ng4-auto-complete';
+import {CalendarModule} from 'primeng/calendar';
 
 @NgModule({
   declarations: [
@@ -102,7 +103,7 @@ import { AutoCompleteModule } from 'ng4-auto-complete';
     routing,
   
     BlockUIModule,
-  
+  CalendarModule,
 
     
      AgmCoreModule.forRoot({

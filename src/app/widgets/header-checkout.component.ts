@@ -10,11 +10,18 @@ declare var $: any
 })
 
 export class HeaderCheckOutComponent implements OnInit {
-    constructor(private _gof3rUtil: Gof3rUtil,private _route:Router,private _instanceService: EventSubscribeService) { }
     isUserLogin: boolean = false;
     isLogin: string = "LOG IN";
     userNameLogOut: string = ""
     customerInfoMain: CustomerInfoMainModel;
+    constructor(private _gof3rUtil: Gof3rUtil,private _route:Router,private _instanceService: EventSubscribeService) { 
+        this._instanceService.$getEventSubject.subscribe(data=>{
+            if(data==="UpdateProfile"){
+                this.checkLoginUser();
+            }
+        })
+    }
+    
 
     ngOnInit() {
         this.checkLoginUser()

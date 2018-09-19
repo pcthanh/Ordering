@@ -2032,7 +2032,7 @@ blockquote {
   font-size: 15px;
   color: #9f9f9f;
   padding: 10px 5px;
-  padding-bottom: 15px;
+  padding-bottom: 10px;
   border-bottom: 1px solid #d9d9d9;
   font-weight: 500;
   cursor: pointer;
@@ -3391,6 +3391,11 @@ blockquote {
     -o-transform: translate(0, -50%);
     transform: translate(0, -50%);
   }
+  /*ThanhPC*/
+  .image-info{
+    flex: 0 0 302px;
+  }
+  /*ThanhPC*/
   .courier-signup-form form {
     position: static;
     max-width: 100%;
@@ -3403,6 +3408,10 @@ blockquote {
     max-width: 100%;
     border-radius: 0;
   }
+  .image-info{
+    flex: 0 0 120px;
+  }
+  
   .cart-sidebar .subtotal-wrap .title-sub {
     position: relative;
     padding-right: 30px;
@@ -3929,21 +3938,30 @@ blockquote {
     flex: 0 0 62.333333%;
     max-width: 62.333333%;
   }
-  .col-cart {
-    -ms-flex: 0 0 29.333333%;
-    flex: 0 0 29.333333%;
-    max-width: 29.333333%;
+  /*ThanhPC*/
+  .image-info{
+    -webkit-flex: 0 0 240px ;
+    flex: 0 0 240px ;
   }
+  /*Begin ThanhPC 15/09/2018*/
+  .col-cart {
+    -ms-flex: 0 0 25.333333%;
+    flex: 0 0 25.333333%;
+    max-width: 25.333333%;
+  }
+  /*End ThanhPC 15/09/2018*/
   .col-merchant {
     -ms-flex: 0 0 62.333331%;
     flex: 0 0 62.333331%;
     max-width: 62.333331%;
   }
-  .col-map-checkout {
-    -ms-flex: 0 0 70.666667%;
-    flex: 0 0 70.666667%;
-    max-width: 70.666667%;
+  /*Begin ThanhPC 15/09/2018*/
+  .col-map-checkout { 
+    -ms-flex: 0 0 74.666667%;
+    flex: 0 0 74.666667%;
+    max-width: 74.666667%;
   }
+  /*End ThanhPC 15/09/2018*/
 }
 .payment-otpion-popup {
   background: #fff;

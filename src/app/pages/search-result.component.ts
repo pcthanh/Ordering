@@ -48,6 +48,7 @@ export class SearchResultComponent implements OnInit {
     script: string = "";
     getCurrentTime: GetCurrentSystemTimeModel;
     customerInfo: CustomerInfoMainModel = new CustomerInfoMainModel();
+    txtSearch: string = ""
     constructor(private _gof3rModule: Gof3rModule, private _renderer2: Renderer2, @Inject(DOCUMENT) private _document, private router: Router, private active_router: ActivatedRoute, private _pickupService: PickupService, private _gof3rUtil: Gof3rUtil, private _instanceService: EventSubscribeService) {
 
 
@@ -58,24 +59,24 @@ export class SearchResultComponent implements OnInit {
 
                 console.log('changeAddressV2:' + dataParse.la)
                 let lacation = dataParse.la;
-                this.GetAllOutletListV2(lacation, "", "")
+                this.GetAllOutletListV2(lacation, "", "", "")
                 this.getTopOffers()
                 this.initJQuery()
             }
             if (dataParse.function === 'Delivery') {
                 this.initJQuery()
-                this.GetAllOutletListV2("", dataParse.type, "");
+                this.GetAllOutletListV2("", dataParse.type, "", "");
                 //this.getTopOffers();
 
             }
             if (dataParse.function === 'Pickup') {
                 this.initJQuery()
-                this.GetAllOutletListV2("", dataParse.type, "");
+                this.GetAllOutletListV2("", dataParse.type, "", "");
                 //this.getTopOffers();
 
             }
             if (dataParse.function === 'changeTime') {
-                this.GetAllOutletListV2("", "", dataParse.date);
+                this.GetAllOutletListV2("", "", dataParse.date, "");
             }
         })
         if (localStorage.getItem('cus') != null) {
@@ -111,7 +112,7 @@ export class SearchResultComponent implements OnInit {
         this.initJQuery()
         console.log(this.script)
 
-        this.GetCurrentSystemTime();
+        this.GetCurrentSystemTime("");
 
         //this.GetAllOutletListV2("", "");
         //this.initSlider()
@@ -181,7 +182,7 @@ export class SearchResultComponent implements OnInit {
         // }, 3500)
 
     }
-    GetAllOutletListV2(location: string, orderMethod: string, orderFor: string) {
+    GetAllOutletListV2(location: string, orderMethod: string, orderFor: string, keyWord: string) {
         this.blockUI.start()
         let common_data = new CommonDataRequest();
         if (location === '') {
@@ -223,7 +224,7 @@ export class SearchResultComponent implements OnInit {
         //request_data.CustomerId = "";
         request_data.FromRow = 0;
         request_data.MCC = this.mccGobal;
-        request_data.KeyWords = "";
+        request_data.KeyWords = keyWord;
         request_data.MerchantOutletId = "";
         request_data.SubCategoryId = "";
         let request_data_json = JSON.stringify(request_data);
@@ -234,12 +235,14 @@ export class SearchResultComponent implements OnInit {
 
             console.log('test:' + JSON.stringify(data));
             this.getAllOutletListV2 = data;
-            let strTemp: string = ""
+            
             for (let i = 0; i < this.getAllOutletListV2.MerchantOutletListInfo.length; i++) {
+                let rating:string="";
+                let strTemp: string = ""
                 for (let j = 0; j < this.getAllOutletListV2.MerchantOutletListInfo[i].SubCategoryList.length; j++) {
                     strTemp = strTemp + this.getAllOutletListV2.MerchantOutletListInfo[i].SubCategoryList[j].SubCategoryName + " • "
                 }
-                let rating = this.getStars((parseInt(this.getAllOutletListV2.MerchantOutletListInfo[i].MerchantOutletRating) / 100));
+                rating = this.getStars((parseInt(this.getAllOutletListV2.MerchantOutletListInfo[i].MerchantOutletRating) / 100));
                 console.log("rating:" + rating)
                 this.getAllOutletListV2.MerchantOutletListInfo[i].Rating = rating;
                 this.getAllOutletListV2.MerchantOutletListInfo[i].subCatgoryTemp = strTemp.substring(0, strTemp.length - 2)
@@ -258,7 +261,7 @@ export class SearchResultComponent implements OnInit {
 
         })
     }
-    GetCurrentSystemTime() {
+    GetCurrentSystemTime(keyWord: string) {
 
 
         let common_data = new CommonDataRequest();
@@ -277,7 +280,7 @@ export class SearchResultComponent implements OnInit {
             // this.getCurrentTime.CurrentData = date;
             // this.getCurrentTime.CurrentTime = moment_(d.getTime()).format("HH:mm:ss")
             strDatime = date + " " + moment_(d.getTime()).format("HH:mm:ss")
-            this.GetAllOutletListV2("", "", strDatime)
+            this.GetAllOutletListV2("", "", strDatime, keyWord)
             //this.orderMain.PickupTime = this.getCurrentTime.CurrentTime + " - " + this.getCurrentTime.CurrentTimeTo;
             // this.orderMain.PickupDate = "select pick up time";
             // let nowDate = this.getCurrentTime.CurrentTime;
@@ -340,6 +343,19 @@ export class SearchResultComponent implements OnInit {
 
         return output.join('');
 
+    }
+    searchAction(events) {
+        if (events.keyCode == 13) {
+            // action
+            console.log("enter press");
+            if(this.txtSearch!=""){
+                this.GetCurrentSystemTime(this.txtSearch);
+            }
+            else{
+                this.GetCurrentSystemTime("")
+            }
+            
+        }
     }
 
 }

@@ -6,6 +6,8 @@ import { Gof3rUtil } from "../util/gof3r-util";
 import { PickupService } from "../services/pickup.service";
 import { CommonDataRequest } from "../models-request/request-comon-data";
 import { UpdateProfileRequest } from "../models-request/update-profile";
+import * as moment_ from 'moment';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 declare var $:any;
 @Component({
     selector: 'page-account',
@@ -15,6 +17,10 @@ declare var $:any;
 export class AccountComponent implements OnInit {
     customerInfoMain: CustomerInfoMainModel;
     isHaveDate:boolean=false;
+     value: Date;
+    gender:string;
+    @BlockUI() blockUI: NgBlockUI;
+    mess:string=""
     constructor(private _pickupService:PickupService,private route:Router,private _instaneService:EventSubscribeService,private _gof3rUtil: Gof3rUtil) { 
         this.customerInfoMain= new CustomerInfoMainModel();
     }
@@ -36,7 +42,12 @@ export class AccountComponent implements OnInit {
             
         }
     }
+    selectGender(g:string){
+        this.gender=g;
+        console.log("getnder:"+g)
+    }
     updateProfile(){
+        this.blockUI.start();
         let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
         common_data.Location = _location
@@ -50,10 +61,12 @@ export class AccountComponent implements OnInit {
         request_data.CustomerId=this.customerInfoMain.CustomerInfo[0].CustomerId+''
         request_data.CustomerName=this.customerInfoMain.CustomerInfo[0].CustomerName
         request_data.DisabledMerchantCategoryList=""
-        request_data.Dob=this.customerInfoMain.CustomerInfo[0].Dob;
+        console.log("date:"+ this.customerInfoMain.CustomerInfo[0].Dob)
+        let d:Date=this.customerInfoMain.CustomerInfo[0].Dob
+        request_data.Dob= moment_(d).format("DD/MM/YYYY");
         request_data.Email=this.customerInfoMain.CustomerInfo[0].Email
         request_data.EnabledMerchantCategoryList=""
-        request_data.Gender=this.customerInfoMain.CustomerInfo[0].Gender;
+        request_data.Gender=this.gender;
         request_data.IdNumber=this.customerInfoMain.CustomerInfo[0].IdNumber;
         request_data.MaritalStatus=this.customerInfoMain.CustomerInfo[0].MaritalStatus
         request_data.Mobile=this.customerInfoMain.CustomerInfo[0].Mobile
@@ -61,6 +74,30 @@ export class AccountComponent implements OnInit {
         console.log("request_data:"+ request_data_json);
         this._pickupService.UpdateCustomer(common_data_json,request_data_json).then(data=>{
             console.log(JSON.stringify(data))
+            if(data.ResultCode==="000"){
+                this.customerInfoMain=data;
+                localStorage.setItem("cus",this._gof3rUtil.encryptParams(JSON.stringify(this.customerInfoMain)));
+                this.mess="Update Profile Success."
+                this.blockUI.stop();
+                this.showPopupPaymentSuccess();
+                this._instaneService.sendCustomEvent("UpdateProfile");
+            }
+            else{
+                this.mess="Update Profile Fail."
+                this.blockUI.stop();
+                this.showPopupPaymentSuccess();
+            }
         })
+    }
+        showPopupPaymentSuccess() {
+        var el = $('#success-popup');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el
+                },
+                type: 'inline'
+            });
+        }
     }
 }

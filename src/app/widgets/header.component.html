@@ -96,7 +96,7 @@
                                                     </g>
                                                     </svg>
                                                 
-                                                    <span>ASAP</span>
+                                                    <span *ngIf="showWhen">{{whenStr}}</span>
                                                 </div>
                                                 <div class="item yourlocal">
                                                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px"
@@ -110,8 +110,11 @@
                                                         <rect fill="none" width="24" height="24"/>
                                                     </g>
                                                     </svg>
-                                                
-                                                    <span>Your Location <br><span class="small">510 Burrard Street, Vancouver, BC, Canada</span></span>
+                                                    
+                                                    <span>Your Location <br>
+                                                    <span *ngIf="showListAddresNotLogin" class="small">{{this.addressShowDiplay.AddressListInfo[0].StreetAddress}}</span>
+                                                    <span *ngIf="showListDelivery" class="small">{{this.listDeliveryAddressShow.DeliveryAddressList[0].Address}}</span>
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div class="address-map">

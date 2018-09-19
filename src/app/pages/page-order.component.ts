@@ -191,7 +191,17 @@ export class PageOrderComponent implements OnInit {
             this.haveData = true
             this.haveDepartment = this.productList.IsHavingDepartment
             console.log('p:' + JSON.stringify(this.productList))
-            
+            for(let i = 0; i<this.productList.ProductList.length; i++){
+                for(let j = 0; j< this.productList.ProductList[i].Produtcs.length; j++){
+                    if(this.productList.ProductList[i].Produtcs[j].Image.indexOf("no_image")>-1){
+                        console.log("xxthanh:"+ this.productList.ProductList[i].Produtcs[j].Name)
+                    this.productList.ProductList[i].Produtcs[j].HaveImage = false;
+                }
+                else{
+                    this.productList.ProductList[i].Produtcs[j].HaveImage = true;
+                }
+                }
+            }
             if (data.ResultCode === "000") {
 
                 this.blockUI.stop()

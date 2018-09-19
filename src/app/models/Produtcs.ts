@@ -22,4 +22,5 @@ export class ProductModel{
     Quantity:number;
     SpecialRequest:string;
     Options:OptionsModel[];
+    HaveImage:boolean=true;
 }

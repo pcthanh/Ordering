@@ -4,7 +4,7 @@ export class CustomerInfoModel{
     CustomerName:string;
     EnglishName:string;
     ShortName:string;
-    Dob:string;
+    Dob:Date;
     Pob:string;
     Gender:string;
     GenderValue:string;

@@ -9,12 +9,13 @@
 <main>
     <div class="main-content-order">
         <div class="row no-gutters">
-            <div class="col-12 col-md-8 col-map-checkout">
+            <div class="col-12 col-md-9 col-map-checkout">
                 <div class="main-top">
                     <div class="row no-gutters">
                         <div class="col-12 col-md-1"></div>
                         <div class="col-12 col-md-11" *ngIf="haveDataOutlet">
-                            <div class="title-to"> {{outletInfo.OutletInfo[0].MerchantOutletName}} <span [innerHtml]="this.outletInfo.OutletInfo[0].Rating" class="rate-gof3r"></span></div>
+                            <div class="title-to"> {{outletInfo.OutletInfo[0].MerchantOutletName}} <span [innerHtml]="this.outletInfo.OutletInfo[0].Rating"
+                                    class="rate-gof3r"></span></div>
                             <div class="name">Abbott St.</div>
                             <div *ngIf=" this.OrderType==='DELIVERY'" class="time-rate">{{this.outletInfo.OutletInfo[0].EstimatedDeliveryDateTimeDisplay}} <img src="assets/images/ico-more-top.png"
                                     alt=""></div>
@@ -29,7 +30,7 @@
                         <div class="order-content-wrap">
                             <div class="order-content">
                                 <div class="row">
-                                    <div class="col-12 col-md-4">
+                                    <div class="col-12 col-md-3">
                                         <div class="order-catalog" *ngIf="haveDataOutlet && this.haveDepartment==='Y'">
                                             <ul>
                                                 <li class="active" (click)="loadItemOfCategory('ALL',this.productList.IsHavingDepartment)"><a>All</a></li>
@@ -49,7 +50,7 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-8">
+                                    <div class="col-12 col-md-9">
                                         <div class="order-info-wrap">
                                             <!--<div class="order-title no-border">Place Settings</div>-->
                                             <!--<div class="text-info-wrap">
@@ -88,22 +89,40 @@
                                                 </div>
 
                                             </div>-->
-                                            
-                                            
+
+
                                             <div *ngIf="haveData">
 
-                                          
+
                                                 <div *ngFor="let item of productList.ProductList">
                                                     <div class="order-title">{{item.Group}}</div>
                                                     <!--<div class="text-info-wrap" data-mfp-src="#chicken-popup" id="chicken-beef"></div>-->
                                                     <div *ngFor="let itemP of item.Produtcs">
 
-                                                        <div class="text-info-wrap chicken-beef" (click)="showProductDetail(itemP.Id)">
-                                                            
+                                                        <!--<div class="text-info-wrap display-flex chicken-beef" (click)="showProductDetail(itemP.Id)">
+
 
                                                             <div class="text-strong"> {{itemP.Name}} <span class="right">{{itemP.PriceDisplay}}</span></div>
                                                             <div class="text">{{itemP.Description}}.</div>
 
+                                                        </div>-->
+                                                        <div class="text-info-wrap display-flex chicken-beef" (click)="showProductDetail(itemP.Id)">
+                                                        <div *ngIf="itemP.HaveImage" class="image-info" [ngStyle]="{'background-image': 'url('+itemP.Image+')'}">
+
+                                                        </div>
+
+                                                        <div class="text" style="padding-left: 10px">
+                                                            <div class="item-name text-strong">
+                                                                {{itemP.Name}}
+                                                            </div>
+
+                                                            <div class="text" style="margin-top: -5px">
+                                                                {{itemP.Description}}.
+                                                            </div>
+                                                            <div class="item-rice">
+                                                                {{itemP.PriceDisplay}}
+                                                            </div>
+                                                        </div>
                                                         </div>
 
                                                     </div>
@@ -111,7 +130,25 @@
 
 
                                                 </div>
+                                                <div class="text-info-wrap not-avaiable display-flex">
+                                                    <div class="image-info" style="background-image: url(https://images.deliveryhero.io/image/fd-sg/Products/1330252.jpg)">
 
+                                                    </div>
+
+                                                    <div class="text" style="padding-left: 10px">
+                                                        <div class="item-name text-strong">
+                                                            Signature Bean Curd 金砖豆腐 金砖豆腐 PRODUCT
+                                                        </div>
+
+                                                        <div class="text" style="margin-top: -5px">
+                                                            ipsum dolor sit amet, consectetur adipiscing elit. Aliquam faucibus enim tortor, a consequat risus accumsan vel.
+                                                        </div>
+                                                        <div class="item-rice">
+                                                            $S11.9
+                                                        </div>
+                                                    </div>
+
+                                                </div>
                                                 <!--start popup when click product-->
                                                 <div id="" #closeModal class="chicken-popup white-popup mfp-hide">
                                                     <div class="title-popup">{{productDetailParse.Name}}</div>
@@ -161,6 +198,9 @@
                                             </div>
                                         </div>
                                     </div>
+
+
+
                                 </div>
                             </div>
                         </div>
@@ -168,7 +208,7 @@
                 </div>
             </div>
             <!--start cart empty-->
-            <div *ngIf="!haveCart" class="col-12 col-md-4 col-cart">
+            <div *ngIf="!haveCart" class="col-12 col-md-3 col-cart">
                 <div class="cart-sidebar-wrap">
                     <div class="cart-sidebar">
                         <img src="assets/images/ico-cart-empty.png" alt="" class="img-cart-empty img-fluid">

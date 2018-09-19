@@ -1,7 +1,9 @@
 import { ProductModel } from "../models/Produtcs";
+import { ProductListArray } from "../models/ProductListArray";
 export class ProductListModel{
-    Group:string;
-    Produtcs:ProductModel[];
+    ProductList:ProductListArray[];
+    // Group:string;
+    // Produtcs:ProductModel[];
     ResultCode:string="";
     ResultDesc:string="";
     ServiceName:string="";

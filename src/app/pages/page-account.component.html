@@ -48,17 +48,18 @@
                                         </div>
                                         <div class="acc-input">
                                             <label for="acc-birth"><span>Birthday</span></label>
-                                            <input type="text" [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Dob" id="acc-birth">
+                                            <!--<input type="text" [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Dob" id="acc-birth">-->
+                                            <p-calendar [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Dob" dateFormat="dd/mm/yy" ></p-calendar>
                                         </div>
                                         <div class="acc-radio">
                                             <div class="title">Gender</div>
                                             <div class="acc-gender">
-                                                <input type="radio" id="acc-male"[checked]="this.customerInfoMain.CustomerInfo[0].Gender==M" name="acc-gender">
+                                                <input type="radio" (click)="selectGender('M')" id="acc-male"[checked]="this.customerInfoMain.CustomerInfo[0].Gender==='M'" name="acc-gender">
                                                 <label for="acc-male"><span>Male</span></label>
                                             </div>
 
                                             <div class="acc-gender">
-                                                <input type="radio" id="acc-fe" name="acc-gender">
+                                                <input type="radio" (click)="selectGender('F')" id="acc-fe" [checked]="this.customerInfoMain.CustomerInfo[0].Gender==='F'" name="acc-gender">
                                                 <label for="acc-fe"><span>Female</span></label>
                                             </div>
                                         </div>
@@ -99,4 +100,11 @@
             </div>
         </div>
     </main>
+     <div id="success-popup" class="success-popup mfp-hide">
+            <div class="title">{{this.mess}}</div>
+           
+    </div>
+    <block-ui>
+    <!-- Your app markup here -->
+</block-ui>
     <gof3r-footer></gof3r-footer>

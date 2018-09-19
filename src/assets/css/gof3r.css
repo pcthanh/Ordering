@@ -215,3 +215,31 @@
     /* border: 1px solid #fff; */
     vertical-align: middle;
 }
+.image-info{
+    
+    height: 160px;
+    width: 300px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+.display-flex{
+  display: flex
+}
+.item-rice{
+  text-align: right;
+  position: absolute;
+  right: 0;
+  bottom: 5px;
+}
+@media (min-width: 1265px) {
+  .image-info{
+    -webkit-flex: 0 0 302px;
+    flex: 0 0 302px;
+  }
+  
+}
+.acc-input span, .acc-input span div
+{
+  width: 100%;
+}

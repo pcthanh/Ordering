@@ -4,8 +4,8 @@
             <header-gof3r></header-gof3r>
         </div>
         <div class="search-sort-form">
-            <form action="#" class="form-search-item">
-                <input class="search-input" type="text" placeholder="Search">
+            <form name="search-form" class="form-search-item">
+                <input (keypress)="searchAction($event)" [(ngModel)]="txtSearch" class="search-input" type="text" name="txtsearch" placeholder="Search">
             </form>
             <!--<a href="#" class="sort-item"><span class="d-none d-md-inline-block">Sort</span>&nbsp;</a>-->
         </div>
