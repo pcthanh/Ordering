@@ -40,7 +40,6 @@ export class AccountComponent implements OnInit {
         }
         else {
             console.log('null')
-            
         }
     }
     selectGender(g:string){

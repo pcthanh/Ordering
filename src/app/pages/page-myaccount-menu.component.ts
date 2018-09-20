@@ -180,6 +180,7 @@ export class MyAccountMenuComponent implements OnInit {
                 //     overflow: '',
                 //     height: ''
                 // });;
+                
                 localStorage.clear();
                 // this.isLogin = "LOG IN"
                 this.blockUI.stop()
