@@ -1,6 +1,6 @@
 <ul class="sidebar-top">
     <li (click)=accountClick() [ngClass]="{active: isMyProfile===true}"><a><span>My Profile</span></a></li>
-    <li (click)="paymentOptionClick()" [ngClass]="{active: isPaymentOption===true}" ><a ><span>PAYMENT OPTIONS</span></a></li>
+    <li (click)="paymentOptionClick()" [ngClass]="{active: isPaymentOption===true}"><a><span>PAYMENT OPTIONS</span></a></li>
     <li (click)="deliveryAddressClick()" [ngClass]="{active: isDeliveryAddress===true}"><a><span>Delivery Addresses</span></a></li>
     <li (click)="orderHistoryClick()" [ngClass]="{active: isOrderHistory===true}"><a><span>Order History Delivery</span></a></li>
     <li (click)="orderHistoryPickup()" [ngClass]="{active: isOrderHistoryPickup===true}"><a><span>Order History Pickup</span></a></li>
@@ -8,3 +8,9 @@
     <li><a href="#"><span>Settings</span></a></li>
     <li (click)="helpClick()" [ngClass]="{active: isHelp===true}"><a><span>Help</span></a></li>
 </ul>
+<div class="sb-logout-wrap">
+    <a style="color: #ffffff" (click)="logOut(this.customerInfoMain.CustomerInfo[0].UserName)" class="btn-main btn-logout-sidebar">Log out</a>
+</div>
+<block-ui>
+    <!-- Your app markup here -->
+</block-ui>

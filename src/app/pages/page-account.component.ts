@@ -20,6 +20,7 @@ export class AccountComponent implements OnInit {
      value: Date;
     gender:string;
     @BlockUI() blockUI: NgBlockUI;
+    isChangeBod:boolean=false;
     mess:string=""
     constructor(private _pickupService:PickupService,private route:Router,private _instaneService:EventSubscribeService,private _gof3rUtil: Gof3rUtil) { 
         this.customerInfoMain= new CustomerInfoMainModel();
@@ -62,11 +63,24 @@ export class AccountComponent implements OnInit {
         request_data.CustomerName=this.customerInfoMain.CustomerInfo[0].CustomerName
         request_data.DisabledMerchantCategoryList=""
         console.log("date:"+ this.customerInfoMain.CustomerInfo[0].Dob)
-        let d:Date=this.customerInfoMain.CustomerInfo[0].Dob
-        request_data.Dob= moment_(d).format("DD/MM/YYYY");
+        if(this.customerInfoMain.CustomerInfo[0].Dob.toString().indexOf("/")>-1){
+            request_data.Dob=this.customerInfoMain.CustomerInfo[0].Dob.toString();
+        }
+        else{
+            let d:Date =this.customerInfoMain.CustomerInfo[0].Dob;
+            console.log("date:"+ d);
+            request_data.Dob= moment_(d).format("DD/MM/YYYY");
+        }
+        
         request_data.Email=this.customerInfoMain.CustomerInfo[0].Email
         request_data.EnabledMerchantCategoryList=""
-        request_data.Gender=this.gender;
+        if(this.gender!=""){
+            request_data.Gender=this.gender;
+        }
+        else{
+            request_data.Gender=this.customerInfoMain.CustomerInfo[0].Gender;
+        }
+        
         request_data.IdNumber=this.customerInfoMain.CustomerInfo[0].IdNumber;
         request_data.MaritalStatus=this.customerInfoMain.CustomerInfo[0].MaritalStatus
         request_data.Mobile=this.customerInfoMain.CustomerInfo[0].Mobile
@@ -99,5 +113,9 @@ export class AccountComponent implements OnInit {
                 type: 'inline'
             });
         }
+    }
+    changeBOD(){
+        this.isChangeBod=true;
+        console.log("thanh");
     }
 }

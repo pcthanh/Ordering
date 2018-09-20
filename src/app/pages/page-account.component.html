@@ -14,9 +14,7 @@
                     <div class="col-12 col-md-3">
                         <div class="sidebar-wrap d-none d-md-block">
                             <myaccount-menu></myaccount-menu>
-                            <div class="sb-logout-wrap">
-                                <a href="#" class="btn-main btn-logout-sidebar">Log out</a>
-                            </div>
+                           
                         </div>
 
                         <div class="page-active d-block d-md-none">
@@ -49,7 +47,7 @@
                                         <div class="acc-input">
                                             <label for="acc-birth"><span>Birthday</span></label>
                                             <!--<input type="text" [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Dob" id="acc-birth">-->
-                                            <p-calendar [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Dob" dateFormat="dd/mm/yy" ></p-calendar>
+                                            <p-calendar (textChange)="changeBOD()" [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Dob" dateFormat="dd/mm/yy" ></p-calendar>
                                         </div>
                                         <div class="acc-radio">
                                             <div class="title">Gender</div>
@@ -73,7 +71,7 @@
                                         </div>
                                         <div class="acc-input">
                                             <label for="acc-pass"><span>Password</span> <a href="02_Login_03_ForgotPassword.html" class="right">Change Password Now?</a></label>
-                                            <input [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Password" type="password" id="acc-pass">
+                                            <input [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Password" type="password"  id="acc-pass">
                                         </div>
                                         <button (click)="updateProfile()" class="btn-main btn-save-acc"><span>SAVE</span></button>
                                     </div>
