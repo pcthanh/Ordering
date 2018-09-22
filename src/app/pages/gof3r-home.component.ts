@@ -620,6 +620,7 @@ export class Gof3rHomeComponent implements OnInit {
         };
     }
     checkShowPopup() {
+        console.log("check:")
         this.checkLoginUser();
     }
     logOutUser(userName: string) {

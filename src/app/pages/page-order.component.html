@@ -130,25 +130,7 @@
 
 
                                                 </div>
-                                                <div class="text-info-wrap not-avaiable display-flex">
-                                                    <div class="image-info" style="background-image: url(https://images.deliveryhero.io/image/fd-sg/Products/1330252.jpg)">
-
-                                                    </div>
-
-                                                    <div class="text" style="padding-left: 10px">
-                                                        <div class="item-name text-strong">
-                                                            Signature Bean Curd 金砖豆腐 金砖豆腐 PRODUCT
-                                                        </div>
-
-                                                        <div class="text" style="margin-top: -5px">
-                                                            ipsum dolor sit amet, consectetur adipiscing elit. Aliquam faucibus enim tortor, a consequat risus accumsan vel.
-                                                        </div>
-                                                        <div class="item-rice">
-                                                            $S11.9
-                                                        </div>
-                                                    </div>
-
-                                                </div>
+                                                
                                                 <!--start popup when click product-->
                                                 <div id="" #closeModal class="chicken-popup white-popup mfp-hide">
                                                     <div class="title-popup">{{productDetailParse.Name}}</div>
@@ -185,8 +167,12 @@
                                                         </div>
 
                                                     </div>
-                                                    <div class="btn-selection-wrap">
+                                                    <div *ngIf="productDetailParse.OptionList.length>0" class="btn-selection-wrap">
                                                         <button (click)="addToCart()" class="btn-main btn-selection"><span>selections required</span></button>
+                                                        <div class="price">{{productDetailParse.TotalStr}}</div>
+                                                    </div>
+                                                    <div *ngIf="productDetailParse.OptionList.length==0" class="btn-selection-wrap">
+                                                        <button (click)="addToCart()" class="btn-main btn-selection"><span>ADD TO ORDER</span></button>
                                                         <div class="price">{{productDetailParse.TotalStr}}</div>
                                                     </div>
                                                 </div>

@@ -255,19 +255,33 @@ export class HeaderGof3rComponent implements OnInit {
                 });;
             } else {
                 var valueCheckUser = $('#check-user').text();
-
+                
                 if(event.target.id==='user'){
+                    
                     if (valueCheckUser === 'true') {
 
                         $(this).parents('.login-wrap').find('.login-dropdown-had').slideDown();
 
                     }
-                    else {
+                    else if (valueCheckUser === 'false') {
+                        console.log("thanh false")
+                        $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
+                    }
+                }
+                else if (event.target.id==='user1'){
+                   
+                    if (valueCheckUser === 'true') {
+
+                        $(this).parents('.login-wrap').find('.login-dropdown-had').slideDown();
+
+                    }
+                    else if (valueCheckUser === 'false') {
+                        console.log("thanh false")
                         $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
                     }
                 }
                 else{
-                    $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
+                     $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
                 }
                     
                 
@@ -599,6 +613,7 @@ export class HeaderGof3rComponent implements OnInit {
 
     }
     checkShowPopup() {
+        console.log('thnh')
         this.checkLoginUser();
 
         // if(this.isUserLogin===true){
@@ -1008,5 +1023,14 @@ export class HeaderGof3rComponent implements OnInit {
         this._instanceService.sendCustomEvent("")
         this._instanceService.sendCustomEvent("Help");
         this._route.navigateByUrl("/help");
+    }
+    closeInfor(){
+         $('.login-dropdown').hide();
+        $('.login-overlay').removeClass('show');
+        $('.login-wrap .login').removeClass('hide-form');
+        $('body').css({
+            overflow: '',
+            height: ''
+        });;
     }
 }
