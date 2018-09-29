@@ -12,6 +12,7 @@ export class FooterLeftComponent implements OnInit {
     isFAQ:boolean=false;
     isPrivacy:boolean=false;
     isterms:boolean=false;
+    isContactUS:boolean=false;
     constructor(private _route:Router,private _instanceService:EventSubscribeService) { 
         this._instanceService.$getEventSubject.subscribe(data=>{
             console.log("data:"+ data)
@@ -27,6 +28,9 @@ export class FooterLeftComponent implements OnInit {
             if(data==="TERMS"){
                 this.isterms=true;
             }
+            if(data==="ContactUS"){
+                this.isContactUS=true;
+            }
         })
     }
 
@@ -37,7 +41,8 @@ export class FooterLeftComponent implements OnInit {
         this.isAbout=true;
         this.isFAQ=false;
         this.isPrivacy=false;
-        this.isterms=false
+        this.isterms=false;
+        this.isContactUS=false;
         this._instanceService.sendCustomEvent('')
         this._route.navigateByUrl('/page-about')
     }
@@ -46,6 +51,7 @@ export class FooterLeftComponent implements OnInit {
         this.isFAQ=true
         this.isPrivacy=false;
         this.isterms=false
+        this.isContactUS=false;
         this._instanceService.sendCustomEvent('')
         this._route.navigateByUrl('/page-faq')
     }
@@ -54,6 +60,7 @@ export class FooterLeftComponent implements OnInit {
         this.isFAQ=false
         this.isPrivacy=true;
         this.isterms=false
+        this.isContactUS=false;
         this._instanceService.sendCustomEvent('')
         this._route.navigateByUrl('/page-privacy')
     }
@@ -62,7 +69,17 @@ export class FooterLeftComponent implements OnInit {
         this.isFAQ=false
         this.isPrivacy=false;
         this.isterms=true
+        this.isContactUS=false;
         this._instanceService.sendCustomEvent('')
         this._route.navigateByUrl('/page-terms')
+    }
+    ContactClick(){
+        this.isAbout=false;
+        this.isFAQ=false
+        this.isPrivacy=false;
+        this.isterms=false
+        this.isContactUS=true;
+        this._instanceService.sendCustomEvent('')
+        this._route.navigateByUrl('/contact-us')
     }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { EventSubscribeService } from "../services/instance.service";
 
 @Component({
     selector: 'contact-us',
@@ -6,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class ContactUsComponent implements OnInit {
-    constructor() { }
+    constructor(private _instanceService:EventSubscribeService) { }
 
-    ngOnInit() { }
+    ngOnInit() { 
+        this._instanceService.sendCustomEvent("ContactUS")
+    }
 }

@@ -2,16 +2,15 @@
                         <div class="sidebar-wrap d-none d-md-block">
                             <ul class="sidebar-top">
                                 <li (click)="aboutClick()" [ngClass]="{active: isAbout===true}" ><a><span>ABOUT US</span></a></li>
-                               <li><a [routerLink]="['/restaurant-owner']">RESTAURANT OWNERS</a></li>
+                               <li><a [routerLink]="['/restaurant-owner']">MERCHANT</a></li>
                                 <li (click)="faqClick()" [ngClass]="{active: isFAQ===true}"><a ><span>FAQ</span></a></li>
-                                <li><a [routerLink]="['/become-courier']">BECOME A COURIER</a></li>
-                                <li><a href="#"><span>CAREERS</span></a></li>
+                                <!--<li><a [routerLink]="['/become-courier']">BECOME A COURIER</a></li>
+                                <li><a href="#"><span>CAREERS</span></a></li>-->
                             </ul>
                             <ul class="sidebar-bottom">
                                 <li (click)="privacyClick()" [ngClass]="{active: isPrivacy===true}"><a><span>PRIVACY</span></a></li>
                                 <li (click)="termsClick()" [ngClass]="{active: isterms===true}"><a><span>TERMS</span></a></li>
-                                <li><a [routerLink]="['/contact-us']"
-                        >CONTACT US</a></li>
+                                <li (click)="ContactClick()" [ngClass]="{active: isContactUS===true}"><a><span>CONTACT US</span></a></li>
                             </ul>
                         </div>
 
