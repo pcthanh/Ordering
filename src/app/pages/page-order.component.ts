@@ -19,6 +19,9 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { CustomerInfoMainModel } from "../models/CustomerInfoMain";
 import { OutletInfoModel } from "../models/OutletInfo";
 import { OrderModel } from "../models/Order";
+import { ListDeliveryAddress } from "../models/ListDeliveryAddress";
+import { VerifyOrderMainModel } from "../models/VerifyOrderMain";
+import { VerifyOrderRequest } from "../models-request/verify-order-request";
 const ORDER_DELIVERY: string = "DELIVERY"
 const ORDER_PICKUP: string = "PICKUP"
 declare var $: any;
@@ -53,6 +56,8 @@ export class PageOrderComponent implements OnInit {
     errorCart:string=""
     @BlockUI() blockUI: NgBlockUI;
     @ViewChild('closeModal') closePopup:ElementRef;
+    listDeliveryAddress: ListDeliveryAddress;
+    verifyOrderMain: VerifyOrderMainModel;
     constructor(private _router:Router,private _gof3rUtil: Gof3rUtil, private _gof3rModule: Gof3rModule, private _util: Gof3rUtil, private _pickupService: PickupService, private _instanceService: EventSubscribeService, private active_router: ActivatedRoute) {
         this.blockUI.start('loading ...'); // Start blocking
         this.productDetail = new ProductDetailMainModel();
@@ -62,6 +67,8 @@ export class PageOrderComponent implements OnInit {
         this.customerInfo= new CustomerInfoMainModel();
         this.orderMain= new OrderModel();
         this.outletInfo= new OutletInfoModel();
+        this.listDeliveryAddress = new ListDeliveryAddress();
+        this.verifyOrderMain= new VerifyOrderMainModel();
         //this.blockUI.start();
         if (localStorage.getItem("out") != null) {
             this.OutletId = localStorage.getItem("out");
@@ -96,6 +103,7 @@ export class PageOrderComponent implements OnInit {
         //this.loadCart()
         //this._instanceService.sendCustomEvent("notCheckOut")
         this.GetOutletInfo()
+        window.addEventListener('scroll', this.scroll, true);
         //   setTimeout(() => {
         //     this.GetProductList("", "")
         //     this.initJquery();
@@ -123,7 +131,32 @@ export class PageOrderComponent implements OnInit {
             alert('thanh')
             $(this).parent('.btn-add-special-inner').find('.text-special').slideDown();
         });
+        
+
+
+
+
     }
+    scroll = (): void => {
+      //handle your scroll here
+      //notice the 'odd' function assignment to a class field
+      //this is used to be able to remove the event listener
+      this.myFunction()
+    };
+     myFunction() {
+         var header = document.getElementById("myHeader");
+var order_catalog =document.getElementById("order-catalog");
+var sticky = header.offsetTop;
+var order_sticky = sticky+ 300;
+  if (window.pageYOffset > sticky) {
+    header.classList.add("sticky");
+    
+  } else {
+    header.classList.remove("sticky");
+    
+  }
+
+}
     GetOutletInfo() {
         let commonData = new CommonDataRequest();
         let _location = localStorage.getItem('la');
@@ -183,7 +216,7 @@ export class PageOrderComponent implements OnInit {
         console.log(commonDataJson);
         console.log(requestJson)
         this._pickupService.GetProductList(commonDataJson, requestJson).then(data => {
-            console.log(data);
+            console.log( "xxx:"+JSON.stringify(data));
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.productList = data;
             console.log('have:' + this.productList.IsHavingDepartment)
@@ -193,7 +226,7 @@ export class PageOrderComponent implements OnInit {
             console.log('p:' + JSON.stringify(this.productList))
             for(let i = 0; i<this.productList.ProductList.length; i++){
                 for(let j = 0; j< this.productList.ProductList[i].Produtcs.length; j++){
-                    if(this.productList.ProductList[i].Produtcs[j].Image.indexOf("no_image")>-1){
+                    if(this.productList.ProductList[i].Produtcs[j].Image.indexOf("no_image")>-1 ||this.productList.ProductList[i].Produtcs[j].Image==""){
                         console.log("xxthanh:"+ this.productList.ProductList[i].Produtcs[j].Name)
                     this.productList.ProductList[i].Produtcs[j].HaveImage = false;
                 }
@@ -371,7 +404,7 @@ export class PageOrderComponent implements OnInit {
         }
     }
     upadteProduct(indexUpdate:number){
-        
+        console.log('vjvj')
         this.showUpdateProduct=true;
         var el = $('.chicken-popup-update');
         if (el.length) {
@@ -776,6 +809,7 @@ export class PageOrderComponent implements OnInit {
             console.log('End Cart:' + JSON.stringify(this.cart));
         }
         this.orderMain.ArrayItem=this.cart.Cart;
+        this.VerifyOrder();
         this.subTotalOrder()
         $.magnificPopup.close()
 
@@ -981,9 +1015,19 @@ export class PageOrderComponent implements OnInit {
                     this._router.navigateByUrl('/check-out')
                 }
             }
-            
             else{
-                this._router.navigateByUrl('/check-out')
+                this.DeliveryAddress()
+                // if(this.orderMain.DeliveryId===""){
+                //      this.errorCart="please select address delivery"
+                //      $.magnificPopup.open({
+                //         items: {
+                //             src: '#pickup-date'
+                //         },
+                //         type: 'inline'
+                //     });
+                // }else{
+                //     this._router.navigateByUrl('/check-out')
+                // }  
             }
             
         }else{
@@ -1032,5 +1076,70 @@ export class PageOrderComponent implements OnInit {
         return output.join('');
 
     }
+    DeliveryAddress() {
+        let common_data = new CommonDataRequest();
+        var _location = localStorage.getItem("la");
+        common_data.Location = _location
+        common_data.ServiceName = "GetDeliveryAddresses";
+        let common_data_json = JSON.stringify(common_data);
+        console.log('Thanh' + common_data_json)
+        let data_request = { CustomerId: this.customerInfo.CustomerInfo[0].CustomerId };
+        let data_request_json = JSON.stringify(data_request);
+        console.log('Thanh1' + data_request_json)
+        this._pickupService.GetDeliveryAddresses(common_data_json, data_request_json).then(data => {
+            this.listDeliveryAddress = data;
+            this._gof3rModule.checkInvalidSessionUser(this.listDeliveryAddress.ResultCode);
+            if(this.listDeliveryAddress.DeliveryAddressList.length>0){
+                // if(this.orderMain.DeliveryId===""){
+                //      this.errorCart="please select address delivery"
+                //      $.magnificPopup.open({
+                //         items: {
+                //             src: '#pickup-date'
+                //         },
+                //         type: 'inline'
+                //     });
+                // }
+                // else{
+                    this._router.navigateByUrl('/check-out')
+                // }
+                
+            }
+            else{
+                this.errorCart="please add address delivery"
+                     $.magnificPopup.open({
+                        items: {
+                            src: '#pickup-date'
+                        },
+                        type: 'inline'
+                    });
+            }
+            console.log("list:" + JSON.stringify(this.listDeliveryAddress))
+        })
+    }
+     VerifyOrder() {
+         if (localStorage.getItem("ot") != null) {
+            this.verifyOrderMain = new VerifyOrderMainModel();
+            let common_data = new CommonDataRequest();
+            var _location = localStorage.getItem("la");
+            common_data.Location = _location
+            common_data.ServiceName = "VerifyOrder";
+            let common_data_json = JSON.stringify(common_data);
+
+            let requestData = new VerifyOrderRequest();
+            requestData.OrderType = this.OrderType;
+            requestData.MerchantId = this.outletInfo.OutletInfo[0].MerchantId;
+            requestData.MerchantOutletId = this.outletInfo.OutletInfo[0].MerchantOutletId;
+            requestData.CurrencyCode = this.outletInfo.OutletInfo[0].CurrencyCode
+            let totalRequest = this._gof3rModule.ParseTo12(this.orderMain.SubTotal)
+            requestData.Subtotal = totalRequest;
+            let requestDataJson = JSON.stringify(requestData);
+            // console.log("verifyComond:"+ common_data_json)
+            console.log('VerifyData:' + requestDataJson)
+            this._pickupService.VerifyOrder(common_data_json, requestDataJson).then(data => {
+                this.verifyOrderMain = data;
+                console.log('verify:' + JSON.stringify(this.verifyOrderMain))
+            })
+         }
+     }
 
 }

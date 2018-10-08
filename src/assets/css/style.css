@@ -71,7 +71,7 @@ a.btn-main {
 }
 .top-action {
   float: right;
-  color: #fff;
+  color: #8E49FF;/*Thanh 06.10.2018*/
   margin-top: 12px;
 }
 .top-action > a {
@@ -632,7 +632,7 @@ a.btn-main {
   position: relative;
 }
 .login-wrap > .login {
-  background: url('../images/ico-arrow-down.png') right 7px no-repeat;
+  background: url('../images/ico-arrow-down-2.png') right 7px no-repeat;
   padding-right: 15px;
   font-size: 14px;
   cursor: pointer;
@@ -644,7 +644,7 @@ a.btn-main {
   overflow: hidden;
 }
 .login-wrap > .login.hide-form {
-  background-image: url('../images/ico-arrow-up.png');
+  background-image: url('../images/ico-arrow-up-2.png');
 }
 .login-dropdown {
   width: 342px;
@@ -1248,7 +1248,7 @@ a.btn-main {
   border: 1px solid #d9d9d9;
   border-top: none;
   padding: 20px 0;
-  background: #fff;
+  background: #d9d9d9;/*Thanh 06.10.2018*/
 }
 .sidebar-wrap ul {
   list-style: none;
@@ -1726,7 +1726,7 @@ blockquote {
   margin-top: -5px;
 }
 .search-sort-form {
-  background: #fff;
+  background: #f7f7f9;/*Thanh 06.10.2018*/
   padding: 0 35px;
   width: 100%;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
@@ -3949,6 +3949,11 @@ blockquote {
     flex: 0 0 25.333333%;
     max-width: 25.333333%;
   }
+  .col-cart-check-out{
+     -ms-flex: 0 0 29.333333%;
+    flex: 0 0 29.333333%;
+    max-width: 29.333333%;
+  }
   /*End ThanhPC 15/09/2018*/
   .col-merchant {
     -ms-flex: 0 0 62.333331%;
@@ -3960,6 +3965,11 @@ blockquote {
     -ms-flex: 0 0 74.666667%;
     flex: 0 0 74.666667%;
     max-width: 74.666667%;
+  }
+  .col-map-checkout1{
+    -ms-flex: 0 0 70.666667%;
+    flex: 0 0 70.666667%;
+    max-width: 70.666667%;
   }
   /*End ThanhPC 15/09/2018*/
 }

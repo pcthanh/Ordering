@@ -12,7 +12,7 @@
                 <div class="col-12 col-md-8 col-map-checkout">
                     <div class="map-checkout">
                         <!--<img src="assets/images/img-map4.jpg" alt="" class="img-fluid">-->
-                        <agm-map style="height: 650px" #agmMap [latitude]="this.lat" [longitude]="this.lng" [zoom]="15" [styles]="styles">
+                        <agm-map style="height: 650px" #agmMap [latitude]="this.lat" [longitude]="this.lng" [zoom]="13" [styles]="styles">
                                 <agm-marker *ngFor="let item of locations" [latitude]="item.lat" [longitude]="item.lng" [iconUrl]="item.icon"></agm-marker>
                             </agm-map>
                     </div>
@@ -172,9 +172,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="new-invite">
+                            <!--<div class="new-invite">
                                 <a href="#"><span class="btn-main">NEW</span> <span class="text">Invite friends, earn GOF3R Credits</span></a>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -332,9 +332,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="new-invite">
+                            <!--<div class="new-invite">
                                 <a href="#"><span class="btn-main">NEW</span> <span class="text">Invite friends, earn GOF3R Credits</span></a>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>

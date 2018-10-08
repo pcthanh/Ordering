@@ -7,6 +7,7 @@ import { PickupService } from "../services/pickup.service";
 import { CommonDataRequest } from "../models-request/request-comon-data";
 import { PickupOrderDetail } from "../models/PickupOrderDetail";
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+
 const ORDER_DELIVERY: string = "DELIVERY"
 const ORDER_PICKUP: string = "PICKUP"
 const ORDER_PREPARING:string="PREPARING"
@@ -18,6 +19,7 @@ const ORDER_DELIVERED:string="DELIVERED"
 const ORDER_CANCELLED:string="CANCELLED"
 const READY_FOR_PICK_UP:string="READY_FOR_PICK_UP"
 const PICKED_UP:string="PICKED_UP"
+import { OutletInfoModel } from "../models/OutletInfo";
 @Component({
     selector: 'tracker-order',
     templateUrl: 'page-tracker-order.component.html'
@@ -43,8 +45,10 @@ export class TrackerOrderComponent implements OnInit {
     pickupOrderDatail:PickupOrderDetail
     isHaveDataPickup:boolean=false;
     @BlockUI() blockUI: NgBlockUI;
-    locations = [{ lat: 10.756468, lng: 106.694461, icon: "assets/images/pin_home.png" }, { lat: 10.769061, lng: 106.68311599999993, icon: "assets/images/pin_food.png" }]
-     customStyle = [
+    outletInfo: OutletInfoModel;
+    locations:any[] =[] ;
+    geoHome: string = ""
+    customStyle = [
               {elementType: 'geometry', stylers: [{color: '#ebe3cd'}]},
               {elementType: 'labels.text.fill', stylers: [{color: '#523735'}]},
               {elementType: 'labels.text.stroke', stylers: [{color: '#f5f1e6'}]},
@@ -340,6 +344,27 @@ export class TrackerOrderComponent implements OnInit {
             localStorage.clear();
             this.route.navigateByUrl("/home")
         }
+        if (localStorage.getItem("ot") != null) {
+            this.outletInfo = JSON.parse(this._util.decryptByDESParams(localStorage.getItem("ot")));
+            let strCut = this.outletInfo.OutletInfo[0].GeoLocation.split(",");
+            this.lat = parseFloat(strCut[0]);
+            this.lng = parseFloat(strCut[1]);
+            this.locations.push({ lat: this.lat, lng: this.lng, icon: "assets/images/pin_food.png" })
+            
+
+
+
+        }
+        if (localStorage.getItem("addressDelivery") != null) {
+            let address = JSON.parse(localStorage.getItem("addressDelivery"))
+            this.geoHome = address.GeoLocation;
+            let strCut = address.GeoLocation.split(",");
+            let lat = parseFloat(strCut[0]);
+            let lng = parseFloat(strCut[1]);
+            this.locations.push({ lat: lat, lng: lng, icon: "assets/images/pin_home.png" })
+            console.log("geoHome:" + this.locations[1].icon)
+            
+        }
     }
 
     ngOnInit() {
@@ -359,6 +384,7 @@ export class TrackerOrderComponent implements OnInit {
         this._pickupService.GetDeliveryOrderDetail(common_data_json, data_request_json).then(data => {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.deliveryOrder = data
+            console.log(JSON.stringify(this.deliveryOrder))
             //this.deliveryOrder.DeliveryOrderDetail[0].OrderStatus=ORDER_DELIVERED
             if(this.deliveryOrder.DeliveryOrderDetail[0].OrderStatus==ORDER_ON_THE_WAY){
                 this.isOnTheWay=true;

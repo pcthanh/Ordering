@@ -35,6 +35,7 @@ export class FooterLeftComponent implements OnInit {
     }
 
     ngOnInit() { 
+        window.scrollTo(0,0);
         console.log('jhhjv')
     }
     aboutClick(){

@@ -860,10 +860,15 @@ export class HeaderGof3rComponent implements OnInit {
         let dataRequestJson = JSON.stringify(dataRequest);
         this._pickupService.GetCurrentSystemTime(common_data_json, dataRequestJson).then(data => {
             let d = new Date(+data.CurrentTimeMillis);
+            
             let startTime = moment_(d).format("HH:mm:ss")
-             let date = moment_(d).format("DD/MM/YYYY")
+            let date = moment_(d).format("DD/MM/YYYY")
             console.log('yy:' + startTime)
             if (isToday){
+                let [h,m,s]=startTime.split(":");
+                if(parseInt(h)<8){
+                    startTime="08:00:00";
+                }
                 this.createTimesDelivery(startTime, END_TIME_LIMIT, isToday,date)
             }
             else {
@@ -892,7 +897,7 @@ export class HeaderGof3rComponent implements OnInit {
         let dataRequestJson = JSON.stringify(dataRequest);
         this._pickupService.GetCurrentSystemTime(common_data_json, dataRequestJson).then(data => {
             let d = new Date(+data.CurrentTimeMillis);
-            let startTime = moment_(d).format("HH:mm:ss")
+            let startTime = "08:00:00"
              let date = moment_(d).format("DD/MM/YYYY")
             console.log('yy:' + startTime)
             if (isToday){
