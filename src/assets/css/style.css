@@ -1847,18 +1847,25 @@ blockquote {
 }
 .countdown {
   position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 100%
+    bottom: -30px;
+    right: 5px;
+    /* width: 100%; */
+    text-align: center;
+    width: 100px;
+    background: #f2f2f2 ;
+    color: black;
+    height: 60px;
+    border-radius: 25px;
+    /*background: linear-gradient(to top, #f2f2f2 0%,#f2f2f2 50%,#000000 50%,white 50%,white 100%);*/
+    font-weight: 500;
 }
 .countdown .cd-sale {
   display: block;
   font-size: 10px;
   width: 40px;
   height: 40px;
-  text-align: center;
   text-transform: uppercase;
-  color: #fff;
+  color: #000;
   padding: 10px 0;
   width: 100%;
   font-size: 0.8rem
@@ -1901,7 +1908,7 @@ blockquote {
   height: 100%;
   box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.2);
   background: #f5f5f5;
-  position: relative;
+  position: fixed;
 }
 .cart-sidebar-wrap .img-cart-empty {
   margin: 0 auto;
@@ -3416,6 +3423,9 @@ blockquote {
     position: relative;
     padding-right: 30px;
     font-size: 18px;
+  }
+  .cart-sidebar-wrap{
+    position: relative;
   }
   .close-cart {
     display: inline-block;

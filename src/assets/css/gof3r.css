@@ -2,6 +2,7 @@
   .container {
     max-width: 540px;
   }
+  
 }
 
 @media (min-width: 768px) {
@@ -318,10 +319,30 @@
   top: 0;
   /*width: 100%;*/
 }
+.promo-mess-sticky {
+  position: fixed;
+  top: 100px;
+  z-index: 10000;
+  /*width: 100%;*/
+}
 .cart-sticky {
   position: fixed;
   /*top: 0;*/
   /*width: 100%;*/
+}
+.food-title-1{
+  width: 250px;
+}
+.promo-mess{
+  height: 60px;
+    text-align: center;
+    line-height: 60px;
+    background: #ffad4c;
+    color: #fff;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 

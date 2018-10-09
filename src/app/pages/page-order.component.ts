@@ -145,14 +145,26 @@ export class PageOrderComponent implements OnInit {
     };
      myFunction() {
          var header = document.getElementById("myHeader");
+         var promo=document.getElementById("promo-mess")
 var order_catalog =document.getElementById("order-catalog");
 var sticky = header.offsetTop;
+var promo_sticky = promo.offsetTop;
 var order_sticky = sticky+ 300;
   if (window.pageYOffset > sticky) {
     header.classList.add("sticky");
-    
+     promo.classList.add("sticky");
   } else {
     header.classList.remove("sticky");
+    promo.classList.remove("sticky");
+    
+  }
+  
+  if (window.pageYOffset+100 > promo_sticky) {
+    
+     promo.classList.add("promo-mess-sticky");
+  } else {
+    
+    promo.classList.remove("promo-mess-sticky");
     
   }
 
