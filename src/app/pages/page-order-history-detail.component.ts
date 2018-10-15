@@ -31,7 +31,7 @@ export class OrderHistoryDetailComponent implements OnInit {
                 // this.status= _status
                 this.customerOrdrId = _customerOrderId
                 this.OrderType=_orderType.toUpperCase()
-                console.log("Heh:"+this.OrderType)
+                
                 if (this.OrderType === ORDER_DELIVERY) {
                     this.getDeliveryOrderDetail(this.customerOrdrId);
                 }
@@ -55,10 +55,10 @@ export class OrderHistoryDetailComponent implements OnInit {
         common_data.ServiceName = "GetDeliveryOrderDetail";
         let common_data_json = JSON.stringify(common_data);
 
-        console.log("com:" + common_data_json);
+        
         let data_request = { Lang: "en", CustomerOrderId: customerOrderId }
         let data_request_json = JSON.stringify(data_request)
-        console.log("request:" + data_request_json)
+       
         this._pickupService.GetDeliveryOrderDetail(common_data_json, data_request_json).then(data => {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.deliveryOrder = data
@@ -68,7 +68,7 @@ export class OrderHistoryDetailComponent implements OnInit {
             // this.groupOptionItem(this.deliveryOrder)
             //this.blockUI.stop();
             this.isOrderHistoryDetailDelivery=true;
-            console.log('deliveryDetail:' + JSON.stringify(this.deliveryOrder))
+            
         })
     }
     getOrderPickupDetail(customerOrderId:string){
@@ -89,7 +89,7 @@ export class OrderHistoryDetailComponent implements OnInit {
             // this.subTotalItem(this.pickupOrderDatail)
             // this.groupOptionItem(this.pickupOrderDatail)
             this.ishaveOrderHistoryDetailPickup=true;
-            console.log("detailOrderPickup:"+ JSON.stringify(this.pickupOrderDatail))
+            
         })
     }
 }

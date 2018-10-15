@@ -343,6 +343,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    z-index: 1
 }
-
+.cart-fixed{
+  
+  top: 160px;
+  position: fixed;
+  width: calc(100% - 74%);
+}
 

@@ -191,7 +191,7 @@
     <div class="header-content">
         <div class="slogan-form">
             <h2 class="large wow fadeIn" data-wow-duration="1s">A Better Way to Get Your Food</h2>
-            <div class="small wow fadeIn" data-wow-duration="2s">Order From Local Restautants You Love</div>
+            <div class="small wow fadeIn" data-wow-duration="2s">Order From The Places You Love</div>
             <div class="form-map">
                 <div class="form-search">
                     <form class="form">
@@ -317,7 +317,8 @@ Or pre-order for pick up at your convenience.
                             <div class="text">Looking to join a dynamic outfit of movers and shakers?
 Flexi hours, hourly pay plus docket, on time delivery incentives and more.
 </div>
-                            <a  class="btn-main btn-join">Welcome to the family!</a>
+                            <a [routerLink]="['/become-courier']"
+                              class="btn-main btn-join">Welcome to the family!</a>
                         </div>
                     </div>
                 </div>
@@ -331,7 +332,7 @@ Flexi hours, hourly pay plus docket, on time delivery incentives and more.
                             <div class="text">We’re always looking to collaborate with food outlets, no matter how big or small. 
 Find out how we go further to reach more hungry bellies.
 </div>
-                            <a  class="btn-main btn-join">Let’s go the distance! !</a>
+                            <a [routerLink]="['/restaurant-owner']" class="btn-main btn-join">Let’s go the distance!</a>
                         </div>
                     </div>
                 </div>
@@ -347,7 +348,7 @@ Take the plunge and together, we can change the world.&nbsp;&nbsp;&nbsp;&nbsp;&n
 <br>
 
 </div>
-                            <a style="background-color: #e7e7e7; color: #fff" class="btn-main btn-join">Count me in! !</a>
+                            <a style="background-color: #e7e7e7; color: #fff" class="btn-main btn-join">Count me in!</a>
                         </div>
                     </div>
                 </div>
@@ -371,7 +372,7 @@ Take the plunge and together, we can change the world.&nbsp;&nbsp;&nbsp;&nbsp;&n
                         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                             width="1170px" height="606px" viewBox="0 0 1170 606" enable-background="new 0 0 1170 606" xml:space="preserve">
                             <g id="Jurong_West">
-                                <path fill="#712FDB" stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" d="M255.385,287.839c0,0,0.702-6.082-8.187-5.38
+                                <path fill="#712FDB"  stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" d="M255.385,287.839c0,0,0.702-6.082-8.187-5.38
                                     c-8.888,0.702-10.525,4.621-12.864,2.661s-6.549-7.34-15.671-7.34s-15.671,2.807-16.139,0s1.17-8.654,2.573-14.267
                                     s2.878-9.824-2.654-18.712c-5.532-8.888-8.807-14.735-13.484-13.098c-4.678,1.637-3.04,3.508-5.38,11.695
                                     c-2.339,8.187-1.403,9.356-10.525,9.59s-11.461,3.742-13.566,4.678c-2.105,0.935-4.678,0.468-4.678,0.468s-0.935,3.04-3.976,4.678
@@ -423,7 +424,7 @@ Take the plunge and together, we can change the world.&nbsp;&nbsp;&nbsp;&nbsp;&n
                                     c2.105-5.847,3.04-10.993,5.614-16.373c2.573-5.38,6.549-7.719,9.59-7.719c3.04,0,5.614-2.339,10.292,1.637
                                     C248.368,142.355,246.496,146.8,259.01,147.033z" />
                                 <text transform="matrix(1 0 0 1 253.4763 216.8524)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">LIM CHU KANG</text>
-                                <text transform="matrix(1 0 0 1 247.4996 232.0086)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">CHUA CHU KANG</text>
+                                <text transform="matrix(1 0 0 1 247.4996 232.0086)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">CHOA CHU KANG</text>
                             </g>
                             <g id="Bukit_Batok">
                                 <path fill="#8E49FE" stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" d="M482.966,345.144c0,0-1.17-3.508-3.742-4.912
@@ -605,7 +606,7 @@ Take the plunge and together, we can change the world.&nbsp;&nbsp;&nbsp;&nbsp;&n
                                     c1.93,0.351,2.631,0,4.649,1.667c2.017,1.667,6.052,5.877,8.508,7.719C484.776,516.912,487.761,521.122,491.094,520.508z"
                                 />
 
-                                <text transform="matrix(0.7991 0.6012 -0.6012 0.7991 423.7999 451.6173)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">QUEENS TOWN</text>
+                                <text transform="matrix(0.7991 0.6012 -0.6012 0.7991 423.7999 451.6173)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">QUEENSTOWN </text>
                             </g>
                             <g id="Tiong_Bahru">
                                 <path fill="#8E49FE" stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" d="M541.206,510.275
@@ -713,7 +714,7 @@ Take the plunge and together, we can change the world.&nbsp;&nbsp;&nbsp;&nbsp;&n
                                     c0.438-2.193-1.491-3.508-1.93-5.35c-0.439-1.842-0.526-4.561-0.789-7.017s-3.772-6.491-4.21-8.42
                                     c-0.439-1.93-0.789-4.122-2.807-6.754c-2.017-2.631-5.35-7.719-6.052-10.525S810.714,434.375,810.714,434.375z"
                                 />
-                                <text transform="matrix(1 0 0 1 714.0567 479.1971)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">JANJONG KATONG</text>
+                                <text transform="matrix(1 0 0 1 714.0567 479.1971)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">TANJONG KATONG</text>
                             </g>
                             <g id="Geylang">
                                 <path fill="#8E49FE" stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" d="M733.002,432.27c0,0-2.573-1.871-2.924-1.988
@@ -876,6 +877,7 @@ Take the plunge and together, we can change the world.&nbsp;&nbsp;&nbsp;&nbsp;&n
                                 />
                                 <text transform="matrix(1 0 0 1 1049.6973 350.2908)" fill="#FFFFFF" font-family="'Roboto'" font-size="12.6304">CHANGI</text>
                             </g>
+                            
                         </svg>
                     </div>
                     <ul class="country-list d-block d-md-none">

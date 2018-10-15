@@ -42,7 +42,7 @@ export class PaymentOptionComponent implements OnInit {
         this.error = new ErrorModel();
         if (localStorage.getItem("cus") != null) {
             this.customerInfoMain = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("cus")));
-            console.log('cus:' + JSON.stringify(this.customerInfoMain))
+            
         }
     }
 
@@ -80,7 +80,7 @@ export class PaymentOptionComponent implements OnInit {
             this._module.checkInvalidSessionUser(this.allPaymentOption.ResultCode)
             this.isHaveData = true
 
-            console.log('allpayment:' + JSON.stringify(data))
+            
         })
     }
     showAddNewCard() {
@@ -100,7 +100,7 @@ export class PaymentOptionComponent implements OnInit {
     }
     selectMonth(month: string) {
         this.addCardData.CardMonth = month;
-        console.log('month:' + this.addCardData.CardMonth)
+        
     }
     selectYear(year: string) {
         this.addCardData.CardYear = year
@@ -146,14 +146,14 @@ export class PaymentOptionComponent implements OnInit {
 
             let data_request_json = JSON.stringify(data_request)
 
-            console.log("verify:" + (data_request_json))
+            
             this._pickupService.VerifyCard(common_data_json, data_request_json).then(data => {
                 this.verifycard = data;
-                console.log('verifyCard:' + JSON.stringify(data))
+                
                 if (this.verifycard.ResultCode === "000") {
                     common_data.ServiceName = "AddNewCardWeb"
                     let common_data_json = JSON.stringify(common_data);
-                    console.log('comon:' + common_data_json)
+                    
                     let data_request = new AddNewCardModel();
                     data_request.ApprovalCode = ""
                     data_request.Bin = this.verifycard.Bin
@@ -171,7 +171,7 @@ export class PaymentOptionComponent implements OnInit {
                     data_request.MaskedCardNumber = this.masKingNumberCard(this.addCardData.CardNumber.replace(/\s/g, ''));
                     let data_request_json = JSON.stringify(data_request)
                     this._pickupService.AddNewCard(common_data_json, data_request_json).then(data => {
-                        console.log(JSON.stringify(data))
+                        
                         if (data.ResultCode === "000") {
                             this.allPaymentOption.CardListInfo = []
                             this.allPaymentOption.CardListInfo = data.CardListInfo;
@@ -184,7 +184,7 @@ export class PaymentOptionComponent implements OnInit {
 
                         this.blockUI.stop()
                     })
-                    console.log('request:' + data_request_json)
+                    
 
                 }
 
@@ -198,14 +198,14 @@ export class PaymentOptionComponent implements OnInit {
 
         let currentYear = parseInt((new Date().getFullYear()) + '');
         let data = { label: currentYear, value: currentYear };
-        console.log("yesr:" + new Date().getFullYear())
+        
         this.cardYear.push(data);
         for (let i = 1; i <= 8; i++) {
             let nextYear = currentYear + i;
             let value = currentYear + i;
             this.cardYear.push({ label: nextYear, value: value });
         }
-        console.log("cardyear:" + this.cardYear[0])
+        
     }
 
     confirmCard() {

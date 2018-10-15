@@ -330,7 +330,7 @@ export class TrackerOrderComponent implements OnInit {
                 // this.status= _status
                 this.customerOrdrId = _customerOrderId
                 this.OrderType=_orderType.toUpperCase()
-                console.log("Heh:"+this.OrderType)
+               
                 if (this.OrderType === ORDER_DELIVERY) {
                     this.getDeliveryOrderDetail(this.customerOrdrId);
                 }
@@ -362,7 +362,7 @@ export class TrackerOrderComponent implements OnInit {
             let lat = parseFloat(strCut[0]);
             let lng = parseFloat(strCut[1]);
             this.locations.push({ lat: lat, lng: lng, icon: "assets/images/pin_home.png" })
-            console.log("geoHome:" + this.locations[1].icon)
+            
             
         }
     }
@@ -377,14 +377,14 @@ export class TrackerOrderComponent implements OnInit {
         common_data.ServiceName = "GetDeliveryOrderDetail";
         let common_data_json = JSON.stringify(common_data);
 
-        console.log("com:" + common_data_json);
+        
         let data_request = { Lang: "en", CustomerOrderId: customerOrderId }
         let data_request_json = JSON.stringify(data_request)
-        console.log("request:" + data_request_json)
+       
         this._pickupService.GetDeliveryOrderDetail(common_data_json, data_request_json).then(data => {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.deliveryOrder = data
-            console.log(JSON.stringify(this.deliveryOrder))
+           
             //this.deliveryOrder.DeliveryOrderDetail[0].OrderStatus=ORDER_DELIVERED
             if(this.deliveryOrder.DeliveryOrderDetail[0].OrderStatus==ORDER_ON_THE_WAY){
                 this.isOnTheWay=true;
@@ -399,7 +399,7 @@ export class TrackerOrderComponent implements OnInit {
             // this.subTotalItem(this.deliveryOrder)
             // this.groupOptionItem(this.deliveryOrder)
             this.blockUI.stop();
-            console.log('deliveryDetail:' + JSON.stringify(this.deliveryOrder))
+            
         })
     }
     getOrderPickupDetail(customerOrderId:string){
@@ -429,7 +429,7 @@ export class TrackerOrderComponent implements OnInit {
              this.blockUI.stop();
             // this.subTotalItem(this.pickupOrderDatail)
             // this.groupOptionItem(this.pickupOrderDatail)
-            console.log("detailOrderPickup:"+ JSON.stringify(this.pickupOrderDatail))
+            
         })
     }
 }

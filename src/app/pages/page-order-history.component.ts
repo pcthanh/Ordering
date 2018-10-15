@@ -46,9 +46,9 @@ export class OrderHistoryomponent implements OnInit {
 
         let data_request = { CurrentCustomerId: this.customerInfo.CustomerInfo[0].CustomerId, Lang: "en", FromRow: "" }
         let data_request_json = JSON.stringify(data_request);
-        console.log()
+       
         this._pickupService.GetDeliveryOrderList(common_data_json, data_request_json).then(data => {
-            console.log('OrderDeliveryList:' + JSON.stringify(data))
+           
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.customerOrderListMain = data;
             this.isHaveData=true;

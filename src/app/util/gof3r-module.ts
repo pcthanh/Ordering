@@ -28,9 +28,9 @@ export class Gof3rModule {
         dataRequest.UserName = userName;
         let requestDataJson = JSON.stringify(dataRequest);
         this._pickupService.LogOutCustomer(common_data_json, requestDataJson).then(data => {
-            console.log('outethanh:'+ data.ResultCode)
+            
             this.response= data
-            console.log('thanh:'+this.response.ResultCode)
+            
              localStorage.clear()
              result= "000";
              return result;
@@ -63,7 +63,7 @@ export class Gof3rModule {
 
     }
     checServiceLinkTo(orderType:string){
-        console.log('checServiceLinkTo:'+ orderType)
+        
         if(orderType===ORDER_PICKUP){
             this._router.navigateByUrl('/pickup-my-order')
         }

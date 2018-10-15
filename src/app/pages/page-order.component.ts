@@ -1,9 +1,9 @@
-import { Component, OnInit,ViewChild,ElementRef} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonDataRequest } from "../models-request/request-comon-data";
 import { GetProductListRequest } from "../models-request/get-request-product-list";
 import { PickupService } from "../services/pickup.service";
 import { EventSubscribeService } from "../services/instance.service";
-import { ActivatedRoute, Params,Router } from "@angular/router";
+import { ActivatedRoute, Params, Router } from "@angular/router";
 import { GetOutletInfoRequest } from "../models-request/get-outlet-info";
 import { MerchantOutletListInfoModel } from "../models/MerchantOutletListInfo";
 import { ProductListModel } from "../models/ProductList";
@@ -33,7 +33,7 @@ declare var $: any;
 export class PageOrderComponent implements OnInit {
     OrderType: string;
     OutletId: string;
-    outletInfo:OutletInfoModel;
+    outletInfo: OutletInfoModel;
     productList: ProductListModel;
     productDetail: ProductDetailMainModel;
     productDetailParse: ProductDetailParseModel;
@@ -48,27 +48,27 @@ export class PageOrderComponent implements OnInit {
     haveDepartment: string = ""
     cartOrderMain: CartOrder;
     customerInfo: CustomerInfoMainModel = new CustomerInfoMainModel();
-    haveCart:boolean=true;
+    haveCart: boolean = true;
     orderMain: OrderModel;
-    showCartEmpty:boolean=false;
-    IndexItemCartUpdate:number;
-    showUpdateProduct:boolean=false;
-    errorCart:string=""
+    showCartEmpty: boolean = false;
+    IndexItemCartUpdate: number;
+    showUpdateProduct: boolean = false;
+    errorCart: string = ""
     @BlockUI() blockUI: NgBlockUI;
-    @ViewChild('closeModal') closePopup:ElementRef;
+    @ViewChild('closeModal') closePopup: ElementRef;
     listDeliveryAddress: ListDeliveryAddress;
     verifyOrderMain: VerifyOrderMainModel;
-    constructor(private _router:Router,private _gof3rUtil: Gof3rUtil, private _gof3rModule: Gof3rModule, private _util: Gof3rUtil, private _pickupService: PickupService, private _instanceService: EventSubscribeService, private active_router: ActivatedRoute) {
+    constructor(private _router: Router, private _gof3rUtil: Gof3rUtil, private _gof3rModule: Gof3rModule, private _util: Gof3rUtil, private _pickupService: PickupService, private _instanceService: EventSubscribeService, private active_router: ActivatedRoute) {
         this.blockUI.start('loading ...'); // Start blocking
         this.productDetail = new ProductDetailMainModel();
         this.productDetailParse = new ProductDetailParseModel();
         this.cartOrderMain = new CartOrder();
         this.cart = new CartOrder();
-        this.customerInfo= new CustomerInfoMainModel();
-        this.orderMain= new OrderModel();
-        this.outletInfo= new OutletInfoModel();
+        this.customerInfo = new CustomerInfoMainModel();
+        this.orderMain = new OrderModel();
+        this.outletInfo = new OutletInfoModel();
         this.listDeliveryAddress = new ListDeliveryAddress();
-        this.verifyOrderMain= new VerifyOrderMainModel();
+        this.verifyOrderMain = new VerifyOrderMainModel();
         //this.blockUI.start();
         if (localStorage.getItem("out") != null) {
             this.OutletId = localStorage.getItem("out");
@@ -80,23 +80,23 @@ export class PageOrderComponent implements OnInit {
             this.customerInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem('cus')));
 
         }
-        
-        if(localStorage.getItem("crt")!=null || localStorage.getItem("crtd")!=null){
-            this.haveCart=true;
+
+        if (localStorage.getItem("crt") != null || localStorage.getItem("crtd") != null) {
+            this.haveCart = true;
         }
-        else{
-            this.haveCart=false;
+        else {
+            this.haveCart = false;
         }
-        this._instanceService.$getEventSubject.subscribe(data=>{
-            if(data.function==="updateTimePickup"){
-                this.orderMain.PickupDateFrom=data.fromDate;
-                this.orderMain.PickupDateTo= data.toDate;
-                let datePikcup={fromDate:this.orderMain.PickupDateFrom,toDate:this.orderMain.PickupDateTo,fromDateDisplay:data.fromDateDisplay,toDateDisplay:data.toDateDisplay}
-                localStorage.setItem("datePickup",JSON.stringify(datePikcup))
-                console.log('afterupdatetime:'+JSON.stringify(this.orderMain));
+        this._instanceService.$getEventSubject.subscribe(data => {
+            if (data.function === "updateTimePickup") {
+                this.orderMain.PickupDateFrom = data.fromDate;
+                this.orderMain.PickupDateTo = data.toDate;
+                let datePikcup = { fromDate: this.orderMain.PickupDateFrom, toDate: this.orderMain.PickupDateTo, fromDateDisplay: data.fromDateDisplay, toDateDisplay: data.toDateDisplay }
+                localStorage.setItem("datePickup", JSON.stringify(datePikcup))
+                
             }
         })
-        
+
     }
     ngOnInit() {
         //this.initJquery()
@@ -104,13 +104,14 @@ export class PageOrderComponent implements OnInit {
         //this._instanceService.sendCustomEvent("notCheckOut")
         this.GetOutletInfo()
         window.addEventListener('scroll', this.scroll, true);
+
         //   setTimeout(() => {
         //     this.GetProductList("", "")
         //     this.initJquery();
         // }, 60)
         // setTimeout(() => {
         //     //this.initJquery()
-            
+
         // }, 1500)
     }
     initJquery() {
@@ -131,44 +132,55 @@ export class PageOrderComponent implements OnInit {
             alert('thanh')
             $(this).parent('.btn-add-special-inner').find('.text-special').slideDown();
         });
-        
+
 
 
 
 
     }
     scroll = (): void => {
-      //handle your scroll here
-      //notice the 'odd' function assignment to a class field
-      //this is used to be able to remove the event listener
-      this.myFunction()
+        //handle your scroll here
+        //notice the 'odd' function assignment to a class field
+        //this is used to be able to remove the event listener
+        this.myFunction()
     };
-     myFunction() {
-         var header = document.getElementById("myHeader");
-         var promo=document.getElementById("promo-mess")
-var order_catalog =document.getElementById("order-catalog");
-var sticky = header.offsetTop;
-var promo_sticky = promo.offsetTop;
-var order_sticky = sticky+ 300;
-  if (window.pageYOffset > sticky) {
-    header.classList.add("sticky");
-     promo.classList.add("sticky");
-  } else {
-    header.classList.remove("sticky");
-    promo.classList.remove("sticky");
-    
-  }
-  
-  if (window.pageYOffset+100 > promo_sticky) {
-    
-     promo.classList.add("promo-mess-sticky");
-  } else {
-    
-    promo.classList.remove("promo-mess-sticky");
-    
-  }
+    myFunction() {
+        var header = document.getElementById("myHeader");
+        var promo = document.getElementById("promo-mess")
+        var order_catalog = document.getElementById("order-catalog");
+        var cart = document.getElementById("cart-fixed")
+        var sticky = header.offsetTop;
+        var promo_sticky = promo.offsetTop;
+        var order_sticky = sticky + 300;
+        var card_stick =cart.offsetTop+100;
+        if (window.pageYOffset > sticky) {
+            header.classList.add("sticky");
+            promo.classList.add("sticky");
+        } else {
+            header.classList.remove("sticky");
+            promo.classList.remove("sticky");
 
-}
+        }
+
+        if (window.pageYOffset + 100 > promo_sticky) {
+
+            promo.classList.add("promo-mess-sticky");
+        } else {
+
+            promo.classList.remove("promo-mess-sticky");
+
+        }
+        // if (window.pageYOffset+120 >= card_stick) {
+        //     //alert(card_stick)
+        //     cart.classList.add("cart-fixed");
+        // } else {
+
+        //     cart.classList.remove("cart-fixed");
+
+        // }
+        
+
+    }
     GetOutletInfo() {
         let commonData = new CommonDataRequest();
         let _location = localStorage.getItem('la');
@@ -182,17 +194,17 @@ var order_sticky = sticky+ 300;
         requestData.OrderType = this.OrderType;
         requestData.MerchantOutletId = this.OutletId;
         let requestJson = JSON.stringify(requestData);
-        console.log('requestInfor:' + requestJson)
+        
         this._pickupService.GetOutletInfo(commonDataJson, requestJson).then(data => {
-            console.log('info:' + JSON.stringify(data));
+            
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
             localStorage.setItem('ot', this._util.encryptParams(JSON.stringify(data)));//set outlet info
             this.outletInfo = data;
-            this.outletInfo.OutletInfo[0].Rating=this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating)/100));
+            this.outletInfo.OutletInfo[0].Rating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100));
             this.haveDataOutlet = true
             this.loadCart();
             this.GetProductList("", "");
-            
+
         })
 
     }
@@ -225,26 +237,24 @@ var order_sticky = sticky+ 300;
         requestData.OrderBy = "PRICE_HIGH_TO_LOW";
         let requestJson = JSON.stringify(requestData);
 
-        console.log(commonDataJson);
-        console.log(requestJson)
+        
         this._pickupService.GetProductList(commonDataJson, requestJson).then(data => {
-            console.log( "xxx:"+JSON.stringify(data));
+            
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.productList = data;
-            console.log('have:' + this.productList.IsHavingDepartment)
-            console.log('t:' + JSON.stringify(data))
+            
             this.haveData = true
             this.haveDepartment = this.productList.IsHavingDepartment
-            console.log('p:' + JSON.stringify(this.productList))
-            for(let i = 0; i<this.productList.ProductList.length; i++){
-                for(let j = 0; j< this.productList.ProductList[i].Produtcs.length; j++){
-                    if(this.productList.ProductList[i].Produtcs[j].Image.indexOf("no_image")>-1 ||this.productList.ProductList[i].Produtcs[j].Image==""){
-                        console.log("xxthanh:"+ this.productList.ProductList[i].Produtcs[j].Name)
-                    this.productList.ProductList[i].Produtcs[j].HaveImage = false;
-                }
-                else{
-                    this.productList.ProductList[i].Produtcs[j].HaveImage = true;
-                }
+            
+            for (let i = 0; i < this.productList.ProductList.length; i++) {
+                for (let j = 0; j < this.productList.ProductList[i].Produtcs.length; j++) {
+                    if (this.productList.ProductList[i].Produtcs[j].Image.indexOf("no_image") > -1 || this.productList.ProductList[i].Produtcs[j].Image == "") {
+                        
+                        this.productList.ProductList[i].Produtcs[j].HaveImage = false;
+                    }
+                    else {
+                        this.productList.ProductList[i].Produtcs[j].HaveImage = true;
+                    }
                 }
             }
             if (data.ResultCode === "000") {
@@ -256,7 +266,7 @@ var order_sticky = sticky+ 300;
     loadItemOfCategory(id, haveDepartment, index: number) {
         this.blockUI.start('processing ...'); // Start blocking
         this.addClass = index;
-        console.log('inde:' + this.addClass)
+        
         if (haveDepartment === "Y") {
             this.GetProductList("", id);
         }
@@ -267,12 +277,12 @@ var order_sticky = sticky+ 300;
             this.GetProductList("", "")
         }
         setTimeout(() => {
-            
+
             this.blockUI.stop();
         }, 700)
 
 
-        console.log('loadItemOfCategory:' + id + " " + haveDepartment)
+        
     }
     subTotalItem(isQtyItem: boolean, productMain: ProductDetailParseModel) {
         let totalOfOptionItem = 0;
@@ -299,7 +309,7 @@ var order_sticky = sticky+ 300;
     }
     showProductDetail(productId: number) {
         this.blockUI.start("loading...")
-        console.log(productId)
+        
         this.productDetailParse = new ProductDetailParseModel();
         let commonData = new CommonDataRequest();
         let _location = localStorage.getItem('la');
@@ -311,14 +321,13 @@ var order_sticky = sticky+ 300;
         dataRequest.ProductId = productId;
         dataRequest.OrderType = this.OrderType
         let requestDataJson = JSON.stringify(dataRequest);
-        console.log('ProductDetail:' + requestDataJson)
+        
         this._pickupService.GetProductDetail(commonDataJson, requestDataJson).then(data => {
-            console.log(data)
+            
             this.productDetail = data
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             if (data.ProductDetailInfo.length > 0) {
-                console.log('gvhgvh')
-                console.log('hjgj:' + this.productDetail.ProductDetailInfo[0].Id)
+                
                 this.productDetailParse.Id = this.productDetail.ProductDetailInfo[0].Id;
                 this.productDetailParse.Name = this.productDetail.ProductDetailInfo[0].Name;
                 this.productDetailParse.Description = this.productDetail.ProductDetailInfo[0].Description;
@@ -398,7 +407,7 @@ var order_sticky = sticky+ 300;
                 //this.initJquery();
                 this.openPopup()
                 this.blockUI.stop()
-                console.log('XX:' + JSON.stringify(this.productDetailParse));
+                
 
             }
 
@@ -415,9 +424,9 @@ var order_sticky = sticky+ 300;
             });
         }
     }
-    upadteProduct(indexUpdate:number){
-        console.log('vjvj')
-        this.showUpdateProduct=true;
+    upadteProduct(indexUpdate: number) {
+        
+        this.showUpdateProduct = true;
         var el = $('.chicken-popup-update');
         if (el.length) {
             $.magnificPopup.open({
@@ -427,19 +436,17 @@ var order_sticky = sticky+ 300;
                 type: 'inline'
             });
         }
-          this.IndexItemCartUpdate = indexUpdate;
-         
-        
-        
+        this.IndexItemCartUpdate = indexUpdate;
+
+
+
     }
     checkOptionItem(optionItemId: string, optionId: number, index: number) {
-        console.log('idItem:' + optionItemId)
-        console.log('idOption:' + optionId)
+        
         let countItemChecked = 0;
         let maxselectItem = this.getMaxSelectItem(optionId);
         let minselectItem = this.getMinSelectItem(optionId);
-        console.log('index:' + index)
-        console.log('Max:' + maxselectItem);
+        
         countItemChecked = this.checkBox(optionItemId, optionId);
 
         if (countItemChecked > maxselectItem && maxselectItem != 0) {
@@ -449,33 +456,29 @@ var order_sticky = sticky+ 300;
                         this.productDetailParse.OptionList[i].OptionItemList[j].isCheck = false;
                         this.productDetailParse.OptionList[i].OptionItemList[j].isLock = false;
                         this.productDetailParse.OptionList[i].OptionItemList[j].Qty = 0;
-                        console.log('geg:' + this.productDetailParse.OptionList[i].OptionItemList[j].isCheck);
+                        
                         break;
                     }
                 }
             }
         }
         let countAfter = this.countCheckBox(optionItemId, optionId);
-        console.log('after: ' + countAfter)
+        
         if (countAfter == minselectItem) {
-            console.log('con 1')
+            
             this.lockCheckBox(optionItemId, optionId);
         }
         this.subTotalOfOptionItem(optionItemId, optionId, this.productDetailParse)
         this.subTotalItem(false, this.productDetailParse);
-        console.log('count:' + countItemChecked)
-
-        console.log('X2:' + JSON.stringify(this.productDetailParse));
+        
     }
 
     checkOptionItemUpdate(optionItemId: string, optionId: number, index: number) {
-        console.log('idItem:' + optionItemId)
-        console.log('idOption:' + optionId)
+        
         let countItemChecked = 0;
-        let maxselectItem = this.getMaxSelectItemUdate(optionId,index);
-        let minselectItem = this.getMinSelectItemUPdate(optionId,index);
-        console.log('index:' + index)
-        console.log('Max:' + maxselectItem);
+        let maxselectItem = this.getMaxSelectItemUdate(optionId, index);
+        let minselectItem = this.getMinSelectItemUPdate(optionId, index);
+        
         countItemChecked = this.checkBoxUpdate(optionItemId, optionId);
 
         if (countItemChecked > maxselectItem && maxselectItem != 0) {
@@ -485,23 +488,21 @@ var order_sticky = sticky+ 300;
                         this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck = false;
                         this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isLock = false;
                         this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].Qty = 0;
-                        console.log('geg:' + this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck);
+                        
                         break;
                     }
                 }
             }
         }
         let countAfter = this.countCheckBoxUpdate(optionItemId, optionId);
-        console.log('after: ' + countAfter)
+        
         if (countAfter == minselectItem) {
-            console.log('con 1')
+            
             this.lockCheckBoxUpdate(optionItemId, optionId);
         }
-        this.subTotalOfOptionItemUpdate(optionItemId, optionId, this.cart.Cart[this.IndexItemCartUpdate],index)
+        this.subTotalOfOptionItemUpdate(optionItemId, optionId, this.cart.Cart[this.IndexItemCartUpdate], index)
         this.subTotalItem(false, this.cart.Cart[this.IndexItemCartUpdate]);
-        console.log('count:' + this.cart.Cart[this.IndexItemCartUpdate].TotalStr)
-
-        console.log('X2:' + JSON.stringify(this.cart.Cart[this.IndexItemCartUpdate]));
+        
     }
     getMaxSelectItem(optionId: number) {
         for (let i = 0; i < this.productDetailParse.OptionList.length; i++) {
@@ -518,8 +519,7 @@ var order_sticky = sticky+ 300;
         }
     }
     getMaxSelectItemUdate(optionId: number, index) {
-        console.log('indexcart:' + index);
-        console.log('hhh:'+ JSON.stringify(this.cart.Cart))
+        
         for (let i = 0; i < this.cart.Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
             if (this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId) {
                 return this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].MaxOptionItemSelectionRequired;
@@ -557,7 +557,7 @@ var order_sticky = sticky+ 300;
         }
         return countItemChecked;
     }
- checkBoxUpdate(optionItemId: string, optionId: number) {
+    checkBoxUpdate(optionItemId: string, optionId: number) {
         let countItemChecked = 0;
         for (let i = 0; i < this.cart.Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
             for (let j = 0; j < this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
@@ -635,7 +635,7 @@ var order_sticky = sticky+ 300;
             }
         }
     }
-     subTotalOfOptionItemUpdate(optionItem: string, optionId: number, productMain: ProductDetailParseModel, index) {
+    subTotalOfOptionItemUpdate(optionItem: string, optionId: number, productMain: ProductDetailParseModel, index) {
         for (let i = 0; i < productMain.OptionList.length; i++) {
             for (let j = 0; j < this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
                 if (productMain.OptionList[i].OptionId == optionId && productMain.OptionList[i].OptionItemList[j].OptionItemId == optionItem) {
@@ -649,27 +649,27 @@ var order_sticky = sticky+ 300;
         this.productDetailParse.Qty++;
         let isQtyItem = true;
         this.subTotalItem(isQtyItem, this.productDetailParse);
-        console.log(JSON.stringify(this.productDetailParse))
+        
     }
     AdditionQtyItemUpdate() {
         this.cart.Cart[this.IndexItemCartUpdate].Qty++;
         let isQtyItem = true;
         this.subTotalItem(isQtyItem, this.cart.Cart[this.IndexItemCartUpdate]);
-        this.orderMain.ArrayItem=this.cart.Cart;
+        this.orderMain.ArrayItem = this.cart.Cart;
         this.subTotalOrder()
-        if(this.OrderType===ORDER_DELIVERY){
-            localStorage.setItem("crtd",JSON.stringify(this.cart))
+        if (this.OrderType === ORDER_DELIVERY) {
+            localStorage.setItem("crtd", JSON.stringify(this.cart))
         }
-        else{
-            localStorage.setItem("crt",JSON.stringify(this.cart))
+        else {
+            localStorage.setItem("crt", JSON.stringify(this.cart))
         }
-        console.log(JSON.stringify(this.productDetailParse))
+        
     }
     SubtractionItem() {
         if (this.productDetailParse.Qty > 1) {
             let isQtyItem = true;
             this.productDetailParse.Qty--;
-            console.log(JSON.stringify(this.productDetailParse))
+            
             this.subTotalItem(isQtyItem, this.productDetailParse)
         }
     }
@@ -678,14 +678,14 @@ var order_sticky = sticky+ 300;
             let isQtyItem = true;
             this.cart.Cart[this.IndexItemCartUpdate].Qty--;
             this.subTotalItem(isQtyItem, this.cart.Cart[this.IndexItemCartUpdate])
-            this.orderMain.ArrayItem=this.cart.Cart;
-        this.subTotalOrder()
-        if(this.OrderType===ORDER_DELIVERY){
-            localStorage.setItem("crtd",JSON.stringify(this.cart))
-        }
-        else{
-            localStorage.setItem("crt",JSON.stringify(this.cart))
-        }
+            this.orderMain.ArrayItem = this.cart.Cart;
+            this.subTotalOrder()
+            if (this.OrderType === ORDER_DELIVERY) {
+                localStorage.setItem("crtd", JSON.stringify(this.cart))
+            }
+            else {
+                localStorage.setItem("crt", JSON.stringify(this.cart))
+            }
         }
     }
     addQuatyOptionItem(optionItem: string, optionId: number, index) {
@@ -697,82 +697,81 @@ var order_sticky = sticky+ 300;
             }
         }
     }
-   
+
     addToCart() {
-        console.log('arry:' + JSON.stringify(this.checkGroupOptionOfItem(this.productDetailParse)));
-        this.haveCart=true;
+        
+        this.haveCart = true;
         this.productDetailParse.SpecialRequest = this.specialRequest;
         if (this.OrderType == ORDER_PICKUP) {//cart for pickup
             if (localStorage.getItem("crt") != null) {//check cart exits
                 this.cart = (JSON.parse(localStorage.getItem("crt")));
             }
-            console.log('Stsrt Cart:' + JSON.stringify(this.cart));
+            
             if (this.cart.Cart.length > 0) {//check cart not yet item
-               if(this.outletInfo.OutletInfo[0].MerchantOutletId===this.cart.OuteletID){
+                if (this.outletInfo.OutletInfo[0].MerchantOutletId === this.cart.OuteletID) {
                     let isExits: boolean;
-                let isCompare: boolean;
-                let countCompare: number = 0;
-                let arrayOptionInCart: any;
-                let arrayOptionItem = this.checkGroupOptionOfItem(this.productDetailParse);
-                for (let i = 0; i < this.cart.Cart.length; i++) {
-                    if (this.cart.Cart[i].Id == this.productDetailParse.Id) {
-                        isExits = true;
-                        console.log('isexits:' + this.isCheck)
-                        if (isExits) {
-                            arrayOptionInCart = this.checkGroupOptionOfItem(this.cart.Cart[i]);
-                            console.log('arrayFirst:' + JSON.stringify(arrayOptionItem));
-                            console.log('second:' + JSON.stringify(arrayOptionInCart));
-                            isCompare = this.checkArrays(JSON.stringify(arrayOptionItem), JSON.stringify(arrayOptionInCart));
-                            console.log('isCompare:' + isCompare)
-                            if (isCompare) {
-                                this.cart.Cart[i].Qty = this.cart.Cart[i].Qty + this.productDetailParse.Qty;
-                                for (let j = 0; j < this.productDetailParse.OptionList.length; j++) {
-                                    for (let h = 0; h < this.productDetailParse.OptionList[i].OptionItemList.length; h++) {
-                                        this.cart.Cart[i].OptionList[j].OptionItemList[h].Qty = this.cart.Cart[i].OptionList[j].OptionItemList[h].Qty + this.productDetailParse.OptionList[j].OptionItemList[h].Qty
-                                        this.subTotalOfOptionItem(this.cart.Cart[i].OptionList[j].OptionItemList[h].OptionItemId, this.cart.Cart[i].OptionList[j].OptionId, this.cart.Cart[i]);
-                                        this.subTotalItem(true, this.cart.Cart[i])
+                    let isCompare: boolean;
+                    let countCompare: number = 0;
+                    let arrayOptionInCart: any;
+                    let arrayOptionItem = this.checkGroupOptionOfItem(this.productDetailParse);
+                    for (let i = 0; i < this.cart.Cart.length; i++) {
+                        if (this.cart.Cart[i].Id == this.productDetailParse.Id) {
+                            isExits = true;
+                            
+                            if (isExits) {
+                                arrayOptionInCart = this.checkGroupOptionOfItem(this.cart.Cart[i]);
+                                
+                                isCompare = this.checkArrays(JSON.stringify(arrayOptionItem), JSON.stringify(arrayOptionInCart));
+                                
+                                if (isCompare) {
+                                    this.cart.Cart[i].Qty = this.cart.Cart[i].Qty + this.productDetailParse.Qty;
+                                    for (let j = 0; j < this.productDetailParse.OptionList.length; j++) {
+                                        for (let h = 0; h < this.productDetailParse.OptionList[i].OptionItemList.length; h++) {
+                                            this.cart.Cart[i].OptionList[j].OptionItemList[h].Qty = this.cart.Cart[i].OptionList[j].OptionItemList[h].Qty + this.productDetailParse.OptionList[j].OptionItemList[h].Qty
+                                            this.subTotalOfOptionItem(this.cart.Cart[i].OptionList[j].OptionItemList[h].OptionItemId, this.cart.Cart[i].OptionList[j].OptionId, this.cart.Cart[i]);
+                                            this.subTotalItem(true, this.cart.Cart[i])
+                                        }
                                     }
                                 }
                             }
+
                         }
+                    }
+
+                    if (!isCompare) {
+                        this.cart.Cart.push(this.productDetailParse);
 
                     }
+                    localStorage.setItem('crt', JSON.stringify(this.cart));
                 }
-
-                if (!isCompare) {
-                    this.cart.Cart.push(this.productDetailParse);
-
-                }
-                localStorage.setItem('crt', JSON.stringify(this.cart));
-               }
-               else{//
-                   console.log("delete cart")
-                    setTimeout(()=>{
-                        $.magnificPopup.open({
-                        items: {
-                            src: '#cart-popup'
-                        },
-                        type: 'inline'
-                        }); 
-                    },50)
+                else {//
                     
-                    this.errorCart="please delete old your cart";
-               }
+                    setTimeout(() => {
+                        $.magnificPopup.open({
+                            items: {
+                                src: '#cart-popup'
+                            },
+                            type: 'inline'
+                        });
+                    }, 50)
+
+                    this.errorCart = "please delete old your cart";
+                }
 
             }
             else {
                 this.cart.OrderType = this.OrderType
-                this.cart.OuteletID=this.outletInfo.OutletInfo[0].MerchantOutletId
+                this.cart.OuteletID = this.outletInfo.OutletInfo[0].MerchantOutletId
                 this.cart.Cart.push(this.productDetailParse);
                 localStorage.setItem('crt', JSON.stringify(this.cart));
             }
             this._instanceService.sendCustomEvent("UpdateCart")
-            console.log('End Cart:' + JSON.stringify(this.cart));
+            
         } else if (this.OrderType === ORDER_DELIVERY) {//cart for delivery
             if (localStorage.getItem("crtd") != null) {//check cart exits
                 this.cart = (JSON.parse(localStorage.getItem("crtd")));
             }
-            console.log('Stsrt Cart:' + JSON.stringify(this.cart));
+            
             if (this.cart.Cart.length > 0) {//check cart not yet item
                 let isExits: boolean;
                 let isCompare: boolean;
@@ -782,13 +781,12 @@ var order_sticky = sticky+ 300;
                 for (let i = 0; i < this.cart.Cart.length; i++) {
                     if (this.cart.Cart[i].Id == this.productDetailParse.Id) {
                         isExits = true;
-                        console.log('isexits:' + this.isCheck)
+                        
                         if (isExits) {
                             arrayOptionInCart = this.checkGroupOptionOfItem(this.cart.Cart[i]);
-                            console.log('arrayFirst:' + JSON.stringify(arrayOptionItem));
-                            console.log('second:' + JSON.stringify(arrayOptionInCart));
+                            
                             isCompare = this.checkArrays(JSON.stringify(arrayOptionItem), JSON.stringify(arrayOptionInCart));
-                            console.log('isCompare:' + isCompare)
+                            
                             if (isCompare) {
                                 this.cart.Cart[i].Qty = this.cart.Cart[i].Qty + this.productDetailParse.Qty;
                                 for (let j = 0; j < this.productDetailParse.OptionList.length; j++) {
@@ -813,14 +811,14 @@ var order_sticky = sticky+ 300;
             }
             else {
                 this.cart.OrderType = this.OrderType
-                this.cart.OuteletID=this.outletInfo.OutletInfo[0].MerchantOutletId
+                this.cart.OuteletID = this.outletInfo.OutletInfo[0].MerchantOutletId
                 this.cart.Cart.push(this.productDetailParse);
                 localStorage.setItem('crtd', JSON.stringify(this.cart));
             }
             this._instanceService.sendCustomEvent("UpdateCart")
-            console.log('End Cart:' + JSON.stringify(this.cart));
+            
         }
-        this.orderMain.ArrayItem=this.cart.Cart;
+        this.orderMain.ArrayItem = this.cart.Cart;
         this.VerifyOrder();
         this.subTotalOrder()
         $.magnificPopup.close()
@@ -862,10 +860,10 @@ var order_sticky = sticky+ 300;
         this.orderMain = new OrderModel();
         if (this.OrderType === ORDER_PICKUP) {
             if (localStorage.getItem("crt") != null) {//check when had cart
-                this.haveCart=true;
+                this.haveCart = true;
                 this.cart = JSON.parse(localStorage.getItem("crt"));
 
-                console.log(JSON.stringify(this.outletInfo))
+                
                 // this.orderMain.PickupAt = this.outletInfo.OutletInfo[0].Address
                 // this.orderMain.MerchantId = this.outletInfo.OutletInfo[0].MerchantId;
                 if (this.cart.Cart.length > 0) {
@@ -873,11 +871,10 @@ var order_sticky = sticky+ 300;
                     if (this.cart.OrderType === ORDER_PICKUP) {
                         // this.isPickup = true;
                         // this.isDelivery = false;
-                        console.log('ORDER: PICKUP')
-                        console.log('Cart:' + JSON.stringify(this.cart))
+                        
                     }
                     else {
-                        console.log('ORDER DELIVERY')
+                        
                         // this.isDelivery = true;
                         // this.isPickup = false;
                     }
@@ -888,20 +885,20 @@ var order_sticky = sticky+ 300;
                 else {
                     // this.showCartEmpty = true
                     // this.showCart = false
-                    this.haveCart=false;
-                    console.log('card empty')
+                    this.haveCart = false;
+                    
                 }
 
             }
             else {//init frist time
                 // this.showCartEmpty = true
                 // this.showCart = false
-                this.haveCart=false;
-                console.log('card empty')
+                this.haveCart = false;
+                
             }
         } else if (this.OrderType === ORDER_DELIVERY) {//cart for delivery
             if (localStorage.getItem("crtd") != null) {//check when had cart
-                this.haveCart=true;
+                this.haveCart = true;
                 this.cart = JSON.parse(localStorage.getItem("crtd"));
                 //this.orderMain.DeliveryTo = this.currentAddress
                 if (this.cart.Cart.length > 0) {
@@ -909,29 +906,28 @@ var order_sticky = sticky+ 300;
                     if (this.cart.OrderType === ORDER_PICKUP) {
                         // this.isPickup = true;
                         // this.isDelivery = false;
-                        console.log('ORDER: PICKUP')
-                        console.log('Cart:' + JSON.stringify(this.cart))
+                        
                     }
                     else {
-                        console.log('ORDER DELIVERY')
+                        
                         // this.isDelivery = true;
                         // this.isPickup = false;
                     }
-                     this.subTotalOrder();
-                   
+                    this.subTotalOrder();
+
                     // this.setDeliveryDateAndTimes(true)
                 }
                 else {
+
+                    this.haveCart = false;
                     
-                   this.haveCart=false;
-                    console.log('card empty')
                 }
 
             }
             else {//init frist time
-                  this.haveCart=false;
+                this.haveCart = false;
                 // this.showCart = false
-                console.log('card empty')
+                
             }
         }
         //get option item of item
@@ -953,7 +949,7 @@ var order_sticky = sticky+ 300;
         }
     }
     subTotalOrder() {
-        console.log('subtotakUpdate')
+        
         let subtotal = 0;
         for (let i = 0; i < this.orderMain.ArrayItem.length; i++) {
             subtotal = subtotal + this.orderMain.ArrayItem[i].Total;
@@ -962,12 +958,12 @@ var order_sticky = sticky+ 300;
         this.orderMain.SubTotalStr = this._util.formatCurrency(this.orderMain.SubTotal, "S$")
 
         let _total = (this.orderMain.SubTotal + this.orderMain.ServiceFeeValue + this.orderMain.Surcharge + this.orderMain.DeliveryFee + this.orderMain.RiderTip) - (this.orderMain.PromoCodeValue + this.orderMain.Credit + this.orderMain.Discount);
-        console.log('totalne:' + this.orderMain.SubTotalStr)
+        
         this.orderMain.Total = _total;
         this.orderMain.TotalDisplay = this._util.formatCurrency(this.orderMain.Total, "S$");
     }
     removeQty(i) {
-        console.log('RemoveQty:' + i);
+        
         if (this.cart.Cart[i].Qty > 1) {
             let totalAnyItem = this.cart.Cart[i].Total / this.cart.Cart[i].Qty;
             this.cart.Cart[i].Qty--;
@@ -980,7 +976,7 @@ var order_sticky = sticky+ 300;
 
     }
     removeCart(index: number) {
-        console.log('remove:' + index)
+        
         this.cart.Cart.splice(index, 1);
         if (this.OrderType === ORDER_PICKUP) {
             localStorage.setItem("crt", JSON.stringify(this.cart))
@@ -995,39 +991,39 @@ var order_sticky = sticky+ 300;
             this.haveCart = false
             //this.showCart = false
         }
-        console.log('end:' + JSON.stringify(this.cart))
+        
     }
-    showAddSpecial(){
+    showAddSpecial() {
         $('.text-special').slideDown();
     }
-     UpadteCartAndClose() {
-         this.orderMain.ArrayItem=this.cart.Cart;
+    UpadteCartAndClose() {
+        this.orderMain.ArrayItem = this.cart.Cart;
         this.subTotalOrder()
-        if(this.OrderType===ORDER_DELIVERY){
-            localStorage.setItem("crtd",JSON.stringify(this.cart));
-        }else{
-            localStorage.setItem("crt",JSON.stringify(this.cart));
+        if (this.OrderType === ORDER_DELIVERY) {
+            localStorage.setItem("crtd", JSON.stringify(this.cart));
+        } else {
+            localStorage.setItem("crt", JSON.stringify(this.cart));
         }
-       
+
         $.magnificPopup.close()
     }
-    checkOut(){
-        if(localStorage.getItem("cus")!=null){
-            if(this.OrderType===ORDER_PICKUP){
-                if(!this.orderMain.PickupDateFrom||!this.orderMain.PickupDateTo){
-                this.errorCart="please select time to pickup"
-                 $.magnificPopup.open({
+    checkOut() {
+        if (localStorage.getItem("cus") != null) {
+            if (this.OrderType === ORDER_PICKUP) {
+                if (!this.orderMain.PickupDateFrom || !this.orderMain.PickupDateTo) {
+                    this.errorCart = "please select time to pickup"
+                    $.magnificPopup.open({
                         items: {
                             src: '#pickup-date'
                         },
                         type: 'inline'
                     });
                 }
-                else{
+                else {
                     this._router.navigateByUrl('/check-out')
                 }
             }
-            else{
+            else {
                 this.DeliveryAddress()
                 // if(this.orderMain.DeliveryId===""){
                 //      this.errorCart="please select address delivery"
@@ -1041,31 +1037,31 @@ var order_sticky = sticky+ 300;
                 //     this._router.navigateByUrl('/check-out')
                 // }  
             }
-            
-        }else{
+
+        } else {
             $('.showloginform').slideDown();
             $('.login-overlay').addClass('show');
-                $(this).addClass('hide-form');
-                $('body').css({
-                    overflow: 'hidden',
-                    height: '100%'
-                });;
+            $(this).addClass('hide-form');
+            $('body').css({
+                overflow: 'hidden',
+                height: '100%'
+            });;
         }
-        
+
     }
-    deleteCartOld(){
-        if(this.OrderType===ORDER_PICKUP){
+    deleteCartOld() {
+        if (this.OrderType === ORDER_PICKUP) {
             localStorage.removeItem("crt");
             this.loadCart()
             $.magnificPopup.close()
         }
-        else{
+        else {
             localStorage.removeItem("crtd");
             this.loadCart()
             $.magnificPopup.close()
         }
     }
-    closePopupSelectTimes(){
+    closePopupSelectTimes() {
         $.magnificPopup.close()
     }
     getStars(rating) {
@@ -1094,14 +1090,14 @@ var order_sticky = sticky+ 300;
         common_data.Location = _location
         common_data.ServiceName = "GetDeliveryAddresses";
         let common_data_json = JSON.stringify(common_data);
-        console.log('Thanh' + common_data_json)
+        
         let data_request = { CustomerId: this.customerInfo.CustomerInfo[0].CustomerId };
         let data_request_json = JSON.stringify(data_request);
-        console.log('Thanh1' + data_request_json)
+        
         this._pickupService.GetDeliveryAddresses(common_data_json, data_request_json).then(data => {
             this.listDeliveryAddress = data;
             this._gof3rModule.checkInvalidSessionUser(this.listDeliveryAddress.ResultCode);
-            if(this.listDeliveryAddress.DeliveryAddressList.length>0){
+            if (this.listDeliveryAddress.DeliveryAddressList.length > 0) {
                 // if(this.orderMain.DeliveryId===""){
                 //      this.errorCart="please select address delivery"
                 //      $.magnificPopup.open({
@@ -1112,24 +1108,24 @@ var order_sticky = sticky+ 300;
                 //     });
                 // }
                 // else{
-                    this._router.navigateByUrl('/check-out')
+                this._router.navigateByUrl('/check-out')
                 // }
-                
+
             }
-            else{
-                this.errorCart="please add address delivery"
-                     $.magnificPopup.open({
-                        items: {
-                            src: '#pickup-date'
-                        },
-                        type: 'inline'
-                    });
+            else {
+                this.errorCart = "please add address delivery"
+                $.magnificPopup.open({
+                    items: {
+                        src: '#pickup-date'
+                    },
+                    type: 'inline'
+                });
             }
-            console.log("list:" + JSON.stringify(this.listDeliveryAddress))
+            
         })
     }
-     VerifyOrder() {
-         if (localStorage.getItem("ot") != null) {
+    VerifyOrder() {
+        if (localStorage.getItem("ot") != null) {
             this.verifyOrderMain = new VerifyOrderMainModel();
             let common_data = new CommonDataRequest();
             var _location = localStorage.getItem("la");
@@ -1145,13 +1141,12 @@ var order_sticky = sticky+ 300;
             let totalRequest = this._gof3rModule.ParseTo12(this.orderMain.SubTotal)
             requestData.Subtotal = totalRequest;
             let requestDataJson = JSON.stringify(requestData);
-            // console.log("verifyComond:"+ common_data_json)
-            console.log('VerifyData:' + requestDataJson)
+            // 
             this._pickupService.VerifyOrder(common_data_json, requestDataJson).then(data => {
                 this.verifyOrderMain = data;
-                console.log('verify:' + JSON.stringify(this.verifyOrderMain))
+                
             })
-         }
-     }
+        }
+    }
 
 }

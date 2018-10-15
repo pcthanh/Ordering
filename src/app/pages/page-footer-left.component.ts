@@ -15,7 +15,7 @@ export class FooterLeftComponent implements OnInit {
     isContactUS:boolean=false;
     constructor(private _route:Router,private _instanceService:EventSubscribeService) { 
         this._instanceService.$getEventSubject.subscribe(data=>{
-            console.log("data:"+ data)
+            
             if(data==="About"){
                 this.isAbout=true
             }
@@ -36,7 +36,7 @@ export class FooterLeftComponent implements OnInit {
 
     ngOnInit() { 
         window.scrollTo(0,0);
-        console.log('jhhjv')
+        
     }
     aboutClick(){
         this.isAbout=true;

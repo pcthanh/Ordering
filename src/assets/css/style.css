@@ -364,7 +364,8 @@ a.btn-main {
   overflow: hidden;
 }
 .download-app-wrap .download-app-inner {
-  background: url('../images/bg-app.jpg') top center no-repeat;
+  /*background: url('../images/bg-app.jpg') top center no-repeat;*/
+  background: #8E49FF;
   background-size: cover;
   margin-bottom: 100px;
 }
@@ -1909,6 +1910,8 @@ blockquote {
   box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.2);
   background: #f5f5f5;
   position: fixed;
+  width: calc(100% - 74%);
+  top: 160px
 }
 .cart-sidebar-wrap .img-cart-empty {
   margin: 0 auto;
@@ -1919,6 +1922,23 @@ blockquote {
   background: #f5f5f5;
   width: 100%;
 }
+
+.cart-sidebar-wrap-check-out {
+  height: 100%;
+  box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.2);
+  background: #f5f5f5;
+  
+}
+.cart-sidebar-wrap-check-out .img-cart-empty {
+  margin: 0 auto;
+  display: block;
+  padding-top: 60px;
+}
+.cart-sidebar-wrap-check-out .cart-sidebar {
+  background: #f5f5f5;
+  width: 100%;
+}
+
 .cart-sidebar .delivery-info {
   background: #64a640;
   text-align: center;
@@ -2377,6 +2397,10 @@ blockquote {
   background-color: #0486b9;
 }
 .main-delivery-checkout .cart-sidebar-wrap .cart-sidebar {
+  position: static;
+  margin-top: 0;
+}
+.main-delivery-checkout .cart-sidebar-wrap-check-out .cart-sidebar {
   position: static;
   margin-top: 0;
 }
@@ -3426,6 +3450,11 @@ blockquote {
   }
   .cart-sidebar-wrap{
     position: relative;
+    height: 100%;
+  box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.2);
+  background: #f5f5f5;
+  width: 100%;
+  top:0
   }
   .close-cart {
     display: inline-block;

@@ -13,7 +13,7 @@ export class HomeService{
 
      registerDevice(requesData:string):Promise<RegisterCustomerDevice>{
         let urlApi =this.util.urlAPI()+this.util.encrypt(requesData);
-        console.log('urlDevice:'+ urlApi)
+        
         return this.http.get(urlApi).toPromise().then(data=>{
             return Promise.resolve(JSON.parse(this.util.decryptByDES(data.text())) as RegisterCustomerDevice)
         });
@@ -26,13 +26,13 @@ export class HomeService{
     getLocationAddress(lat:number, long:number){
         let urlGoogleAPI="https://maps.googleapis.com/maps/api/geocode/json?latlng="+ lat+","+long+"&key=AIzaSyAcuXzA_6raMbgdAqRtq_4a0maw6EionEE"
         return this.http.get(urlGoogleAPI).toPromise().then(data=>{
-            //console.log("thanh:"+data.text())
+            
             return Promise.resolve(JSON.parse(data.text()));
         });
     }
     getServiceHome(commonData:string, requestData:string){
         let urlAPI = this.util.urlAPI()+this.util.encryptKEK(commonData)+"/"+ this.util.encryptAPIWorking(requestData);
-        console.log("re:"+ urlAPI);
+        
         return this.http.get(urlAPI).toPromise().then(data=>{
               return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as GetInitialParams);
           })

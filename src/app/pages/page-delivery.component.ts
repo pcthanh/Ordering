@@ -35,7 +35,7 @@ export class DeliveryAddressComponent implements OnInit {
         this.addressAdd = new AddressAdd();
         if (localStorage.getItem("cus") != null) {
             this.customerInfoMain = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("cus")));
-            console.log('cus:' + JSON.stringify(this.customerInfoMain))
+            
         }
         else {
             this._route.navigateByUrl("/home");
@@ -64,7 +64,7 @@ export class DeliveryAddressComponent implements OnInit {
                     // localStorage.setItem('lat', this.lat + '');
                     // localStorage.setItem('long', this.lng + '');
                     // localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
-                    // console.log('lat:' + this.lat + " - lng:" + this.lng)
+                    
                 });
             });
         });
@@ -78,14 +78,14 @@ export class DeliveryAddressComponent implements OnInit {
         common_data.Location = _location
         common_data.ServiceName = "GetDeliveryAddresses";
         let common_data_json = JSON.stringify(common_data);
-        console.log('Thanh' + common_data_json)
+        
         let data_request = { CustomerId: this.customerInfoMain.CustomerInfo[0].CustomerId };
         let data_request_json = JSON.stringify(data_request);
-        console.log('Thanh1' + data_request_json)
+        
         this._pickupService.GetDeliveryAddresses(common_data_json, data_request_json).then(data => {
             this.listDeliveryAddress = data;
             this._gof3rModule.checkInvalidSessionUser(this.listDeliveryAddress.ResultCode);
-            console.log("list:" + JSON.stringify(this.listDeliveryAddress))
+            
         })
     }
 
@@ -112,10 +112,9 @@ export class DeliveryAddressComponent implements OnInit {
                 data_request.CustomerId = this.customerInfoMain.CustomerInfo[0].CustomerId + ''
                 data_request.GeoLocation = this.lat + ',' + this.lng;
                 let data_request_json = JSON.stringify(data_request);
-                console.log('InstructionForRider:' + this.addressAdd.InstructionForRider)
-                console.log('add:' + data_request_json)
+                
                 this._pickupService.AddDeliveryAddress(common_data_json, data_request_json).then(data => {
-                    console.log('add:' + JSON.stringify(data))
+                    
                     if (data.ResultCode === '000') {
 
                         this.DeliveryAddress()
@@ -157,9 +156,9 @@ export class DeliveryAddressComponent implements OnInit {
 
             let data_request = { AddressId: this.addressId }
             let data_request_json = JSON.stringify(data_request)
-            console.log('addresId:' + data_request_json)
+            
             this._pickupService.DeleteDeliveryAddress(common_data_json, data_request_json).then(data => {
-                console.log('delete:' + JSON.stringify(data))
+                
                 if (data.ResultCode === "000") {
                     $.magnificPopup.close()
                     this.DeliveryAddress();

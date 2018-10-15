@@ -78,6 +78,7 @@ export class Gof3rHomeComponent implements OnInit {
     listDeliveryAddressShow: ListDeliveryAddress
     listDeliveryAddress: ListDeliveryAddress;
     showListSelectAddress:boolean=false;
+    listMap:any[]=[];
     @ViewChild(NgAutocompleteComponent) public completer: NgAutocompleteComponent;
     
     public list1 = 
@@ -103,6 +104,8 @@ export class Gof3rHomeComponent implements OnInit {
         this.checkLoginUser();
         this.initJQuery()
         this.registerDeviceRequest()
+        this.GetOutletListByLocation()
+       
         // this.searchControl = new FormControl(); comment danh cho google map
         // this.mapsAPILoader.load().then(() => {
         //     let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
@@ -124,7 +127,7 @@ export class Gof3rHomeComponent implements OnInit {
         //             localStorage.setItem('lat', this.lat + '');
         //             localStorage.setItem('long', this.lng + '');
         //             localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
-        //             console.log('lat:' + this.lat + " - lng:" + this.lng)
+        //             
         //         });
         //     });
         // });
@@ -137,7 +140,7 @@ export class Gof3rHomeComponent implements OnInit {
         if (localStorage.getItem("cus") != null) {// get address when user login
             if (localStorage.getItem("addressDelivery") != null && localStorage.getItem("addressDelivery")!="undefined") {
                 let address = JSON.parse(localStorage.getItem("addressDelivery"))
-                console.log("xxthanh:"+ address)
+                
                 this.inputAddress = address.Address;
                 let strCut = address.GeoLocation.split(",");
                 this.lat = strCut[0];
@@ -147,12 +150,23 @@ export class Gof3rHomeComponent implements OnInit {
                 localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
             }
             else {//when user login but have not addressDelivery
-                console.log("thanhxxx")
+                
                 this.checkUserLoginChangeAddress()
             }
         }
         else { // get address when user not login
+            if (localStorage.getItem("address") != null) {
+                    this.addressList = JSON.parse(localStorage.getItem("address"));
+                    if(this.addressList.AddressListInfo.length>0){
+                        this.inputAddress= this.addressList.AddressListInfo[0].StreetAddress;
+                        this.lat =Number.parseFloat(this.addressList.AddressListInfo[0].lat);
+                        this.lng =Number.parseFloat(this.addressList.AddressListInfo[0].long);
+                        localStorage.setItem('lat', this.lat + '');
+                        localStorage.setItem('long', this.lng + '');
+                        localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
+                    }
 
+                }
         }
     }
     deliveryClick() {
@@ -165,31 +179,38 @@ export class Gof3rHomeComponent implements OnInit {
             this.haveData = 1
             localStorage.setItem("orderType", this.orderType)
             $('.map-wrap').slideDown()
-            this._homeservice.getLocationAddress(this.lat, this.lng).then(data => {
-                var address = data["results"][0]["formatted_address"];
-                console.log("current:" + address)
+            // this._homeservice.getLocationAddress(this.lat, this.lng).then(data => {
+            //     var address = data["results"][0]["formatted_address"];
+            //     
 
-                this.inputAddress = address
-                // var arraySplited = address.split(",");
-                if (localStorage.getItem("address") != null) {
+            //     this.inputAddress = address
+            //     // var arraySplited = address.split(",");
+            //     if (localStorage.getItem("address") != null) {
+            //         this.addressList = JSON.parse(localStorage.getItem("address"));
+            //         for (let j = 0; j < this.addressList.AddressListInfo.length; j++) {
+            //             this.addressList.AddressListInfo[j].isCheck = false;
+            //         }
+
+            //     }
+            //     let item = new AddressIteModel();
+
+            //     item.StreetAddress = address;
+            //     item.lat = this.lat + ''
+            //     item.long = this.lng + ''
+            //     item.isCheck = true;
+            //     let arrayName = item.StreetAddress.split(',');
+            //     item.Name = arrayName[0];
+            //     this.addressList.AddressListInfo.push(item);
+            //     localStorage.setItem('address', JSON.stringify(this.addressList));
+
+            // })
+             if (localStorage.getItem("address") != null) {
                     this.addressList = JSON.parse(localStorage.getItem("address"));
                     for (let j = 0; j < this.addressList.AddressListInfo.length; j++) {
                         this.addressList.AddressListInfo[j].isCheck = false;
                     }
 
                 }
-                let item = new AddressIteModel();
-
-                item.StreetAddress = address;
-                item.lat = this.lat + ''
-                item.long = this.lng + ''
-                item.isCheck = true;
-                let arrayName = item.StreetAddress.split(',');
-                item.Name = arrayName[0];
-                this.addressList.AddressListInfo.push(item);
-                localStorage.setItem('address', JSON.stringify(this.addressList));
-
-            })
         }
         else {
             this.haveData = 0
@@ -210,7 +231,7 @@ export class Gof3rHomeComponent implements OnInit {
             $('.map-wrap').slideDown()
             this._homeservice.getLocationAddress(this.lat, this.lng).then(data => {
                 var address = data["results"][0]["formatted_address"];
-                console.log("current:" + address)
+                
                 this.inputAddress = address
                 // var arraySplited = address.split(",");
                 if (localStorage.getItem("address") != null) {
@@ -239,7 +260,7 @@ export class Gof3rHomeComponent implements OnInit {
 
     }
     registerDeviceRequest() {
-        console.log('s3')
+        
         var request = new RegisterDeviceRequest();
         if (localStorage.getItem('device') != null) {
             request.DeviceNumber = localStorage.getItem('device');
@@ -252,20 +273,19 @@ export class Gof3rHomeComponent implements OnInit {
 
         // request.DeviceNumber='9999'
         var jsonRequest = JSON.stringify(request);
-        console.log('Device:' + jsonRequest)
+        
         this._homeservice.registerDevice(jsonRequest).then(data => {
-            console.log('hehe:' + JSON.stringify(data))
-            console.log('hbjhbj')
+            
             this.registerDevice = (data);
             localStorage.setItem('KEK', (this.registerDevice.KEKWorkingKey));
             localStorage.setItem('WK', (this.registerDevice.APIWorkingKey));
-            console.log('s4')
+            
             this.getInitParam();
 
         });
     }
     getInitParam() {
-        console.log('s5')
+        
         var comomrequest = new GetInitParamRequest();
         if (localStorage.getItem('device') != null) {
             comomrequest.DeviceNumber = localStorage.getItem('device');
@@ -278,7 +298,7 @@ export class Gof3rHomeComponent implements OnInit {
         if (localStorage.getItem('la') != null) {
 
             comomrequest.Location = localStorage.getItem('la');
-            console.log('init:' + comomrequest.Location)
+            
         }
         else {
             comomrequest.Location = ""
@@ -287,16 +307,15 @@ export class Gof3rHomeComponent implements OnInit {
 
         var requestData = new RequestNull();
         var jsonCommon = JSON.stringify(comomrequest);
-        console.log(jsonCommon);
+        
         var jsonRequest = JSON.stringify(requestData);
-        console.log(jsonRequest)
+        
         this._homeservice.getServiceHome(jsonCommon, jsonRequest).then(data => {
-            console.log('s6')
-            console.log('init:' + JSON.stringify(data))
+            
             this.getInitialParams = data;
             //this.haveDataInit=true
             localStorage.setItem("IN", this._gof3rUtil.encryptParams(JSON.stringify(this.getInitialParams)));
-            console.log(data);
+            
             //this.blockUI.stop()
         });
     }
@@ -306,7 +325,7 @@ export class Gof3rHomeComponent implements OnInit {
         common_data.Location = _location
         common_data.ServiceName = "GetAllOutletListV2";
         let common_data_json = JSON.stringify(common_data);
-        console.log('getoutlet:' + common_data_json)
+        
         let request_data = new GetAllOutletListV2Request();
         request_data.OrderType = this.orderType;
         if (this.orderType === ORDER_PICKUP || !this.orderType) {
@@ -323,10 +342,10 @@ export class Gof3rHomeComponent implements OnInit {
         request_data.SubCategoryId = "";
         let request_data_json = JSON.stringify(request_data);
 
-        console.log('data:' + request_data_json)
+        
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             //this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
-            console.log('test:' + JSON.stringify(data));
+            
             this.getAllOutletListV2 = data;
             if (this.getAllOutletListV2.MerchantOutletListInfo.length == 0) {
                 // this.noData=true;
@@ -369,7 +388,7 @@ export class Gof3rHomeComponent implements OnInit {
 
                     $(this).parents('.login-wrap').find('.login-dropdown-had').slideDown();
                 } else if (valueCheckUser === 'false') {
-                    console.log('thanh false')
+                    
                     $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
                 }
 
@@ -525,7 +544,7 @@ export class Gof3rHomeComponent implements OnInit {
             this.isUserLogin = true;
         }
         else {
-            console.log('null')
+            
             this.isUserLogin = false;
         }
     }
@@ -560,7 +579,7 @@ export class Gof3rHomeComponent implements OnInit {
                 });;
                 this.checkUserLoginChangeAddress()
                 this.blockUI.stop()
-                console.log(data)
+                
             })
         }
 
@@ -577,10 +596,10 @@ export class Gof3rHomeComponent implements OnInit {
                 position => {
 
                     this.geolocationPosition = position,
-                        console.log(position)
+                        
                     this._homeservice.getLocationAddress(position.coords.latitude, position.coords.longitude).then(data => {
                         var address = data["results"][0]["formatted_address"];
-                        console.log("current:" + address)
+                        
                         this.inputAddress = address
                         // var arraySplited = address.split(",");
 
@@ -593,7 +612,7 @@ export class Gof3rHomeComponent implements OnInit {
                         this.showListSelectAddress=false;
                         this.blockUI.stop();
                         //this.locationrequest =this.lang+","+this.long+"#_#_";
-                        // console.log('xxx:'+ this.locationrequest)
+                        
                         // localStorage.setItem('la',this.locationrequest);
                         // localStorage.setItem('lat',position.coords.latitude+'');
                         // localStorage.setItem('long',position.coords.longitude+'');
@@ -606,13 +625,13 @@ export class Gof3rHomeComponent implements OnInit {
                 error => {
                     switch (error.code) {
                         case 1:
-                            console.log('Permission Denied');
+                            
                             break;
                         case 2:
-                            console.log('Position Unavailable');
+                            
                             break;
                         case 3:
-                            console.log('Timeout');
+                            
                             break;
                     }
                 }
@@ -620,7 +639,7 @@ export class Gof3rHomeComponent implements OnInit {
         };
     }
     checkShowPopup() {
-        console.log("check:")
+        
         this.checkLoginUser();
     }
     logOutUser(userName: string) {
@@ -669,7 +688,7 @@ export class Gof3rHomeComponent implements OnInit {
         let request_data_json = JSON.stringify(requestData);
         this._pickupService.RequestRegistrationOTP(common_data_json, request_data_json).then(data => {
             this.responseData = data;
-            console.log('dada' + JSON.stringify(data))
+            
             if (this.responseData.ResultCode == "000") {
                 let requestRegister = new RequestRegisterCustomerModel();
                 requestRegister.CustomerName = this.signUp.FullName;
@@ -699,7 +718,7 @@ export class Gof3rHomeComponent implements OnInit {
         common_data.Location = _location
         common_data.ServiceName = "RegisterCustomer";
         var common_data_json = JSON.stringify(common_data);
-        console.log('json:' + JSON.stringify(common_data_json))
+        
         let requestRegister = new RequestRegisterCustomerModel();
         requestRegister.CustomerName = this.signUp.FullName
         requestRegister.Email = this.signUp.Email
@@ -707,10 +726,10 @@ export class Gof3rHomeComponent implements OnInit {
         requestRegister.OTP = otp
         requestRegister.Password = this.signUp.Password
         let request_data_json = JSON.stringify(requestRegister);
-        console.log(request_data_json)
+        
         this._pickupService.RegisterCustomer(common_data_json, request_data_json).then(data => {
             this.customerInfoMain = data;
-            console.log(JSON.stringify(this.customerInfoMain));
+            
             if (this.customerInfoMain.ResultCode == "000") {
                 // this._instanceService.sendCustomEvent(this.customerLoginMain.CustomerInfo[0].UserName);
                 // this._router.navigateByUrl('/login')
@@ -727,12 +746,12 @@ export class Gof3rHomeComponent implements OnInit {
         common_data.Location = _location
         common_data.ServiceName = "GetDeliveryAddresses";
         let common_data_json = JSON.stringify(common_data);
-        console.log('Thanh' + common_data_json)
+        
         let data_request = { CustomerId: this.customerInfoMain.CustomerInfo[0].CustomerId };
         let data_request_json = JSON.stringify(data_request);
-        console.log('Thanh1' + data_request_json)
+        
         this._pickupService.GetDeliveryAddresses(common_data_json, data_request_json).then(data => {
-            console.log('listAdd:' + JSON.stringify(data))
+            
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             // this.showListDelivery=true;
             // this.showListAddresNotLogin=false
@@ -792,7 +811,7 @@ export class Gof3rHomeComponent implements OnInit {
     }
     checkInputPostalCode(event){
         var postal_code:string = event.target.value;
-        console.log("postalCode:"+ postal_code)
+        
         let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
         common_data.Location = _location
@@ -802,7 +821,7 @@ export class Gof3rHomeComponent implements OnInit {
         let data_request = {SearchValue:postal_code};
         let request_data_json = JSON.stringify(data_request);
         this._pickupService.SearchSingaporeAddress(common_data_json,request_data_json).then(data=>{
-            console.log("addPostal:"+ JSON.stringify(data))
+            
             this.list=data;
             this.showListSelectAddress=true;
             // for(let i = 0; i< data.AddressList.length; i++){
@@ -813,22 +832,49 @@ export class Gof3rHomeComponent implements OnInit {
         })
     }
     Selected(item: SelectedAutocompleteItem) {
-        console.log(item);
+        
     }
     setList(list){
           this.autoCompleteService.setDynamicList(list);
           // this will log in console if your list is empty.
       }
     selectAddress(addres:string, lat:string, lng:string){
+        this.addressList = new AddressListModel();
         this.list=[];
         this.showListSelectAddress=false;
         this.inputAddress=addres;
-        console.log("thanh tet:" +lat +"-"+ lng)
+        
         this.lat= Number.parseFloat(lat);
         this.lng = Number.parseFloat(lng);
         localStorage.setItem('lat', this.lat + '');
         localStorage.setItem('long', this.lng + '');
         localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
+        let item = new AddressIteModel();
+
+                item.StreetAddress = addres;
+                item.lat = this.lat + ''
+                item.long = this.lng + ''
+                item.isCheck = true;
+                let arrayName = item.StreetAddress.split(',');
+                item.Name = arrayName[0];
+                this.addressList.AddressListInfo.push(item);
+                localStorage.setItem('address', JSON.stringify(this.addressList));
     }
+    GetOutletListByLocation(){
+        
+        let common_data = new CommonDataRequest();
+        var _location = localStorage.getItem("la");
+        common_data.Location = _location
+        common_data.ServiceName = "GetOutletListByLocation";
+        let common_data_json = JSON.stringify(common_data);
+        let data_request ={Lang:"en"};
+        let data_request_json = JSON.stringify(data_request);
+        console.log("common_data_json:"+ common_data_json)
+        console.log("data_request_json:"+ data_request_json)
+        this._pickupService.GetOutletListByLocation(common_data_json,data_request_json).then(data=>{
+            console.log("xxxthanh:"+JSON.stringify( data));
+        })
+     }
+    
 
 }

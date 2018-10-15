@@ -8,5 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class RetaurantOwnerComponent implements OnInit {
     constructor() { }
 
-    ngOnInit() { }
+    ngOnInit() {
+         window.scrollTo(0,0);
+     }
 }

@@ -94,7 +94,7 @@ export class HeaderGof3rComponent implements OnInit {
         this.listDeliveryAddressShow = new ListDeliveryAddress();
         this._instanceService.$getEventSubject.subscribe(data=>{
             if(data==="CheckOut"){
-                console.log("checkout")
+                
                 //this.checkOut=false;
             }
         })
@@ -141,7 +141,7 @@ export class HeaderGof3rComponent implements OnInit {
                         var address = data["results"][0]["formatted_address"];
                         this.inputChangeAddress = address;
                     })
-                    console.log('lat:' + this.lat + " - lng:" + this.lng)
+                    
                 });
             });
         });
@@ -158,13 +158,13 @@ export class HeaderGof3rComponent implements OnInit {
 
         }
         else {
-            console.log('null')
+            
             this.isUserLogin = false;
         }
     }
     checkUserLoginChangeAddress() {
         if (localStorage.getItem('cus') == null) {
-            console.log('chua login')
+            
             this.getAddress()
             this.showListAddresNotLogin=true;
             this.showListDelivery=false;
@@ -176,12 +176,12 @@ export class HeaderGof3rComponent implements OnInit {
             common_data.Location = _location
             common_data.ServiceName = "GetDeliveryAddresses";
             let common_data_json = JSON.stringify(common_data);
-            console.log('Thanh'+ common_data_json)
+            
             let data_request = { CustomerId: this.customerInfoMain.CustomerInfo[0].CustomerId };
             let data_request_json = JSON.stringify(data_request);
-            console.log('Thanh1'+ data_request_json)
+            
             this._pickupService.GetDeliveryAddresses(common_data_json, data_request_json).then(data => {
-                 console.log('listAdd:' + JSON.stringify(data))
+                 
                 this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
                 this.showListDelivery=true;
                 this.showListAddresNotLogin=false
@@ -218,7 +218,7 @@ export class HeaderGof3rComponent implements OnInit {
         if (localStorage.getItem('address') != null) {
 
             this.addressList = JSON.parse(localStorage.getItem('address'));
-            console.log('addMain:' + JSON.stringify(this.addressList))
+            
             for (let i = 0; i < this.addressList.AddressListInfo.length; i++) {
                 if (this.addressList.AddressListInfo[i].isCheck == true) {
                     let item = new AddressIteModel();
@@ -229,7 +229,7 @@ export class HeaderGof3rComponent implements OnInit {
                     this.addressShowDiplay.AddressListInfo.push(item)
 
                     this.isShowAdd = true
-                    console.log('hehe:' + JSON.stringify(this.addressShowDiplay))
+                    
                 }
             }
         }
@@ -264,7 +264,7 @@ export class HeaderGof3rComponent implements OnInit {
 
                     }
                     else if (valueCheckUser === 'false') {
-                        console.log("thanh false")
+                        
                         $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
                     }
                 }
@@ -276,7 +276,7 @@ export class HeaderGof3rComponent implements OnInit {
 
                     }
                     else if (valueCheckUser === 'false') {
-                        console.log("thanh false")
+                        
                         $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
                     }
                 }
@@ -413,7 +413,7 @@ export class HeaderGof3rComponent implements OnInit {
 
     }
     changeAddressOutletV2Login(geo:string,index:number,itemAddress:any){
-        console.log(geo)
+        
         let strCut = geo.split(",");
         let location = strCut[0] + ',' + strCut[1] + "#_#_"
         let dataSendChangeAddreesV2 = { function: 'changeAddressV2', la: location };
@@ -440,7 +440,7 @@ export class HeaderGof3rComponent implements OnInit {
         this.addressList.AddressListInfo[index].isCheck = true
         this.addressShowDiplay.AddressListInfo[0] = this.addressList.AddressListInfo[index]
         localStorage.setItem('address', JSON.stringify(this.addressList))
-        console.log('list:' + JSON.stringify(this.addressList.AddressListInfo))
+        
     }
     else{
         for(let i = 0; i< this.listDeliveryAddress.DeliveryAddressList.length; i++){
@@ -490,10 +490,10 @@ export class HeaderGof3rComponent implements OnInit {
                 position => {
 
                     this.geolocationPosition = position,
-                        console.log(position)
+                        
                     this._homeservice.getLocationAddress(position.coords.latitude, position.coords.longitude).then(data => {
                         var address = data["results"][0]["formatted_address"];
-                        console.log("current:" + address)
+                        
                         this.inputChangeAddress = address
                         // var arraySplited = address.split(",");
 
@@ -504,7 +504,7 @@ export class HeaderGof3rComponent implements OnInit {
                         localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
                         this.blockUI.stop();
                         //this.locationrequest =this.lang+","+this.long+"#_#_";
-                        // console.log('xxx:'+ this.locationrequest)
+                        
                         // localStorage.setItem('la',this.locationrequest);
                         // localStorage.setItem('lat',position.coords.latitude+'');
                         // localStorage.setItem('long',position.coords.longitude+'');
@@ -517,13 +517,13 @@ export class HeaderGof3rComponent implements OnInit {
                 error => {
                     switch (error.code) {
                         case 1:
-                            console.log('Permission Denied');
+                            
                             break;
                         case 2:
-                            console.log('Position Unavailable');
+                            
                             break;
                         case 3:
-                            console.log('Timeout');
+                            
                             break;
                     }
                 }
@@ -531,7 +531,7 @@ export class HeaderGof3rComponent implements OnInit {
         };
     }
     saveChangeAddress() {
-        console.log(this.lat + "-" + this.lng)
+        
         if(localStorage.getItem("cus")!=null){
             this.addDeliveryAddress(this.inputChangeAddress)
             let location = this.lat + ',' + this.lng + "#_#_"
@@ -557,10 +557,9 @@ export class HeaderGof3rComponent implements OnInit {
         item.Name = arrayName[0];
         this.addressList.AddressListInfo.push(item);
         this.addressShowDiplay.AddressListInfo.pop()
-        console.log('lenght:' + this.addressList.AddressListInfo.length);
+        
         this.addressShowDiplay.AddressListInfo.push(item)
-        console.log('dislay:' + this.addressShowDiplay.AddressListInfo[0].StreetAddress)
-        console.log(this.inputChangeAddress);
+        
         localStorage.setItem('address', JSON.stringify(this.addressList));
         $('.login-dropdown-step3').hide();
         $('.login-overlay').removeClass('show');
@@ -594,9 +593,9 @@ export class HeaderGof3rComponent implements OnInit {
         data_request.GeoLocation = this.lat + ',' + this.lng;
         let data_request_json = JSON.stringify(data_request);
          
-        console.log('add:'+ data_request_json)
+        
         this._pickupService.AddDeliveryAddress(common_data_json, data_request_json).then(data => {
-            console.log('add:' + JSON.stringify(data))
+            
             if (data.ResultCode === '000') {
                 let addressDelivery={AddressId:data.AddressId, GeoLocation:this.lat + ',' + this.lng,Address:this.inputChangeAddress}
                 localStorage.setItem("addressDelivery",JSON.stringify(addressDelivery))
@@ -613,7 +612,7 @@ export class HeaderGof3rComponent implements OnInit {
 
     }
     checkShowPopup() {
-        console.log('thnh')
+        
         this.checkLoginUser();
 
         // if(this.isUserLogin===true){
@@ -682,7 +681,7 @@ export class HeaderGof3rComponent implements OnInit {
                     height: ''
                 });;
                 this.blockUI.stop()
-                console.log(data)
+                
             })
         }
 
@@ -717,7 +716,7 @@ export class HeaderGof3rComponent implements OnInit {
             let round = this.roundTime(hours, minutes, 5);
             let dateAdd = moment_(this.getCurrentTime.CurrentTime, "HH:mm").add(ADD_MINUTE_TIME_FROM_SERVER, "minutes");
             let roundTime = this.roundTime(dateAdd.hours(), dateAdd.minutes(), 15);
-            console.log("cudate:"+ roundTime)
+            
             this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
             localStorage.setItem("whenDelivery",moment_(roundTime).format("DD/MM/YYYY :HH:mm:ss"))
             this.loadDateDelivery(d);
@@ -796,7 +795,7 @@ export class HeaderGof3rComponent implements OnInit {
         this.DateDeliveryList.DateList.push(this.arrayDateDelivery1)
         this.DateDeliveryList.DateList.push(this.arrayDateDelivery2)
         this.haveDateList=true
-        console.log('dateList:' + JSON.stringify(this.DateDeliveryList))
+        
 
     }
     createTimesDelivery(startTimes: any, endTimes: any, isToday: boolean,date:string) {
@@ -806,7 +805,7 @@ export class HeaderGof3rComponent implements OnInit {
         while (nowDateTemp.isBefore(endDateTemp)) {
             if (moment_(nowDateTemp, "HH:mm").add(ADD_MINUTE_TIME_FROM_SERVER, "minutes").isBefore(endDateTemp)) {
                 let dateAdd = moment_(nowDateTemp, "HH:mm").add(ADD_MINUTE_TIME_FROM_SERVER, "minutes");
-                console.log('add:' + moment_(nowDateTemp, "HH:mm").add(ADD_MINUTE_TIME_FROM_SERVER, "minutes").format('HH:mm'))
+                
                 let roundTime = this.roundTime(dateAdd.hours(), dateAdd.minutes(), 15);
                 let jsonDate = { label: moment_(roundTime).format('HH:mm'), value:date+" "+ moment_(roundTime).format('HH:mm:ss') }
                 this.timesDelivery.push(jsonDate);
@@ -821,18 +820,17 @@ export class HeaderGof3rComponent implements OnInit {
         
         //this.whenStr = this.timesDelivery[0].label;
         
-        console.log('time:' + JSON.stringify(this.timesDelivery))
+        
     }
     createTimesPickup(startTimes: any, endTimes: any, isToday: boolean,date:string) {
         //let nowDate = this.getCurrentTime.CurrentTime;
         let nowDateTemp = moment_(startTimes, "HH:mm:ss");
         let endDateTemp = moment_(END_TIME_LIMIT, "HH:mm:ss")
-        console.log('nowDateTemp:'+ nowDateTemp);
-        console.log('endDateTemp:'+ endDateTemp);
+        
         while (nowDateTemp.isBefore(endDateTemp)) {
             
                 let dateAdd = moment_(nowDateTemp, "HH:mm");
-                console.log('add:' + moment_(nowDateTemp, "HH:mm").add(ADD_MINUTE_TIME_FROM_SERVER, "minutes").format('HH:mm'))
+                
                 let roundTime = this.roundTime(dateAdd.hours(), dateAdd.minutes(), 5);
                 let timeNext = moment_(roundTime,"HH:mm").add(30,"minutes");
                 let jsonDate = { label:this.tConvert(moment_(roundTime).format('HH:mm')) +" - "+this.tConvert(moment_(timeNext).format('HH:mm')), value:date+" "+ moment_(roundTime).format('HH:mm:ss'),fromDate: date+" "+ moment_(roundTime).format('HH:mm:ss'),toDate:date+" "+ moment_(timeNext).format('HH:mm:ss'),fromDateDisplay:date+" "+this.tConvert(moment_(roundTime).format('HH:mm')),toDateDisplay:date+" "+this.tConvert(moment_(timeNext).format('HH:mm'))}
@@ -845,7 +843,7 @@ export class HeaderGof3rComponent implements OnInit {
         
         //this.whenStr = this.timesDelivery[0].label;
         
-        console.log('timePickup:' + JSON.stringify(this.timesPickup))
+        
     }
     loadTimesDelivery(isToday: boolean,date:string) {
         this.timesDelivery= [];
@@ -863,7 +861,7 @@ export class HeaderGof3rComponent implements OnInit {
             
             let startTime = moment_(d).format("HH:mm:ss")
             let date = moment_(d).format("DD/MM/YYYY")
-            console.log('yy:' + startTime)
+            
             if (isToday){
                 let [h,m,s]=startTime.split(":");
                 if(parseInt(h)<8){
@@ -885,7 +883,7 @@ export class HeaderGof3rComponent implements OnInit {
     }
     loadTimesDeliveryPickup(isToday: boolean,dateInput:string) {
         this.timesPickup= [];
-        console.log('istoday:'+ isToday)
+        
         this.getCurrentTime = new GetCurrentSystemTimeModel();
         let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
@@ -899,7 +897,7 @@ export class HeaderGof3rComponent implements OnInit {
             let d = new Date(+data.CurrentTimeMillis);
             let startTime = "08:00:00"
              let date = moment_(d).format("DD/MM/YYYY")
-            console.log('yy:' + startTime)
+            
             if (isToday){
                 this.createTimesPickup(startTime, END_TIME_LIMIT, isToday,date)
             }
@@ -929,8 +927,7 @@ export class HeaderGof3rComponent implements OnInit {
         this._instanceService.sendCustomEvent(dataSend);
     }
     selectTimePickup(fromDate:string,toDate:string,fromDateDisplay:string,toDateDisplay:string){
-        console.log("fromDate:"+fromDate)
-        console.log("toDate:"+toDate)
+        
         let dataSend = { function: 'updateTimePickup', fromDate: fromDate,toDate:toDate,fromDateDisplay:fromDateDisplay,toDateDisplay:toDateDisplay };
         $('.login-dropdown').hide();
         $('.login-overlay').removeClass('show');
@@ -956,7 +953,7 @@ export class HeaderGof3rComponent implements OnInit {
         let request_data_json = JSON.stringify(requestData);
         this._pickupService.RequestRegistrationOTP(common_data_json, request_data_json).then(data => {
             this.responseData = data;
-            console.log('dada' + JSON.stringify(data))
+            
             if (this.responseData.ResultCode == "000") {
                 let requestRegister = new RequestRegisterCustomerModel();
                 requestRegister.CustomerName = this.signUp.FullName;
@@ -986,7 +983,7 @@ export class HeaderGof3rComponent implements OnInit {
         common_data.Location = _location
         common_data.ServiceName = "RegisterCustomer";
         var common_data_json = JSON.stringify(common_data);
-        console.log('json:' + JSON.stringify(common_data_json))
+        
         let requestRegister = new RequestRegisterCustomerModel();
         requestRegister.CustomerName = this.signUp.FullName
         requestRegister.Email = this.signUp.Email
@@ -994,10 +991,10 @@ export class HeaderGof3rComponent implements OnInit {
         requestRegister.OTP = otp
         requestRegister.Password = this.signUp.Password
         let request_data_json = JSON.stringify(requestRegister);
-        console.log(request_data_json)
+        
         this._pickupService.RegisterCustomer(common_data_json, request_data_json).then(data => {
             this.customerInfoMain = data;
-            console.log(JSON.stringify(this.customerInfoMain));
+            
             if (this.customerInfoMain.ResultCode == "000") {
                 // this._instanceService.sendCustomEvent(this.customerLoginMain.CustomerInfo[0].UserName);
                 // this._router.navigateByUrl('/login')

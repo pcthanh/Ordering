@@ -11,6 +11,6 @@ export class HocComponent implements OnInit {
 
     ngOnInit() { }
     test(){
-        console.log('jjhbj')
+       
     }
 }

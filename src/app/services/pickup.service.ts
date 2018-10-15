@@ -43,7 +43,7 @@ export class PickupService {
       constructor(public util: Gof3rUtil, private http: Http) { }
       GetTopOffers(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
@@ -51,76 +51,76 @@ export class PickupService {
       getAddresFromPostalCode(postal_code: string) {
             let urlGoogleAPI = "https://maps.googleapis.com/maps/api/geocode/json?address=" + postal_code + "&key=AIzaSyAcuXzA_6raMbgdAqRtq_4a0maw6EionEE"
             return this.http.get(urlGoogleAPI).toPromise().then(data => {
-                  //console.log("thanh:"+data.text())
+                  
                   return Promise.resolve(JSON.parse(data.text()));
             });
       }
       getAddresFromLng(lat: string, long: string) {
             let urlGoogleAPI = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + long + "&key=AIzaSyAcuXzA_6raMbgdAqRtq_4a0maw6EionEE";
             return this.http.get(urlGoogleAPI).toPromise().then(data => {
-                  //console.log("thanh:"+data.text())
+                  
                   return Promise.resolve(JSON.parse(data.text()));
             });
       }
       GetAllOutletListV2(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as GetAllOutletListV2Model);
             })
       }
       GetProductList(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as ProductListModel);
             })
       }
       GetOutletInfo(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
       GetProductDetail(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as ProductDetailMainModel);
             })
       }
       VerifyOrder(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as VerifyOrderMainModel);
             })
       }
       SearchUserByEmailOrPhone(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as SearchUserByEmailOrPhone);
             })
       }
       CheckLogon(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as CustomerInfoMainModel);
             })
       }
       GetCurrentSystemTime(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as GetCurrentSystemTimeModel);
             })
       }
       ApplyPromoCode(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as PromoCodeMainModel);
             })
@@ -128,14 +128,14 @@ export class PickupService {
 
       GetAllPaymentOptionsWithPromotion(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as GetAllPaymentOptionsWithPromotionModle);
             })
       }
       RequestRegistrationOTP(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as ResponseModel);
             })
@@ -143,28 +143,28 @@ export class PickupService {
 
       RegisterCustomer(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as CustomerInfoMainModel);
             })
       }
       LogOutCustomer(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
       AddDeliveryAddress(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
       GetDeliveryAddresses(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as ListDeliveryAddress);
             })
@@ -172,28 +172,28 @@ export class PickupService {
 
       VerifyCard(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as VerifyCard);
             })
       }
       AddNewCard(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as AddNewCardModel);
             })
       }
       AddCardTransaction(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
       MakePayment(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as MakePaymentModel);
             })
@@ -201,56 +201,56 @@ export class PickupService {
 
       PlaceOrder(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as PlaceOrder);
             })
       }
       LogOut(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
       UpdateCardTransaction(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
       GetPickupOrderDetail(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as PickupOrderDetail);
             })
       }
       GetPickupOrderList(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as CustomerOrderListMain);
             })
       }
       GetDeliveryOrderList(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as DeliveryCustomerOrderListMain);
             })
       }
       GetTransferOrderList(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as TransferOrderListMain);
             })
       }
       SearchUserByPhone(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as CustomerSearchByPhoneTransfer);
             })
@@ -258,14 +258,14 @@ export class PickupService {
 
       DoTransferOrder(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
       GetCombineOrderList(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text()))as CombineOrderListMain);
             })
@@ -273,42 +273,42 @@ export class PickupService {
 
  GetCombineOrdersByOutlet(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text()))as CombineOrderList);
             })
       }
       DoCombineOrder(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text()))as CombineOrderList);
             })
       }
       GetDeliveryOrderDetail(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
       GetAllPaymentOptions(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
        GetPrepaidWalletDetail(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
        DoPrepaidWalletTopup(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
@@ -316,42 +316,42 @@ export class PickupService {
 
 GetPointWalletDetail(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text()))as PointWalletInfo);
             })
       }
       DoPointWalletTopup(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
       UpdateDeliveryAddress(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
        DeleteDeliveryAddress(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
       GetAllOffers(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text()))as AllOffers);
             })
       }
        GetAllOutletBySubCategory(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text()))as SubCategoryListOutlet);
             })
@@ -359,42 +359,49 @@ GetPointWalletDetail(commonData: string, requestData: string) {
 
       DeleteCard(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
       GetResetUserPasswordCode(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
       ResetUserPassword(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
        GetPromoCodeList(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
        UpdateCustomer(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
       SearchSingaporeAddress(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-            console.log('API:' + urlAPI);
+            
+            return this.http.get(urlAPI).toPromise().then(data => {
+                  return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
+            })
+      }
+      GetOutletListByLocation (commonData: string, requestData: string) {
+            let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
+            console.log("urlAPI:"+ urlAPI)
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })

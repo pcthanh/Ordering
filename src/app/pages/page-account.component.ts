@@ -36,15 +36,15 @@ export class AccountComponent implements OnInit {
         if (localStorage.getItem("cus") != null) {
             this.customerInfoMain = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("cus")));
             this.isHaveDate=true;
-            console.log("hjj:"+ JSON.stringify(this.customerInfoMain))
+           
         }
         else {
-            console.log('null')
+           
         }
     }
     selectGender(g:string){
         this.gender=g;
-        console.log("getnder:"+g)
+       
     }
     updateProfile(){
         this.blockUI.start();
@@ -61,13 +61,13 @@ export class AccountComponent implements OnInit {
         request_data.CustomerId=this.customerInfoMain.CustomerInfo[0].CustomerId+''
         request_data.CustomerName=this.customerInfoMain.CustomerInfo[0].CustomerName
         request_data.DisabledMerchantCategoryList=""
-        console.log("date:"+ this.customerInfoMain.CustomerInfo[0].Dob)
+        
         if(this.customerInfoMain.CustomerInfo[0].Dob.toString().indexOf("/")>-1){
             request_data.Dob=this.customerInfoMain.CustomerInfo[0].Dob.toString();
         }
         else{
             let d:Date =this.customerInfoMain.CustomerInfo[0].Dob;
-            console.log("date:"+ d);
+            
             request_data.Dob= moment_(d).format("DD/MM/YYYY");
         }
         
@@ -84,9 +84,9 @@ export class AccountComponent implements OnInit {
         request_data.MaritalStatus=this.customerInfoMain.CustomerInfo[0].MaritalStatus
         request_data.Mobile=this.customerInfoMain.CustomerInfo[0].Mobile
         let request_data_json= JSON.stringify(request_data);
-        console.log("request_data:"+ request_data_json);
+        
         this._pickupService.UpdateCustomer(common_data_json,request_data_json).then(data=>{
-            console.log(JSON.stringify(data))
+           
             if(data.ResultCode==="000"){
                 this.customerInfoMain=data;
                 localStorage.setItem("cus",this._gof3rUtil.encryptParams(JSON.stringify(this.customerInfoMain)));
@@ -115,6 +115,6 @@ export class AccountComponent implements OnInit {
     }
     changeBOD(){
         this.isChangeBod=true;
-        console.log("thanh");
+       
     }
 }

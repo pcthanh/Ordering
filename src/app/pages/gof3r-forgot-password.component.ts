@@ -56,7 +56,7 @@ export class FotgotPasswordComponent implements OnInit {
             let requestDataJson = JSON.stringify(dataRequest);
             this._pickupService.SearchUserByEmailOrPhone(common_data_json, requestDataJson).then(data => {
                 this.searchByEmailOrPhone = data;
-                console.log(JSON.stringify(data))
+               
                 if (this.searchByEmailOrPhone.ResultCode == '000') {
                     this.customerIdTemp = this.searchByEmailOrPhone.CustomerId + '';
                     this.showStep1 = false;
@@ -78,7 +78,7 @@ export class FotgotPasswordComponent implements OnInit {
 
     }
     selectMethodSendCode(customerID: string) {
-        console.log(this.checkMethod)
+        
         this.response= new ResponseModel();
         if (this.checkMethod !== undefined) {
             
@@ -97,12 +97,12 @@ export class FotgotPasswordComponent implements OnInit {
             else {
                 methodName = "PHONE";
             }
-            console.log('id:' + customerID)
+            
             let data_request = { ReceiveResetUserPasswordCodeBy: methodName, CustomerId: customerID }
             let data_request_json = JSON.stringify(data_request);
-            console.log("datarequedt:" + data_request_json)
+            
             this._pickupService.GetResetUserPasswordCode(common_data_json, data_request_json).then(data => {
-                console.log(JSON.stringify(data))
+                
                 if (data.ResultCode === "000") {
                     this.showStep2 = false;
                     this.showStep3 = true;
@@ -134,9 +134,9 @@ export class FotgotPasswordComponent implements OnInit {
 
                 let data_request = { NewPassword: this.newPassword, OTP: this.resetCode, CustomerId: customerID };
                 let data_requet_json = JSON.stringify(data_request);
-                console.log(data_requet_json)
+                 
                 this._pickupService.ResetUserPassword(common_data_json, data_requet_json).then(data => {
-                    console.log(JSON.stringify(data))
+                     
                     if(data.ResultCode==="000"){
                         this.blockUI.stop();
                         this._route.navigateByUrl('/home');

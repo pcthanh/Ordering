@@ -10,6 +10,7 @@ export class PrivacyComponent implements OnInit {
     constructor(private _instanceService:EventSubscribeService) { }
 
     ngOnInit() {
+        window.scrollTo(0,0);
         this._instanceService.sendCustomEvent("PRIVACY")
      }
 }

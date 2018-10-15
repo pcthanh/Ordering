@@ -27,7 +27,7 @@ export class MyAccountMenuComponent implements OnInit {
     constructor(private route:Router,private instaneService:EventSubscribeService,private _pickupService:PickupService,private _gof3rUtil: Gof3rUtil) { 
         this.customerInfoMain= new CustomerInfoMainModel();
         this.instaneService.$getEventSubject.subscribe(data=>{
-            console.log("Dataxxx:"+ data)
+            
             if(data==="MyProfile"){
                 this.isMyProfile=true;
             }
@@ -67,10 +67,10 @@ export class MyAccountMenuComponent implements OnInit {
         if (localStorage.getItem("cus") != null) {
             this.customerInfoMain= JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("cus")));
             // this.isHaveDate=true;
-            console.log("hjj:"+ JSON.stringify(this.customerInfoMain))
+            
         }
         else {
-            console.log('null')
+           
             
         }
     }

@@ -42,9 +42,9 @@ export class OrderHistoryPickupComponent implements OnInit {
 
         let data_request={CurrentCustomerId:this.customerInfo.CustomerInfo[0].CustomerId,Lang:"en",FromRow:""}
         let data_request_json = JSON.stringify(data_request);
-        console.log()
+        
         this._pickupService.GetPickupOrderList(common_data_json,data_request_json).then(data=>{
-           console.log('OrderPickupList:'+ JSON.stringify(data))
+           
             this.blockUI.stop();
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
              this.customerOrderListMain = data;
@@ -53,7 +53,7 @@ export class OrderHistoryPickupComponent implements OnInit {
                     this.PickUpOrderList.push(this.customerOrderListMain.CustomerPickUpOrderList[i].PickUpOrderList[j]);
                 }
             }
-            console.log("here:"+ JSON.stringify(this.PickUpOrderList))
+           
            
         })
 

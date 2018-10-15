@@ -14,7 +14,7 @@ export class Gof3rFooterComponent implements OnInit {
         
      }
     aboutClick(){
-          console.log("heh")
+         
          this._instanceService.sendCustomEvent("About");
        
          this._route.navigateByUrl('/page-about')
@@ -33,5 +33,10 @@ export class Gof3rFooterComponent implements OnInit {
         this._instanceService.sendCustomEvent("TERMS");
        
          this._route.navigateByUrl('/page-terms')
+    }
+    contactClick(){
+        this._instanceService.sendCustomEvent("ContactUS");
+       
+         this._route.navigateByUrl('/contact-us')
     }
 }

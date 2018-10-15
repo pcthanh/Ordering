@@ -158,7 +158,7 @@ export class HeaderCheckOutComponent implements OnInit {
 
         }
         else {
-            console.log('null')
+            
             this.isUserLogin = false;
         }
     }

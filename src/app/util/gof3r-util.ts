@@ -8,7 +8,7 @@ export class Gof3rUtil {
         //var keyHex=CryptoJS.enc.Hex.parse(key);
         var ivHex = "00000000";
         var iv = CryptoJS.enc.Hex.parse(ivHex);
-        //console.log("IV :" + iv);
+        
 
         var encrypted = CryptoJS.TripleDES.encrypt(data, keyHex, {
             mode: CryptoJS.mode.CBC,
@@ -17,7 +17,7 @@ export class Gof3rUtil {
 
         });
         var en = encrypted.toString();
-        //console.log(en);
+        
         var tohex = this.toHex(en).toUpperCase();
         return tohex;
     }
@@ -28,7 +28,7 @@ export class Gof3rUtil {
         //var keyHex=CryptoJS.enc.Hex.parse(key);
         var ivHex = "00000000";
         var iv = CryptoJS.enc.Hex.parse(ivHex);
-        //console.log("IV :" + iv);
+        
 
         var encrypted = CryptoJS.TripleDES.encrypt(data, keyHex, {
             mode: CryptoJS.mode.CBC,
@@ -37,7 +37,7 @@ export class Gof3rUtil {
 
         });
         var en = encrypted.toString();
-        //console.log(en);
+        
         var tohex = this.toHex(en).toUpperCase();
         return tohex;
     }
@@ -63,7 +63,7 @@ export class Gof3rUtil {
         //var keyHex=CryptoJS.enc.Hex.parse(key);
         var ivHex = "00000000";
         var iv = CryptoJS.enc.Hex.parse(ivHex);
-        //console.log("IV :" + iv);
+        
 
         var encrypted = CryptoJS.TripleDES.encrypt(data, keyHex, {
             mode: CryptoJS.mode.CBC,
@@ -72,7 +72,7 @@ export class Gof3rUtil {
 
         });
         var en = encrypted.toString();
-        //console.log(en);
+        
         var tohex = this.toHex(en).toUpperCase();
         return tohex;
     }
@@ -83,7 +83,7 @@ export class Gof3rUtil {
         //var keyHex=CryptoJS.enc.Hex.parse(key);
         var ivHex = "00000000";
         var iv = CryptoJS.enc.Hex.parse(ivHex);
-        //console.log("IV :" + iv);
+       
 
         var encrypted = CryptoJS.TripleDES.encrypt(data, keyHex, {
             mode: CryptoJS.mode.CBC,
@@ -92,7 +92,7 @@ export class Gof3rUtil {
 
         });
         var en = encrypted.toString();
-        //console.log(en);
+        
         var tohex = this.toHex(en).toUpperCase();
         return tohex;
     }
@@ -148,7 +148,7 @@ export class Gof3rUtil {
         ciphertext = this.hexToString(ciphertext);
         var keyKEK = this.decryptByDES((localStorage.getItem('KEK')));
         var key = this.decryptByDESWK(localStorage.getItem('WK'), keyKEK);
-        console.log("WK:" + key)
+        
         var keyHex = CryptoJS.enc.Utf8.parse(key);
         var ivHex = "00000000";
         var iv = CryptoJS.enc.Hex.parse(ivHex);

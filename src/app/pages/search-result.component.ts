@@ -54,10 +54,10 @@ export class SearchResultComponent implements OnInit {
 
         this._instanceService.$getEventSubject.subscribe(data => {
             let dataParse = data;
-            console.log('a:' + dataParse)
+            
             if (dataParse.function === 'changeAddressV2') {
 
-                console.log('changeAddressV2:' + dataParse.la)
+                
                 let lacation = dataParse.la;
                 this.GetAllOutletListV2(lacation, "", "", "")
                 this.getTopOffers()
@@ -94,9 +94,9 @@ export class SearchResultComponent implements OnInit {
 
             if (this.getInitialParams.MCCInfo.length > 0) {
                 for (let i = 0; i < this.getInitialParams.MCCInfo.length; i++) {
-                    console.log("mccvalus:" + this.getInitialParams.MCCInfo[i].Value)
+                    
                     if (this.getInitialParams.MCCInfo[i].Value == "Food") {
-                        console.log("mccvalus:" + this.getInitialParams.MCCInfo[i].Value)
+                        
                         this.mccGobal = this.getInitialParams.MCCInfo[i].Id + '';
                     }
                 }
@@ -110,7 +110,7 @@ export class SearchResultComponent implements OnInit {
     ngOnInit() {
 
         this.initJQuery()
-        console.log(this.script)
+        
 
         this.GetCurrentSystemTime("");
 
@@ -196,7 +196,7 @@ export class SearchResultComponent implements OnInit {
 
         common_data.ServiceName = "GetAllOutletListV2";
         let common_data_json = JSON.stringify(common_data);
-        console.log('getoutlet:' + common_data_json)
+        
         let request_data = new GetAllOutletListV2Request();
         if (orderMethod === '') {
             if (localStorage.getItem("orderType") != null) {
@@ -229,11 +229,11 @@ export class SearchResultComponent implements OnInit {
         request_data.SubCategoryId = "";
         let request_data_json = JSON.stringify(request_data);
 
-        console.log('data:' + request_data_json)
+        
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
 
-            console.log('test:' + JSON.stringify(data));
+            
             this.getAllOutletListV2 = data;
             
             for (let i = 0; i < this.getAllOutletListV2.MerchantOutletListInfo.length; i++) {
@@ -243,7 +243,7 @@ export class SearchResultComponent implements OnInit {
                     strTemp = strTemp + this.getAllOutletListV2.MerchantOutletListInfo[i].SubCategoryList[j].SubCategoryName + " • "
                 }
                 rating = this.getStars((parseInt(this.getAllOutletListV2.MerchantOutletListInfo[i].MerchantOutletRating) / 100));
-                console.log("rating:" + rating)
+                
                 this.getAllOutletListV2.MerchantOutletListInfo[i].Rating = rating;
                 this.getAllOutletListV2.MerchantOutletListInfo[i].subCatgoryTemp = strTemp.substring(0, strTemp.length - 2)
             }
@@ -304,8 +304,7 @@ export class SearchResultComponent implements OnInit {
             requestData.CustomerId = ""
         let comomDataJson = JSON.stringify(commondata);
         let requestDataJson = JSON.stringify(requestData);
-        console.log(comomDataJson);
-        console.log(requestDataJson)
+        
         this._pickupService.GetTopOffers(comomDataJson, requestDataJson).then(data => {
             this.OfferList = data;
             if (this.OfferList.OffersList.length > 0) {
@@ -315,13 +314,13 @@ export class SearchResultComponent implements OnInit {
                 this.haveOffer = false
             }
 
-            console.log("topoffer:" + JSON.stringify(this.OfferList))
+            
             this.blockUI.stop()
         })
     }
     enterOrder(outletId: string) {
         localStorage.setItem("out", outletId);
-        console.log('outletid:' + outletId)
+        
         this.router.navigateByUrl("/order")
     }
     getStars(rating) {
@@ -347,7 +346,7 @@ export class SearchResultComponent implements OnInit {
     searchAction(events) {
         if (events.keyCode == 13) {
             // action
-            console.log("enter press");
+            
             if(this.txtSearch!=""){
                 this.GetCurrentSystemTime(this.txtSearch);
             }
