@@ -39,4 +39,8 @@ export class Gof3rFooterComponent implements OnInit {
        
          this._route.navigateByUrl('/contact-us')
     }
+    merchantClick(){
+        this._instanceService.sendCustomEvent("merchant")
+        this._route.navigateByUrl('/restaurant-owner')
+    }
 }
