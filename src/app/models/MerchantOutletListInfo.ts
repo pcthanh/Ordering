@@ -30,4 +30,6 @@ export class MerchantOutletListInfoModel{
     EstimatedPickupTime:string=""
     subCatgoryTemp:string="";
     Rating:string=""
+    ProductWebsitePromotionalMessage:string=""
+    ProductWebsitePromotionalBanner:string=""
 ;}

@@ -1896,8 +1896,8 @@ blockquote {
   vertical-align: middle;
 }
 .order-content-wrap {
-  padding: 15px;
-  padding-bottom: 0;
+  padding: 15px 15px 15px 0;
+  /*padding-bottom: 0;*/
 }
 .order-content {
   background: #fff;
@@ -3385,7 +3385,7 @@ blockquote {
   height: 100%;
 }
 .nano-scroll > .nano-content {
-  max-height: 400px;
+  max-height: 250px;/*Thanhpc*/
   position: relative;
 }
 .nano-scroll.nano > .nano-pane {
@@ -3410,6 +3410,15 @@ blockquote {
 .close-cart {
   display: none;
 }
+/*ThanhPC*/
+.merchant-baner{
+  top: 155px;
+}
+.outlet-banner-wrap{
+  padding: 0 15px 0 0;
+  padding-bottom: 0;
+}
+/*ThanhPC*/
 @media (max-width: 1199px) {
   .img-app {
     top: 50%;
@@ -3443,6 +3452,13 @@ blockquote {
     flex: 0 0 120px;
   }
   
+  .merchant-baner{
+    top: 85px;
+  }
+  .outlet-banner-wrap{
+  padding: 0;
+  padding-bottom: 0;
+}
   .cart-sidebar .subtotal-wrap .title-sub {
     position: relative;
     padding-right: 30px;
@@ -3466,6 +3482,7 @@ blockquote {
     top: 50%;
     margin-top: -15px;
   }
+  
   .over-body {
     overflow: hidden;
     height: 100%;
@@ -3999,6 +4016,7 @@ blockquote {
     flex: 0 0 62.333331%;
     max-width: 62.333331%;
   }
+  
   /*Begin ThanhPC 15/09/2018*/
   .col-map-checkout { 
     -ms-flex: 0 0 74.666667%;

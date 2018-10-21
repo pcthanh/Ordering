@@ -18,7 +18,7 @@ import { BlockUIModule } from 'ng-block-ui';
 
 import { AgmCoreModule,MapsAPILoader } from '@agm/core';
 
-
+import { DropdownModule} from 'primeng/primeng';
 import { HomeService } from "./services/home.service";
 import { Gof3rUtil } from "./util/gof3r-util";
 import { PickupService } from "./services/pickup.service";
@@ -59,6 +59,7 @@ import { LocationStrategy,HashLocationStrategy } from "@angular/common";
 import {NgAutoCompleteModule} from "ng-auto-complete";
 import { AutoCompleteModule } from 'ng4-auto-complete';
 import {CalendarModule} from 'primeng/calendar';
+import { ClickOutsideModule } from 'ng4-click-outside';
 
 @NgModule({
   declarations: [
@@ -104,7 +105,7 @@ import {CalendarModule} from 'primeng/calendar';
   
     BlockUIModule,
   CalendarModule,
-
+ DropdownModule,ClickOutsideModule,
     
      AgmCoreModule.forRoot({
         apiKey: 'AIzaSyAVdsuXFE3Ca3vwy_lopgMUHTfJLdd3_Ck',libraries:["places"],

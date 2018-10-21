@@ -58,6 +58,7 @@ export class PageOrderComponent implements OnInit {
     @ViewChild('closeModal') closePopup: ElementRef;
     listDeliveryAddress: ListDeliveryAddress;
     verifyOrderMain: VerifyOrderMainModel;
+    productWebsiteBannerMessage:string="";
     constructor(private _router: Router, private _gof3rUtil: Gof3rUtil, private _gof3rModule: Gof3rModule, private _util: Gof3rUtil, private _pickupService: PickupService, private _instanceService: EventSubscribeService, private active_router: ActivatedRoute) {
         this.blockUI.start('loading ...'); // Start blocking
         this.productDetail = new ProductDetailMainModel();
@@ -87,6 +88,9 @@ export class PageOrderComponent implements OnInit {
         else {
             this.haveCart = false;
         }
+        if(localStorage.getItem("promomes")!=null){
+            this.productWebsiteBannerMessage=localStorage.getItem("promomes")
+        }
         this._instanceService.$getEventSubject.subscribe(data => {
             if (data.function === "updateTimePickup") {
                 this.orderMain.PickupDateFrom = data.fromDate;
@@ -103,7 +107,7 @@ export class PageOrderComponent implements OnInit {
         //this.loadCart()
         //this._instanceService.sendCustomEvent("notCheckOut")
         this.GetOutletInfo()
-        window.addEventListener('scroll', this.scroll, true);
+        //window.addEventListener('scroll', this.scroll, true);
 
         //   setTimeout(() => {
         //     this.GetProductList("", "")
@@ -153,14 +157,14 @@ export class PageOrderComponent implements OnInit {
         var promo_sticky = promo.offsetTop;
         var order_sticky = sticky + 300;
         var card_stick =cart.offsetTop+100;
-        if (window.pageYOffset > sticky) {
-            header.classList.add("sticky");
-            promo.classList.add("sticky");
-        } else {
-            header.classList.remove("sticky");
-            promo.classList.remove("sticky");
+        // if (window.pageYOffset > sticky) {
+        //     header.classList.add("sticky");
+        //     promo.classList.add("sticky");
+        // } else {
+        //     header.classList.remove("sticky");
+        //     promo.classList.remove("sticky");
 
-        }
+        // }
 
         if (window.pageYOffset + 100 > promo_sticky) {
 
@@ -200,6 +204,7 @@ export class PageOrderComponent implements OnInit {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
             localStorage.setItem('ot', this._util.encryptParams(JSON.stringify(data)));//set outlet info
             this.outletInfo = data;
+            console.log("outletinfor:"+ JSON.stringify(this.outletInfo))
             this.outletInfo.OutletInfo[0].Rating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100));
             this.haveDataOutlet = true
             this.loadCart();
@@ -414,7 +419,19 @@ export class PageOrderComponent implements OnInit {
         })
     }
     openPopup() {
+        this.specialRequest=""
         var el = $('.chicken-popup');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el
+                },
+                type: 'inline'
+            });
+        }
+    }
+    openPopupOutletInfor() {
+        var el = $('#infor-popup');
         if (el.length) {
             $.magnificPopup.open({
                 items: {
@@ -1147,6 +1164,9 @@ export class PageOrderComponent implements OnInit {
                 
             })
         }
+    }
+    showpopupInfor(){
+        this.openPopupOutletInfor()
     }
 
 }

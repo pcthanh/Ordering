@@ -43,7 +43,7 @@ import { PromoCodeMainModel } from "../models/PromoCodeMain";
 import { AddCardModel } from "../models/AddCard";
 import { VerifyCard } from "../models/VerifyCard";
 import { AddNewCardModel } from "../models-request/add-new-card";
-
+import { SelectItem } from 'primeng/primeng';
 import * as moment_ from 'moment';
 const ORDER_DELIVERY: string = "DELIVERY"
 const ORDER_PICKUP: string = "PICKUP"
@@ -107,7 +107,7 @@ export class PageCheckOutComponent implements OnInit {
     noData: boolean = false;
     selectedPromoCode: boolean = false;
     addCardData: AddCardModel;
-    riderTip = [{ label: '$2.00', value: 2, ck: false }, { label: '$3.00', value: 3, ck: false }, { label: '$4.00', value: 4, ck: false }]
+    riderTip : SelectItem[] = [];
     cadrMonth = [{ label: "01", value: '01' }, { label: "02", value: '02' }, { label: "03", value: '03' }, { label: "04", value: '04' }, { label: "05", value: '05' }, { label: "06", value: '06' }, { label: "07", value: '07' }, { label: "08", value: '08' }, { label: "09", value: '09' }, { label: "10", value: '10' }, { label: "11", value: '11' }, { label: "12", value: '12' }]
     cardYear: any[] = []
     verifycard: VerifyCard;
@@ -122,6 +122,7 @@ export class PageCheckOutComponent implements OnInit {
     geoHome: string = ""
     orderNote: string = ""
     countrys: any[] = []
+    riderValue:number;
     styles = [{
         featureType: "landscape",
         elementType: "geometry.fill",
@@ -300,8 +301,10 @@ export class PageCheckOutComponent implements OnInit {
         this.addCardData = new AddCardModel();
         this.verifycard = new VerifyCard()
         this.getInitParam = new GetInitialParams();
+        
         if (localStorage.getItem("ot") != null) {
             this.outletInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("ot")));
+            this.outletInfo.OutletInfo[0].Rating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100));
             let strCut = this.outletInfo.OutletInfo[0].GeoLocation.split(",");
             this.lat = parseFloat(strCut[0]);
             this.lng = parseFloat(strCut[1]);
@@ -358,9 +361,12 @@ export class PageCheckOutComponent implements OnInit {
             this.toDate = date.toDateDisplay
             this.orderMain.PickupDateFrom = date.fromDate;
             this.orderMain.PickupDateTo = date.toDate;
-        }
-
-
+        }   
+        // this.orderMain.RiderTip=parseInt(this.riderValue);
+        //  this.orderMain.RiderTip =parseInt(this.riderValue);
+        //  console.log("rider:"+ this.riderValue)
+        // //this.orderMain.RiderTipDisplay = this._util.formatCurrency(this.riderValue, 'S$')
+        // this.subTotalOrder();
     }
 
     ngOnInit() {
@@ -368,11 +374,18 @@ export class PageCheckOutComponent implements OnInit {
         this.loadCart();
         this.VerifyOrder();
         this.inItPage()
+        this.setRiderTip()
         this.selectPromoCodeModel.PromoCodeText = "Browse rewards or use promo code"
         setTimeout(() => {
             this.initCountry()
         }, 1000)
+        window.scrollTo(0,0)
 
+    }
+    setRiderTip(){
+        for(let i =0; i<=10; i++){
+            this.riderTip.push({label:"$"+i+".00",value:i})
+        }
     }
 
     loadCardYear() {
@@ -558,7 +571,7 @@ export class PageCheckOutComponent implements OnInit {
           
             this._pickupService.VerifyOrder(common_data_json, requestDataJson).then(data => {
                 this.verifyOrderMain = data;
-               
+                console.log("veryfiyOrder:"+ JSON.stringify(this.verifyOrderMain))
                 this.orderMain.ServiceFee = this.verifyOrderMain.OrderFeeAndDiscountInfo.ServiceFeeDisplay
                 this.orderMain.ServiceFeeValue = parseInt(this.verifyOrderMain.OrderFeeAndDiscountInfo.ServiceFee) / 100;
                 this.orderMain.DiscountDisplay = this.verifyOrderMain.OrderFeeAndDiscountInfo.DiscountAmountDisplay
@@ -590,28 +603,28 @@ export class PageCheckOutComponent implements OnInit {
             this.cart.Cart[i].OptionItemsStr = opitem.substring(0, opitem.length - 2);
         }
     }
-    riderTipClick(tipVlaue: number, index: number, ck: boolean) {
+    selechRiderTip(tipVlaue: number) {
 
 
         
-        for (let i = 0; i < this.riderTip.length; i++) {
-            if (i === index) {
-                if (ck === true) {
-                    this.riderTip[i].ck = false
-                    this.orderMain.RiderTip = 0;
-                }
-                else {
-                    this.riderTip[i].ck = true;
-                    this.orderMain.RiderTip = tipVlaue;
-                }
+        // for (let i = 0; i < this.riderTip.length; i++) {
+        //     if (i === index) {
+        //         if (ck === true) {
+        //             this.riderTip[i].ck = false
+        //             this.orderMain.RiderTip = 0;
+        //         }
+        //         else {
+        //             this.riderTip[i].ck = true;
+        //             this.orderMain.RiderTip = tipVlaue;
+        //         }
 
-            }
-            else {
-                this.riderTip[i].ck = false;
-                //this.orderMain.RiderTip = 0;
-            }
+        //     }
+        //     else {
+        //         this.riderTip[i].ck = false;
+        //         //this.orderMain.RiderTip = 0;
+        //     }
 
-        }
+        // }
         // if (this.riderTip[index].ck === true) {
         //    
         //     this.riderTip[index].ck = false;
@@ -623,18 +636,18 @@ export class PageCheckOutComponent implements OnInit {
         //     this.riderTip[index].ck = true
 
         // }
-        this.orderMain.RiderTipDisplay = this._util.formatCurrency(tipVlaue, 'S$')
-        this.subTotalOrder();
+        this.riderValue=(tipVlaue);
+        
 
 
     }
-    uncheck(event, i: number) {
+    // uncheck(event, i: number) {
 
         
-        this.riderTip[i].ck = !this.riderTip[i].ck
+    //     this.riderTip[i].ck = !this.riderTip[i].ck
 
 
-    }
+    // }
     getAllPaymentOptionsWithPromotion() {
         this.allPayment = new GetAllPaymentOptionsWithPromotionModle();
         let common_data = new CommonDataRequest();
@@ -1041,6 +1054,7 @@ export class PageCheckOutComponent implements OnInit {
 
     }
     showPopup() {
+        
         this.selectedCard = false
         var el = $('#payment-otpion-popup');
         if (el.length) {
@@ -1165,7 +1179,7 @@ export class PageCheckOutComponent implements OnInit {
     }
     showPopupPromoCode() {
         this.selectedPromoCode = false
-        var el = $('.reward-popup');
+        var el = $('#reward-popup');
         if (el.length) {
             $.magnificPopup.open({
                 items: {
@@ -1174,6 +1188,28 @@ export class PageCheckOutComponent implements OnInit {
                 type: 'inline'
             });
         }
+    }
+    showPopupRiderTip() {
+        
+//         var ele = document.getElementsByName("Choose");
+//    for(var i=0;i<ele.length;i++){
+//       ele[i].checked = false;
+//    }
+$('input[name=rider-input]').prop('checked',false);
+setTimeout(()=>{
+    var el = $('#rider-tip-popup');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el
+                },
+                type: 'inline'
+            });
+        }
+},50)
+        
+        
+        
     }
     deletePromoCode() {
         this.selectPromoCodeModel = new SelectPromoCode()
@@ -1320,6 +1356,33 @@ export class PageCheckOutComponent implements OnInit {
         if (country !== "0") {
             this.addCardData.CardCountry = country;
         }
+    }
+    getStars(rating) {
+
+        // Round to nearest half
+        rating = Math.round(rating * 2) / 2;
+        let output = [];
+
+        // Append all the filled whole stars
+        for (var i = rating; i >= 1; i--)
+            output.push('<i style="color: #8e49fe;" class="fa fa-star" ></i>&nbsp;');
+
+        // If there is a half a star, append it
+        if (i == .5) output.push('<i class="fa fa-star-half-o"  style="color: #8e49fe;"></i>&nbsp;');
+
+        // Fill the empty stars
+        for (let i = (5 - rating); i >= 1; i--)
+            output.push('<i class="fa fa-star-o" style="color: #8e49fe;"></i>&nbsp;');
+
+        return output.join('');
+
+    }
+    closeRiderTip(){
+         $.magnificPopup.close()
+          this.orderMain.RiderTip =(this.riderValue);
+         console.log("rider:"+ this.riderValue)
+        this.orderMain.RiderTipDisplay = this._util.formatCurrency(this.riderValue, 'S$')
+        this.subTotalOrder();
     }
 
 

@@ -3,6 +3,7 @@
     max-width: 540px;
   }
   
+  
 }
 
 @media (min-width: 768px) {
@@ -286,10 +287,7 @@
     font-size: 15px;
     font-weight: 500;
 }
-.outlet-banner-wrap{
-  padding: 0 15px;
-  padding-bottom: 0;
-}
+
 .main-top{
   background-position: center !important;
 }
@@ -351,4 +349,51 @@
   position: fixed;
   width: calc(100% - 74%);
 }
+.popup{
+    position: relative;
+    background: #f2f2f2;
+    padding: 0;
+    width: auto;
+    max-width: 500px;
+    margin: 20px auto;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+.popup .title-popup {
+    font-size: 24px;
+    font-weight: 300;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding: 0 20px;
+    display: inline-block;
+    width: 100%;
+}
+.special-request{
+  font-weight: 500;
+  color: red;
+  font-size: 18px
+}
+.plus{
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    top: 50%;
+    right: 20px;
+    margin-top: -7px;
+    background: url('../images/ico-plus.png') right center no-repeat;
+    cursor: pointer
+}
+.close{
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    top: 50%;
+    right: 20px;
+    margin-top: -7px;
+    background: url('../images/ico-close.png') right center no-repeat;
+    cursor: pointer
+}
+
 

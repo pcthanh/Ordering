@@ -235,7 +235,9 @@ export class SearchResultComponent implements OnInit {
 
             
             this.getAllOutletListV2 = data;
-            
+            if(this.getAllOutletListV2.ResultCode==="000"){
+                localStorage.setItem("promomes",this.getAllOutletListV2.ProductWebsitePromotionalMessage)
+            }
             for (let i = 0; i < this.getAllOutletListV2.MerchantOutletListInfo.length; i++) {
                 let rating:string="";
                 let strTemp: string = ""

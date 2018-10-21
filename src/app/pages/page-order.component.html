@@ -9,14 +9,14 @@
 <main>
     <div class="row no-gutters">
         <div class="col-12 col-md-12">
-            <div class="promo-mess" id="promo-mess">
-                We are experiencing very high demand and unfortunately all our GOF3R are busy at the moment. We're sorry for the inconvenience and will be up and running again soon.
+            <div class="promo-mess" *ngIf="haveDataOutlet" style="position: fixed; top: 100px;z-index: 1000"  id="promo-mess">
+                {{outletInfo.OutletInfo[0].ProductWebsitePromotionalMessage}}
             </div>
         </div>
     </div>
     <div class="main-content-order">
         <div class="row no-gutters">
-            <div class="col-12 col-md-9 col-map-checkout">
+            <div class="col-12 col-md-9 col-map-checkout merchant-baner">
                 <div class="main-top banner-outlet">
                     <div class="row no-gutters">
                         <div class="col-12 col-md-1"></div>
@@ -36,14 +36,14 @@
                     
                 </div>
                 <div class="row no-gutters">
-                    <div class="col-12 col-md-1"></div>
-                        <div class="col-12 col-md-11" *ngIf="haveDataOutlet">
+                    <!--<div class="col-12 col-md-1"></div>-->
+                        <div class="col-12 col-md-12" *ngIf="haveDataOutlet">
                             
                             <div class="outlet-banner-wrap">
                                  <div class="outlet-name-rating"> {{outletInfo.OutletInfo[0].MerchantOutletName}} 
                                      <span [innerHtml]="this.outletInfo.OutletInfo[0].Rating"
                                     class="rate-gof3r"></span>
-                                    <span class="outlet-about">
+                                    <span class="outlet-about" (click)="showpopupInfor()" style="cursor: pointer">
                                         <img src="assets/images/about.png" width="20" height="20">
                                     </span>
                                 </div>
@@ -55,8 +55,8 @@
                     </div>
         
                 <div class="row no-gutters">
-                    <div class="col-12 col-md-1"></div>
-                    <div class="col-12 col-md-11">
+                    <!--<div class="col-12 col-md-1"></div>-->
+                    <div class="col-12 col-md-12">
                         <div class="order-content-wrap">
                             <div class="order-content">
                                 <div class="row">
@@ -207,8 +207,31 @@
                                                     </div>
                                                 </div>
                                                 <!--end popup when click product-->
-
-
+                                                <!--popup outlet info-->
+                                               
+                            
+                                                    <div id="infor-popup" class="popup mfp-hide">
+                                                        <div class="title-popup">{{outletInfo.OutletInfo[0].MerchantOutletName}}</div>
+                                                        <div class="card">
+  <img class="card-img-top" src="{{outletInfo.OutletInfo[0].MerchantOutletImage}}" height="300" alt="Card image cap">
+  <div class="card-body">
+    <p class="card-text">{{outletInfo.OutletInfo[0].MerchantOutletName}} 
+                                     <span [innerHtml]="this.outletInfo.OutletInfo[0].Rating"
+                                    class="rate-gof3r"></span></p>
+    <p class="card-text">{{outletInfo.OutletInfo[0].MerchantDescription}}</p>
+    <p class="card-text">{{outletInfo.OutletInfo[0].Address}}</p>
+    
+  </div>
+</div>
+                            
+                                                       
+                            
+                                                        
+                                                        
+                                                    </div>
+                                                    
+                                                
+                                                <!--end popup outlet info-->
 
 
                                             </div>
@@ -274,7 +297,7 @@
                 <div class="btn-add-special-wrap">
                     <div class="btn-add-special-inner">
                         <button (click)="showAddSpecial()" class="btn-add-special"><span>Add Special instructions for the Restaurant (Optional)</span></button>
-                        <textarea name="" [(ngModel)]="specialRequest" class="text-special" style="display: none;"></textarea>
+                        <textarea name="" [(ngModel)]="this.cart.Cart[IndexItemCartUpdate].SpecialRequest" class="text-special" style="display: none;"></textarea>
                     </div>
 
 
@@ -332,7 +355,7 @@
 
                                             <tbody>
                                                 <tr>
-                                                    <td class="number" style="width: 10%; color: #8e49fe">{{item.Qty}}</td>
+                                                    <td class="number" style="width: 10%;font-weight: 500">{{item.Qty}}X</td>
                                                     <td style="width: 60%; font-size: 15px; font-weight: 500">{{item.Name}}</td>
                                                     <td style="width: 20%;font-size: 15px; font-weight: 500;text-align: right">{{item.TotalStr}}</td>
                                                     <td style="width: 10%; text-align: right;color: #9f9f9f"> <a (click)="removeCart(i)" class="btn-delete"><img src="assets/images/ico-close.png" alt=""></a></td>
@@ -348,9 +371,11 @@
                                                 <div *ngFor="let itemOPD of itemOp.OptionItemList">
                                                     <div *ngIf="itemOPD.isCheck==true">
                                                         <li><span class="inf">• {{itemOPD.OptionItemName}}</span><span class="price">{{itemOPD.PriceDisplay}}</span></li>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
+                                            <li *ngIf="item.SpecialRequest!=''"><span class="special-request">Special Request: </span><span class="special-request">{{item.SpecialRequest}}</span></li>
 
                                         </ul>
                                     </div>

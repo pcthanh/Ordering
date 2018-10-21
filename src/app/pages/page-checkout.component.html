@@ -26,7 +26,8 @@
                                 <div class="addr"><img src="assets/images/home-1.png" alt=""> <span>{{this.outletInfo.OutletInfo[0].Address}}</span></div>
                             </div>
                             <div class="text">
-                                <div class="small">Delivery Instruction</div>
+                                <div *ngIf="this.orderMain.OrderType==='DELIVERY'" class="small">Delivery Instructions</div>
+                                <div *ngIf="this.orderMain.OrderType==='PICKUP'" class="small">Pickup Instructions</div>
                                 <input class="order-note-1"[(ngModel)]="this.orderNote" type="text" id="order-note">
                             </div>
                         </div>
@@ -35,7 +36,7 @@
                             <div class="pin-food"><img src="assets/images/pin_food.png" alt=""></div>
                              <img src="assets/images/img-map3.jpg" alt="" class="img-fluid">-->
                             <!--<img src="https://maps.googleapis.com/maps/api/staticmap?size=953x563&center={{this.outletInfo.OutletInfo[0].GeoLocation}}&scale=0.2&markers=icon:https://demo.sandbox-technology.com:82/GOF3R/naviox/images/pin_food.png|{{this.outletInfo.OutletInfo[0].GeoLocation}}&markers=icon:https://demo.sandbox-technology.com:82/GOF3R/naviox/images/pin_home.png|{{this.geoHome}}&maptype=roadmap&format=png32&visual_refresh=true&zoom=13&style=feature:administrative%7Cvisibility:off&style=feature:transit%7Cvisibility:off&style=feature:landscape%7Celement:geometry.fill%7Ccolor:0xE8E4DBstyle=feature:landscape%7Celement:geometry.stroke%7Cvisibility:off&style=feature:landscape.natural%7Celement:geometry.fill%7Ccolor:0xF0ECE4&style=feature:poi%7Celement:geometry.fill%7Ccolor:0xF0ECE4&style=feature:poi%7Celement:geometry.stroke%7Cvisibility:off&style=feature:poi%7Celement:labels.text%7Cvisibility:off&style=feature:poi%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.text.fill%7Ccolor:0x635E5A&style=feature:road%7Celement:labels.text.stroke%7Ccolor:0xFFFFFF&style=feature:road%7Celement:geometry.fill%7Ccolor:0xFFFFFF&style=feature:road%7Celement:geometry.stroke%7Ccolor:0xDCD6CD&style=feature:road.local%7Celement:geometry.fill%7Ccolor:0xDCD6CD&style=feature:road.local%7Celement:geometry.stroke%7Cvisibility:off&style=feature:water%7Cvisibility:on&style=feature:water%7Celement:labels.text%7Cvisibility:off&style=feature:water%7Celement:geometry.fill%7Ccolor:0xC8D1DF&key=AIzaSyAVdsuXFE3Ca3vwy_lopgMUHTfJLdd3_Ck" alt="" class="img-fluid">-->
-                                <agm-map style="height: 650px" #agmMap [latitude]="this.lat"  [longitude]="this.lng" [zoom]="15"  [styles]="styles">
+                                <agm-map style="height: 650px" #agmMap [latitude]="this.lat"  [longitude]="this.lng" [zoom]="13"  [styles]="styles">
                                 <agm-marker *ngFor="let item of this.arrayLocation" [latitude]="item.lat" [longitude]="item.lng" [iconUrl]="item.icon"></agm-marker>
                             </agm-map>
                         </div>
@@ -44,9 +45,11 @@
                 <div class="col-12 col-md-4 col-cart-check-out">
                     <div class="cart-sidebar-wrap-check-out">
                         <div class="cart-sidebar">
-                            <div class="info-top">
-                                <div class="title">{{outletInfo.OutletInfo[0].MerchantOutletName}}</div>
-                                <div class="sub-total"><span class="inf">Food & Beverage Subtotal </span> <span class="price">{{this.orderMain.SubTotalStr}}</span></div>
+                            
+                            <div class="info-top" style="background: #f5f5f5">
+                                <div class="title">{{outletInfo.OutletInfo[0].MerchantOutletName}} <span [innerHtml]="this.outletInfo.OutletInfo[0].Rating"
+                                    class="rate-gof3r"></span></div>
+                                <!--<div class="sub-total"><span class="inf">Food & Beverage Subtotal </span> <span class="price">{{this.orderMain.SubTotalStr}}</span></div>
                                 <div class="gst"><span class="inf">Service fee</span> <span class="price">{{this.orderMain.ServiceFee}}</span></div>
                                 <div *ngIf="this.orderMain.OrderType==='DELIVERY'"  class="delivery-fee"><span class="inf">Delivery Fee</span> <span class="price">{{this.orderMain.DeliveryFeeDisplay}}</span></div>
                                 <div *ngIf="this.orderMain.Surcharge!=0" class="gst"><span class="inf">Surchagre</span> <span class="price">{{this.orderMain.SurchargeDisplay}}</span></div>
@@ -65,16 +68,78 @@
                                     </div>
                                 </div>
 
-                                <div  class="title">Total <span class="price">{{this.orderMain.TotalDisplay}}</span></div>
+                                <div  class="title">Total <span class="price">{{this.orderMain.TotalDisplay}}</span></div>-->
                             </div>
+ <div *ngIf="haveCart" class="nano-scroll nano">
+                                <div class="nano-content item-checkout-list no-delete">
+                                    <div class="item-checkout-wrap"*ngFor="let item of cart.Cart;let i=index">
+                                        <div class="item-checkout">
+                                            <div class="number" style="font-size: 16px;
+    font-weight: 500;
+    color: #000;">{{item.Qty}}X</div>
+                                        <div class="title">{{item.Name}} <span class="price">{{item.TotalStr}}</span></div>
+                                            <ul class="item-info">
+                                                <div *ngFor="let itemOp of item.OptionList">
+                                                <div *ngFor="let itemOPD of itemOp.OptionItemList">
+                                                    <div *ngIf="itemOPD.isCheck==true">
+                                                        <li><span class="inf">• {{itemOPD.OptionItemName}}</span><span class="price">{{itemOPD.PriceDisplay}}</span></li>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                           <div class="info-top">
+                               <div class="sub-total"><span class="inf">Subtotal </span> <span class="price">{{this.orderMain.SubTotalStr}}</span></div>
+                                <!--<div class="gst"><span class="inf">Service fee</span> <span class="price">{{this.orderMain.ServiceFee}}</span></div>-->
+                                <div *ngIf="this.orderMain.OrderType==='DELIVERY'"  class="delivery-fee"><span class="inf">Delivery Fee</span> <span class="price">{{this.orderMain.DeliveryFeeDisplay}}</span></div>
+                                <div *ngIf="this.orderMain.Surcharge!=0" class="gst"><span class="inf">Surchagre</span> <span class="price">{{this.orderMain.SurchargeDisplay}}</span></div>
+                                <div style="cursor: pointer" *ngIf="this.orderMain.OrderType==='DELIVERY'" (click)="showPopupRiderTip()" class="gst">
+                                    <span class="inf">Rider Tip</span> <span class="price">{{this.orderMain.RiderTipDisplay}}</span>
+                                </div>
+                                <div *ngIf="this.orderMain.DiscountDisplay!=''" class="gst"><span class="inf">Discount</span> <span class="price">{{this.orderMain.DiscountDisplay}}</span></div>
+                                <div *ngIf="this.orderMain.OrderType==='DELIVERY'" class="courier-tip">
+                                    <!--<div class="tip-title">Rider Tip</div>
+                                  
+                                    <div class="tip tip1" style="width:100%">
+                                          
+                                        
+      
+      <p-dropdown [options]="riderTip" [(ngModel)]="this.riderValue" [style]="{'width':'100%','height':'2.2rem'}" editable="false"
+                                placeholder="Choose a rider tip"></p-dropdown>
+                                
+     
+                                          
+                                        
+                                    </div>-->
+    
+                                    <!--<div class="tip tip1" *ngFor="let item of riderTip;let i = index">
+                                        <input (click)="riderTipClick(item.value,i,item.ck)"  value="{{i}}"  id="tip-{{i}}" type="radio" [checked]="item.ck"  name="courier-tip-input">
+                                        <label  for="tip-{{i}}">{{item.label}}</label>
+
+                                    </div>
+                                    
+                                    <div class="tip input-tip">
+                                        <input type="text" placeholder="$99.99">
+                                        <a href="#" class="close"><img src="assets/images/ico-close.png" alt=""></a>
+                                    </div>-->
+                                </div>
+
+                                <div  class="title">Total <span class="price">{{this.orderMain.TotalDisplay}}</span></div>
+                           </div>
+
                             <div class="methods">
-                                 <div *ngIf="selectedCard" (click)="showPopup()" class="payment selected"><img src="{{this.selectMethod.CardTypeIdImg}}" alt="" width="39" height="28"><span> {{this.selectMethod.MaskingCardNumber}}</span> <span class="change">CHANGE</span></div>
-                                 <div *ngIf="!selectedCard" (click)="showPopup()" class="payment"><img src="assets/images/ico-payment.png" alt=""><span>Select Payment Method</span></div>
+                                 <div *ngIf="selectedCard" (click)="showPopup()" class="payment selected"><img src="{{this.selectMethod.CardTypeIdImg}}" alt="" width="39" height="28"><span> {{this.selectMethod.MaskingCardNumber}}</span> <span class="change" >CHANGE</span></div>
+                                 <div *ngIf="!selectedCard" (click)="showPopup()"  class="payment"><img src="assets/images/ico-payment.png" alt=""><span>Select Payment Method</span><div  class="plus"></div></div>
                                 <!--<div class="voucher" data-mfp-src="#voucher-popup"><img src="assets/images/ico-voucher.png" alt=""><span>Add Voucher</span></div>-->
-                                <div *ngIf="!selectedPromoCode" class="reward" (click)="showPopupPromoCode()" ><img src="assets/images/ico-reward.png" alt=""><span>{{this.selectPromoCodeModel.PromoCodeText}}</span></div>
+                                <div *ngIf="!selectedPromoCode" (click)="showPopupPromoCode()" class="reward selected"  ><img src="assets/images/ico-reward.png" alt=""><span>{{this.selectPromoCodeModel.PromoCodeText}}</span><div class="plus"></div></div>
                                 <!--<div *ngIf="selectedPromoCode" class="reward selected" (click)="showPopupPromoCode()"><img src="assets/images/ico-reward.png" alt=""><span></span><span class="change">CHANGE</span></div>-->
                                 <div *ngIf="selectedPromoCode"  class="payment selected"><img src="assets/images/ico-reward.png" alt=""><span (click)="showPopupPromoCode()"> {{this.selectPromoCodeModel.PromoCodeText}}</span> <span (click)="deletePromoCode()" class="change">DELETE</span></div>
-                                <div class="credit"><img src="assets/images/ico-dola.png" alt=""><span>{{creditDisplay}} credit available. Use it now</span><button (click)="applyCredit()" class="btn-apply">Apply</button></div>
+                                <!--<div  class="credit"><img src="assets/images/ico-dola.png" alt=""><span>{{creditDisplay}} credit available. Use it now</span><button (click)="applyCredit()" class="btn-apply">Apply</button></div>-->
+                                <div *ngIf="creditAmount>0" (click)="applyCredit()" class="payment"><img src="assets/images/ico-dola.png" alt=""><span>{{creditDisplay}} credit available. Use it now</span></div>
                             </div>
 
                             <div *ngIf="allPaymentget" id="payment-otpion-popup" class="payment-otpion-popup white-popup mfp-hide">
@@ -198,8 +263,8 @@
 
                             
 
-                            <div id="reward-popup" class="reward-popup white-popup mfp-hide">
-                                <div class="title-popup">Choose Rewards</div>
+                            <div id="reward-popup" *ngIf="loadPromoCodeComplete" class="reward-popup white-popup mfp-hide">
+                                <div *ngIf="this.promoCodeList.PromoCodeList.lenght>0" class="title-popup">Choose Rewards</div>
                                 <div class="reward-choose-wrap" *ngIf="loadPromoCodeComplete">
                                     <div class="reward-choose"*ngFor="let item of this.promoCodeList.PromoCodeList;let i = index">
                                         <input type="radio" name="reward-input" id="reward-{{i}}" (click)="selectPromoCode(item.PromoCodeId,item.PromoCodeText,item.PromoCodeValue)">
@@ -220,31 +285,26 @@
                                 </div>
                             </div>
 
-                            
-
-                            <div class="btn-select-payment-wrap">
-                                <button (click)="placeOrder()"class="btn-main btn-select-payment"><span>Place order</span></button>
-                            </div>
-                            <div *ngIf="haveCart" class="nano-scroll nano">
-                                <div class="nano-content item-checkout-list no-delete">
-                                    <div class="item-checkout-wrap"*ngFor="let item of cart.Cart;let i=index">
-                                        <div class="item-checkout">
-                                            <div class="number">{{item.Qty}}</div>
-                                        <div class="title">{{item.Name}} <span class="price">{{item.TotalStr}}</span></div>
-                                            <ul class="item-info">
-                                                <div *ngFor="let itemOp of item.OptionList">
-                                                <div *ngFor="let itemOPD of itemOp.OptionItemList">
-                                                    <div *ngIf="itemOPD.isCheck==true">
-                                                        <li><span class="inf">• {{itemOPD.OptionItemName}}</span><span class="price">{{itemOPD.PriceDisplay}}</span></li>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            </ul>
-                                        </div>
+                            <div id="rider-tip-popup" class="reward-popup white-popup mfp-hide">
+                                <div class="title-popup">Choose Rider Tip</div>
+                                <div class="reward-choose-wrap" style="max-height: 300px; overflow: hidden; overflow-y: scroll">
+                                    <div class="reward-choose" *ngFor="let item of riderTip;let i = index">
+                                        <input type="radio" name="rider-input" id="reward-{{i}}"(click)="selechRiderTip(item.value)" >
+                                        <label for="reward-{{i}}"><span>{{item.label}}</span></label>
                                     </div>
                                     
                                 </div>
+                               
+                                <div class="btn-selection-wrap">
+                                    <button class="btn-main btn-selection btn-reward" (click)="closeRiderTip()"><span>Apply</span></button>
+                                </div>
                             </div>
+                            
+
+                            <div class="btn-select-payment-wrap">
+                                <button (click)="placeOrder()"class="btn-main btn-select-payment"><span>GOF3R IT</span></button>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -256,6 +316,11 @@
             <div style="cursor: pointer" class="text-center" (click)="trackerOrder()" 
             ><img src="assets/images/ico-succsess.png" alt=""></div>
     </div>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="#">Action</a>
+    <a class="dropdown-item" href="#">Another action</a>
+    <a class="dropdown-item" href="#">Something else here</a>
+  </div>
       <block-ui>
       <!-- Your app markup here -->
     </block-ui>
