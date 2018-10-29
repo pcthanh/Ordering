@@ -384,7 +384,7 @@
     background: url('../images/ico-plus.png') right center no-repeat;
     cursor: pointer
 }
-.close{
+.close-gof3r{
     content: '';
     position: absolute;
     width: 14px;
@@ -394,6 +394,41 @@
     margin-top: -7px;
     background: url('../images/ico-close.png') right center no-repeat;
     cursor: pointer
+}
+.success-popup button{
+  padding:  0 30px;
+}
+.margin-top-search{
+  margin-top: 100px;
+}
+.restaurant-form{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 300px;
+}
+@keyframes example {
+    0%   {width: 0%}
+    25%  {width: 25%}
+    50%  {width: 50%}
+    75% {width: 75%}
+    100% {width: 100%}
+}
+.tracker{
+      height: 100%;
+    box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.2);
+    background: #f5f5f5;
+}
+#partitioned {
+  padding-left: 15px;
+  letter-spacing: 42px;
+  border: 0;
+  background-image: linear-gradient(to left, black 70%, rgba(255, 255, 255, 0) 0%);
+  background-position: bottom;
+  background-size: 50px 1px;
+  background-repeat: repeat-x;
+  background-position-x: 35px;
+  width: 220px;
 }
 
 

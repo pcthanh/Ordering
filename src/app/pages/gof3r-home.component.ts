@@ -32,7 +32,8 @@ import { ListDeliveryAddress } from "../models/ListDeliveryAddress";
 import { Gof3rModule } from "../util/gof3r-module";
 import { EventSubscribeService } from "../services/instance.service";
 import { AutoCompleteService } from 'ng4-auto-complete';
-import {CreateNewAutocompleteGroup, SelectedAutocompleteItem, NgAutocompleteComponent} from "ng-auto-complete";
+import { CreateNewAutocompleteGroup, SelectedAutocompleteItem, NgAutocompleteComponent } from "ng-auto-complete";
+import { ErrorModel  } from "../models/Error";
 declare var $: any;
 const ORDER_DELIVERY = "DELIVERY"
 const ORDER_PICKUP = "PICKUP";
@@ -77,26 +78,30 @@ export class Gof3rHomeComponent implements OnInit {
     addressList: AddressListModel;
     listDeliveryAddressShow: ListDeliveryAddress
     listDeliveryAddress: ListDeliveryAddress;
-    showListSelectAddress:boolean=false;
-    listMap:any[]=[];
+    showListSelectAddress: boolean = false;
+    listMap: any[] = [];
+    error:ErrorModel;
+    selectCountryCode:string=""
+    isHaveCountry:boolean=false;
     @ViewChild(NgAutocompleteComponent) public completer: NgAutocompleteComponent;
-    
-    public list1 = 
-        
-            [
-                {name: 'Option 1', id: '1'},
-                {name: 'Option 2', id: '2'},
-                {name: 'Option 3', id: '3'},
-                {name: 'Option 4', id: '4'},
-                {name: 'Option 5', id: '5'},
-            ];
-           
-    list:any[]=[];
-    
-    constructor(private _instanceService:EventSubscribeService,private _gof3rModule: Gof3rModule, private router: Router, private active_router: ActivatedRoute, private _pickupService: PickupService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private _homeservice: HomeService, private _gof3rUtil: Gof3rUtil, private gof3rModule: Gof3rModule,public autoCompleteService: AutoCompleteService) {
+
+    public list1 =
+
+    [
+        { name: 'Option 1', id: '1' },
+        { name: 'Option 2', id: '2' },
+        { name: 'Option 3', id: '3' },
+        { name: 'Option 4', id: '4' },
+        { name: 'Option 5', id: '5' },
+    ];
+
+    list: any[] = [];
+
+    constructor(private _instanceService: EventSubscribeService, private _gof3rModule: Gof3rModule, private router: Router, private active_router: ActivatedRoute, private _pickupService: PickupService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private _homeservice: HomeService, private _gof3rUtil: Gof3rUtil, private gof3rModule: Gof3rModule, public autoCompleteService: AutoCompleteService) {
         this.signUp = new SingUpModel();
         this.listDeliveryAddress = new ListDeliveryAddress();
         this.listDeliveryAddressShow = new ListDeliveryAddress();
+        this.error= new ErrorModel();
         this.blockUI.stop()
     }
     ngOnInit() {
@@ -104,8 +109,8 @@ export class Gof3rHomeComponent implements OnInit {
         this.checkLoginUser();
         this.initJQuery()
         this.registerDeviceRequest()
-        this.GetOutletListByLocation()
-       
+        //this.GetOutletListByLocation()
+
         // this.searchControl = new FormControl(); comment danh cho google map
         // this.mapsAPILoader.load().then(() => {
         //     let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
@@ -138,9 +143,9 @@ export class Gof3rHomeComponent implements OnInit {
     }
     loadAddress() {
         if (localStorage.getItem("cus") != null) {// get address when user login
-            if (localStorage.getItem("addressDelivery") != null && localStorage.getItem("addressDelivery")!="undefined") {
+            if (localStorage.getItem("addressDelivery") != null && localStorage.getItem("addressDelivery") != "undefined") {
                 let address = JSON.parse(localStorage.getItem("addressDelivery"))
-                
+
                 this.inputAddress = address.Address;
                 let strCut = address.GeoLocation.split(",");
                 this.lat = strCut[0];
@@ -150,23 +155,23 @@ export class Gof3rHomeComponent implements OnInit {
                 localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
             }
             else {//when user login but have not addressDelivery
-                
+
                 this.checkUserLoginChangeAddress()
             }
         }
         else { // get address when user not login
             if (localStorage.getItem("address") != null) {
-                    this.addressList = JSON.parse(localStorage.getItem("address"));
-                    if(this.addressList.AddressListInfo.length>0){
-                        this.inputAddress= this.addressList.AddressListInfo[0].StreetAddress;
-                        this.lat =Number.parseFloat(this.addressList.AddressListInfo[0].lat);
-                        this.lng =Number.parseFloat(this.addressList.AddressListInfo[0].long);
-                        localStorage.setItem('lat', this.lat + '');
-                        localStorage.setItem('long', this.lng + '');
-                        localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
-                    }
-
+                this.addressList = JSON.parse(localStorage.getItem("address"));
+                if (this.addressList.AddressListInfo.length > 0) {
+                    this.inputAddress = this.addressList.AddressListInfo[0].StreetAddress;
+                    this.lat = Number.parseFloat(this.addressList.AddressListInfo[0].lat);
+                    this.lng = Number.parseFloat(this.addressList.AddressListInfo[0].long);
+                    localStorage.setItem('lat', this.lat + '');
+                    localStorage.setItem('long', this.lng + '');
+                    localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
                 }
+
+            }
         }
     }
     deliveryClick() {
@@ -204,13 +209,13 @@ export class Gof3rHomeComponent implements OnInit {
             //     localStorage.setItem('address', JSON.stringify(this.addressList));
 
             // })
-             if (localStorage.getItem("address") != null) {
-                    this.addressList = JSON.parse(localStorage.getItem("address"));
-                    for (let j = 0; j < this.addressList.AddressListInfo.length; j++) {
-                        this.addressList.AddressListInfo[j].isCheck = false;
-                    }
-
+            if (localStorage.getItem("address") != null) {
+                this.addressList = JSON.parse(localStorage.getItem("address"));
+                for (let j = 0; j < this.addressList.AddressListInfo.length; j++) {
+                    this.addressList.AddressListInfo[j].isCheck = false;
                 }
+
+            }
         }
         else {
             this.haveData = 0
@@ -231,7 +236,7 @@ export class Gof3rHomeComponent implements OnInit {
             $('.map-wrap').slideDown()
             this._homeservice.getLocationAddress(this.lat, this.lng).then(data => {
                 var address = data["results"][0]["formatted_address"];
-                
+
                 this.inputAddress = address
                 // var arraySplited = address.split(",");
                 if (localStorage.getItem("address") != null) {
@@ -260,7 +265,7 @@ export class Gof3rHomeComponent implements OnInit {
 
     }
     registerDeviceRequest() {
-        
+
         var request = new RegisterDeviceRequest();
         if (localStorage.getItem('device') != null) {
             request.DeviceNumber = localStorage.getItem('device');
@@ -273,19 +278,19 @@ export class Gof3rHomeComponent implements OnInit {
 
         // request.DeviceNumber='9999'
         var jsonRequest = JSON.stringify(request);
-        
+
         this._homeservice.registerDevice(jsonRequest).then(data => {
-            
+
             this.registerDevice = (data);
             localStorage.setItem('KEK', (this.registerDevice.KEKWorkingKey));
             localStorage.setItem('WK', (this.registerDevice.APIWorkingKey));
-            
+
             this.getInitParam();
 
         });
     }
     getInitParam() {
-        
+
         var comomrequest = new GetInitParamRequest();
         if (localStorage.getItem('device') != null) {
             comomrequest.DeviceNumber = localStorage.getItem('device');
@@ -298,7 +303,7 @@ export class Gof3rHomeComponent implements OnInit {
         if (localStorage.getItem('la') != null) {
 
             comomrequest.Location = localStorage.getItem('la');
-            
+
         }
         else {
             comomrequest.Location = ""
@@ -307,15 +312,23 @@ export class Gof3rHomeComponent implements OnInit {
 
         var requestData = new RequestNull();
         var jsonCommon = JSON.stringify(comomrequest);
-        
+
         var jsonRequest = JSON.stringify(requestData);
-        
+
         this._homeservice.getServiceHome(jsonCommon, jsonRequest).then(data => {
-            
+
             this.getInitialParams = data;
+            
+            for(let i = 0; i< this.getInitialParams.CountryInfo.length; i++){
+               
+                if(this.getInitialParams.CountryInfo[i].CountryCode==="65"){
+                    this.signUp.PhoneCode="+"+this.getInitialParams.CountryInfo[i].CountryCode;
+                }
+            }
+            this.isHaveCountry=true;
             //this.haveDataInit=true
             localStorage.setItem("IN", this._gof3rUtil.encryptParams(JSON.stringify(this.getInitialParams)));
-            
+
             //this.blockUI.stop()
         });
     }
@@ -325,7 +338,7 @@ export class Gof3rHomeComponent implements OnInit {
         common_data.Location = _location
         common_data.ServiceName = "GetAllOutletListV2";
         let common_data_json = JSON.stringify(common_data);
-        
+
         let request_data = new GetAllOutletListV2Request();
         request_data.OrderType = this.orderType;
         if (this.orderType === ORDER_PICKUP || !this.orderType) {
@@ -342,10 +355,10 @@ export class Gof3rHomeComponent implements OnInit {
         request_data.SubCategoryId = "";
         let request_data_json = JSON.stringify(request_data);
 
-        
+
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             //this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
-            
+
             this.getAllOutletListV2 = data;
             if (this.getAllOutletListV2.MerchantOutletListInfo.length == 0) {
                 // this.noData=true;
@@ -383,12 +396,12 @@ export class Gof3rHomeComponent implements OnInit {
                 });;
             } else {
                 var valueCheckUser = $('#check-user').text();
-                
+
                 if (valueCheckUser === 'true') {
 
                     $(this).parents('.login-wrap').find('.login-dropdown-had').slideDown();
                 } else if (valueCheckUser === 'false') {
-                    
+
                     $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
                 }
 
@@ -424,12 +437,12 @@ export class Gof3rHomeComponent implements OnInit {
             $('.loginform-dropdown').hide();
         });
 
-        $('.signup-form form button').on('click', function (event) {
-            event.preventDefault();
+        // $('.signup-form form button').on('click', function (event) {
+        //     event.preventDefault();
 
-            $('.signup-dropdown-otp').fadeIn();
-            $('.signup-dropdown').hide();
-        });
+        //     $('.signup-dropdown-otp').fadeIn();
+        //     $('.signup-dropdown').hide();
+        // });
 
         $('.back-login').on('click', function (event) {
             event.preventDefault();
@@ -537,14 +550,14 @@ export class Gof3rHomeComponent implements OnInit {
         // });
     }
     checkLoginUser() {
-        if (localStorage.getItem("cus") != null) {
+        if (localStorage.getItem("cus") != null && localStorage.getItem("cus") != 'undefined') {
             this.customerInfoMain = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("cus")));
             this.isLogin = this.customerInfoMain.CustomerInfo[0].CustomerName
             this.userNameLogOut = this.customerInfoMain.CustomerInfo[0].UserName;
             this.isUserLogin = true;
         }
         else {
-            
+
             this.isUserLogin = false;
         }
     }
@@ -568,26 +581,48 @@ export class Gof3rHomeComponent implements OnInit {
             this._pickupService.CheckLogon(common_data_json, requestDataJson).then(data => {
 
                 this.customerInfoMain = data;
-                localStorage.setItem("cus", this._gof3rUtil.encryptParams(JSON.stringify(this.customerInfoMain)))
-                this.isLogin = this.customerInfoMain.CustomerInfo[0].CustomerName;
-                $('.login-dropdown').hide();
-                $('.login-overlay').removeClass('show');
-                $('.login-wrap .login').removeClass('hide-form');
-                $('body').css({
-                    overflow: '',
-                    height: ''
-                });;
-                this.checkUserLoginChangeAddress()
-                this.blockUI.stop()
-                
+                if (this.customerInfoMain.ResultCode === "000") {
+                    console.log("login:" + JSON.stringify(this.customerInfoMain))
+                    localStorage.setItem("cus", this._gof3rUtil.encryptParams(JSON.stringify(this.customerInfoMain)))
+
+                    this.isLogin = this.customerInfoMain.CustomerInfo[0].CustomerName;
+                    $('.login-dropdown').hide();
+                    $('.login-overlay').removeClass('show');
+                    $('.login-wrap .login').removeClass('hide-form');
+                    $('body').css({
+                        overflow: '',
+                        height: ''
+                    });;
+                    this.checkUserLoginChangeAddress()
+                    this.getInitParam()
+                    this.blockUI.stop()
+                }
+                else{
+                    this.error.ResultDesc=this.customerInfoMain.ResultDesc;
+                    this.showPopupPaymentSuccess()
+                    this.blockUI.stop()
+                }
+
+
             })
         }
 
     }
+     showPopupPaymentSuccess() {
+        var el = $('#success-popup');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el
+                },
+                type: 'inline'
+            });
+        }
+    }
     deleteAddress() {
         this.inputAddress = ""
-        this.list=[]
-        this.showListSelectAddress=false;
+        this.list = []
+        this.showListSelectAddress = false;
     }
     getCurrentLocation() {
         if (window.navigator && window.navigator.geolocation) {
@@ -596,42 +631,42 @@ export class Gof3rHomeComponent implements OnInit {
                 position => {
 
                     this.geolocationPosition = position,
-                        
-                    this._homeservice.getLocationAddress(position.coords.latitude, position.coords.longitude).then(data => {
-                        var address = data["results"][0]["formatted_address"];
-                        
-                        this.inputAddress = address
-                        // var arraySplited = address.split(",");
 
-                        this.lat = position.coords.latitude;
-                        this.lng = position.coords.longitude;
-                        localStorage.setItem('lat', this.lat + '');
-                        localStorage.setItem('long', this.lng + '');
-                        localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
-                        this.list=[];
-                        this.showListSelectAddress=false;
-                        this.blockUI.stop();
-                        //this.locationrequest =this.lang+","+this.long+"#_#_";
-                        
-                        // localStorage.setItem('la',this.locationrequest);
-                        // localStorage.setItem('lat',position.coords.latitude+'');
-                        // localStorage.setItem('long',position.coords.longitude+'');
-                        // localStorage.setItem('latcur',position.coords.latitude+'');
-                        // localStorage.setItem('longcur',position.coords.longitude+'')
-                        // this.registerDeviceRequest()
+                        this._homeservice.getLocationAddress(position.coords.latitude, position.coords.longitude).then(data => {
+                            var address = data["results"][0]["formatted_address"];
 
-                    })
+                            this.inputAddress = address
+                            // var arraySplited = address.split(",");
+
+                            this.lat = position.coords.latitude;
+                            this.lng = position.coords.longitude;
+                            localStorage.setItem('lat', this.lat + '');
+                            localStorage.setItem('long', this.lng + '');
+                            localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
+                            this.list = [];
+                            this.showListSelectAddress = false;
+                            this.blockUI.stop();
+                            //this.locationrequest =this.lang+","+this.long+"#_#_";
+
+                            // localStorage.setItem('la',this.locationrequest);
+                            // localStorage.setItem('lat',position.coords.latitude+'');
+                            // localStorage.setItem('long',position.coords.longitude+'');
+                            // localStorage.setItem('latcur',position.coords.latitude+'');
+                            // localStorage.setItem('longcur',position.coords.longitude+'')
+                            // this.registerDeviceRequest()
+
+                        })
                 },
                 error => {
                     switch (error.code) {
                         case 1:
-                            
+
                             break;
                         case 2:
-                            
+
                             break;
                         case 3:
-                            
+
                             break;
                     }
                 }
@@ -639,7 +674,7 @@ export class Gof3rHomeComponent implements OnInit {
         };
     }
     checkShowPopup() {
-        
+
         this.checkLoginUser();
     }
     logOutUser(userName: string) {
@@ -666,7 +701,7 @@ export class Gof3rHomeComponent implements OnInit {
                 });;
                 localStorage.clear();
                 this.isLogin = "LOG IN"
-                this.inputAddress=""
+                this.inputAddress = ""
                 this.registerDeviceRequest();
                 this.blockUI.stop()
             }
@@ -675,8 +710,8 @@ export class Gof3rHomeComponent implements OnInit {
 
     RegisterOPT() {
 
-
-        let common_data = new CommonDataRequest();
+        if(this.signUp.Password===this.signUp.ConfrimPassword){
+            let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
         common_data.Location = _location
         common_data.ServiceName = "RequestRegistrationOTP";
@@ -688,21 +723,35 @@ export class Gof3rHomeComponent implements OnInit {
         let request_data_json = JSON.stringify(requestData);
         this._pickupService.RequestRegistrationOTP(common_data_json, request_data_json).then(data => {
             this.responseData = data;
-            
+            console.log("RegisterOPT"+ JSON.stringify(this.responseData))
             if (this.responseData.ResultCode == "000") {
                 let requestRegister = new RequestRegisterCustomerModel();
                 requestRegister.CustomerName = this.signUp.FullName;
                 requestRegister.Email = this.signUp.Email
-                requestRegister.Mobile = this.signUp.PhoneNumber;
+                requestRegister.Mobile =this.signUp.PhoneCode+ this.signUp.PhoneNumber;
                 requestRegister.Password = this.signUp.Password
+                $('.signup-dropdown-otp').fadeIn();
+                $('.signup-dropdown').hide();
+                 this.move()
                 // this._instanceService.sendCustomEvent(requestRegister);
                 // this._router.navigateByUrl('/login-otp')
 
             } else {
                 // this.isError=true
+                this.error.ResultDesc = this.responseData.ResultDesc;
+                this.showPopupPaymentSuccess()
+                //   $('.signup-dropdown-otp').fadeIn();
+                // $('.signup-dropdown').hide();
+                //this.move()
 
             }
         })
+    }
+    else{
+        this.error.ResultDesc="The password is not match"
+        this.showPopupPaymentSuccess();
+    }
+        
 
     }
     inputOTP(even) {
@@ -713,12 +762,13 @@ export class Gof3rHomeComponent implements OnInit {
 
     }
     registerCustomer(otp: string) {
+        this.blockUI.start("Sign up.........!")
         let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
         common_data.Location = _location
         common_data.ServiceName = "RegisterCustomer";
         var common_data_json = JSON.stringify(common_data);
-        
+
         let requestRegister = new RequestRegisterCustomerModel();
         requestRegister.CustomerName = this.signUp.FullName
         requestRegister.Email = this.signUp.Email
@@ -726,15 +776,24 @@ export class Gof3rHomeComponent implements OnInit {
         requestRegister.OTP = otp
         requestRegister.Password = this.signUp.Password
         let request_data_json = JSON.stringify(requestRegister);
-        
+
         this._pickupService.RegisterCustomer(common_data_json, request_data_json).then(data => {
             this.customerInfoMain = data;
-            
+
             if (this.customerInfoMain.ResultCode == "000") {
                 // this._instanceService.sendCustomEvent(this.customerLoginMain.CustomerInfo[0].UserName);
                 // this._router.navigateByUrl('/login')
+                this.error.ResultDesc="Sign up successful."
+                this.showPopupPaymentSuccess()
                 $('.signup-dropdown-otp').hide();
                 $('.loginform-dropdown').fadeIn();
+                this.getInitParam();
+                this.blockUI.stop();
+            }
+            else{
+                this.error.ResultDesc=this.customerInfoMain.ResultDesc;
+                this.showPopupPaymentSuccess();
+                this.blockUI.stop()
             }
         })
     }
@@ -746,37 +805,37 @@ export class Gof3rHomeComponent implements OnInit {
         common_data.Location = _location
         common_data.ServiceName = "GetDeliveryAddresses";
         let common_data_json = JSON.stringify(common_data);
-        
+
         let data_request = { CustomerId: this.customerInfoMain.CustomerInfo[0].CustomerId };
         let data_request_json = JSON.stringify(data_request);
-        
+
         this._pickupService.GetDeliveryAddresses(common_data_json, data_request_json).then(data => {
-            
+
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             // this.showListDelivery=true;
             // this.showListAddresNotLogin=false
-                this.listDeliveryAddress = data;
-                if(this.listDeliveryAddress.DeliveryAddressList.length>0){
-                    localStorage.setItem("addressDelivery", JSON.stringify(this.listDeliveryAddress.DeliveryAddressList[0]))
-                setTimeout(()=>{
+            this.listDeliveryAddress = data;
+            if (this.listDeliveryAddress.DeliveryAddressList.length > 0) {
+                localStorage.setItem("addressDelivery", JSON.stringify(this.listDeliveryAddress.DeliveryAddressList[0]))
+                setTimeout(() => {
                     let address = JSON.parse(localStorage.getItem("addressDelivery"))
-                this.inputAddress = address.Address;
-                let strCut = address.GeoLocation.split(",");
-                this.lat = strCut[0];
-                this.lng = strCut[1];
-                localStorage.setItem('lat', this.lat + '');
-                localStorage.setItem('long', this.lng + '');
-                localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
-                },50)
-                
+                    this.inputAddress = address.Address;
+                    let strCut = address.GeoLocation.split(",");
+                    this.lat = strCut[0];
+                    this.lng = strCut[1];
+                    localStorage.setItem('lat', this.lat + '');
+                    localStorage.setItem('long', this.lng + '');
+                    localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
+                }, 50)
+
             }
-            else{
-                 if (localStorage.getItem("address") != null) {
+            else {
+                if (localStorage.getItem("address") != null) {
                     this.addressList = JSON.parse(localStorage.getItem("address"));
-                    if(this.addressList.AddressListInfo.length>0){
-                        this.inputAddress= this.addressList.AddressListInfo[0].StreetAddress;
-                        this.lat =Number.parseFloat(this.addressList.AddressListInfo[0].lat);
-                        this.lng =Number.parseFloat(this.addressList.AddressListInfo[0].long);
+                    if (this.addressList.AddressListInfo.length > 0) {
+                        this.inputAddress = this.addressList.AddressListInfo[0].StreetAddress;
+                        this.lat = Number.parseFloat(this.addressList.AddressListInfo[0].lat);
+                        this.lng = Number.parseFloat(this.addressList.AddressListInfo[0].long);
                         localStorage.setItem('lat', this.lat + '');
                         localStorage.setItem('long', this.lng + '');
                         localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
@@ -785,96 +844,128 @@ export class Gof3rHomeComponent implements OnInit {
                 }
 
             }
-                
-            
+
+
 
             //this.listDeliveryAddress = data;
         })
 
     }
-    accountClick(){
+    accountClick() {
         this._instanceService.sendCustomEvent("MyProfile");
         //window.location.href=("/account")
         ///this.router.navigate(["/account"])
     }
-    orderHistoryClick(){
+    orderHistoryClick() {
         this._instanceService.sendCustomEvent("OrderHistory");
         this.router.navigateByUrl("/order-history")
     }
-    inviteFriend(){
+    inviteFriend() {
         this._instanceService.sendCustomEvent("Invite");
         this.router.navigateByUrl("/invite");
     }
-    help(){
+    help() {
         this._instanceService.sendCustomEvent("Help");
         this.router.navigateByUrl("/help");
     }
-    checkInputPostalCode(event){
-        var postal_code:string = event.target.value;
-        
+    checkInputPostalCode(event) {
+        var postal_code: string = event.target.value;
+
         let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
         common_data.Location = _location
         common_data.ServiceName = "SearchSingaporeAddress";
         let common_data_json = JSON.stringify(common_data);
 
-        let data_request = {SearchValue:postal_code};
+        let data_request = { SearchValue: postal_code };
         let request_data_json = JSON.stringify(data_request);
-        this._pickupService.SearchSingaporeAddress(common_data_json,request_data_json).then(data=>{
-            
-            this.list=data;
-            this.showListSelectAddress=true;
+        this._pickupService.SearchSingaporeAddress(common_data_json, request_data_json).then(data => {
+
+            this.list = data;
+            this.showListSelectAddress = true;
             // for(let i = 0; i< data.AddressList.length; i++){
             //     this.list.push({name:data.AddressList[i].Address,postalCode:data.AddressList[i].PostalCode,lat:data.AddressList[i].Latitude,lng:data.AddressList[i].Longitude})
-                
+
             // }
-            
+
         })
     }
     Selected(item: SelectedAutocompleteItem) {
-        
+
     }
-    setList(list){
-          this.autoCompleteService.setDynamicList(list);
-          // this will log in console if your list is empty.
-      }
-    selectAddress(addres:string, lat:string, lng:string){
+    setList(list) {
+        this.autoCompleteService.setDynamicList(list);
+        // this will log in console if your list is empty.
+    }
+    selectAddress(addres: string, lat: string, lng: string) {
         this.addressList = new AddressListModel();
-        this.list=[];
-        this.showListSelectAddress=false;
-        this.inputAddress=addres;
-        
-        this.lat= Number.parseFloat(lat);
+        this.list = [];
+        this.showListSelectAddress = false;
+        this.inputAddress = addres;
+
+        this.lat = Number.parseFloat(lat);
         this.lng = Number.parseFloat(lng);
         localStorage.setItem('lat', this.lat + '');
         localStorage.setItem('long', this.lng + '');
         localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
         let item = new AddressIteModel();
 
-                item.StreetAddress = addres;
-                item.lat = this.lat + ''
-                item.long = this.lng + ''
-                item.isCheck = true;
-                let arrayName = item.StreetAddress.split(',');
-                item.Name = arrayName[0];
-                this.addressList.AddressListInfo.push(item);
-                localStorage.setItem('address', JSON.stringify(this.addressList));
+        item.StreetAddress = addres;
+        item.lat = this.lat + ''
+        item.long = this.lng + ''
+        item.isCheck = true;
+        let arrayName = item.StreetAddress.split(',');
+        item.Name = arrayName[0];
+        this.addressList.AddressListInfo.push(item);
+        localStorage.setItem('address', JSON.stringify(this.addressList));
     }
-    GetOutletListByLocation(){
-        
+    GetOutletListByLocation() {
+
         let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
         common_data.Location = _location
         common_data.ServiceName = "GetOutletListByLocation";
         let common_data_json = JSON.stringify(common_data);
-        let data_request ={Lang:"en"};
+        let data_request = { Lang: "en" };
         let data_request_json = JSON.stringify(data_request);
-        console.log("common_data_json:"+ common_data_json)
-        console.log("data_request_json:"+ data_request_json)
-        this._pickupService.GetOutletListByLocation(common_data_json,data_request_json).then(data=>{
-            console.log("xxxthanh:"+JSON.stringify( data));
+        console.log("common_data_json:" + common_data_json)
+        console.log("data_request_json:" + data_request_json)
+        this._pickupService.GetOutletListByLocation(common_data_json, data_request_json).then(data => {
+            console.log("xxxthanh:" + JSON.stringify(data));
         })
-     }
-    
+    }
+    showSelectCountry(){
+        var el = $('#country-popup');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el
+                },
+                type: 'inline'
+            });
+        }
+    }
+    selectCountry(countryCode:string){
+        this.selectCountryCode="+"+countryCode;;
+       
+    }
+    closeCountry(){
+         this.signUp.PhoneCode=this.selectCountryCode;
+        $.magnificPopup.close()
+    }
+     move() {
+    var elem = document.getElementById("per"); 
+    var width = 1;
+    var id = setInterval(frame, 100);
+    function frame() {
+        if (width >= 100) {
+            clearInterval(id);
+        } else {
+            width++; 
+            elem.style.width = width + '%'; 
+        }
+    }
+}
+
 
 }

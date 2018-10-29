@@ -30,8 +30,10 @@ import { InputOTPModel } from "../models/InputOTP";
 import { RequestRegisterCustomerModel } from "../models-request/request-register-customer";
 import { RequestRegisterOTP } from "../models-request/request-register-otp";
 import { ResponseModel } from "../models/Response";
-
-
+import { ErrorModel } from "../models/Error";
+import { GetInitialParams } from "../models/GetInitialParams";
+import { GetInitParamRequest } from "../models-request/get-init-param-request";
+import { RequestNull } from "../models-request/request-null";
 declare var $: any
 const ORDER_DELIVERY = "DELIVERY"
 const ORDER_PICKUP = "PICKUP";
@@ -86,12 +88,17 @@ export class HeaderGof3rComponent implements OnInit {
     showWhen:boolean=false;
     inputOTPStr: string = "";
     isDelivery:boolean=false;
-    isPickup:boolean=false
+    isPickup:boolean=false;
+    error:ErrorModel;
+    getInitialParams: GetInitialParams;
+    selectCountryCode:string=""
     constructor(private _route:Router,private _gof3rModule:Gof3rModule,private _pickupService: PickupService, private _gof3rUtil: Gof3rUtil, private _instanceService: EventSubscribeService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private _homeservice: HomeService) {
         this.addressList = new AddressListModel();
         this.signUp = new SingUpModel();
         this.listDeliveryAddress = new ListDeliveryAddress();
         this.listDeliveryAddressShow = new ListDeliveryAddress();
+        this.error = new ErrorModel();
+        this.getInitialParams= new GetInitialParams();
         this._instanceService.$getEventSubject.subscribe(data=>{
             if(data==="CheckOut"){
                 
@@ -107,6 +114,21 @@ export class HeaderGof3rComponent implements OnInit {
             else if (this.orderType === ORDER_PICKUP) {
                 this.selectOrderTypePickup = true;
             }
+        }
+        if (localStorage.getItem("IN") != null) {
+            this.getInitialParams = new GetInitialParams();
+           
+            this.getInitialParams = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("IN")));
+
+
+            for(let i = 0; i< this.getInitialParams.CountryInfo.length; i++){
+               
+                if(this.getInitialParams.CountryInfo[i].CountryCode==="65"){
+                    this.signUp.PhoneCode="+"+this.getInitialParams.CountryInfo[i].CountryCode;
+                }
+            }
+
+
         }
     }
 
@@ -150,8 +172,11 @@ export class HeaderGof3rComponent implements OnInit {
         this.initJQuery()
     }
     checkLoginUser() {
-        if (localStorage.getItem("cus") != null) {
+
+        if (localStorage.getItem("cus") != null && localStorage.getItem("cus")!="undefined") {
+
             this.customerInfoMain = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("cus")));
+            console.log("cus:"+ JSON.stringify(this.customerInfoMain))
             this.isLogin = this.customerInfoMain.CustomerInfo[0].CustomerName
             this.userNameLogOut = this.customerInfoMain.CustomerInfo[0].UserName;
             this.isUserLogin = true;
@@ -254,21 +279,11 @@ export class HeaderGof3rComponent implements OnInit {
                     height: ''
                 });;
             } else {
+                 
+            
                 var valueCheckUser = $('#check-user').text();
                 
                 if(event.target.id==='user'){
-                    
-                    if (valueCheckUser === 'true') {
-
-                        $(this).parents('.login-wrap').find('.login-dropdown-had').slideDown();
-
-                    }
-                    else if (valueCheckUser === 'false') {
-                        
-                        $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
-                    }
-                }
-                else if (event.target.id==='user1'){
                    
                     if (valueCheckUser === 'true') {
 
@@ -280,11 +295,30 @@ export class HeaderGof3rComponent implements OnInit {
                         $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
                     }
                 }
+                else if (event.target.id==='user1'){
+                  
+                    if (valueCheckUser === 'true') {
+
+                        $(this).parents('.login-wrap').find('.login-dropdown-had').slideDown();
+
+                    }
+                    else if (valueCheckUser === 'false') {
+                        
+                        $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
+                    }
+                }
                 else{
-                     $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
+                   
+                        $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
+                    
+                     
                 }
                     
-                
+                $('.back-login').on('click', function (event) {
+            event.preventDefault();
+            $('.signup-dropdown').hide();
+            $('.loginform-dropdown').fadeIn();
+        });
                 
 
                 $('.login-overlay').addClass('show');
@@ -308,6 +342,7 @@ export class HeaderGof3rComponent implements OnInit {
             $('.login-dropdown-step3').hide();
             $('.login-overlay').removeClass('show');
             $('.login-wrap .login').removeClass('hide-form');
+            $('.login-dropdown-had').hide();
             $('body').css({
                 overflow: '',
                 height: ''
@@ -319,12 +354,12 @@ export class HeaderGof3rComponent implements OnInit {
             $('.signup-dropdown').fadeIn();
             $('.loginform-dropdown').hide();
         });
-         $('.signup-form form button').on('click', function (event) {
-            event.preventDefault();
+        //  $('.signup-form form button').on('click', function (event) {
+        //     event.preventDefault();
 
-            $('.signup-dropdown-otp').fadeIn();
-            $('.signup-dropdown').hide();
-        });
+        //     $('.signup-dropdown-otp').fadeIn();
+        //     $('.signup-dropdown').hide();
+        // });
         $('.deli-list .deli').on('click', function (event) {
             event.preventDefault();
             $('.how-top .login-dropdown').show();
@@ -671,7 +706,8 @@ export class HeaderGof3rComponent implements OnInit {
             this._pickupService.CheckLogon(common_data_json, requestDataJson).then(data => {
 
                 this.customerInfoMain = data;
-                localStorage.setItem("cus", this._gof3rUtil.encryptParams(JSON.stringify(this.customerInfoMain)))
+                if(this.customerInfoMain.ResultCode==="000"){
+                    localStorage.setItem("cus", this._gof3rUtil.encryptParams(JSON.stringify(this.customerInfoMain)))
                 this.isLogin = this.customerInfoMain.CustomerInfo[0].CustomerName;
                 $('.login-dropdown').hide();
                 $('.login-overlay').removeClass('show');
@@ -681,10 +717,28 @@ export class HeaderGof3rComponent implements OnInit {
                     height: ''
                 });;
                 this.blockUI.stop()
+            }
+            else{
+                this.error.ResultDesc=this.customerInfoMain.ResultDesc;
+                    this.showPopupPaymentSuccess()
+                    this.blockUI.stop()
+            }
+                
                 
             })
         }
 
+    }
+     showPopupPaymentSuccess() {
+        var el = $('#success-popup');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el
+                },
+                type: 'inline'
+            });
+        }
     }
     GetCurrentSystemTime() {
         this.getCurrentTime = new GetCurrentSystemTimeModel();
@@ -941,7 +995,8 @@ export class HeaderGof3rComponent implements OnInit {
      RegisterOPT() {
 
 
-        let common_data = new CommonDataRequest();
+        if(this.signUp.Password===this.signUp.ConfrimPassword){
+            let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
         common_data.Location = _location
         common_data.ServiceName = "RequestRegistrationOTP";
@@ -953,23 +1008,49 @@ export class HeaderGof3rComponent implements OnInit {
         let request_data_json = JSON.stringify(requestData);
         this._pickupService.RequestRegistrationOTP(common_data_json, request_data_json).then(data => {
             this.responseData = data;
-            
+            console.log("RegisterOPT"+ JSON.stringify(this.responseData))
             if (this.responseData.ResultCode == "000") {
                 let requestRegister = new RequestRegisterCustomerModel();
                 requestRegister.CustomerName = this.signUp.FullName;
                 requestRegister.Email = this.signUp.Email
-                requestRegister.Mobile = this.signUp.PhoneNumber;
+                requestRegister.Mobile =this.signUp.PhoneCode+ this.signUp.PhoneNumber;
                 requestRegister.Password = this.signUp.Password
+                $('.signup-dropdown-otp').fadeIn();
+                $('.signup-dropdown').hide();
+                 this.move()
                 // this._instanceService.sendCustomEvent(requestRegister);
                 // this._router.navigateByUrl('/login-otp')
 
             } else {
                 // this.isError=true
+                this.error.ResultDesc = this.responseData.ResultDesc;
+                this.showPopupPaymentSuccess()
+                //   $('.signup-dropdown-otp').fadeIn();
+                // $('.signup-dropdown').hide();
+                //this.move()
 
             }
         })
-
     }
+    else{
+        this.error.ResultDesc="The password is not match"
+        this.showPopupPaymentSuccess();
+    }
+
+}
+move() {
+    var elem = document.getElementById("per"); 
+    var width = 1;
+    var id = setInterval(frame, 100);
+    function frame() {
+        if (width >= 100) {
+            clearInterval(id);
+        } else {
+            width++; 
+            elem.style.width = width + '%'; 
+        }
+    }
+}
     inputOTP(even) {
         let lenght = (even.target.value.length)
         if (lenght == 6) {
@@ -978,12 +1059,13 @@ export class HeaderGof3rComponent implements OnInit {
 
     }
     registerCustomer(otp: string) {
+        this.blockUI.start("Sign up.........!")
         let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
         common_data.Location = _location
         common_data.ServiceName = "RegisterCustomer";
         var common_data_json = JSON.stringify(common_data);
-        
+
         let requestRegister = new RequestRegisterCustomerModel();
         requestRegister.CustomerName = this.signUp.FullName
         requestRegister.Email = this.signUp.Email
@@ -991,19 +1073,66 @@ export class HeaderGof3rComponent implements OnInit {
         requestRegister.OTP = otp
         requestRegister.Password = this.signUp.Password
         let request_data_json = JSON.stringify(requestRegister);
-        
+
         this._pickupService.RegisterCustomer(common_data_json, request_data_json).then(data => {
             this.customerInfoMain = data;
-            
+
             if (this.customerInfoMain.ResultCode == "000") {
                 // this._instanceService.sendCustomEvent(this.customerLoginMain.CustomerInfo[0].UserName);
                 // this._router.navigateByUrl('/login')
-                // $('.signup-dropdown-otp').hide();
-                // $('.loginform-dropdown').fadeIn();
-                this._route.navigateByUrl('/home')
-                
+                $('.signup-dropdown-otp').hide();
+                $('.loginform-dropdown').fadeIn();
+                this.getInitParam();
+                this.blockUI.stop();
+            }
+            else{
+                this.error.ResultDesc=this.customerInfoMain.ResultDesc;
+                this.showPopupPaymentSuccess();
+                this.blockUI.stop()
             }
         })
+    }
+    getInitParam() {
+
+        var comomrequest = new GetInitParamRequest();
+        if (localStorage.getItem('device') != null) {
+            comomrequest.DeviceNumber = localStorage.getItem('device');
+        }
+        else {
+            let device_number = this._gof3rUtil.guid();
+
+            comomrequest.DeviceNumber = device_number
+        }
+        if (localStorage.getItem('la') != null) {
+
+            comomrequest.Location = localStorage.getItem('la');
+
+        }
+        else {
+            comomrequest.Location = ""
+        }
+        //comomrequest.DeviceNumber='9999'
+
+        var requestData = new RequestNull();
+        var jsonCommon = JSON.stringify(comomrequest);
+
+        var jsonRequest = JSON.stringify(requestData);
+
+        this._homeservice.getServiceHome(jsonCommon, jsonRequest).then(data => {
+
+            this.getInitialParams = data;
+            
+            for(let i = 0; i< this.getInitialParams.CountryInfo.length; i++){
+               
+                if(this.getInitialParams.CountryInfo[i].CountryCode==="65"){
+                    this.signUp.PhoneCode="+"+this.getInitialParams.CountryInfo[i].CountryCode;
+                }
+            }
+            //this.haveDataInit=true
+            localStorage.setItem("IN", this._gof3rUtil.encryptParams(JSON.stringify(this.getInitialParams)));
+
+            //this.blockUI.stop()
+        });
     }
     accountClick(){
         this._instanceService.sendCustomEvent("")
@@ -1034,5 +1163,24 @@ export class HeaderGof3rComponent implements OnInit {
             overflow: '',
             height: ''
         });;
+    }
+    showSelectCountry(){
+        var el = $('#country-popup');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el
+                },
+                type: 'inline'
+            });
+        }
+    }
+    selectCountry(countryCode:string){
+        this.selectCountryCode="+"+countryCode;;
+       
+    }
+    closeCountry(){
+         this.signUp.PhoneCode=this.selectCountryCode;
+        $.magnificPopup.close()
     }
 }

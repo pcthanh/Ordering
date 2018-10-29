@@ -9,7 +9,7 @@
 <main>
     <div class="row no-gutters">
         <div class="col-12 col-md-12">
-            <div class="promo-mess" *ngIf="haveDataOutlet" style="position: fixed; top: 100px;z-index: 1000"  id="promo-mess">
+            <div class="promo-mess" *ngIf="haveDataOutlet" style="position: fixed; top: 100px;z-index: 1"  id="promo-mess">
                 {{outletInfo.OutletInfo[0].ProductWebsitePromotionalMessage}}
             </div>
         </div>
@@ -323,7 +323,7 @@
             <div *ngIf="haveCart" class="col-12 col-md-4 col-cart">
                 <div class="cart-sidebar-wrap" id="cart-fixed">
                     <div class="cart-sidebar">
-                        <div *ngIf=" this.OrderType==='DELIVERY'" class="delivery-info"><span>Delivery is now free!</span></div>
+                        <div *ngIf=" this.OrderType==='DELIVERY'" class="delivery-info"><span *ngIf="hadVeryfiOrder">{{this.verifyOrderMain.OrderFeeAndDiscountInfo.DeliveryFeeMessage}}</span></div>
                         <div class="subtotal-wrap">
                             <div class="title-sub">Subtotal <span class="price">{{this.orderMain.SubTotalStr}}</span></div>
                             <button (click)="checkOut()" class="btn-main btn-checkout"><span>Checkout</span></button>

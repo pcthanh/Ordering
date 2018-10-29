@@ -75,6 +75,7 @@ export class PaymentOptionComponent implements OnInit {
         let data_request_json = JSON.stringify(data_request)
         this._pickupService.GetAllPaymentOptions(common_data_json, data_request_json).then(data => {
             this.allPaymentOption = data
+            console.log("all:"+ JSON.stringify(this.allPaymentOption.PointWalletListInfo.length))
             //this._gof3rModule.checkInvalidSessionUser(this.allPaymentOption.ResultCode)
 
             this._module.checkInvalidSessionUser(this.allPaymentOption.ResultCode)
@@ -171,7 +172,7 @@ export class PaymentOptionComponent implements OnInit {
                     data_request.MaskedCardNumber = this.masKingNumberCard(this.addCardData.CardNumber.replace(/\s/g, ''));
                     let data_request_json = JSON.stringify(data_request)
                     this._pickupService.AddNewCard(common_data_json, data_request_json).then(data => {
-                        
+                        console.log("card:"+ JSON.stringify(data))
                         if (data.ResultCode === "000") {
                             this.allPaymentOption.CardListInfo = []
                             this.allPaymentOption.CardListInfo = data.CardListInfo;
@@ -179,7 +180,8 @@ export class PaymentOptionComponent implements OnInit {
                         }
                         else {
                             this.errorAddCard = true;
-                            this.errorAddCardDisplay = data.ResultDesc
+                            this.error.ResultDesc = data.ResultDesc
+                            this.showPopupPaymentSuccess()
                         }
 
                         this.blockUI.stop()
@@ -192,6 +194,17 @@ export class PaymentOptionComponent implements OnInit {
         }
 
         //let data_request = {IIN:}
+    }
+    showPopupPaymentSuccess() {
+        var el = $('#success-popup');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el
+                },
+                type: 'inline'
+            });
+        }
     }
     loadCardYear() {
 

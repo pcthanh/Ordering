@@ -447,10 +447,10 @@
                         <div class="user-login user-account">
                             <div class="account">Account</div>
                             <div class="login-wrap">
-                                <div class="login">
+                                <div id="user" (click)="checkShowPopup()" class="login">
                                     <div (click)="checkShowPopup()" id="user" class="d-none d-md-block">{{isLogin}}</div>
                                     <div  id="check-user" class="" style="display: none">{{isUserLogin}}</div>
-                                    <div id="user1" (click)="checkShowPopup()" class="d-block d-md-none">
+                                    <!--<div id="user1" (click)="checkShowPopup()" class="d-block d-md-none">
                                         <svg version="1.1" id="user1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                              width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
                                         <g id="Filled_Icons_1_">
@@ -472,7 +472,7 @@
                                             <rect fill="none" width="24" height="24"/>
                                         </g>
                                         </svg>
-                                    </div>
+                                    </div>-->
                                 </div>
                                 <!--start popup user had login-->
                                 <div class="login-dropdown-had">
@@ -538,7 +538,12 @@
                                             </div>
                                             <form>
                                                 <input type="text"[(ngModel)]="this.signUp.FullName" name="name-signup" placeholder="Full Name">
-                                                <input type="text" [(ngModel)]="this.signUp.PhoneNumber" name="phone-signup" placeholder="Phone Number">
+                                                                                  <div class="input-group mb-3">
+  <div class="input-group-prepend" style="cursor: pointer" (click)="showSelectCountry()">
+    <span class="input-group-text" id="basic-addon1">{{this.signUp.PhoneCode}}</span>
+  </div>
+  <input type="text" [(ngModel)]="this.signUp.PhoneNumber" name="phone-signup" placeholder="Phone Number"class="form-control" aria-label="Username" aria-describedby="basic-addon1">
+</div>
                                                 <input type="text" [(ngModel)]="this.signUp.Email" name="email-signup" placeholder="Email Address">
                                                 <input type="password" [(ngModel)]="this.signUp.Password" name="pass-signup" placeholder="Password">
                                                 <input type="password" [(ngModel)]="this.signUp.ConfrimPassword" name="pass-confirm-signup" placeholder="Confirm Password">
@@ -555,7 +560,7 @@
                                     <div class="login-dropdown-content signup-dropdown-otp">
                                         <div class="verifi-code">
                                             <div class="title">Enter Your Code</div>
-                                            <div class="text">We sent a verification code to you at +650 123456</div>
+                                            <div class="text">We sent a verification code to you at {{this.signUp.PhoneCode}}{{this.signUp.PhoneNumber}}</div>
                                             <div class="code">
                                                 <input type="text" [(ngModel)]="inputOTPStr" (keyup)="inputOTP($event)" maxlength="6">
                                                 <div class="row">
@@ -566,7 +571,7 @@
                                                     <div class="col-2"><div class="bor"></div></div>
                                                     <div class="col-2"><div class="bor"></div></div>
                                                 </div>
-                                                <button class="btn-sendcode"><span class="per" style="width: 40%;"></span><span class="send">RESEND CODE</span></button>
+                                                <button class="btn-sendcode"><span id="per" class="per" style="width: 40%;"></span><span class="send">RESEND CODE</span></button>
                                                 <div class="get-sms"><a href="#">Didn’t get the SMS?</a></div>
                                             </div>
                                         </div>
@@ -578,6 +583,28 @@
                     </div>
                      
                 </div>
+                <div id="success-popup" class="success-popup mfp-hide" style="text-align: center">
+            <div class="" style="text-align: center">{{this.error.ResultDesc}}</div>
+            <!--<div style="cursor: pointer" class="text-center" (click)="trackerOrder()" 
+            ><img src="assets/images/ico-succsess.png" alt=""></div>-->
+            
+           
+    </div>
+    <div id="country-popup" class="reward-popup white-popup mfp-hide">
+                                <div class="title-popup">Choose Country</div>
+                                <div class="reward-choose-wrap" style="max-height: 300px; overflow: hidden; overflow-y: scroll">
+                                    <div class="reward-choose" *ngFor="let item of this.getInitialParams.CountryInfo;let i = index">
+                                        <input type="radio" name="rider-input" id="reward-{{i}}"(click)="selectCountry(item.CountryCode)" >
+                                        <label for="reward-{{i}}"><span>{{item.CountryName}} (+{{item.CountryCode}})</span></label>
+                                    </div>
+                                    
+                                    
+                                </div>
+                               
+                                <div class="btn-selection-wrap">
+                                    <button class="btn-main btn-selection btn-reward" (click)="closeCountry()"><span>Apply</span></button>
+                                </div>
+                            </div>
   <block-ui>
       <!-- Your app markup here -->
     </block-ui>

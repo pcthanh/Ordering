@@ -60,6 +60,7 @@ import {NgAutoCompleteModule} from "ng-auto-complete";
 import { AutoCompleteModule } from 'ng4-auto-complete';
 import {CalendarModule} from 'primeng/calendar';
 import { ClickOutsideModule } from 'ng4-click-outside';
+import { ClipboardModule } from 'ngx-clipboard';
 
 @NgModule({
   declarations: [
@@ -106,6 +107,7 @@ import { ClickOutsideModule } from 'ng4-click-outside';
     BlockUIModule,
   CalendarModule,
  DropdownModule,ClickOutsideModule,
+ ClipboardModule,
     
      AgmCoreModule.forRoot({
         apiKey: 'AIzaSyAVdsuXFE3Ca3vwy_lopgMUHTfJLdd3_Ck',libraries:["places"],

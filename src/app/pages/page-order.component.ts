@@ -59,6 +59,7 @@ export class PageOrderComponent implements OnInit {
     listDeliveryAddress: ListDeliveryAddress;
     verifyOrderMain: VerifyOrderMainModel;
     productWebsiteBannerMessage:string="";
+    hadVeryfiOrder:boolean=false;
     constructor(private _router: Router, private _gof3rUtil: Gof3rUtil, private _gof3rModule: Gof3rModule, private _util: Gof3rUtil, private _pickupService: PickupService, private _instanceService: EventSubscribeService, private active_router: ActivatedRoute) {
         this.blockUI.start('loading ...'); // Start blocking
         this.productDetail = new ProductDetailMainModel();
@@ -133,7 +134,7 @@ export class PageOrderComponent implements OnInit {
         // $('#numberCounter').handleCounter();
         $('.btn-add-special').on('click', function (event) {
             event.preventDefault();
-            alert('thanh')
+            
             $(this).parent('.btn-add-special-inner').find('.text-special').slideDown();
         });
 
@@ -948,6 +949,7 @@ export class PageOrderComponent implements OnInit {
             }
         }
         //get option item of item
+        this.VerifyOrder();
         this.upadteShowOpntionItem()
 
     }
@@ -1161,7 +1163,8 @@ export class PageOrderComponent implements OnInit {
             // 
             this._pickupService.VerifyOrder(common_data_json, requestDataJson).then(data => {
                 this.verifyOrderMain = data;
-                
+                this.hadVeryfiOrder=true
+                console.log("very:"+ JSON.stringify(this.verifyOrderMain))
             })
         }
     }

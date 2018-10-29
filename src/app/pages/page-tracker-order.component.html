@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div *ngIf="this.isHaveData" class="col-12 col-md-4 col-cart">
-                    <div class="cart-sidebar-wrap">
+                    <div class="tracker">
                         <div class="cart-sidebar tracker-wrap">
                             <div class="tracker-content">
                                 <!--<div class="info-text">{{deliveryOrder.DeliveryOrderDetail[0].MerchantOutletName}} is confriming your order.</div>-->
@@ -41,7 +41,7 @@
                                     <div class="tab-pane fade show active" id="tracker1" role="tabpanel" aria-labelledby="tracker1-tab">
                                         <div class="tracker-progress">
                                             <ul>
-                                                <li class="completed"><span class="step"></span><span class="inf">Processing Payment</span> <span class="time">{{this.deliveryOrder.DeliveryOrderDetail[0].CurrentStatusDate}}</span></li>
+                                                <li class="completed"><span class="step"></span><span class="inf">Processing</span> <span class="time">{{this.deliveryOrder.DeliveryOrderDetail[0].CurrentStatusDate}}</span></li>
                                                 <li [ngClass]="{completed: isOnTheWay===true,progressing:isOnTheWay===false}"><span class="step"></span><span class="inf">On_The_Way</span><span *ngIf="isOnTheWay" class="time">{{this.deliveryOrder.DeliveryOrderDetail[0].CurrentStatusDate}}</span></li>
                                                 <li [ngClass]="{completed: isDelivered===true,last:isDelivered===true,progressing:isShowProcessingDilivered==true}"><span class="step"></span><span class="inf">Delivered</span><span *ngIf="isDelivered" class="time">{{this.deliveryOrder.DeliveryOrderDetail[0].CurrentStatusDate}}</span></li>
                                                 <!--<li><span class="step"></span><span class="inf">Collecting Your Order</span></li>

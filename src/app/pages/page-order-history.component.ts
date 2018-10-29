@@ -51,6 +51,7 @@ export class OrderHistoryomponent implements OnInit {
            
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.customerOrderListMain = data;
+            console.log("order:"+ JSON.stringify(this.customerOrderListMain))
             this.isHaveData=true;
             this.blockUI.stop()
         })

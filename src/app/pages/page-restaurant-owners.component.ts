@@ -12,11 +12,16 @@ export class RetaurantOwnerComponent implements OnInit {
         this._instanceService.$getEventSubject.subscribe(data => {
             window.scrollTo(0, 0);
         })
+        window.scrollTo(0, 0);
     }
 
     ngOnInit() {
         window.scrollTo(0, 0);
         this.initButton()
+        $('html,body').animate({
+                scrollTop: $(".header-wrap").offset().top
+            });
+        
     }
     initButton() {
         $("#btnStart").click(function () {

@@ -42,7 +42,14 @@
                             <div class="col-12 col-md-6">
                                 <div class="delivery-address-wrap">
                                     <div class="title">Add New Address</div>
-                                    <input id="input-address-1" class="new-address" type="text" placeholder="Enter your Address" #search [formControl]="searchControl">
+                                    <!--<input id="input-address-1" (keyup)="checkInputPostalCode($event)" class="new-address" type="text" placeholder="Enter your Address" #search [formControl]="searchControl">-->
+                                    <input id="input-address-1" (keyup)="checkInputPostalCode($event)" [(ngModel)]="inputAddress" class="new-address" type="text" placeholder="Enter your Address" >
+                                     <div *ngIf="showListSelectAddress" class="add-wrap">
+                    <ul class="list-group">
+                        <li style="cursor: pointer" *ngFor="let item of list.AddressList" (click)="selectAddress(item.Address,item.Latitude,item.Longitude)" class="list-group-item">{{item.Address}}</li>
+                        
+                    </ul>
+                </div>
                                     <div class="map-address">
                                         <div class="location-add">
                                             <div><strong>Is this your location?</strong><br>If needed, drag pin to exact location</div>

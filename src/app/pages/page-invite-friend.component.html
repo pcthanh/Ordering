@@ -42,11 +42,12 @@
                                 <div class="img-gift">
                                     <img src="assets/images/ico-gift.png" alt="">
                                 </div>
-                                <div class="title">Share the goodness of Carrot. <a href="#" class="note"><img src="assets/images/ico-refer-help.png" alt=""></a></div>
-                                <div class="text">Tap to copy your referral link.<br><a href="https://carrots.sg/r/HDO289" class="link-refer">https://carrots.sg/r/HDO289</a></div>
+                                <div class="title">Share the goodness of GOF3R. <a href="#" class="note"><img src="assets/images/ico-refer-help.png" alt=""></a></div>
+                                <div class="text">Your referral link.<br><a ngxClipboard [cbContent] ="this.getInitialParams.CustomerInfo[0].ReferralURL"class="link-refer">{{this.getInitialParams.CustomerInfo[0].ReferralURL}}</a></div>
 
                                 <div class="or"><span>OR</span></div>
                                 <a href="#" class="btn-main btn-refer"><span>SHARE</span></a>
+                                <a style="color: #ffffff" (click)="copyToClipboard(this.getInitialParams.CustomerInfo[0].ReferralURL)" class="btn-main btn-refer"><span>{{textCopy}}</span></a>
                             </div>
                         </div>
                     </div>

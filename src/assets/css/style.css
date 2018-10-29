@@ -1340,7 +1340,8 @@ a.btn-main {
 }
 .restourant-apply-wrap {
   background: url('../images/bg-restaurant2.jpg') center 0 no-repeat;
-  background-size: cover;
+  background-size: contain;
+  min-height: 700px;
 }
 .restourant-apply .quote {
   padding: 45px 0;
@@ -2429,7 +2430,7 @@ blockquote {
   border-bottom: 1px solid #ddd;
   padding: 10px 20px;
   position: relative;
-  cursor: pointer;
+  /*cursor: pointer;*/
 }
 .main-delivery-checkout .cart-sidebar .methods > div:before {
   content: '';

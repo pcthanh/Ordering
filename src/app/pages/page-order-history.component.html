@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="order-address">
                                         <div class="time">{{itemOrder.OrderDate}}</div>
-                                        <div class="address">1010 Main Street, Saskatoon, SK, Canada</div>
+                                        <!--<div class="address">1010 Main Street, Saskatoon, SK, Canada</div>-->
                                     </div>
                                     <div class="order-detail">
                                         <a *ngIf="itemOrder.OrderStatus===DELIVERED" [routerLink]="['/order-history-detail','delivery',itemOrder.CustomerOrderId]" style="color: #ffffff" class="btn-main btn-order-detail">Order details</a>
