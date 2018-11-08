@@ -18,4 +18,5 @@ export class OrderListItem{
     IsAcceptedByOutlet:string=""
     IsAcceptedByRider:string=""
     IsSelect:boolean=false
+    DeliveryAddress:string=""
 }

@@ -1,0 +1,88 @@
+<body class="cms-page">
+    <header>
+        <div class="header-wrap">
+            <div class="header-top">
+                <header-checkout></header-checkout>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="about-wrap">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-md-3">
+                        <footer-left></footer-left>
+                    </div>
+
+                    <div class="col-12 col-md-9">
+                        <div class="cms-content cms-faq">
+
+                            <div class="text-content">
+                                <div class="faq-title">POSITIONS AVAILABLE</div>
+                                <div class="faq-content">
+                                    <div class="faq-question">Par-time CS position</div>
+                                    <blockquote>
+                                        Job Descriptoin:<br />
+                                        <i class="fa fa-asterisk" style="padding-right: 10px" aria-hidden="true"></i>Lorem
+                                        ipsum dolor sit amet, consectetur adipiscing elit. Integer eu dui nisi. Sed id tortor
+                                        mattis turpis congue vulputate. Nullam augue est, aliquam nec pellentesque bibendum,
+                                        malesuada et nulla. Phasellus elementum scelerisque hendrerit. Mauris vitae nisl
+                                        sit amet mauris fermentum cursus.<br />
+                                        <i class="fa fa-asterisk" style="padding-right: 10px" aria-hidden="true"></i>Lorem
+                                        ipsum dolor sit amet, consectetur adipiscing elit. Integer eu dui nisi. Sed id tortor
+                                        mattis turpis congue vulputate. Nullam augue est, aliquam nec pellentesque bibendum,
+                                        malesuada et nulla. Phasellus elementum scelerisque hendrerit. Mauris vitae nisl
+                                        sit amet mauris fermentum cursus.<br />
+                                        <button (click)="apllyNow()" style="width: 200px;margin-top: 10px" class="btn-main btn-apply"><span>APPLY NOW</span></button>
+
+                                    </blockquote>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div id="success-popup" style="background: #d9d9d9" class="success-popup mfp-hide">
+        <div class="form-apply1">
+            <div class="title">Get Started</div>
+            <div class="text">Leave us your contact details and we’ll be in touch soon.</div>
+            <form action="#" style="padding-top: 15px;">
+                <div class="input-apply">
+                    <label for="restaurant-name" class="label">Full Name <span class="note">Required</span></label>
+                    <input id="restaurant-name" type="text" name="restaurant-name">
+                </div>
+                <div class="input-apply">
+                    <label for="contactnane-input" class="label">Email <span class="note">Required</span></label>
+                    <input id="contactnane-input" type="text" name="contact-name">
+                </div>
+                <div class="input-apply">
+                    <label for="phone-input" class="label">Mobile Number<span class="note">Required</span></label>
+                    <input id="phone-input" type="text" name="contact-phone">
+                </div>
+
+                <div class="input-apply">
+                    <label for="else-input" class="label">Any superpowers we should know of </label>
+                    <textarea name="else" id="else-input" rows="10"></textarea>
+                </div>
+                <div class="custom-file" style="padding-top: 25px">
+                    <input type="file" style="padding-top: 20px;" class="custom-file-input" id="validatedCustomFile" required>
+                    <label style="margin-top: 15px;" class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                    <!--<div class="invalid-feedback">Example invalid custom file feedback</div>-->
+                </div>
+                <button style="width: 100%"  class="btn-main btn-apply"><span>GOF3R IT</span></button>
+            </form>
+            <!--<div class="login-here">
+                            <div class="text">Already a member of the network? Email us at restaurants@GOF3R.com with any questions or click below to log into your GOF3R Restaurant Portal.</div>
+                            <a href="02_Login.html">LOGIN HERE</a>
+                        </div>-->
+        </div>
+
+
+    </div>
+    <gof3r-footer></gof3r-footer>
+
+</body>

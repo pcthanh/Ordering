@@ -60,8 +60,8 @@
                         <div class="order-content-wrap">
                             <div class="order-content">
                                 <div class="row">
-                                    <div class="col-12 col-md-3" id="order-catalog">
-                                        <div class="order-catalog" *ngIf="haveDataOutlet && this.haveDepartment==='Y'">
+                                    <div class="col-12 col-md-3" >
+                                        <div class="order-catalog" id="order-catalog" *ngIf="haveDataOutlet && this.haveDepartment==='Y'">
                                             <ul>
                                                 <li class="active" (click)="loadItemOfCategory('ALL',this.productList.IsHavingDepartment)"><a>All</a></li>
                                                 <li *ngFor="let item of this.outletInfo.OutletInfo[0].DepartmentCategoryList;let i = index" id="{{item.DepartmentId}}" (click)="loadItemOfCategory(item.DepartmentId,this.productList.IsHavingDepartment,i)"
@@ -70,7 +70,7 @@
                                             </ul>
                                         </div>
 
-                                        <div class="order-catalog" *ngIf="haveDataOutlet && this.haveDepartment==='N'">
+                                        <div class="order-catalog" id="order-catalog" *ngIf="haveDataOutlet && this.haveDepartment==='N'">
                                             <ul>
                                                 <li class="active" (click)="loadItemOfCategory('ALL',this.productList.IsHavingDepartment)"><a>All</a></li>
                                                 <li *ngFor="let item of this.outletInfo.OutletInfo[0].DepartmentCategoryList[0].CategoryList;let i = index" id="{{item.CategoryId}}"
@@ -81,7 +81,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-9">
-                                        <div class="order-info-wrap">
+                                        <div class="order-info-wrap" id="uu">
                                             <!--<div class="order-title no-border">Place Settings</div>-->
                                             <!--<div class="text-info-wrap">
                                                 <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
@@ -172,7 +172,25 @@
                                                             <input type="checkbox" name="" id="id-select-{{itemOptions.OptionName}}-{{i}}" [disabled]="itemOptionItem.isLock" [checked]="itemOptionItem.isCheck"
                                                                 (change)="checkOptionItem(itemOptionItem.OptionItemId,itemOptions.OptionId,i)">
                                                             <label for="id-select-{{itemOptions.OptionName}}-{{i}}">{{itemOptionItem.OptionItemName}} {{itemOptionItem.PriceDisplay}}</label>
+                                                            <div class="handle-bottom1">
+                                                        <!--<a href="#" class="feedback">Send Menu Feeback</a>-->
+                                                        <div *ngIf="itemOptionItem.isShowQty" class="handle-counter1" id="handleCounter">
+                                                            <button (click)="SubtractionQtyOptionItem(itemOptionItem.OptionItemId,itemOptions.OptionId)" class="counter-minus1"><span>_</span></button>
+                                                            <!--<input style="
+  width: 57px;
+  border: none;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  outline: none;
+  font-size: 20px;
+  font-weight: bold; display: block" type="text" value="1">-->
+  <button (click)="SubtractionItem()" class="counter-minus1"><span style="vertical-align: middle">{{itemOptionItem.Qty}}</span></button>
+                                                            <button (click)="additionQtyOptionItem(itemOptionItem.OptionItemId,itemOptions.OptionId)" class="counter-plus1">+</button>
                                                         </div>
+
+                                                    </div>
+                                                        </div>
+                                                        
 
                                                     </div>
 
@@ -291,8 +309,22 @@
                         <input type="checkbox" name="" id="id-select-{{itemOptions.OptionName}}-{{i}}" [disabled]="itemOptionItem.isLock" [checked]="itemOptionItem.isCheck"
                             (change)="checkOptionItemUpdate(itemOptionItem.OptionItemId,itemOptions.OptionId,i)">
                         <label for="id-select-{{itemOptions.OptionName}}-{{i}}">{{itemOptionItem.OptionItemName}} {{itemOptionItem.PriceDisplay}}</label>
+                   <div class="handle-bottom1">
+                    <div *ngIf="itemOptionItem.isShowQty" class="handle-counter1" id="handleCounter">
+                                                            <button (click)="SubtractionQtyOptionItem(itemOptionItem.OptionItemId,itemOptions.OptionId)" class="counter-minus1"><span>_</span></button>
+                                                            <!--<input style="
+  width: 57px;
+  border: none;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  outline: none;
+  font-size: 20px;
+  font-weight: bold; display: block" type="text" value="1">-->
+  <button (click)="SubtractionItem()" class="counter-minus1"><span style="vertical-align: middle">{{itemOptionItem.Qty}}</span></button>
+                                                            <button (click)="additionQtyOptionItem(itemOptionItem.OptionItemId,itemOptions.OptionId)" class="counter-plus1">+</button>
+                                                        </div>
                     </div>
-
+                    </div>
                 </div>
                 <div class="btn-add-special-wrap">
                     <div class="btn-add-special-inner">

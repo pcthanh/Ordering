@@ -61,6 +61,7 @@ import { AutoCompleteModule } from 'ng4-auto-complete';
 import {CalendarModule} from 'primeng/calendar';
 import { ClickOutsideModule } from 'ng4-click-outside';
 import { ClipboardModule } from 'ngx-clipboard';
+import { GrowsWithUsComponent } from "./pages/page-grows-with-us.component";
 
 @NgModule({
   declarations: [
@@ -92,7 +93,8 @@ import { ClipboardModule } from 'ngx-clipboard';
     PaymentOptionComponent,
     DeliveryAddressComponent,
     OrderHistoryPickupComponent,
-    OrderHistoryDetailComponent
+    OrderHistoryDetailComponent,
+    GrowsWithUsComponent
     //Import Component
 
     

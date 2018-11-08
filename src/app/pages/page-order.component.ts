@@ -58,8 +58,8 @@ export class PageOrderComponent implements OnInit {
     @ViewChild('closeModal') closePopup: ElementRef;
     listDeliveryAddress: ListDeliveryAddress;
     verifyOrderMain: VerifyOrderMainModel;
-    productWebsiteBannerMessage:string="";
-    hadVeryfiOrder:boolean=false;
+    productWebsiteBannerMessage: string = "";
+    hadVeryfiOrder: boolean = false;
     constructor(private _router: Router, private _gof3rUtil: Gof3rUtil, private _gof3rModule: Gof3rModule, private _util: Gof3rUtil, private _pickupService: PickupService, private _instanceService: EventSubscribeService, private active_router: ActivatedRoute) {
         this.blockUI.start('loading ...'); // Start blocking
         this.productDetail = new ProductDetailMainModel();
@@ -89,8 +89,8 @@ export class PageOrderComponent implements OnInit {
         else {
             this.haveCart = false;
         }
-        if(localStorage.getItem("promomes")!=null){
-            this.productWebsiteBannerMessage=localStorage.getItem("promomes")
+        if (localStorage.getItem("promomes") != null) {
+            this.productWebsiteBannerMessage = localStorage.getItem("promomes")
         }
         this._instanceService.$getEventSubject.subscribe(data => {
             if (data.function === "updateTimePickup") {
@@ -98,7 +98,7 @@ export class PageOrderComponent implements OnInit {
                 this.orderMain.PickupDateTo = data.toDate;
                 let datePikcup = { fromDate: this.orderMain.PickupDateFrom, toDate: this.orderMain.PickupDateTo, fromDateDisplay: data.fromDateDisplay, toDateDisplay: data.toDateDisplay }
                 localStorage.setItem("datePickup", JSON.stringify(datePikcup))
-                
+
             }
         })
 
@@ -108,7 +108,7 @@ export class PageOrderComponent implements OnInit {
         //this.loadCart()
         //this._instanceService.sendCustomEvent("notCheckOut")
         this.GetOutletInfo()
-        //window.addEventListener('scroll', this.scroll, true);
+        window.addEventListener('scroll', this.scroll, true);
 
         //   setTimeout(() => {
         //     this.GetProductList("", "")
@@ -134,7 +134,7 @@ export class PageOrderComponent implements OnInit {
         // $('#numberCounter').handleCounter();
         $('.btn-add-special').on('click', function (event) {
             event.preventDefault();
-            
+
             $(this).parent('.btn-add-special-inner').find('.text-special').slideDown();
         });
 
@@ -150,40 +150,18 @@ export class PageOrderComponent implements OnInit {
         this.myFunction()
     };
     myFunction() {
-        var header = document.getElementById("myHeader");
-        var promo = document.getElementById("promo-mess")
-        var order_catalog = document.getElementById("order-catalog");
-        var cart = document.getElementById("cart-fixed")
-        var sticky = header.offsetTop;
-        var promo_sticky = promo.offsetTop;
-        var order_sticky = sticky + 300;
-        var card_stick =cart.offsetTop+100;
-        // if (window.pageYOffset > sticky) {
-        //     header.classList.add("sticky");
-        //     promo.classList.add("sticky");
-        // } else {
-        //     header.classList.remove("sticky");
-        //     promo.classList.remove("sticky");
+        var header = document.getElementById("order-catalog");
+       
+        // alert(sticky)
+        // alert(window.pageYOffset)
+        if (window.pageYOffset >= 250) {
+    header.classList.add("sticky")
+  } else {
+    header.classList.remove("sticky");
+  }
 
-        // }
-
-        if (window.pageYOffset + 100 > promo_sticky) {
-
-            promo.classList.add("promo-mess-sticky");
-        } else {
-
-            promo.classList.remove("promo-mess-sticky");
-
-        }
-        // if (window.pageYOffset+120 >= card_stick) {
-        //     //alert(card_stick)
-        //     cart.classList.add("cart-fixed");
-        // } else {
-
-        //     cart.classList.remove("cart-fixed");
-
-        // }
         
+
 
     }
     GetOutletInfo() {
@@ -199,13 +177,13 @@ export class PageOrderComponent implements OnInit {
         requestData.OrderType = this.OrderType;
         requestData.MerchantOutletId = this.OutletId;
         let requestJson = JSON.stringify(requestData);
-        
+
         this._pickupService.GetOutletInfo(commonDataJson, requestJson).then(data => {
-            
+
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
             localStorage.setItem('ot', this._util.encryptParams(JSON.stringify(data)));//set outlet info
             this.outletInfo = data;
-            console.log("outletinfor:"+ JSON.stringify(this.outletInfo))
+            console.log("outletinfor:" + JSON.stringify(this.outletInfo))
             this.outletInfo.OutletInfo[0].Rating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100));
             this.haveDataOutlet = true
             this.loadCart();
@@ -243,19 +221,19 @@ export class PageOrderComponent implements OnInit {
         requestData.OrderBy = "PRICE_HIGH_TO_LOW";
         let requestJson = JSON.stringify(requestData);
 
-        
+
         this._pickupService.GetProductList(commonDataJson, requestJson).then(data => {
-            
+
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.productList = data;
-            
+
             this.haveData = true
             this.haveDepartment = this.productList.IsHavingDepartment
-            
+
             for (let i = 0; i < this.productList.ProductList.length; i++) {
                 for (let j = 0; j < this.productList.ProductList[i].Produtcs.length; j++) {
                     if (this.productList.ProductList[i].Produtcs[j].Image.indexOf("no_image") > -1 || this.productList.ProductList[i].Produtcs[j].Image == "") {
-                        
+
                         this.productList.ProductList[i].Produtcs[j].HaveImage = false;
                     }
                     else {
@@ -272,7 +250,7 @@ export class PageOrderComponent implements OnInit {
     loadItemOfCategory(id, haveDepartment, index: number) {
         this.blockUI.start('processing ...'); // Start blocking
         this.addClass = index;
-        
+
         if (haveDepartment === "Y") {
             this.GetProductList("", id);
         }
@@ -288,7 +266,7 @@ export class PageOrderComponent implements OnInit {
         }, 700)
 
 
-        
+
     }
     subTotalItem(isQtyItem: boolean, productMain: ProductDetailParseModel) {
         let totalOfOptionItem = 0;
@@ -315,7 +293,7 @@ export class PageOrderComponent implements OnInit {
     }
     showProductDetail(productId: number) {
         this.blockUI.start("loading...")
-        
+
         this.productDetailParse = new ProductDetailParseModel();
         let commonData = new CommonDataRequest();
         let _location = localStorage.getItem('la');
@@ -327,13 +305,14 @@ export class PageOrderComponent implements OnInit {
         dataRequest.ProductId = productId;
         dataRequest.OrderType = this.OrderType
         let requestDataJson = JSON.stringify(dataRequest);
-        
+
         this._pickupService.GetProductDetail(commonDataJson, requestDataJson).then(data => {
-            
+
             this.productDetail = data
+            console.log("detail:" + JSON.stringify(this.productDetail))
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             if (data.ProductDetailInfo.length > 0) {
-                
+
                 this.productDetailParse.Id = this.productDetail.ProductDetailInfo[0].Id;
                 this.productDetailParse.Name = this.productDetail.ProductDetailInfo[0].Name;
                 this.productDetailParse.Description = this.productDetail.ProductDetailInfo[0].Description;
@@ -413,14 +392,14 @@ export class PageOrderComponent implements OnInit {
                 //this.initJquery();
                 this.openPopup()
                 this.blockUI.stop()
-                
+
 
             }
 
         })
     }
     openPopup() {
-        this.specialRequest=""
+        this.specialRequest = ""
         var el = $('.chicken-popup');
         if (el.length) {
             $.magnificPopup.open({
@@ -443,7 +422,7 @@ export class PageOrderComponent implements OnInit {
         }
     }
     upadteProduct(indexUpdate: number) {
-        
+
         this.showUpdateProduct = true;
         var el = $('.chicken-popup-update');
         if (el.length) {
@@ -460,11 +439,11 @@ export class PageOrderComponent implements OnInit {
 
     }
     checkOptionItem(optionItemId: string, optionId: number, index: number) {
-        
+
         let countItemChecked = 0;
         let maxselectItem = this.getMaxSelectItem(optionId);
         let minselectItem = this.getMinSelectItem(optionId);
-        
+
         countItemChecked = this.checkBox(optionItemId, optionId);
 
         if (countItemChecked > maxselectItem && maxselectItem != 0) {
@@ -474,29 +453,29 @@ export class PageOrderComponent implements OnInit {
                         this.productDetailParse.OptionList[i].OptionItemList[j].isCheck = false;
                         this.productDetailParse.OptionList[i].OptionItemList[j].isLock = false;
                         this.productDetailParse.OptionList[i].OptionItemList[j].Qty = 0;
-                        
+
                         break;
                     }
                 }
             }
         }
         let countAfter = this.countCheckBox(optionItemId, optionId);
-        
+
         if (countAfter == minselectItem) {
-            
+
             this.lockCheckBox(optionItemId, optionId);
         }
         this.subTotalOfOptionItem(optionItemId, optionId, this.productDetailParse)
         this.subTotalItem(false, this.productDetailParse);
-        
+
     }
 
     checkOptionItemUpdate(optionItemId: string, optionId: number, index: number) {
-        
+
         let countItemChecked = 0;
         let maxselectItem = this.getMaxSelectItemUdate(optionId, index);
         let minselectItem = this.getMinSelectItemUPdate(optionId, index);
-        
+
         countItemChecked = this.checkBoxUpdate(optionItemId, optionId);
 
         if (countItemChecked > maxselectItem && maxselectItem != 0) {
@@ -506,21 +485,21 @@ export class PageOrderComponent implements OnInit {
                         this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck = false;
                         this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isLock = false;
                         this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].Qty = 0;
-                        
+
                         break;
                     }
                 }
             }
         }
         let countAfter = this.countCheckBoxUpdate(optionItemId, optionId);
-        
+
         if (countAfter == minselectItem) {
-            
+
             this.lockCheckBoxUpdate(optionItemId, optionId);
         }
         this.subTotalOfOptionItemUpdate(optionItemId, optionId, this.cart.Cart[this.IndexItemCartUpdate], index)
         this.subTotalItem(false, this.cart.Cart[this.IndexItemCartUpdate]);
-        
+
     }
     getMaxSelectItem(optionId: number) {
         for (let i = 0; i < this.productDetailParse.OptionList.length; i++) {
@@ -537,7 +516,7 @@ export class PageOrderComponent implements OnInit {
         }
     }
     getMaxSelectItemUdate(optionId: number, index) {
-        
+
         for (let i = 0; i < this.cart.Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
             if (this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId) {
                 return this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].MaxOptionItemSelectionRequired;
@@ -667,7 +646,7 @@ export class PageOrderComponent implements OnInit {
         this.productDetailParse.Qty++;
         let isQtyItem = true;
         this.subTotalItem(isQtyItem, this.productDetailParse);
-        
+
     }
     AdditionQtyItemUpdate() {
         this.cart.Cart[this.IndexItemCartUpdate].Qty++;
@@ -681,13 +660,13 @@ export class PageOrderComponent implements OnInit {
         else {
             localStorage.setItem("crt", JSON.stringify(this.cart))
         }
-        
+
     }
     SubtractionItem() {
         if (this.productDetailParse.Qty > 1) {
             let isQtyItem = true;
             this.productDetailParse.Qty--;
-            
+
             this.subTotalItem(isQtyItem, this.productDetailParse)
         }
     }
@@ -717,14 +696,14 @@ export class PageOrderComponent implements OnInit {
     }
 
     addToCart() {
-        
+
         this.haveCart = true;
         this.productDetailParse.SpecialRequest = this.specialRequest;
         if (this.OrderType == ORDER_PICKUP) {//cart for pickup
             if (localStorage.getItem("crt") != null) {//check cart exits
                 this.cart = (JSON.parse(localStorage.getItem("crt")));
             }
-            
+
             if (this.cart.Cart.length > 0) {//check cart not yet item
                 if (this.outletInfo.OutletInfo[0].MerchantOutletId === this.cart.OuteletID) {
                     let isExits: boolean;
@@ -735,12 +714,12 @@ export class PageOrderComponent implements OnInit {
                     for (let i = 0; i < this.cart.Cart.length; i++) {
                         if (this.cart.Cart[i].Id == this.productDetailParse.Id) {
                             isExits = true;
-                            
+
                             if (isExits) {
                                 arrayOptionInCart = this.checkGroupOptionOfItem(this.cart.Cart[i]);
-                                
+
                                 isCompare = this.checkArrays(JSON.stringify(arrayOptionItem), JSON.stringify(arrayOptionInCart));
-                                
+
                                 if (isCompare) {
                                     this.cart.Cart[i].Qty = this.cart.Cart[i].Qty + this.productDetailParse.Qty;
                                     for (let j = 0; j < this.productDetailParse.OptionList.length; j++) {
@@ -763,7 +742,7 @@ export class PageOrderComponent implements OnInit {
                     localStorage.setItem('crt', JSON.stringify(this.cart));
                 }
                 else {//
-                    
+
                     setTimeout(() => {
                         $.magnificPopup.open({
                             items: {
@@ -784,47 +763,64 @@ export class PageOrderComponent implements OnInit {
                 localStorage.setItem('crt', JSON.stringify(this.cart));
             }
             this._instanceService.sendCustomEvent("UpdateCart")
-            
+
         } else if (this.OrderType === ORDER_DELIVERY) {//cart for delivery
             if (localStorage.getItem("crtd") != null) {//check cart exits
                 this.cart = (JSON.parse(localStorage.getItem("crtd")));
             }
             
             if (this.cart.Cart.length > 0) {//check cart not yet item
-                let isExits: boolean;
-                let isCompare: boolean;
-                let countCompare: number = 0;
-                let arrayOptionInCart: any;
-                let arrayOptionItem = this.checkGroupOptionOfItem(this.productDetailParse);
-                for (let i = 0; i < this.cart.Cart.length; i++) {
-                    if (this.cart.Cart[i].Id == this.productDetailParse.Id) {
-                        isExits = true;
-                        
-                        if (isExits) {
-                            arrayOptionInCart = this.checkGroupOptionOfItem(this.cart.Cart[i]);
-                            
-                            isCompare = this.checkArrays(JSON.stringify(arrayOptionItem), JSON.stringify(arrayOptionInCart));
-                            
-                            if (isCompare) {
-                                this.cart.Cart[i].Qty = this.cart.Cart[i].Qty + this.productDetailParse.Qty;
-                                for (let j = 0; j < this.productDetailParse.OptionList.length; j++) {
-                                    for (let h = 0; h < this.productDetailParse.OptionList[i].OptionItemList.length; h++) {
-                                        this.cart.Cart[i].OptionList[j].OptionItemList[h].Qty = this.cart.Cart[i].OptionList[j].OptionItemList[h].Qty + this.productDetailParse.OptionList[j].OptionItemList[h].Qty
-                                        this.subTotalOfOptionItem(this.cart.Cart[i].OptionList[j].OptionItemList[h].OptionItemId, this.cart.Cart[i].OptionList[j].OptionId, this.cart.Cart[i]);
-                                        this.subTotalItem(true, this.cart.Cart[i])
+               
+                if (this.outletInfo.OutletInfo[0].MerchantOutletId === this.cart.OuteletID) {
+                    let isExits: boolean;
+                    let isCompare: boolean;
+                    let countCompare: number = 0;
+                    let arrayOptionInCart: any;
+                    let arrayOptionItem = this.checkGroupOptionOfItem(this.productDetailParse);
+                    for (let i = 0; i < this.cart.Cart.length; i++) {
+                        if (this.cart.Cart[i].Id == this.productDetailParse.Id) {
+                            isExits = true;
+
+                            if (isExits) {
+                                arrayOptionInCart = this.checkGroupOptionOfItem(this.cart.Cart[i]);
+
+                                isCompare = this.checkArrays(JSON.stringify(arrayOptionItem), JSON.stringify(arrayOptionInCart));
+
+                                if (isCompare) {
+                                    this.cart.Cart[i].Qty = this.cart.Cart[i].Qty + this.productDetailParse.Qty;
+                                    for (let j = 0; j < this.productDetailParse.OptionList.length; j++) {
+                                        for (let h = 0; h < this.productDetailParse.OptionList[j].OptionItemList.length; h++) {
+                                            console.log("qty:" + this.cart.Cart[i].OptionList[j].OptionItemList[h].Qty)
+                                            this.cart.Cart[i].OptionList[j].OptionItemList[h].Qty = this.cart.Cart[i].OptionList[j].OptionItemList[h].Qty + this.productDetailParse.OptionList[j].OptionItemList[h].Qty
+                                            this.subTotalOfOptionItem(this.cart.Cart[i].OptionList[j].OptionItemList[h].OptionItemId, this.cart.Cart[i].OptionList[j].OptionId, this.cart.Cart[i]);
+                                            this.subTotalItem(true, this.cart.Cart[i])
+                                        }
                                     }
                                 }
                             }
+
                         }
+                    }
+
+                    if (!isCompare) {
+                        this.cart.Cart.push(this.productDetailParse);
 
                     }
+                    localStorage.setItem('crtd', JSON.stringify(this.cart));
+                }
+                else {
+                    setTimeout(() => {
+                        $.magnificPopup.open({
+                            items: {
+                                src: '#cart-popup'
+                            },
+                            type: 'inline'
+                        });
+                    }, 50)
+
+                    this.errorCart = "please delete old your cart";
                 }
 
-                if (!isCompare) {
-                    this.cart.Cart.push(this.productDetailParse);
-
-                }
-                localStorage.setItem('crtd', JSON.stringify(this.cart));
 
             }
             else {
@@ -834,7 +830,7 @@ export class PageOrderComponent implements OnInit {
                 localStorage.setItem('crtd', JSON.stringify(this.cart));
             }
             this._instanceService.sendCustomEvent("UpdateCart")
-            
+
         }
         this.orderMain.ArrayItem = this.cart.Cart;
         this.VerifyOrder();
@@ -855,7 +851,7 @@ export class PageOrderComponent implements OnInit {
         for (let i = 0; i < item.OptionList.length; i++) {
             for (let j = 0; j < item.OptionList[i].OptionItemList.length; j++) {
                 if (item.OptionList[i].OptionItemList[j].Qty > 0 && item.OptionList[i].OptionItemList[j].isCheck == true) {
-                    arryOptionItemId.push({ 'idOptionItem': item.OptionList[i].OptionItemList[j].OptionItemId, 'Qty': item.OptionList[i].OptionItemList[j].Qty })
+                    arryOptionItemId.push({ 'idOptionItem': item.OptionList[i].OptionItemList[j].OptionItemId, 'Qty': item.OptionList[i].OptionItemList[j].Qty, 'note': item.SpecialRequest })
                 }
             }
         }
@@ -864,6 +860,8 @@ export class PageOrderComponent implements OnInit {
     checkArrays(arrA, arrB) {
 
         //check if lengths are different
+        console.log("array:" + arrA)
+        console.log("array:" + arrB)
         if (arrA.length !== arrB.length) return false;
 
 
@@ -881,7 +879,7 @@ export class PageOrderComponent implements OnInit {
                 this.haveCart = true;
                 this.cart = JSON.parse(localStorage.getItem("crt"));
 
-                
+
                 // this.orderMain.PickupAt = this.outletInfo.OutletInfo[0].Address
                 // this.orderMain.MerchantId = this.outletInfo.OutletInfo[0].MerchantId;
                 if (this.cart.Cart.length > 0) {
@@ -889,10 +887,10 @@ export class PageOrderComponent implements OnInit {
                     if (this.cart.OrderType === ORDER_PICKUP) {
                         // this.isPickup = true;
                         // this.isDelivery = false;
-                        
+
                     }
                     else {
-                        
+
                         // this.isDelivery = true;
                         // this.isPickup = false;
                     }
@@ -904,7 +902,7 @@ export class PageOrderComponent implements OnInit {
                     // this.showCartEmpty = true
                     // this.showCart = false
                     this.haveCart = false;
-                    
+
                 }
 
             }
@@ -912,7 +910,7 @@ export class PageOrderComponent implements OnInit {
                 // this.showCartEmpty = true
                 // this.showCart = false
                 this.haveCart = false;
-                
+
             }
         } else if (this.OrderType === ORDER_DELIVERY) {//cart for delivery
             if (localStorage.getItem("crtd") != null) {//check when had cart
@@ -924,10 +922,10 @@ export class PageOrderComponent implements OnInit {
                     if (this.cart.OrderType === ORDER_PICKUP) {
                         // this.isPickup = true;
                         // this.isDelivery = false;
-                        
+
                     }
                     else {
-                        
+
                         // this.isDelivery = true;
                         // this.isPickup = false;
                     }
@@ -938,14 +936,14 @@ export class PageOrderComponent implements OnInit {
                 else {
 
                     this.haveCart = false;
-                    
+
                 }
 
             }
             else {//init frist time
                 this.haveCart = false;
                 // this.showCart = false
-                
+
             }
         }
         //get option item of item
@@ -968,7 +966,7 @@ export class PageOrderComponent implements OnInit {
         }
     }
     subTotalOrder() {
-        
+
         let subtotal = 0;
         for (let i = 0; i < this.orderMain.ArrayItem.length; i++) {
             subtotal = subtotal + this.orderMain.ArrayItem[i].Total;
@@ -977,12 +975,12 @@ export class PageOrderComponent implements OnInit {
         this.orderMain.SubTotalStr = this._util.formatCurrency(this.orderMain.SubTotal, "S$")
 
         let _total = (this.orderMain.SubTotal + this.orderMain.ServiceFeeValue + this.orderMain.Surcharge + this.orderMain.DeliveryFee + this.orderMain.RiderTip) - (this.orderMain.PromoCodeValue + this.orderMain.Credit + this.orderMain.Discount);
-        
+
         this.orderMain.Total = _total;
         this.orderMain.TotalDisplay = this._util.formatCurrency(this.orderMain.Total, "S$");
     }
     removeQty(i) {
-        
+
         if (this.cart.Cart[i].Qty > 1) {
             let totalAnyItem = this.cart.Cart[i].Total / this.cart.Cart[i].Qty;
             this.cart.Cart[i].Qty--;
@@ -995,7 +993,7 @@ export class PageOrderComponent implements OnInit {
 
     }
     removeCart(index: number) {
-        
+
         this.cart.Cart.splice(index, 1);
         if (this.OrderType === ORDER_PICKUP) {
             localStorage.setItem("crt", JSON.stringify(this.cart))
@@ -1005,12 +1003,14 @@ export class PageOrderComponent implements OnInit {
         }
 
         this.orderMain.ArrayItem = this.cart.Cart;
-        //this.VerifyOrder();
+        this.VerifyOrder();
+        this.subTotalOrder()
         if (this.cart.Cart.length <= 0) {
             this.haveCart = false
             //this.showCart = false
         }
-        
+
+
     }
     showAddSpecial() {
         $('.text-special').slideDown();
@@ -1071,11 +1071,13 @@ export class PageOrderComponent implements OnInit {
     deleteCartOld() {
         if (this.OrderType === ORDER_PICKUP) {
             localStorage.removeItem("crt");
+            this.cart = new CartOrder();
             this.loadCart()
             $.magnificPopup.close()
         }
         else {
             localStorage.removeItem("crtd");
+            this.cart = new CartOrder();
             this.loadCart()
             $.magnificPopup.close()
         }
@@ -1109,10 +1111,10 @@ export class PageOrderComponent implements OnInit {
         common_data.Location = _location
         common_data.ServiceName = "GetDeliveryAddresses";
         let common_data_json = JSON.stringify(common_data);
-        
+
         let data_request = { CustomerId: this.customerInfo.CustomerInfo[0].CustomerId };
         let data_request_json = JSON.stringify(data_request);
-        
+
         this._pickupService.GetDeliveryAddresses(common_data_json, data_request_json).then(data => {
             this.listDeliveryAddress = data;
             this._gof3rModule.checkInvalidSessionUser(this.listDeliveryAddress.ResultCode);
@@ -1140,7 +1142,7 @@ export class PageOrderComponent implements OnInit {
                     type: 'inline'
                 });
             }
-            
+
         })
     }
     VerifyOrder() {
@@ -1163,13 +1165,123 @@ export class PageOrderComponent implements OnInit {
             // 
             this._pickupService.VerifyOrder(common_data_json, requestDataJson).then(data => {
                 this.verifyOrderMain = data;
-                this.hadVeryfiOrder=true
-                console.log("very:"+ JSON.stringify(this.verifyOrderMain))
+                this.hadVeryfiOrder = true
+                console.log("very:" + JSON.stringify(this.verifyOrderMain))
             })
         }
     }
-    showpopupInfor(){
+    showpopupInfor() {
         this.openPopupOutletInfor()
     }
+    SubtractionQtyOptionItem(optionItemId: string, optionId: number) {
+        console.log('add:' + optionId + '-' + optionItemId)
+        let hadCheck = this.checkItemHadCheck(optionItemId, optionId);
+
+        if (hadCheck) {// option item checked
+            console.log('co check')
+            let minQuanty = this.getMinQuantyOptionItem(optionItemId, optionId);
+            let qtyOptionItem = this.getQuantyOfOptionItem(optionItemId, optionId);
+            if (qtyOptionItem > minQuanty && minQuanty != 0) {
+                this.SubQuatyOptionItem(optionItemId, optionId);
+            }
+            if (minQuanty == 0) {
+                if (this.getQuantyOfOptionItem(optionItemId, optionId) > 1) {
+                    this.SubQuatyOptionItem(optionItemId, optionId);
+                }
+            }
+        } else {//option item no checked
+            console.log('ko check')
+        }
+        this.subTotalOfOptionItem(optionItemId, optionId, this.productDetailParse)
+        this.subTotalItem(false, this.productDetailParse);
+    }
+    checkItemHadCheck(optionItemId: string, optionId: number) {
+        let hadCheck: boolean;
+        for (let i = 0; i < this.productDetailParse.OptionList.length; i++) {
+            for (let j = 0; j < this.productDetailParse.OptionList[i].OptionItemList.length; j++) {
+                if (this.productDetailParse.OptionList[i].OptionId == optionId && this.productDetailParse.OptionList[i].OptionItemList[j].OptionItemId == optionItemId) {
+                    if (this.productDetailParse.OptionList[i].OptionItemList[j].isCheck == true) {
+                        hadCheck = true;
+                    }
+                }
+            }
+        }
+        return hadCheck;
+    }
+    getMaxQuantyOptionItem(optionItem: string, optionId: number) {
+        let maxQuaty = 0;
+        for (let i = 0; i < this.productDetailParse.OptionList.length; i++) {
+            for (let j = 0; j < this.productDetailParse.OptionList[i].OptionItemList.length; j++) {
+                if (this.productDetailParse.OptionList[i].OptionId == optionId && this.productDetailParse.OptionList[i].OptionItemList[j].OptionItemId == optionItem) {
+                    maxQuaty = this.productDetailParse.OptionList[i].OptionItemList[j].MaxQuantityRequired;
+                }
+            }
+        }
+        return maxQuaty;
+    }
+
+    getMinQuantyOptionItem(optionItem: string, optionId: number) {
+        let minQuaty: number = 0;
+        for (let i = 0; i < this.productDetailParse.OptionList.length; i++) {
+            for (let j = 0; j < this.productDetailParse.OptionList[i].OptionItemList.length; j++) {
+                if (this.productDetailParse.OptionList[i].OptionId == optionId && this.productDetailParse.OptionList[i].OptionItemList[j].OptionItemId == optionItem) {
+                    minQuaty = this.productDetailParse.OptionList[i].OptionItemList[j].MinQuantityRequired;
+                }
+            }
+        }
+        return minQuaty;
+    }
+    getQuantyOfOptionItem(optionItem: string, optionId: number) {
+        let quaty = 0;
+        for (let i = 0; i < this.productDetailParse.OptionList.length; i++) {
+            for (let j = 0; j < this.productDetailParse.OptionList[i].OptionItemList.length; j++) {
+                if (this.productDetailParse.OptionList[i].OptionId == optionId && this.productDetailParse.OptionList[i].OptionItemList[j].OptionItemId == optionItem) {
+                    quaty = this.productDetailParse.OptionList[i].OptionItemList[j].Qty;
+                }
+            }
+        }
+        return quaty;
+    }
+    SubQuatyOptionItem(optionItem: string, optionId: number) {
+        for (let i = 0; i < this.productDetailParse.OptionList.length; i++) {
+            for (let j = 0; j < this.productDetailParse.OptionList[i].OptionItemList.length; j++) {
+                if (this.productDetailParse.OptionList[i].OptionId == optionId && this.productDetailParse.OptionList[i].OptionItemList[j].OptionItemId == optionItem) {
+                    this.productDetailParse.OptionList[i].OptionItemList[j].Qty--;
+                }
+            }
+        }
+    }
+    additionQtyOptionItem(optionItemId: string, optionId: number) {
+        console.log('add:' + optionId + '-' + optionItemId)
+        let hadCheck = this.checkItemHadCheck(optionItemId, optionId);
+
+        if (hadCheck) {// option item checked
+            console.log('co check')
+            let maxQuanty = this.getMaxQuantyOptionItem(optionItemId, optionId);
+            console.log('co check:' + maxQuanty)
+            let qtyOptionItem = this.getQuantyOfOptionItem(optionItemId, optionId);
+            if (qtyOptionItem < maxQuanty && maxQuanty != 0) {
+                this.addQuatyOptionItem1(optionItemId, optionId);
+            }
+            if (maxQuanty == 0) {
+                this.addQuatyOptionItem1(optionItemId, optionId);
+            }
+        } else {//option item no checked
+            console.log('ko check')
+        }
+        this.subTotalOfOptionItem(optionItemId, optionId, this.productDetailParse)
+        this.subTotalItem(false, this.productDetailParse);
+        console.log(JSON.stringify(this.productDetailParse))
+    }
+    addQuatyOptionItem1(optionItem: string, optionId: number) {
+        for (let i = 0; i < this.productDetailParse.OptionList.length; i++) {
+            for (let j = 0; j < this.productDetailParse.OptionList[i].OptionItemList.length; j++) {
+                if (this.productDetailParse.OptionList[i].OptionId == optionId && this.productDetailParse.OptionList[i].OptionItemList[j].OptionItemId == optionItem) {
+                    this.productDetailParse.OptionList[i].OptionItemList[j].Qty++;
+                }
+            }
+        }
+    }
+
 
 }

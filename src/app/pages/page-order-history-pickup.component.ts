@@ -42,12 +42,12 @@ export class OrderHistoryPickupComponent implements OnInit {
 
         let data_request={CurrentCustomerId:this.customerInfo.CustomerInfo[0].CustomerId,Lang:"en",FromRow:""}
         let data_request_json = JSON.stringify(data_request);
-        
         this._pickupService.GetPickupOrderList(common_data_json,data_request_json).then(data=>{
            
             this.blockUI.stop();
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
              this.customerOrderListMain = data;
+             
              for(let i = 0; i< this.customerOrderListMain.CustomerPickUpOrderList.length; i++){
                 for(let j = 0; j< this.customerOrderListMain.CustomerPickUpOrderList[i].PickUpOrderList.length; j++){
                     this.PickUpOrderList.push(this.customerOrderListMain.CustomerPickUpOrderList[i].PickUpOrderList[j]);

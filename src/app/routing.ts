@@ -24,6 +24,7 @@ import { PaymentOptionComponent } from "./pages/page-payment-option.component";
 import { DeliveryAddressComponent } from "./pages/page-delivery.component";
 import { OrderHistoryPickupComponent } from "./pages/page-order-history-pickup.component";
 import { OrderHistoryDetailComponent } from "./pages/page-order-history-detail.component";
+import { GrowsWithUsComponent } from "./pages/page-grows-with-us.component";
 
 const routes: Routes = [
     
@@ -51,6 +52,7 @@ const routes: Routes = [
     { path: 'delivery-address',component:DeliveryAddressComponent},
     { path: 'order-history-pickup',component:OrderHistoryPickupComponent},
     { path: 'order-history-detail/:orderType/:customerOrderId',component:OrderHistoryDetailComponent},
+    { path: 'grows-with-us',component:GrowsWithUsComponent},
     { path: 'hoc', component: HocComponent },
     
 ]

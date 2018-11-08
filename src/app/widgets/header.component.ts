@@ -502,6 +502,7 @@ export class HeaderGof3rComponent implements OnInit {
             height: ''
         });;
         this._instanceService.sendCustomEvent(dataSend);
+        this._route.navigateByUrl("/search-result")
     }
     pickupClick() {
         let dataSend = { function: 'Pickup', type: ORDER_PICKUP };
@@ -517,6 +518,7 @@ export class HeaderGof3rComponent implements OnInit {
             height: ''
         });;
         this._instanceService.sendCustomEvent(dataSend);
+        this._route.navigateByUrl("/search-result")
     }
     getCurrentLocation() {
         if (window.navigator && window.navigator.geolocation) {
@@ -1069,7 +1071,7 @@ move() {
         let requestRegister = new RequestRegisterCustomerModel();
         requestRegister.CustomerName = this.signUp.FullName
         requestRegister.Email = this.signUp.Email
-        requestRegister.Mobile = this.signUp.PhoneNumber
+        requestRegister.Mobile =this.signUp.PhoneCode+ this.signUp.PhoneNumber
         requestRegister.OTP = otp
         requestRegister.Password = this.signUp.Password
         let request_data_json = JSON.stringify(requestRegister);

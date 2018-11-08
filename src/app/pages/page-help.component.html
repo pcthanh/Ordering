@@ -46,32 +46,42 @@
                         <form style="margin-top: 10px">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Name</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter name">
+                                <input type="text" [(ngModel)]="this.sendToucht.FullName" name="full-name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter name">
                                 
                             </div>
                              <div class="form-group">
                                 <label for="exampleInputEmail1">Phone number</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter phone number">
+                                <input type="text" [(ngModel)]="this.sendToucht.Phone" name="phone" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter phone number">
                                 <small id="emailHelp" class="form-text text-muted">We'll never share your phone number with anyone else.</small>
                             </div>
                              <div class="form-group">
                                 <label for="exampleInputEmail1">Email address</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                                <input type="text" [(ngModel)]="this.sendToucht.Email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
                                 <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Content</label>
-                                <textarea  type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter your concerns of queries"></textarea>
+                                <textarea  type="text" [(ngModel)]="this.sendToucht.Content" name="content" class="form-control" id="exampleInputPassword1" placeholder="Enter content"></textarea>
                             </div>
                             <!--<div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
                                 <label class="form-check-label" for="exampleCheck1">Check me out</label>
                             </div>-->
-                            <button type="submit" style="background-color: #8e49fe" class="btn btn-primary">Submit</button>
+                            <button type="button" (click)="sendTouchRequest()" style="background-color: #8e49fe;width: 100%" class="btn btn-primary">GOF3R IT</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </main>
+    <div id="success-popup" class="success-popup mfp-hide" style="text-align: center">
+            <div class="" style="text-align: center">{{this.message }}</div>
+            <!--<div style="cursor: pointer" class="text-center" (click)="trackerOrder()" 
+            ><img src="assets/images/ico-succsess.png" alt=""></div>-->
+            
+           
+    </div>
+    <block-ui>
+    <!-- Your app markup here -->
+</block-ui>
     <gof3r-footer></gof3r-footer>

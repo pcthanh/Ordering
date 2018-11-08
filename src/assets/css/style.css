@@ -424,6 +424,7 @@ a.btn-main {
   width: 100%;
   height: auto;
 }
+
 .blog-post .img-blog .title {
   position: absolute;
   top: 50%;
@@ -1312,7 +1313,10 @@ a.btn-main {
   font-weight: 300;
 }
 .cms-page-restaurant .header-wrap {
-  background-image: url('../images/bn-restaurant.jpg');
+  background-image: url('../images/merchant_bk.jpg');
+}
+.cms-page-rider .header-wrap {
+  background-image: url('../images/rider_bk.jpeg');
 }
 .cms-page-restaurant .download-app-wrap {
   background: url('../images/bg-restaurant.jpg') center center no-repeat;
@@ -1876,7 +1880,7 @@ blockquote {
   display: block;
 }
 .main-content-order .main-top {
-  background: url('../images/bg-top-order.jpg') 0 0 no-repeat;
+  background: url('../images/banner_outlet.jpg') 0 0 no-repeat;
   background-size: cover;
   color: #fff;
 }
@@ -1911,7 +1915,7 @@ blockquote {
   box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.2);
   background: #f5f5f5;
   position: fixed;
-  width: calc(100% - 74%);
+  width: calc(100% - 70%);
   top: 160px
 }
 .cart-sidebar-wrap .img-cart-empty {
@@ -2028,7 +2032,7 @@ blockquote {
   padding-right: 0;
 }
 .order-catalog ul {
-  padding-left: 30px;
+  padding-left: 0;
   padding-top: 10px;
   list-style: none;
 }
@@ -4002,9 +4006,12 @@ blockquote {
   }
   /*Begin ThanhPC 15/09/2018*/
   .col-cart {
-    -ms-flex: 0 0 25.333333%;
+    /*-ms-flex: 0 0 25.333333%;
     flex: 0 0 25.333333%;
-    max-width: 25.333333%;
+    max-width: 25.333333%;*/
+    -ms-flex: 0 0 29.333333%;
+    flex: 0 0 29.333333%;
+    max-width: 29.333333%;
   }
   .col-cart-check-out{
      -ms-flex: 0 0 29.333333%;
@@ -4020,9 +4027,12 @@ blockquote {
   
   /*Begin ThanhPC 15/09/2018*/
   .col-map-checkout { 
-    -ms-flex: 0 0 74.666667%;
+    /*-ms-flex: 0 0 74.666667%;
     flex: 0 0 74.666667%;
-    max-width: 74.666667%;
+    max-width: 74.666667%;*/
+    -ms-flex: 0 0 70.666667%;
+    flex: 0 0 70.666667%;
+    max-width: 70.666667%;
   }
   .col-map-checkout1{
     -ms-flex: 0 0 70.666667%;

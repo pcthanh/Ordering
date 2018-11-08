@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="order-address">
                                         <div class="time">{{itemOrder.OrderDate}}</div>
-                                        <!--<div class="address">1010 Main Street, Saskatoon, SK, Canada</div>-->
+                                        <div class="address">{{itemOrder.DeliveryAddress}}</div>
                                     </div>
                                     <div class="order-detail">
                                         <a *ngIf="itemOrder.OrderStatus===DELIVERED" [routerLink]="['/order-history-detail','delivery',itemOrder.CustomerOrderId]" style="color: #ffffff" class="btn-main btn-order-detail">Order details</a>
@@ -57,9 +57,19 @@
                                 </div>
                                 
                             </div>
-                            <div class="order-history-paging">
+                            <div *ngIf="customerOrderListMain.CustomerDeliveryOrderList.length==0" class="order-empty" style="text-align: center;">
+                                   <div class="title" style="padding: 15px;
+    font-size: 18px;
+    font-weight: 500;color: red">
+                                        Your list order is empty
+                                   </div>
+                                   <div class="button-order">
+                                       <button [routerLink]="['/search-result']"  style="width: 100%" class="btn-main btn-apply"><span>Start Ordering</span></button>
+                                   </div>
+                               </div>
+                            <!--<div class="order-history-paging">
                                 Showing 1 to 2 of 2 entries
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>

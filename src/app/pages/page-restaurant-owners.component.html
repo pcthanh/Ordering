@@ -4,7 +4,7 @@
             <div class="header-top">
                 <div class="main-menu">
                     <h1 class="logo text-hide"><a href=""><img src="assets/images/logo.png" alt=""><span>GOF3R</span></a></h1>
-                    <div class="top-action">
+                    <!--<div class="top-action">
                         <div class="user-login user-account">
                             <div class="account">Account</div>
                             <div class="login-wrap">
@@ -82,17 +82,17 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
-            <!--<div class="header-content">
+            <div class="header-content">
                 <div class="slogan-form">
                     <h2 class="large wow fadeIn" data-wow-duration="1s">Grow With GOF3R</h2>
                     <div class="btn-center wow fadeIn" data-wow-duration="3s">
                         <button id="btnStart" class="btn-main btn-getstart">GET STARTED</button>
                     </div>
                 </div>
-            </div>-->
+            </div>
         </div>
     </header>
     <main>
@@ -150,29 +150,29 @@
                         <form action="#">
                             <div class="input-apply">
                                 <label for="restaurant-name" class="label">Restaurant Name <span class="note">Required</span></label>
-                                <input id="restaurant-name" type="text" name="restaurant-name">
+                                <input id="restaurant-name" [(ngModel)]="this.merchantContact.RestaurantName" type="text" name="restaurant-name">
                             </div>
                             <div class="input-apply">
                                 <label for="contactnane-input" class="label">Contact Name <span class="note">Required</span></label>
-                                <input id="contactnane-input" type="text" name="contact-name">
+                                <input id="contactnane-input" [(ngModel)]="this.merchantContact.ContactName" type="text" name="contact-name">
                             </div>
                             <div class="input-apply">
                                 <label for="phone-input" class="label">Contact Phone <span class="note">Required</span></label>
-                                <input id="phone-input" type="text" name="contact-phone">
+                                <input id="phone-input" [(ngModel)]="this.merchantContact.ContactPhone" type="text" name="contact-phone">
                             </div>
                             <div class="input-apply">
                                 <label for="email-input" class="label">Email <span class="note">Required</span></label>
-                                <input id="email-input" type="text" name="email-email">
+                                <input id="email-input" [(ngModel)]="this.merchantContact.ContactEmail" type="text" name="email-email">
                             </div>
                             <div class="input-apply">
                                 <label for="address-input" class="label">Restaurant Address <span class="note">Required</span></label>
-                                <input id="address-input" type="text" name="restaurant-address">
+                                <input id="address-input" [(ngModel)]="this.merchantContact.RestaurantAddress" type="text" name="restaurant-address">
                             </div>
                             <div class="input-apply">
                                 <label for="else-input" class="label">Anything else we should know? <span class="note">Required</span></label>
-                                <textarea name="else" id="else-input" rows="10"></textarea>
+                                <textarea name="else"[(ngModel)]="this.merchantContact.Notes" id="else-input" rows="10"></textarea>
                             </div>
-                            <button class="btn-main btn-apply"><span>GOF3R IT</span></button>
+                            <button (click)="sendToServer()" class="btn-main btn-apply"><span>GOF3R IT</span></button>
                         </form>
                         <!--<div class="login-here">
                             <div class="text">Already a member of the network? Email us at restaurants@GOF3R.com with any questions or click below to log into your GOF3R Restaurant Portal.</div>
@@ -183,6 +183,16 @@
             </div>
         </div>
     </main>
+    <div id="success-popup" class="success-popup mfp-hide" style="text-align: center">
+            <div class="" style="text-align: center">{{this.message }}</div>
+            <!--<div style="cursor: pointer" class="text-center" (click)="trackerOrder()" 
+            ><img src="assets/images/ico-succsess.png" alt=""></div>-->
+            
+           
+    </div>
+    <block-ui>
+    <!-- Your app markup here -->
+</block-ui>
     <gof3r-footer></gof3r-footer>
     <!-- Optional JavaScript -->
     

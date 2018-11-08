@@ -13,6 +13,7 @@ export class FooterLeftComponent implements OnInit {
     isPrivacy:boolean=false;
     isterms:boolean=false;
     isContactUS:boolean=false;
+    isGrowsUS:boolean=false;
     constructor(private _route:Router,private _instanceService:EventSubscribeService) { 
         this._instanceService.$getEventSubject.subscribe(data=>{
             
@@ -31,6 +32,9 @@ export class FooterLeftComponent implements OnInit {
             if(data==="ContactUS"){
                 this.isContactUS=true;
             }
+            if(data==="GrowsUS"){
+                this.isGrowsUS=true;
+            }
         })
     }
 
@@ -44,6 +48,7 @@ export class FooterLeftComponent implements OnInit {
         this.isPrivacy=false;
         this.isterms=false;
         this.isContactUS=false;
+        this.isGrowsUS=false;
         this._instanceService.sendCustomEvent('')
         this._route.navigateByUrl('/page-about')
     }
@@ -53,6 +58,7 @@ export class FooterLeftComponent implements OnInit {
         this.isPrivacy=false;
         this.isterms=false
         this.isContactUS=false;
+        this.isGrowsUS=false;
         this._instanceService.sendCustomEvent('')
         this._route.navigateByUrl('/page-faq')
     }
@@ -62,6 +68,7 @@ export class FooterLeftComponent implements OnInit {
         this.isPrivacy=true;
         this.isterms=false
         this.isContactUS=false;
+        this.isGrowsUS=false;
         this._instanceService.sendCustomEvent('')
         this._route.navigateByUrl('/page-privacy')
     }
@@ -71,6 +78,7 @@ export class FooterLeftComponent implements OnInit {
         this.isPrivacy=false;
         this.isterms=true
         this.isContactUS=false;
+        this.isGrowsUS=false;
         this._instanceService.sendCustomEvent('')
         this._route.navigateByUrl('/page-terms')
     }
@@ -80,7 +88,18 @@ export class FooterLeftComponent implements OnInit {
         this.isPrivacy=false;
         this.isterms=false
         this.isContactUS=true;
+        this.isGrowsUS=false;
         this._instanceService.sendCustomEvent('')
         this._route.navigateByUrl('/contact-us')
+    }
+    Grows(){
+        this.isAbout=false;
+        this.isFAQ=false
+        this.isPrivacy=false;
+        this.isterms=false
+        this.isContactUS=false;
+        this.isGrowsUS=true;
+        this._instanceService.sendCustomEvent('')
+        this._route.navigateByUrl('/grows-with-us')
     }
 }

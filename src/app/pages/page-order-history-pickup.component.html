@@ -37,7 +37,7 @@
                     </div>
                     <div class="col-12 col-md-9">
                         <div class="cms-content">
-                            <h2 class="page-title">Order History</h2>
+                            <h2 class="page-title">Order Pickup History</h2>
                             <div class="order-history-wrap" >
                                 
                                      <div class="order-history-item" *ngFor="let itemOrder of PickUpOrderList">
@@ -56,13 +56,23 @@
                                         
                                     </div>
                                 </div>
-                                
+                             
                                
                                
                             </div>
-                            <div class="order-history-paging">
+                              <div *ngIf="this.PickUpOrderList.length==0" class="order-empty" style="text-align: center;">
+                                   <div class="title" style="padding: 15px;
+    font-size: 18px;
+    font-weight: 500;color: red">
+                                        Your list order is empty
+                                   </div>
+                                   <div class="button-order">
+                                       <button [routerLink]="['/search-result']"  style="width: 100%" class="btn-main btn-apply"><span>Start Ordering</span></button>
+                                   </div>
+                               </div>
+                            <!--<div class="order-history-paging">
                                 Showing 1 to 2 of 2 entries
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>

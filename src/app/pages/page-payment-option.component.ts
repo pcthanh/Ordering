@@ -147,10 +147,10 @@ export class PaymentOptionComponent implements OnInit {
 
             let data_request_json = JSON.stringify(data_request)
 
-            
+            console.log("v:"+ data_request_json);
             this._pickupService.VerifyCard(common_data_json, data_request_json).then(data => {
                 this.verifycard = data;
-                
+                console.log("c1:"+ JSON.stringify(this.verifycard))
                 if (this.verifycard.ResultCode === "000") {
                     common_data.ServiceName = "AddNewCardWeb"
                     let common_data_json = JSON.stringify(common_data);
@@ -171,6 +171,7 @@ export class PaymentOptionComponent implements OnInit {
                     data_request.ExpiryDate = this.addCardData.CardMonth + "/" + this.addCardData.CardYear
                     data_request.MaskedCardNumber = this.masKingNumberCard(this.addCardData.CardNumber.replace(/\s/g, ''));
                     let data_request_json = JSON.stringify(data_request)
+                    console.log("a:"+ data_request_json)
                     this._pickupService.AddNewCard(common_data_json, data_request_json).then(data => {
                         console.log("card:"+ JSON.stringify(data))
                         if (data.ResultCode === "000") {
