@@ -52,4 +52,6 @@ export class PickupOrderDetailItem{
     DeliverToAlias:string=""
     DeliverOn:string=""
     EstimatedDeliveryTime:string=""
+    MerchantGeoLocation:string="";
+    CustomerGeoLocation:string=""
 }

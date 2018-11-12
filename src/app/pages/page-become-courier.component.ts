@@ -63,6 +63,7 @@ export class BecomeCourierComponent implements OnInit {
         let common_data_json = JSON.stringify(common_data);
         let data_request = { Lang: "en" };
         let data_request_json = JSON.stringify(data_request);
+        console.log("com:"+ common_data_json)
         this._pickupService.GetOutletListByLocation(common_data_json, data_request_json).then(data => {
 
             this.responseArea = data;

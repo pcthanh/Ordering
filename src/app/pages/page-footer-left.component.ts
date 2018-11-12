@@ -49,7 +49,7 @@ export class FooterLeftComponent implements OnInit {
         this.isterms=false;
         this.isContactUS=false;
         this.isGrowsUS=false;
-        this._instanceService.sendCustomEvent('')
+        this._instanceService.sendCustomEvent('About')
         this._route.navigateByUrl('/page-about')
     }
     faqClick(){
@@ -59,7 +59,7 @@ export class FooterLeftComponent implements OnInit {
         this.isterms=false
         this.isContactUS=false;
         this.isGrowsUS=false;
-        this._instanceService.sendCustomEvent('')
+        this._instanceService.sendCustomEvent('FAQ')
         this._route.navigateByUrl('/page-faq')
     }
     privacyClick(){
@@ -69,7 +69,7 @@ export class FooterLeftComponent implements OnInit {
         this.isterms=false
         this.isContactUS=false;
         this.isGrowsUS=false;
-        this._instanceService.sendCustomEvent('')
+        this._instanceService.sendCustomEvent('PRIVACY')
         this._route.navigateByUrl('/page-privacy')
     }
     termsClick(){
@@ -79,7 +79,7 @@ export class FooterLeftComponent implements OnInit {
         this.isterms=true
         this.isContactUS=false;
         this.isGrowsUS=false;
-        this._instanceService.sendCustomEvent('')
+        this._instanceService.sendCustomEvent('TERMS')
         this._route.navigateByUrl('/page-terms')
     }
     ContactClick(){
@@ -89,7 +89,7 @@ export class FooterLeftComponent implements OnInit {
         this.isterms=false
         this.isContactUS=true;
         this.isGrowsUS=false;
-        this._instanceService.sendCustomEvent('')
+        this._instanceService.sendCustomEvent('ContactUS')
         this._route.navigateByUrl('/contact-us')
     }
     Grows(){
@@ -99,7 +99,7 @@ export class FooterLeftComponent implements OnInit {
         this.isterms=false
         this.isContactUS=false;
         this.isGrowsUS=true;
-        this._instanceService.sendCustomEvent('')
+        this._instanceService.sendCustomEvent('Grows')
         this._route.navigateByUrl('/grows-with-us')
     }
 }

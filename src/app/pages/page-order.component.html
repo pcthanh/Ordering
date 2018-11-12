@@ -61,7 +61,9 @@
                             <div class="order-content">
                                 <div class="row">
                                     <div class="col-12 col-md-3" >
-                                        <div class="order-catalog" id="order-catalog" *ngIf="haveDataOutlet && this.haveDepartment==='Y'">
+                                        <div class="order-catalog" style="max-height: 500px;
+    overflow: hidden;
+    overflow-y: scroll;" id="order-catalog" *ngIf="haveDataOutlet && this.haveDepartment==='Y'">
                                             <ul>
                                                 <li class="active" (click)="loadItemOfCategory('ALL',this.productList.IsHavingDepartment)"><a>All</a></li>
                                                 <li *ngFor="let item of this.outletInfo.OutletInfo[0].DepartmentCategoryList;let i = index" id="{{item.DepartmentId}}" (click)="loadItemOfCategory(item.DepartmentId,this.productList.IsHavingDepartment,i)"
@@ -70,7 +72,9 @@
                                             </ul>
                                         </div>
 
-                                        <div class="order-catalog" id="order-catalog" *ngIf="haveDataOutlet && this.haveDepartment==='N'">
+                                        <div class="order-catalog" style="max-height: 500px;
+    overflow: hidden;
+    overflow-y: scroll;" id="order-catalog" *ngIf="haveDataOutlet && this.haveDepartment==='N'">
                                             <ul>
                                                 <li class="active" (click)="loadItemOfCategory('ALL',this.productList.IsHavingDepartment)"><a>All</a></li>
                                                 <li *ngFor="let item of this.outletInfo.OutletInfo[0].DepartmentCategoryList[0].CategoryList;let i = index" id="{{item.CategoryId}}"
@@ -415,6 +419,7 @@
                                 </div>
 
                             </div>
+                            <div class="nano-pane"><div class="nano-slider" style="height: 245px; transform: translate(0px, 155px);"></div></div>
                         </div>
                     </div>
                 </div>

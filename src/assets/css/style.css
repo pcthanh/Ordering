@@ -1431,6 +1431,8 @@ a.btn-main {
 .faq-title {
   font-size: 18px;
   color: #333333;
+  padding-bottom: 10px;
+  padding-top: 10px
 }
 .faq-question {
   color: #8e49fe;

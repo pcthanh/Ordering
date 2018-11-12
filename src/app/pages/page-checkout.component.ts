@@ -48,6 +48,7 @@ import * as moment_ from 'moment';
 const ORDER_DELIVERY: string = "DELIVERY"
 const ORDER_PICKUP: string = "PICKUP"
 declare var $: any;
+declare var My2c2p:any;
 @Component({
     selector: 'page-checkout',
     templateUrl: 'page-checkout.component.html'
@@ -125,6 +126,7 @@ export class PageCheckOutComponent implements OnInit {
     riderValue:number;
     inputPromoCode:string=""
     selectCredit:boolean=false;
+    cardNmuberTemp:string=""
     styles = [{
         featureType: "landscape",
         elementType: "geometry.fill",
@@ -1275,7 +1277,7 @@ setTimeout(()=>{
 
     }
 
-    addCard() {
+    addCard(encryptedCardInfo) {
         if (this.addCardData.CardCountry && this.addCardData.CardCVV && this.addCardData.CardMonth && this.addCardData.CardYear && this.addCardData.CardNumber && this.addCardData.NameCard) {
             this.blockUI.start("Processing")
             let common_data = new CommonDataRequest();
@@ -1283,22 +1285,16 @@ setTimeout(()=>{
             common_data.Location = _location
             common_data.ServiceName = "VerifyCard";
             let common_data_json = JSON.stringify(common_data);
-
-
             let iin = this.addCardData.CardNumber.replace(/\s/g, '')
             iin = iin.substring(0, 6);
             let data_request = { IIN: iin }
-
             let data_request_json = JSON.stringify(data_request)
-
-            
             this._pickupService.VerifyCard(common_data_json, data_request_json).then(data => {
                 this.verifycard = data;
                 console.log("vryfi:"+ JSON.stringify(this.verifycard))
                 if (this.verifycard.ResultCode === "000") {
                     common_data.ServiceName = "AddNewCardWeb"
                     let common_data_json = JSON.stringify(common_data);
-                    
                     let data_request = new AddNewCardModel();
                     data_request.ApprovalCode = ""
                     data_request.Bin = this.verifycard.Bin
@@ -1314,6 +1310,7 @@ setTimeout(()=>{
                     data_request.RefNo = ""
                     data_request.ExpiryDate = this.addCardData.CardMonth + "/" + this.addCardData.CardYear
                     data_request.MaskedCardNumber = this.masKingNumberCard(this.addCardData.CardNumber.replace(/\s/g, ''));
+                    data_request.EncryptedCardInfo=encryptedCardInfo;
                     let data_request_json = JSON.stringify(data_request)
                     console.log("json:"+ data_request_json)
                     this._pickupService.AddNewCard(common_data_json, data_request_json).then(data => {
@@ -1321,7 +1318,10 @@ setTimeout(()=>{
                         if (data.ResultCode === "000") {
                             this.allPayment.CardListInfo = []
                             this.allPayment.CardListInfo = data.CardListInfo;
-                            $.magnificPopup.close()
+                            this.errorAddCard = true;
+                            this.error.ResultDesc = data.ResultDesc
+                            this.showPopupddCardError()
+                            //$.magnificPopup.close()
                         }
                         else {
                             this.errorAddCard = true;
@@ -1353,7 +1353,21 @@ setTimeout(()=>{
     }
     
     confirmCard() {
-        this.addCard()
+        //this.addCard()
+        let encryptedCardInfo="";
+       My2c2p.getEncrypted("2c2p-payment-form",function(encryptedData,errCode,errDesc) {
+			if(errCode!=0){ alert(errDesc+" ("+errCode+")"); }
+			else {
+                
+				encryptedCardInfo= encryptedData.encryptedCardInfo;
+                
+
+               
+			}
+		});
+        if(encryptedCardInfo!=""){
+            this.addCard(encryptedCardInfo)
+        }
     }
     masKingNumberCard(cardNumber: string): string {
         cardNumber = cardNumber.substring(0, 6) + cardNumber.substring(0, 6).replace(/\d/g, '*')
@@ -1387,7 +1401,9 @@ setTimeout(()=>{
         // If the formmattedCardNumber is different to what is shown, change the value
         if (cardNumber !== formattedCardNumber) {
             this.addCardData.CardNumber = formattedCardNumber;
+            
         }
+        this.cardNmuberTemp =event.target.value .replace(/\s+/g, '');
     }
     initCountry() {
         if (localStorage.getItem('IN') != null) {

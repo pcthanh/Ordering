@@ -92,6 +92,8 @@ export class HeaderGof3rComponent implements OnInit {
     error:ErrorModel;
     getInitialParams: GetInitialParams;
     selectCountryCode:string=""
+    showDetail:boolean=true;
+    routerThisPage:boolean=true;
     constructor(private _route:Router,private _gof3rModule:Gof3rModule,private _pickupService: PickupService, private _gof3rUtil: Gof3rUtil, private _instanceService: EventSubscribeService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private _homeservice: HomeService) {
         this.addressList = new AddressListModel();
         this.signUp = new SingUpModel();
@@ -100,10 +102,16 @@ export class HeaderGof3rComponent implements OnInit {
         this.error = new ErrorModel();
         this.getInitialParams= new GetInitialParams();
         this._instanceService.$getEventSubject.subscribe(data=>{
+            console.log(data)
             if(data==="CheckOut"){
                 
                 //this.checkOut=false;
             }
+            if(data==="About" ||data==="FAQ"|| data==="PRIVACY"||data==="TERMS"||data==="ContactUS"||data==="Grows"){
+                this.showDetail=false;
+                this.routerThisPage=false;
+            }
+            
         })
         if (localStorage.getItem("orderType") != null) {
 
@@ -130,6 +138,7 @@ export class HeaderGof3rComponent implements OnInit {
 
 
         }
+       
     }
 
     ngOnInit() {

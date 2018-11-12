@@ -349,7 +349,7 @@ export class TrackerOrderComponent implements OnInit {
             let strCut = this.outletInfo.OutletInfo[0].GeoLocation.split(",");
             this.lat = parseFloat(strCut[0]);
             this.lng = parseFloat(strCut[1]);
-            this.locations.push({ lat: this.lat, lng: this.lng, icon: "assets/images/pin_food.png" })
+            // this.locations.push({ lat: this.lat, lng: this.lng, icon: "assets/images/pin_food.png" })
             
 
 
@@ -361,7 +361,7 @@ export class TrackerOrderComponent implements OnInit {
             let strCut = address.GeoLocation.split(",");
             let lat = parseFloat(strCut[0]);
             let lng = parseFloat(strCut[1]);
-            this.locations.push({ lat: lat, lng: lng, icon: "assets/images/pin_home.png" })
+            // this.locations.push({ lat: lat, lng: lng, icon: "assets/images/pin_home.png" })
             
             
         }
@@ -396,6 +396,10 @@ export class TrackerOrderComponent implements OnInit {
                 this.isShowProcessingDilivered=false;
             }
             this.isHaveData = true;
+            let  [latMerchant,lngMerchant] = this.deliveryOrder.DeliveryOrderDetail[0].MerchantGeoLocation.split(",");
+            let  [latCsutomer,lngCustomer] = this.deliveryOrder.DeliveryOrderDetail[0].CustomerGeoLocation.split(",");
+            this.locations.push({lat:parseFloat(latMerchant),lng:parseFloat(lngMerchant),icon: "assets/images/pin_food.png"},{lat:parseFloat(latCsutomer),lng:parseFloat(lngCustomer),icon: "assets/images/pin_home.png"})
+            console.log('l:'+ JSON.stringify(this.locations))
             // this.subTotalItem(this.deliveryOrder)
             // this.groupOptionItem(this.deliveryOrder)
             this.blockUI.stop();

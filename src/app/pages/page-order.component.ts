@@ -785,7 +785,7 @@ export class PageOrderComponent implements OnInit {
                                 arrayOptionInCart = this.checkGroupOptionOfItem(this.cart.Cart[i]);
 
                                 isCompare = this.checkArrays(JSON.stringify(arrayOptionItem), JSON.stringify(arrayOptionInCart));
-
+                                console.log("comp:"+ isCompare)
                                 if (isCompare) {
                                     this.cart.Cart[i].Qty = this.cart.Cart[i].Qty + this.productDetailParse.Qty;
                                     for (let j = 0; j < this.productDetailParse.OptionList.length; j++) {
@@ -848,13 +848,21 @@ export class PageOrderComponent implements OnInit {
     }
     checkGroupOptionOfItem(item: ProductDetailParseModel) {
         let arryOptionItemId = [];
-        for (let i = 0; i < item.OptionList.length; i++) {
+        console.log("note:"+JSON.stringify(item))
+        if(item.OptionList.length>0){
+             for (let i = 0; i < item.OptionList.length; i++) {
             for (let j = 0; j < item.OptionList[i].OptionItemList.length; j++) {
                 if (item.OptionList[i].OptionItemList[j].Qty > 0 && item.OptionList[i].OptionItemList[j].isCheck == true) {
                     arryOptionItemId.push({ 'idOptionItem': item.OptionList[i].OptionItemList[j].OptionItemId, 'Qty': item.OptionList[i].OptionItemList[j].Qty, 'note': item.SpecialRequest })
                 }
             }
         }
+    }
+    else{
+        arryOptionItemId.push({ 'idOptionItem': item.Id, 'Qty': item.Qty, 'note': item.SpecialRequest })
+    }
+       
+        console.log('array1:'+ arryOptionItemId)
         return arryOptionItemId;
     }
     checkArrays(arrA, arrB) {

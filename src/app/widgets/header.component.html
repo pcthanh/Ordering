@@ -1,9 +1,8 @@
 
-                <div class="main-menu" style="position: fixed;
-  top: 0;" id="myHeader">
+                <div class="main-menu" [ngClass]="{'fixed-header': this.routerThisPage}"  id="myHeader">
                     <h1 class="logo text-hide"><a href=""><img src="assets/images/logo.png" alt="" width="80" height="80"><span>GOF3R</span></a></h1>
                     <div class="top-action top-action-search">
-                        <div class="acc-top user-account">
+                        <div class="acc-top user-account" *ngIf="this.showDetail===true">
                             <div class="account">Address</div>
                             <div class="login-wrap">
                                 <div   class="login"><div *ngIf="showListAddresNotLogin" class="title">{{this.addressShowDiplay.AddressListInfo[0].StreetAddress}}</div></div>
@@ -355,7 +354,7 @@
 
                             </div>
                         </div>
-                        <div class="how-top user-account" >
+                        <div class="how-top user-account" *ngIf="this.showDetail===true">
                             <div class="account">How</div>
                             <div class="login-wrap">
                                 <div class="login">{{this.orderType}}</div>
@@ -377,7 +376,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="when-top user-account">
+                        <div class="when-top user-account" *ngIf="this.showDetail===true">
                             <div class="account">When</div>
                             <div class="login-wrap">
                                 <div class="login"><span *ngIf="showWhen">{{whenStr}}</span></div>
@@ -553,8 +552,8 @@
                                         </div>
                                         <div class="social-login">
                                             <span class="or"><span>Or</span></span>
-                                            <a href="#" class="fb-login"><span>Log in with Facebook</span></a>
-                                            <a href="#" class="gplus-login"><span>Log in with Google</span></a>
+                                            <a href="#" class="fb-login"><span>Sign up with Facebook</span></a>
+                                            <a href="#" class="gplus-login"><span>Sign up with Google</span></a>
                                         </div>
                                     </div>
                                     <div class="login-dropdown-content signup-dropdown-otp">

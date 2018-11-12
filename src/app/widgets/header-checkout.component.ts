@@ -3,6 +3,7 @@ import { CustomerInfoMainModel } from "../models/CustomerInfoMain";
 import { Gof3rUtil } from "../util/gof3r-util";
 import { EventSubscribeService } from "../services/instance.service";
 import { ActivatedRoute, Params,Router } from "@angular/router";
+import { SingUpModel } from "../models/SignUp";
 declare var $: any
 @Component({
     selector: 'header-checkout',
@@ -14,12 +15,16 @@ export class HeaderCheckOutComponent implements OnInit {
     isLogin: string = "LOG IN";
     userNameLogOut: string = ""
     customerInfoMain: CustomerInfoMainModel;
+    inutUserName: string = ""
+    passWord:string=""
+    signUp: SingUpModel;
     constructor(private _gof3rUtil: Gof3rUtil,private _route:Router,private _instanceService: EventSubscribeService) { 
         this._instanceService.$getEventSubject.subscribe(data=>{
             if(data==="UpdateProfile"){
                 this.checkLoginUser();
             }
         })
+        this.signUp = new SingUpModel();
     }
     
 
@@ -47,11 +52,42 @@ export class HeaderCheckOutComponent implements OnInit {
                     height: ''
                 });;
             } else {
-              
+                 
+            
+                var valueCheckUser = $('#check-user').text();
+                
+                if(event.target.id==='user'){
+                   
+                    if (valueCheckUser === 'true') {
 
                         $(this).parents('.login-wrap').find('.login-dropdown-had').slideDown();
 
-                 
+                    }
+                    else if (valueCheckUser === 'false') {
+                        
+                        $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
+                    }
+                }
+                else if (event.target.id==='user1'){
+                  
+                    if (valueCheckUser === 'true') {
+
+                        $(this).parents('.login-wrap').find('.login-dropdown-had').slideDown();
+
+                    }
+                    else if (valueCheckUser === 'false') {
+                        
+                        $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
+                    }
+                }
+                else{
+                   
+                        $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
+                    
+                     
+                }
+                    
+                   
 
                 $('.login-overlay').addClass('show');
                 $(this).addClass('hide-form');
@@ -179,5 +215,15 @@ export class HeaderCheckOutComponent implements OnInit {
     help(){
         this._instanceService.sendCustomEvent("Help");
         this._route.navigateByUrl("/help");
+    }
+     checkShowPopup() {
+        
+        this.checkLoginUser();
+
+        // if(this.isUserLogin===true){
+        //     $('.login-dropdown-had').slideDown();
+        //     //this.isUserLogin=!this.isUserLogin
+        // }
+
     }
 }
