@@ -516,6 +516,7 @@ export class PageCheckOutComponent implements OnInit {
             if (localStorage.getItem("crtd") != null) {//check when had cart
                 this.haveCart = true;
                 this.cart = JSON.parse(localStorage.getItem("crtd"));
+                console.log("cart:"+ JSON.stringify(this.cart))
                 //this.orderMain.DeliveryTo = this.currentAddress
                 if (this.cart.Cart.length > 0) {
                     this.orderMain.ArrayItem = this.cart.Cart;
@@ -1461,6 +1462,26 @@ setTimeout(()=>{
     orderMore(){
          $.magnificPopup.close()
         this.route.navigateByUrl('/search-result')
+    }
+    removeCart(index: number) {
+        console.log("delete:"+ index)
+        this.cart.Cart.splice(index, 1);
+        if (this.OrderType === ORDER_PICKUP) {
+            localStorage.setItem("crt", JSON.stringify(this.cart))
+        }
+        else if (this.OrderType === ORDER_DELIVERY) {
+            localStorage.setItem("crtd", JSON.stringify(this.cart))
+        }
+
+        this.orderMain.ArrayItem = this.cart.Cart;
+        this.VerifyOrder();
+        this.subTotalOrder()
+        if (this.cart.Cart.length <= 0) {
+            this.haveCart = false
+            //this.showCart = false
+        }
+
+
     }
 
 }

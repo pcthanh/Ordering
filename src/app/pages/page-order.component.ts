@@ -60,6 +60,7 @@ export class PageOrderComponent implements OnInit {
     verifyOrderMain: VerifyOrderMainModel;
     productWebsiteBannerMessage: string = "";
     hadVeryfiOrder: boolean = false;
+    removeCartFlag:boolean=false
     constructor(private _router: Router, private _gof3rUtil: Gof3rUtil, private _gof3rModule: Gof3rModule, private _util: Gof3rUtil, private _pickupService: PickupService, private _instanceService: EventSubscribeService, private active_router: ActivatedRoute) {
         this.blockUI.start('loading ...'); // Start blocking
         this.productDetail = new ProductDetailMainModel();
@@ -151,16 +152,16 @@ export class PageOrderComponent implements OnInit {
     };
     myFunction() {
         var header = document.getElementById("order-catalog");
-       
+
         // alert(sticky)
         // alert(window.pageYOffset)
         if (window.pageYOffset >= 250) {
-    header.classList.add("sticky")
-  } else {
-    header.classList.remove("sticky");
-  }
+            header.classList.add("sticky")
+        } else {
+            header.classList.remove("sticky");
+        }
 
-        
+
 
 
     }
@@ -424,6 +425,7 @@ export class PageOrderComponent implements OnInit {
     upadteProduct(indexUpdate: number) {
 
         this.showUpdateProduct = true;
+        this.removeCartFlag = false;
         var el = $('.chicken-popup-update');
         if (el.length) {
             $.magnificPopup.open({
@@ -434,7 +436,7 @@ export class PageOrderComponent implements OnInit {
             });
         }
         this.IndexItemCartUpdate = indexUpdate;
-
+        this.productDetailParse=this.cart.Cart[this.IndexItemCartUpdate];
 
 
     }
@@ -686,10 +688,10 @@ export class PageOrderComponent implements OnInit {
         }
     }
     addQuatyOptionItem(optionItem: string, optionId: number, index) {
-        for (let i = 0; i < this.cart.Cart[index].OptionList.length; i++) {
-            for (let j = 0; j < this.cart.Cart[index].OptionList[i].OptionItemList.length; j++) {
-                if (this.cart.Cart[index].OptionList[i].OptionId == optionId && this.cart.Cart[index].OptionList[i].OptionItemList[j].OptionItemId == optionItem) {
-                    this.cart.Cart[index].OptionList[i].OptionItemList[j].Qty++;
+        for (let i = 0; i < this.cart.Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
+            for (let j = 0; j < this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
+                if (this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId && this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].OptionItemId == optionItem) {
+                    this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].Qty++;
                 }
             }
         }
@@ -768,9 +770,9 @@ export class PageOrderComponent implements OnInit {
             if (localStorage.getItem("crtd") != null) {//check cart exits
                 this.cart = (JSON.parse(localStorage.getItem("crtd")));
             }
-            
+
             if (this.cart.Cart.length > 0) {//check cart not yet item
-               
+
                 if (this.outletInfo.OutletInfo[0].MerchantOutletId === this.cart.OuteletID) {
                     let isExits: boolean;
                     let isCompare: boolean;
@@ -785,7 +787,7 @@ export class PageOrderComponent implements OnInit {
                                 arrayOptionInCart = this.checkGroupOptionOfItem(this.cart.Cart[i]);
 
                                 isCompare = this.checkArrays(JSON.stringify(arrayOptionItem), JSON.stringify(arrayOptionInCart));
-                                console.log("comp:"+ isCompare)
+                                console.log("comp:" + isCompare)
                                 if (isCompare) {
                                     this.cart.Cart[i].Qty = this.cart.Cart[i].Qty + this.productDetailParse.Qty;
                                     for (let j = 0; j < this.productDetailParse.OptionList.length; j++) {
@@ -848,21 +850,21 @@ export class PageOrderComponent implements OnInit {
     }
     checkGroupOptionOfItem(item: ProductDetailParseModel) {
         let arryOptionItemId = [];
-        console.log("note:"+JSON.stringify(item))
-        if(item.OptionList.length>0){
-             for (let i = 0; i < item.OptionList.length; i++) {
-            for (let j = 0; j < item.OptionList[i].OptionItemList.length; j++) {
-                if (item.OptionList[i].OptionItemList[j].Qty > 0 && item.OptionList[i].OptionItemList[j].isCheck == true) {
-                    arryOptionItemId.push({ 'idOptionItem': item.OptionList[i].OptionItemList[j].OptionItemId, 'Qty': item.OptionList[i].OptionItemList[j].Qty, 'note': item.SpecialRequest })
+        console.log("note:" + JSON.stringify(item))
+        if (item.OptionList.length > 0) {
+            for (let i = 0; i < item.OptionList.length; i++) {
+                for (let j = 0; j < item.OptionList[i].OptionItemList.length; j++) {
+                    if (item.OptionList[i].OptionItemList[j].Qty > 0 && item.OptionList[i].OptionItemList[j].isCheck == true) {
+                        arryOptionItemId.push({ 'idOptionItem': item.OptionList[i].OptionItemList[j].OptionItemId, 'Qty': item.OptionList[i].OptionItemList[j].Qty, 'note': item.SpecialRequest })
+                    }
                 }
             }
         }
-    }
-    else{
-        arryOptionItemId.push({ 'idOptionItem': item.Id, 'Qty': item.Qty, 'note': item.SpecialRequest })
-    }
-       
-        console.log('array1:'+ arryOptionItemId)
+        else {
+            arryOptionItemId.push({ 'idOptionItem': item.Id, 'Qty': item.Qty, 'note': item.SpecialRequest })
+        }
+
+        console.log('array1:' + arryOptionItemId)
         return arryOptionItemId;
     }
     checkArrays(arrA, arrB) {
@@ -926,17 +928,8 @@ export class PageOrderComponent implements OnInit {
                 this.cart = JSON.parse(localStorage.getItem("crtd"));
                 //this.orderMain.DeliveryTo = this.currentAddress
                 if (this.cart.Cart.length > 0) {
-                    this.orderMain.ArrayItem = this.cart.Cart;
-                    if (this.cart.OrderType === ORDER_PICKUP) {
-                        // this.isPickup = true;
-                        // this.isDelivery = false;
+                    this.orderMain.ArrayItem = this.cart.Cart
 
-                    }
-                    else {
-
-                        // this.isDelivery = true;
-                        // this.isPickup = false;
-                    }
                     this.subTotalOrder();
 
                     // this.setDeliveryDateAndTimes(true)
@@ -1001,7 +994,8 @@ export class PageOrderComponent implements OnInit {
 
     }
     removeCart(index: number) {
-
+        console.log("delete:"+ index)
+        this.removeCartFlag=true;
         this.cart.Cart.splice(index, 1);
         if (this.OrderType === ORDER_PICKUP) {
             localStorage.setItem("crt", JSON.stringify(this.cart))
@@ -1181,20 +1175,26 @@ export class PageOrderComponent implements OnInit {
     showpopupInfor() {
         this.openPopupOutletInfor()
     }
-    SubtractionQtyOptionItem(optionItemId: string, optionId: number) {
+    SubtractionQtyOptionItem(optionItemId: string, optionId: number, index: number) {
         console.log('add:' + optionId + '-' + optionItemId)
-        let hadCheck = this.checkItemHadCheck(optionItemId, optionId);
+        let hadCheck :boolean;
+        
 
         if (hadCheck) {// option item checked
             console.log('co check')
             let minQuanty = this.getMinQuantyOptionItem(optionItemId, optionId);
             let qtyOptionItem = this.getQuantyOfOptionItem(optionItemId, optionId);
             if (qtyOptionItem > minQuanty && minQuanty != 0) {
-                this.SubQuatyOptionItem(optionItemId, optionId);
+                // this.SubQuatyOptionItem1(optionItemId, optionId);
+                
+                    this.SubQuatyOptionItem1(optionItemId, optionId);
+                
             }
             if (minQuanty == 0) {
                 if (this.getQuantyOfOptionItem(optionItemId, optionId) > 1) {
-                    this.SubQuatyOptionItem(optionItemId, optionId);
+                    
+                        this.SubQuatyOptionItem1(optionItemId, optionId);
+                    
                 }
             }
         } else {//option item no checked
@@ -1203,12 +1203,36 @@ export class PageOrderComponent implements OnInit {
         this.subTotalOfOptionItem(optionItemId, optionId, this.productDetailParse)
         this.subTotalItem(false, this.productDetailParse);
     }
+    SubQuatyOptionItem(optionItem: string, optionId: number, index) {
+        for (let i = 0; i < this.cart.Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
+            for (let j = 0; j < this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
+                if (this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId && this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].OptionItemId == optionItem) {
+                    this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].Qty--;
+                }
+            }
+        }
+    }
     checkItemHadCheck(optionItemId: string, optionId: number) {
         let hadCheck: boolean;
+        console.log("heh:" + JSON.stringify(this.productDetailParse))
         for (let i = 0; i < this.productDetailParse.OptionList.length; i++) {
             for (let j = 0; j < this.productDetailParse.OptionList[i].OptionItemList.length; j++) {
-                if (this.productDetailParse.OptionList[i].OptionId == optionId && this.productDetailParse.OptionList[i].OptionItemList[j].OptionItemId == optionItemId) {
+                if (this.productDetailParse.OptionList[i].OptionId === optionId && this.productDetailParse.OptionList[i].OptionItemList[j].OptionItemId === optionItemId) {
                     if (this.productDetailParse.OptionList[i].OptionItemList[j].isCheck == true) {
+                        hadCheck = true;
+                    }
+                }
+            }
+        }
+        return hadCheck;
+    }
+    checkItemHadCheck1(optionItemId: string, optionId: number) {
+        let hadCheck: boolean;
+        console.log("heh:" + JSON.stringify(this.productDetailParse))
+        for (let i = 0; i < this.cart.Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
+            for (let j = 0; j < this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
+                if (this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionId === optionId && this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].OptionItemId === optionItemId) {
+                    if (this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck == true) {
                         hadCheck = true;
                     }
                 }
@@ -1250,7 +1274,7 @@ export class PageOrderComponent implements OnInit {
         }
         return quaty;
     }
-    SubQuatyOptionItem(optionItem: string, optionId: number) {
+    SubQuatyOptionItem1(optionItem: string, optionId: number) {
         for (let i = 0; i < this.productDetailParse.OptionList.length; i++) {
             for (let j = 0; j < this.productDetailParse.OptionList[i].OptionItemList.length; j++) {
                 if (this.productDetailParse.OptionList[i].OptionId == optionId && this.productDetailParse.OptionList[i].OptionItemList[j].OptionItemId == optionItem) {
@@ -1261,8 +1285,11 @@ export class PageOrderComponent implements OnInit {
     }
     additionQtyOptionItem(optionItemId: string, optionId: number) {
         console.log('add:' + optionId + '-' + optionItemId)
-        let hadCheck = this.checkItemHadCheck(optionItemId, optionId);
+        let hadCheck: boolean;
+        
+            hadCheck = this.checkItemHadCheck(optionItemId, optionId);
 
+        
         if (hadCheck) {// option item checked
             console.log('co check')
             let maxQuanty = this.getMaxQuantyOptionItem(optionItemId, optionId);
@@ -1270,9 +1297,14 @@ export class PageOrderComponent implements OnInit {
             let qtyOptionItem = this.getQuantyOfOptionItem(optionItemId, optionId);
             if (qtyOptionItem < maxQuanty && maxQuanty != 0) {
                 this.addQuatyOptionItem1(optionItemId, optionId);
+                
+                    this.addQuatyOptionItem1(optionItemId, optionId);
+                
             }
             if (maxQuanty == 0) {
-                this.addQuatyOptionItem1(optionItemId, optionId);
+                
+                    this.addQuatyOptionItem1(optionItemId, optionId);
+                
             }
         } else {//option item no checked
             console.log('ko check')

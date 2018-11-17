@@ -17,7 +17,8 @@
     <div class="main-content-order">
         <div class="row no-gutters">
             <div class="col-12 col-md-9 col-map-checkout merchant-baner">
-                <div class="main-top banner-outlet">
+                <!--<div class="main-top banner-outlet"*ngIf="haveDataOutlet" style="background: url({{outletInfo.OutletInfo[0].MerchantOutletImageForWeb}}) 0 0 no-repeat">-->
+                    <div class="main-top banner-outlet"*ngIf="haveDataOutlet" [ngStyle]="{'background': 'url(' + outletInfo.OutletInfo[0].MerchantOutletImageForWeb + ') 0 0 no-repeat'}">
                     <div class="row no-gutters">
                         <div class="col-12 col-md-1"></div>
                         <div class="col-12 col-md-11" *ngIf="haveDataOutlet">
@@ -303,7 +304,7 @@
             <!--end cart empty-->
 
             <!--start popup update product in cart-->
-            <div id="" *ngIf="showUpdateProduct" class="chicken-popup-update white-popup mfp-hide">
+            <div id="" *ngIf="showUpdateProduct && haveCart && !removeCartFlag" class="chicken-popup-update white-popup mfp-hide">
                 <div class="title-popup">{{this.cart.Cart[IndexItemCartUpdate].Name}}</div>
                 <div class="text-popup">{{this.cart.Cart[IndexItemCartUpdate].Description}}</div>
                 <div *ngFor="let itemOptions of this.cart.Cart[IndexItemCartUpdate].OptionList">
@@ -360,10 +361,7 @@
                 <div class="cart-sidebar-wrap" id="cart-fixed">
                     <div class="cart-sidebar">
                         <div *ngIf=" this.OrderType==='DELIVERY'" class="delivery-info"><span *ngIf="hadVeryfiOrder">{{this.verifyOrderMain.OrderFeeAndDiscountInfo.DeliveryFeeMessage}}</span></div>
-                        <div class="subtotal-wrap">
-                            <div class="title-sub">Subtotal <span class="price">{{this.orderMain.SubTotalStr}}</span></div>
-                            <button (click)="checkOut()" class="btn-main btn-checkout"><span>Checkout</span></button>
-                        </div>
+                        
                         <div class="nano-scroll nano">
                             <div class="nano-content item-checkout-list">
                                 <!--<div class="item-checkout-wrap" *ngFor="let item of cart.Cart;let i=index">
@@ -386,13 +384,13 @@
                                 </div>-->
                                 <div class="item-checkout-wrap" *ngFor="let item of cart.Cart;let i=index">
                                     <!--Table-->
-                                    <div style="cursor: pointer" (click)="upadteProduct(i)" class="table-responsive">
+                                    <div style="cursor: pointer"  class="table-responsive">
                                         <table  class="table">
 
                                             <tbody>
                                                 <tr>
                                                     <td class="number" style="width: 10%;font-weight: 500">{{item.Qty}}X</td>
-                                                    <td style="width: 60%; font-size: 15px; font-weight: 500">{{item.Name}}</td>
+                                                    <td (click)="upadteProduct(i)" style="width: 60%; font-size: 15px; font-weight: 500">{{item.Name}}</td>
                                                     <td style="width: 20%;font-size: 15px; font-weight: 500;text-align: right">{{item.TotalStr}}</td>
                                                     <td style="width: 10%; text-align: right;color: #9f9f9f"> <a (click)="removeCart(i)" class="btn-delete"><img src="assets/images/ico-close.png" alt=""></a></td>
 
@@ -420,6 +418,10 @@
 
                             </div>
                             <div class="nano-pane"><div class="nano-slider" style="height: 245px; transform: translate(0px, 155px);"></div></div>
+                        </div>
+                        <div class="subtotal-wrap">
+                            <div class="title-sub">Subtotal <span class="price">{{this.orderMain.SubTotalStr}}</span></div>
+                            <button (click)="checkOut()" class="btn-main btn-checkout"><span>Checkout</span></button>
                         </div>
                     </div>
                 </div>

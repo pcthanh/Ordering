@@ -83,9 +83,9 @@
                                             <tbody>
                                                 <tr>
                                                     <td class="" style="width: 10%;font-weight: 500;font-size: 15px">{{item.Qty}}X</td>
-                                                    <td style="width: 70%; font-size: 15px; font-weight: 500">{{item.Name}}</td>
-                                                    <td style="width: 20%;font-size: 15px; font-weight: 500;text-align: right">{{item.TotalStr}}</td>
-                                                    
+                                                    <td style="width: 60%; font-size: 15px; font-weight: 500">{{item.Name}}</td>
+                                                    <td style="width: 20%;font-size: 15px; font-weight: 500;text-align: right">{{item.PriceDisplay}}</td>
+                                                    <td style="width: 10%; text-align: right;color: #9f9f9f"> <a (click)="removeCart(i)" class="btn-delete"><img src="assets/images/ico-close.png" alt=""></a></td>
                                                 </tr>
 
                                             </tbody>
@@ -94,7 +94,7 @@
                                                 <div *ngFor="let itemOp of item.OptionList">
                                                 <div *ngFor="let itemOPD of itemOp.OptionItemList">
                                                     <div *ngIf="itemOPD.isCheck==true">
-                                                        <li><span class="inf">• {{itemOPD.OptionItemName}}</span><span class="price">{{itemOPD.PriceDisplay}}</span></li>
+                                                        <li style="padding-right: 40px"><span class="inf">• {{itemOPD.OptionItemName}} {{itemOPD.Qty}}X</span><span class="price">{{itemOPD.PriceDisplay}}</span></li>
                                                     </div>
                                                 </div>
                                             </div>
@@ -104,15 +104,16 @@
                                     
                                 </div>
                             </div>
-                           <div class="info-top">
+                           <div class="info-top" *ngIf="haveCart">
                                <div class="sub-total"><span class="inf">Subtotal </span> <span class="price">{{this.orderMain.SubTotalStr}}</span></div>
                                 <!--<div class="gst"><span class="inf">Service fee</span> <span class="price">{{this.orderMain.ServiceFee}}</span></div>-->
                                 <div *ngIf="this.orderMain.OrderType==='DELIVERY'"  class="delivery-fee"><span class="inf">Delivery Fee</span> <span class="price">{{this.orderMain.DeliveryFeeDisplay}}</span></div>
                                 <div *ngIf="this.orderMain.Surcharge!=0" class="gst"><span class="inf">Surchagre</span> <span class="price">{{this.orderMain.SurchargeDisplay}}</span></div>
-                                <div style="cursor: pointer" *ngIf="this.orderMain.OrderType==='DELIVERY'" (click)="showPopupRiderTip()" class="gst">
+                                <div style="cursor: pointer;font-weight: 600" *ngIf="this.orderMain.OrderType==='DELIVERY'" (click)="showPopupRiderTip()" class="gst">
                                     <span class="inf">Rider Tip</span> <span class="price">{{this.orderMain.RiderTipDisplay}}</span>
                                 </div>
                                 <div *ngIf="this.orderMain.DiscountDisplay!=''" class="gst"><span class="inf">Discount</span> <span class="price">{{this.orderMain.DiscountDisplay}}</span></div>
+                                <div *ngIf="this.orderMain.PromoCodeDisPlay!=''"  class="gst"><span class="inf">PromoCode</span> <span class="price">{{this.orderMain.PromoCodeDisPlay}}</span></div>
                                 <div *ngIf="this.orderMain.OrderType==='DELIVERY'" class="courier-tip">
                                     <!--<div class="tip-title">Rider Tip</div>
                                   
@@ -143,7 +144,7 @@
                                 <div  class="title">Total <span class="price">{{this.orderMain.TotalDisplay}}</span></div>
                            </div>
 
-                            <div class="methods">
+                            <div class="methods" *ngIf="haveCart">
                                  <div *ngIf="selectedCard"  class="payment selected"><img src="{{this.selectMethod.CardTypeIdImg}}" alt="" width="39" height="28"><span> {{this.selectMethod.MaskingCardNumber}}</span> <span (click)="deleteMethod()" class="close-gof3r" ></span></div>
                                  <div *ngIf="!selectedCard"   class="payment"><img src="assets/images/ico-payment.png" alt=""><span>Select Payment Method</span><div (click)="showPopup()"  class="plus"></div></div>
                                 <!--<div class="voucher" data-mfp-src="#voucher-popup"><img src="assets/images/ico-voucher.png" alt=""><span>Add Voucher</span></div>-->
@@ -336,7 +337,7 @@
                             </div>
                             
 
-                            <div class="btn-select-payment-wrap">
+                            <div *ngIf="haveCart" class="btn-select-payment-wrap">
                                 <button (click)="placeOrder()"class="btn-main btn-select-payment"><span>GOF3R IT</span></button>
                             </div>
                             
@@ -351,7 +352,7 @@
             <!--<div style="cursor: pointer" class="text-center" (click)="trackerOrder()" 
             ><img src="assets/images/ico-succsess.png" alt=""></div>-->
             <button type="button" class="btn-main btn-select-payment" style="background: #ffad4c" (click)="orderMore()">Order More</button>
-            <button type="button" class="btn-main btn-select-payment"(click)="trackerOrder()">Tracker Order</button>
+            <button type="button" class="btn-main btn-select-payment"(click)="trackerOrder()">Track Order</button>
     </div>
     <div id="add-card" class="success-popup mfp-hide" style="text-align: center">
             <div class="" style="text-align: center">{{this.error.ResultDesc}}</div>
