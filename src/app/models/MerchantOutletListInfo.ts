@@ -32,4 +32,8 @@ export class MerchantOutletListInfoModel{
     Rating:string=""
     ProductWebsitePromotionalMessage:string=""
     ProductWebsitePromotionalBanner:string=""
+    FoodCentreId:string="";
+    FoodCentreName:string=""
+    MaxOutletsInCart:string=""
+    MessageForOrderMore:string=""
 ;}

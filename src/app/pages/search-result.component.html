@@ -162,7 +162,8 @@
             
             
             <div class="all-restaurants food-slide" *ngIf="haveData">
-                <h2 class="title">All Retaurants</h2>
+                <h2 class="title" *ngIf="!this.foodCenter">All Retaurants</h2>
+                <h2 class="title" *ngIf="this.foodCenter">{{this.foodName}}</h2>
                 <div class="row">
                     <div class="col-12 col-md-4" *ngFor="let item of getAllOutletListV2.MerchantOutletListInfo">
                         <div class="food-item wow slideInUp" data-wow-duration="0.5s">

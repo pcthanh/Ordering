@@ -49,36 +49,12 @@ export class SearchResultComponent implements OnInit {
     getCurrentTime: GetCurrentSystemTimeModel;
     customerInfo: CustomerInfoMainModel = new CustomerInfoMainModel();
     txtSearch: string = ""
+    foodCenter:boolean=false;
+    foodName:string=""
     constructor(private _gof3rModule: Gof3rModule, private _renderer2: Renderer2, @Inject(DOCUMENT) private _document, private router: Router, private active_router: ActivatedRoute, private _pickupService: PickupService, private _gof3rUtil: Gof3rUtil, private _instanceService: EventSubscribeService) {
 
 
-        this._instanceService.$getEventSubject.subscribe(data => {
-            let dataParse = data;
-            
-            if (dataParse.function === 'changeAddressV2') {
-
-                
-                let lacation = dataParse.la;
-                this.GetAllOutletListV2(lacation, "", "", "")
-                this.getTopOffers()
-                this.initJQuery()
-            }
-            if (dataParse.function === 'Delivery') {
-                this.initJQuery()
-                this.GetAllOutletListV2("", dataParse.type, "", "");
-                //this.getTopOffers();
-
-            }
-            if (dataParse.function === 'Pickup') {
-                this.initJQuery()
-                this.GetAllOutletListV2("", dataParse.type, "", "");
-                //this.getTopOffers();
-
-            }
-            if (dataParse.function === 'changeTime') {
-                this.GetAllOutletListV2("", "", dataParse.date, "");
-            }
-        })
+       
         if (localStorage.getItem('cus') != null) {
             this.customerInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem('cus')));
 
@@ -104,6 +80,39 @@ export class SearchResultComponent implements OnInit {
 
 
         }
+         this._instanceService.$getEventSubject.subscribe(data => {
+            let dataParse = data;
+            
+            if (dataParse.function === 'changeAddressV2') {
+
+                
+                let lacation = dataParse.la;
+                this.GetAllOutletListV2(lacation, "", "", "","")
+                this.getTopOffers()
+                this.initJQuery()
+            }
+            if (dataParse.function === 'Delivery') {
+                this.initJQuery()
+                this.GetAllOutletListV2("", dataParse.type, "", "","");
+                //this.getTopOffers();
+
+            }
+            if (dataParse.function === 'Pickup') {
+                this.initJQuery()
+                this.GetAllOutletListV2("", dataParse.type, "", "","");
+                //this.getTopOffers();
+
+            }
+            if (dataParse.function === 'changeTime') {
+                this.GetAllOutletListV2("", "", dataParse.date, "","");
+            }
+            if(dataParse.function==="FoodCenter"){
+                
+                this.foodCenter=true
+                this.foodName=dataParse.foodname;
+                this.GetAllOutletListV2("",dataParse.type,dataParse.foodtime,"",dataParse.foodcenter);
+            }
+        })
     }
 
 
@@ -182,7 +191,7 @@ export class SearchResultComponent implements OnInit {
         // }, 3500)
 
     }
-    GetAllOutletListV2(location: string, orderMethod: string, orderFor: string, keyWord: string) {
+    GetAllOutletListV2(location: string, orderMethod: string, orderFor: string, keyWord: string,foodcenter:string) {
         this.blockUI.start()
         let common_data = new CommonDataRequest();
         if (location === '') {
@@ -227,18 +236,25 @@ export class SearchResultComponent implements OnInit {
         request_data.KeyWords = keyWord;
         request_data.MerchantOutletId = "";
         request_data.SubCategoryId = "";
+        if(this.foodCenter)
+            request_data.OrderFor = orderFor
+        request_data.FoodCentreId=foodcenter;
         let request_data_json = JSON.stringify(request_data);
 
-        
+        console.log("data_requet:"+ (request_data_json))
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
 
             
             this.getAllOutletListV2 = data;
+            console.log("getallOutlet:"+ JSON.stringify(this.getAllOutletListV2))
             if(this.getAllOutletListV2.ResultCode==="000"){
                 localStorage.setItem("promomes",this.getAllOutletListV2.ProductWebsitePromotionalMessage)
             }
-            for (let i = 0; i < this.getAllOutletListV2.MerchantOutletListInfo.length; i++) {
+            
+
+            if (this.getAllOutletListV2.MerchantOutletListInfo.length > 0) {
+                for (let i = 0; i < this.getAllOutletListV2.MerchantOutletListInfo.length; i++) {
                 let rating:string="";
                 let strTemp: string = ""
                 for (let j = 0; j < this.getAllOutletListV2.MerchantOutletListInfo[i].SubCategoryList.length; j++) {
@@ -249,8 +265,6 @@ export class SearchResultComponent implements OnInit {
                 this.getAllOutletListV2.MerchantOutletListInfo[i].Rating = rating;
                 this.getAllOutletListV2.MerchantOutletListInfo[i].subCatgoryTemp = strTemp.substring(0, strTemp.length - 2)
             }
-
-            if (this.getAllOutletListV2.MerchantOutletListInfo.length > 0) {
                 // this.noData=true;
                 this.haveData = true;
                 this.noData = false
@@ -282,7 +296,11 @@ export class SearchResultComponent implements OnInit {
             // this.getCurrentTime.CurrentData = date;
             // this.getCurrentTime.CurrentTime = moment_(d.getTime()).format("HH:mm:ss")
             strDatime = date + " " + moment_(d.getTime()).format("HH:mm:ss")
-            this.GetAllOutletListV2("", "", strDatime, keyWord)
+            if(!this.foodCenter)
+            {
+                console.log("than")
+                this.GetAllOutletListV2("", "", strDatime, keyWord,"")
+            }
             //this.orderMain.PickupTime = this.getCurrentTime.CurrentTime + " - " + this.getCurrentTime.CurrentTimeTo;
             // this.orderMain.PickupDate = "select pick up time";
             // let nowDate = this.getCurrentTime.CurrentTime;

@@ -2,11 +2,13 @@
                 <div class="main-menu" [ngClass]="{'fixed-header': this.routerThisPage}"  id="myHeader">
                     <h1 class="logo text-hide"><a href=""><img src="assets/images/logo.png" alt="" width="80" height="80"><span>GOF3R</span></a></h1>
                     <div class="top-action top-action-search">
-                        <div class="acc-top user-account" *ngIf="this.showDetail===true">
-                            <div class="account">Address</div>
+                        
+                        <div class="acc-top user-account" >
+                            
+                            <div class="account" *ngIf="this.showDetail===true">Address</div>
                             <div class="login-wrap">
-                                <div   class="login"><div *ngIf="showListAddresNotLogin" class="title">{{this.addressShowDiplay.AddressListInfo[0].StreetAddress}}</div></div>
-                                <div   class="login"><div *ngIf="showListDelivery" class="title">{{this.listDeliveryAddressShow.DeliveryAddressList[0].Address}}</div></div>
+                                <div   class="login"><div *ngIf="showListAddresNotLogin &&this.showDetail===true" class="title">{{this.addressShowDiplay.AddressListInfo[0].StreetAddress}}</div></div>
+                                <div   class="login"><div *ngIf="showListDelivery &&this.showDetail===true" class="title">{{this.listDeliveryAddressShow.DeliveryAddressList[0].Address}}</div></div>
                                 
                                 <!--change address step1-->
                                 <div class="login-dropdown">
@@ -354,8 +356,8 @@
 
                             </div>
                         </div>
-                        <div class="how-top user-account" *ngIf="this.showDetail===true">
-                            <div class="account">How</div>
+                        <div class="how-top user-account" [hidden]="!this.showDetail">
+                            <div class="account" >How</div>
                             <div class="login-wrap">
                                 <div class="login">{{this.orderType}}</div>
                                 
@@ -376,7 +378,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="when-top user-account" *ngIf="this.showDetail===true">
+                        <div class="when-top user-account" [hidden]="!this.showDetail">
                             <div class="account">When</div>
                             <div class="login-wrap">
                                 <div class="login"><span *ngIf="showWhen">{{whenStr}}</span></div>

@@ -7,4 +7,5 @@ export class GetAllOutletListV2Request{
     KeyWords:string;
     SubCategoryId:string;
     MerchantOutletId:string;
+    FoodCentreId:string=""
 }

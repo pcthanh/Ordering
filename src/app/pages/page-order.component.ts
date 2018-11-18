@@ -707,7 +707,7 @@ export class PageOrderComponent implements OnInit {
             }
 
             if (this.cart.Cart.length > 0) {//check cart not yet item
-                if (this.outletInfo.OutletInfo[0].MerchantOutletId === this.cart.OuteletID) {
+                
                     let isExits: boolean;
                     let isCompare: boolean;
                     let countCompare: number = 0;
@@ -742,20 +742,20 @@ export class PageOrderComponent implements OnInit {
 
                     }
                     localStorage.setItem('crt', JSON.stringify(this.cart));
-                }
-                else {//
+                
+                // else {//
 
-                    setTimeout(() => {
-                        $.magnificPopup.open({
-                            items: {
-                                src: '#cart-popup'
-                            },
-                            type: 'inline'
-                        });
-                    }, 50)
+                //     setTimeout(() => {
+                //         $.magnificPopup.open({
+                //             items: {
+                //                 src: '#cart-popup'
+                //             },
+                //             type: 'inline'
+                //         });
+                //     }, 50)
 
-                    this.errorCart = "please delete old your cart";
-                }
+                //     this.errorCart = "please delete old your cart";
+                // }
 
             }
             else {
@@ -773,7 +773,7 @@ export class PageOrderComponent implements OnInit {
 
             if (this.cart.Cart.length > 0) {//check cart not yet item
 
-                if (this.outletInfo.OutletInfo[0].MerchantOutletId === this.cart.OuteletID) {
+                
                     let isExits: boolean;
                     let isCompare: boolean;
                     let countCompare: number = 0;
@@ -809,19 +809,19 @@ export class PageOrderComponent implements OnInit {
 
                     }
                     localStorage.setItem('crtd', JSON.stringify(this.cart));
-                }
-                else {
-                    setTimeout(() => {
-                        $.magnificPopup.open({
-                            items: {
-                                src: '#cart-popup'
-                            },
-                            type: 'inline'
-                        });
-                    }, 50)
+                // }
+                // else {
+                //     setTimeout(() => {
+                //         $.magnificPopup.open({
+                //             items: {
+                //                 src: '#cart-popup'
+                //             },
+                //             type: 'inline'
+                //         });
+                //     }, 50)
 
-                    this.errorCart = "please delete old your cart";
-                }
+                //     this.errorCart = "please delete old your cart";
+                // }
 
 
             }
@@ -1029,7 +1029,8 @@ export class PageOrderComponent implements OnInit {
         $.magnificPopup.close()
     }
     checkOut() {
-        if (localStorage.getItem("cus") != null) {
+        if(this.cart.OuteletID===this.outletInfo.OutletInfo[0].MerchantOutletId){
+            if (localStorage.getItem("cus") != null) {
             if (this.OrderType === ORDER_PICKUP) {
                 if (!this.orderMain.PickupDateFrom || !this.orderMain.PickupDateTo) {
                     this.errorCart = "please select time to pickup"
@@ -1068,6 +1069,20 @@ export class PageOrderComponent implements OnInit {
                 height: '100%'
             });;
         }
+    }
+    else{
+        setTimeout(() => {
+                        $.magnificPopup.open({
+                            items: {
+                                src: '#cart-popup'
+                            },
+                            type: 'inline'
+                        });
+                    }, 50)
+
+                    this.errorCart = "please delete old your cart";
+    }
+        
 
     }
     deleteCartOld() {
