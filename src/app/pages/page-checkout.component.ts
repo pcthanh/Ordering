@@ -44,6 +44,7 @@ import { AddCardModel } from "../models/AddCard";
 import { VerifyCard } from "../models/VerifyCard";
 import { AddNewCardModel } from "../models-request/add-new-card";
 import { SelectItem } from 'primeng/primeng';
+import { CartOrderNew } from "../models/CartOrderNew";
 import * as moment_ from 'moment';
 const ORDER_DELIVERY: string = "DELIVERY"
 const ORDER_PICKUP: string = "PICKUP"
@@ -128,6 +129,7 @@ export class PageCheckOutComponent implements OnInit {
     selectCredit: boolean = false;
     cardNmuberTemp: string = ""
     flagShowPopupFoodCenter: boolean = true;
+    cartNew:CartOrderNew;
     styles = [{
         featureType: "landscape",
         elementType: "geometry.fill",
@@ -306,6 +308,7 @@ export class PageCheckOutComponent implements OnInit {
         this.addCardData = new AddCardModel();
         this.verifycard = new VerifyCard()
         this.getInitParam = new GetInitialParams();
+        this.cartNew = new CartOrderNew();
 
         if (localStorage.getItem("ot") != null) {
             this.outletInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("ot")));
@@ -367,6 +370,9 @@ export class PageCheckOutComponent implements OnInit {
             this.orderMain.PickupDateFrom = date.fromDate;
             this.orderMain.PickupDateTo = date.toDate;
         }
+        if (localStorage.getItem("orderType") != null) {
+            this.OrderType = localStorage.getItem("orderType");
+        }
         // this.orderMain.RiderTip=parseInt(this.riderValue);
         //  this.orderMain.RiderTip =parseInt(this.riderValue);
         //  console.log("rider:"+ this.riderValue)
@@ -426,10 +432,10 @@ export class PageCheckOutComponent implements OnInit {
         let common_data_json = JSON.stringify(common_data);
 
         let request_data = new GetAllOutletListV2Request();
-        request_data.OrderType = this.cart.OrderType;
-        if (this.cart.OrderType === ORDER_PICKUP || !this.cart.OrderType) {
+        request_data.OrderType = this.OrderType
+        if (this.OrderType === ORDER_PICKUP || !this.OrderType) {
             request_data.OrderFor = "";
-        } else if (this.cart.OrderType === ORDER_DELIVERY) {
+        } else if (this.OrderType === ORDER_DELIVERY) {
 
             request_data.OrderFor = localStorage.getItem("whenDelivery")
 
@@ -440,14 +446,22 @@ export class PageCheckOutComponent implements OnInit {
         request_data.FromRow = 0;
         request_data.MCC = this.mccGobal;
         request_data.KeyWords = "";
-        request_data.MerchantOutletId = this.orderMain.MerchantOutletId;
+        // if(this.cartNew.cartNew.length>1){
+        //     request_data.MerchantOutletId = ""
+        //     request_data.FoodCentreId=this.cartNew.cartNew[0].FoodCenterID
+        // }
+        // else{
+        //     request_data.MerchantOutletId = this.cartNew.cartNew[0].OuteletID;
+        // }
+        request_data.MerchantOutletId = this.cartNew.cartNew[0].OuteletID;
+        
         request_data.SubCategoryId = "";
         let request_data_json = JSON.stringify(request_data);
-
-
+        
+        console.log("request:"+ request_data_json)
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             this.getAllOutletListV2 = data;
-
+            console.log("getall:"+ JSON.stringify(data))
             this.getAllPaymentOptionsWithPromotion()
             this.orderMain.DeliveryOn = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeDisplay
             this.orderMain.DeliveryOnRequest = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
@@ -458,17 +472,18 @@ export class PageCheckOutComponent implements OnInit {
     subTotalOrder() {
 
         let subtotal = 0;
-        let total1: number = 0;
-        let total2: number = 0;
-        let _total: number = 0;
-        for (let i = 0; i < this.orderMain.ArrayItem.length; i++) {
-            subtotal = subtotal + this.orderMain.ArrayItem[i].Total;
+        // for (let i = 0; i < this.orderMain.ArrayItem.length; i++) {
+        //     subtotal = subtotal + this.orderMain.ArrayItem[i].Total;
+        // }
+        for (let i = 0; i < this.cartNew.cartNew.length; i++) {
+            for (let j = 0; j < this.cartNew.cartNew[i].Cart.length; j++) {
+                subtotal = subtotal + this.cartNew.cartNew[i].Cart[j].Total
+            }
         }
         this.orderMain.SubTotal = subtotal;
         this.orderMain.SubTotalStr = this._util.formatCurrency(this.orderMain.SubTotal, "S$")
-        total1 = this.orderMain.SubTotal + this.orderMain.ServiceFeeValue + this.orderMain.Surcharge + this.orderMain.DeliveryFee + this.orderMain.RiderTip;
-        total2 = parseFloat(this.orderMain.PromoCodeValue + '') + parseFloat(this.orderMain.Credit + '')
-        _total = total1 - total2;
+
+        let _total = (this.orderMain.SubTotal + this.orderMain.ServiceFeeValue + this.orderMain.Surcharge + this.orderMain.DeliveryFee + this.orderMain.RiderTip) - (this.orderMain.PromoCodeValue + this.orderMain.Credit + this.orderMain.Discount);
 
         this.orderMain.Total = _total;
         this.orderMain.TotalDisplay = this._util.formatCurrency(this.orderMain.Total, "S$");
@@ -516,21 +531,12 @@ export class PageCheckOutComponent implements OnInit {
         } else if (this.OrderType === ORDER_DELIVERY) {//cart for delivery
             if (localStorage.getItem("crtd") != null) {//check when had cart
                 this.haveCart = true;
-                this.cart = JSON.parse(localStorage.getItem("crtd"));
-                console.log("cart:" + JSON.stringify(this.cart))
+                this.cartNew = JSON.parse(localStorage.getItem("crtd"));
+                console.log("cart:" + JSON.stringify(this.cartNew))
                 //this.orderMain.DeliveryTo = this.currentAddress
-                if (this.cart.Cart.length > 0) {
-                    this.orderMain.ArrayItem = this.cart.Cart;
-                    if (this.cart.OrderType === ORDER_PICKUP) {
-                        // this.isPickup = true;
-                        // this.isDelivery = false;
-
-                    }
-                    else {
-
-                        // this.isDelivery = true;
-                        // this.isPickup = false;
-                    }
+                if (this.cartNew.cartNew.length > 0) {
+                    //this.orderMain.ArrayItem = this.cart.Cart;
+                    
                     this.subTotalOrder();
 
                     // this.setDeliveryDateAndTimes(true)
@@ -550,6 +556,7 @@ export class PageCheckOutComponent implements OnInit {
             }
         }
         //get option item of item
+        this.subTotalEachCart()
         this.upadteShowOpntionItem()
 
 
@@ -568,12 +575,24 @@ export class PageCheckOutComponent implements OnInit {
 
             let requestData = new VerifyOrderRequest();
             requestData.OrderType = this.OrderType;
-            requestData.MerchantId = this.outletInfo.OutletInfo[0].MerchantId;
-            requestData.MerchantOutletId = this.outletInfo.OutletInfo[0].MerchantOutletId;
+            if (this.cartNew.cartNew.length > 1) {
+                requestData.IsCombinedOrder = "Y"
+                requestData.MerchantId = ""
+                requestData.MerchantOutletId = ""
+                requestData.CombinedOrderInfo=this.combinedOrderInfo();
+            }
+            else {
+                requestData.IsCombinedOrder = "N"
+                requestData.MerchantId = this.outletInfo.OutletInfo[0].MerchantId;
+                requestData.MerchantOutletId = this.outletInfo.OutletInfo[0].MerchantOutletId;
+
+            }
+            requestData.ProductList=this.listProduct()
             requestData.CurrencyCode = this.outletInfo.OutletInfo[0].CurrencyCode
             let totalRequest = this._gof3rModule.ParseTo12(this.orderMain.SubTotal)
             requestData.Subtotal = totalRequest;
             let requestDataJson = JSON.stringify(requestData);
+            console.log("very_json:"+ requestDataJson)
 
             this._pickupService.VerifyOrder(common_data_json, requestDataJson).then(data => {
                 this.verifyOrderMain = data;
@@ -589,6 +608,7 @@ export class PageCheckOutComponent implements OnInit {
                 this.orderMain.OrderingTerminalId = this.verifyOrderMain.OrderFeeAndDiscountInfo.OrderingTerminalId
                 this.orderMain.DiscountProgramAmount = parseInt(this.verifyOrderMain.OrderFeeAndDiscountInfo.DiscountAmount) / 100
                 this.orderMain.MerchantOutletId = this.verifyOrderMain.OrderFeeAndDiscountInfo.OrderingMerchantOutletId
+                
                 this.subTotalOrder();
                 this.getAllOutletV2()
             })
@@ -715,10 +735,10 @@ export class PageCheckOutComponent implements OnInit {
                 let date = new Date()
                 data_request.TransactionDate = moment_(date).format("DD/MM/YYYY HH:mm:ss")
                 let data_request_json = JSON.stringify(data_request)
-
+                console.log("PO:"+ this.PO)
                 if (this.PO === "PO_CARD") {
                     this._pickupService.AddCardTransaction(common_data_json, data_request_json).then(data => {
-
+                        console.log("AddCardTransaction:"+ JSON.stringify(data))
                         if (data.ResultCode === "000") {
                             localStorage.setItem('addcard', JSON.stringify(data_request))
 
@@ -758,7 +778,10 @@ export class PageCheckOutComponent implements OnInit {
         if (this.PO === "PO_CARD")
             data_request.PaymentOptions = "PO_CARD"
         data_request.PaymentAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.SubTotal.toFixed(2)))
-        data_request.DiscountAmount = this._gof3rModule.ParseTo12(this.orderMain.Discount + this.orderMain.Credit + this.orderMain.PromoCodeValue)
+        let discount=parseFloat((this.orderMain.Discount + this.orderMain.Credit + this.orderMain.PromoCodeValue).toFixed(2))
+        console.log("discount:"+ discount)
+        data_request.DiscountAmount = this._gof3rModule.ParseTo12(discount)
+        console.log("discount1:"+ data_request.DiscountAmount)
         data_request.PaymentFee = this._gof3rModule.ParseTo12(this.orderMain.ServiceFeeValue + this.orderMain.Surcharge + this.orderMain.RiderTip)
         data_request.TranxCurrency = "702"//this.orderMain.CurrencyCode
         data_request.UsedPromotionCodeList = this.orderMain.PrmoCodeID
@@ -778,10 +801,10 @@ export class PageCheckOutComponent implements OnInit {
         data_request.ApprovalCode = ""
         data_request.CardHolderName = this.orderMain.CardHoldName
         let data_request_json = JSON.stringify(data_request)
-
+        console.log("MakePayment_Request:"+ data_request_json)
 
         this._pickupService.MakePayment(common_data_json, data_request_json).then(data => {
-
+            console.log("MakePayment:"+ JSON.stringify(data))
             this.makePaymentMain = data;
             if (this.makePaymentMain.ResultCode === "000") {
                 this.placeOrderRequest(this.makePaymentMain.TranxDetailInfo[0].RefNo, this.makePaymentMain.TranxDetailInfo[0].InvoiceNo, this.makePaymentMain.TranxDetailInfo[0].ApprovalCode)
@@ -821,7 +844,7 @@ export class PageCheckOutComponent implements OnInit {
         }
 
         data_request.CreditAmount = this._gof3rModule.ParseTo12(this.orderMain.Credit)
-        data_request.MerchantId = this.orderMain.MerchantId
+        
         data_request.PaymentAmount = this._gof3rModule.ParseTo12(this.orderMain.SubTotal)
         data_request.OrderType = this.orderMain.OrderType
         data_request.Surcharge = this._gof3rModule.ParseTo12(this.orderMain.Surcharge)
@@ -831,7 +854,7 @@ export class PageCheckOutComponent implements OnInit {
         data_request.MaskedPAN = this.orderMain.MaskingCardNumber
         data_request.PaymentQRCode = ""
         data_request.PromoCodeId = this.orderMain.PrmoCodeID
-        data_request.MerchantOutletId = this.orderMain.MerchantOutletId
+        
         data_request.RiderTipAmount = this._gof3rModule.ParseTo12(this.orderMain.RiderTip)
         data_request.DiscountProgramAmount = this._gof3rModule.ParseTo12(this.orderMain.DiscountProgramAmount)
         data_request.VoucherList = ""
@@ -844,6 +867,17 @@ export class PageCheckOutComponent implements OnInit {
         data_request.uniqueTransactionCode = InvoiceNo
         data_request.IsGroupOrder = this.orderMain.IsGroupOrder
         data_request.Note = this.orderNote;
+        if(this.cartNew.cartNew.length>1){
+            data_request.MerchantId = ""
+            data_request.MerchantOutletId = ""
+            data_request.IsCombinedOrder="Y"
+        }
+        else{
+            data_request.IsCombinedOrder="N"
+            data_request.MerchantId = this.orderMain.MerchantId
+            data_request.MerchantOutletId = this.cartNew.cartNew[0].OuteletID
+        }
+        data_request.CombinedOrderInfo=this.combinedOrderInfo();
         if (this.PO === "PO_CARD")
             data_request.PaymentOptions = "PO_CARD"
         if (this.PO === "PO_POINT")
@@ -868,7 +902,7 @@ export class PageCheckOutComponent implements OnInit {
         data_request.TranxAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.Total.toFixed(2)))
 
         let data_request_json = JSON.stringify(data_request);
-
+        console.log("request:"+ data_request_json)
         this._pickupService.PlaceOrder(common_data_json, data_request_json).then(data => {
 
 
@@ -900,12 +934,12 @@ export class PageCheckOutComponent implements OnInit {
                         if (data.ResultCode === "000") {
                             this.blockUI.stop(); //end block ui
                             if (this.orderMain.OrderType === ORDER_DELIVERY) {
-                                this.cart = new CartOrder()
-                                localStorage.setItem('crtd', JSON.stringify(this.cart))
+                                this.cartNew = new CartOrderNew()
+                                localStorage.setItem('crtd', JSON.stringify(this.cartNew))
                             }
                             if (this.orderMain.OrderType === ORDER_PICKUP) {
-                                this.cart = new CartOrder()
-                                localStorage.setItem('crt', JSON.stringify(this.cart))
+                                 this.cartNew = new CartOrderNew()
+                                localStorage.setItem('crt', JSON.stringify(this.cartNew))
                             }
                             console.log("payment:" + JSON.stringify(this.placeOrderMain))
                             this.showPopupPaymentSuccess()
@@ -918,13 +952,13 @@ export class PageCheckOutComponent implements OnInit {
                 }
                 if (this.orderMain.PaymentOptions === "PO_POINT" || this.orderMain.PaymentOptions === "PO_WALLET") {
                     if (this.orderMain.OrderType === ORDER_DELIVERY) {
-                        this.cart = new CartOrder()
-                        localStorage.setItem('crtd', JSON.stringify(this.cart))
+                        this.cartNew = new CartOrderNew()
+                        localStorage.setItem('crtd', JSON.stringify(this.cartNew))
 
                     }
                     if (this.orderMain.OrderType === ORDER_PICKUP) {
-                        this.cart = new CartOrder()
-                        localStorage.setItem('crt', JSON.stringify(this.cart))
+                       this.cartNew = new CartOrderNew()
+                        localStorage.setItem('crt', JSON.stringify(this.cartNew))
                     }
                     this.blockUI.stop();
                     this.showPopupPaymentSuccess()
@@ -985,6 +1019,13 @@ export class PageCheckOutComponent implements OnInit {
         //"81,000000000050,1,^^^23,27,000000000050,1###35,000000000050,1,^^^21,21,000000000050,1===21,23,000000000050,1"
         let dataString = "";
         let count: number = 0;
+        this.orderMain.ArrayItem=[]
+        for (let t = 0; t < this.cartNew.cartNew.length; t++) {
+            for (let u = 0; u < this.cartNew.cartNew[t].Cart.length; u++) {
+                this.orderMain.ArrayItem.push(this.cartNew.cartNew[t].Cart[u]);
+            }
+
+        }
         for (let i = 0; i < this.orderMain.ArrayItem.length; i++) {
             count = 0;
             if (this.orderMain.ArrayItem[i].SpecialRequest) {
@@ -1037,6 +1078,7 @@ export class PageCheckOutComponent implements OnInit {
         this.error.ResultCode = errorCode
         this.error.ResultDesc = ErrorDesc
         this.error.ServiceName = serviceName
+        this.showPopupddCardError()
     }
     selectCardPayment(MaskedCardNumber: string, CardToken: string, CardHolderName: string, CardTypeIdValue: string, CardTypeIdImg: string) {
 
@@ -1481,35 +1523,114 @@ export class PageCheckOutComponent implements OnInit {
         $.magnificPopup.close()
         this.route.navigateByUrl('/search-result')
     }
-    removeCart(index: number) {
+    removeCart(indexCart:number,index: number) {
         console.log("delete:" + index)
-        this.cart.Cart.splice(index, 1);
+        this.cartNew.cartNew[indexCart].Cart.splice(index, 1);
         if (this.OrderType === ORDER_PICKUP) {
-            localStorage.setItem("crt", JSON.stringify(this.cart))
+            localStorage.setItem("crt", JSON.stringify(this.cartNew))
         }
         else if (this.OrderType === ORDER_DELIVERY) {
-            localStorage.setItem("crtd", JSON.stringify(this.cart))
+            localStorage.setItem("crtd", JSON.stringify(this.cartNew))
         }
 
-        this.orderMain.ArrayItem = this.cart.Cart;
-        this.VerifyOrder();
-        this.subTotalOrder()
-        if (this.cart.Cart.length <= 0) {
+       this.orderMain.ArrayItem = this.cartNew.cartNew[indexCart].Cart;
+        
+        
+        if (this.cartNew.cartNew[indexCart].Cart.length <= 0) {
+
+
+            this.cartNew.cartNew.splice(indexCart, 1);
+            if (this.OrderType === ORDER_PICKUP) {
+                localStorage.setItem("crt", JSON.stringify(this.cartNew))
+            }
+            else if (this.OrderType === ORDER_DELIVERY) {
+                localStorage.setItem("crtd", JSON.stringify(this.cartNew))
+            }
+        }
+
+        if (this.cartNew.cartNew.length <= 0) {
+
             this.haveCart = false
             //this.showCart = false
         }
+        this.VerifyOrder();
+        this.subTotalOrder()
+        this.subTotalEachCart()
 
 
     }
     payNow() {
         this.flagShowPopupFoodCenter = false;
+        $.magnificPopup.close()
         this.placeOrder();
+
     }
     goToFoodCenter() {
         let data = { function: "FoodCenter", type: "Delivery", foodcenter: this.outletInfo.OutletInfo[0].FoodCentreId, foodtime: this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue, foodname: this.outletInfo.OutletInfo[0].FoodCentreName }
         this._instanceService.sendCustomEvent(data)
         $.magnificPopup.close()
         this.route.navigateByUrl("search-result");
+    }
+    subTotalEachCart() {
+
+        for (let i = 0; i < this.cartNew.cartNew.length; i++) {
+            let total: number = 0
+            for (let j = 0; j < this.cartNew.cartNew[i].Cart.length; j++) {
+                total = total + this.cartNew.cartNew[i].Cart[j].Total;
+            }
+            this.cartNew.cartNew[i].Total = total;
+            this.cartNew.cartNew[i].TotalDisplay = this._gof3rUtil.formatCurrency(this.cartNew.cartNew[i].Total, "S$")
+        }
+    }
+    combinedOrderInfo() {
+        //let productList=this.listProduct();
+        let combineInfor: string = ""
+        for (let u = 0; u < this.cartNew.cartNew.length; u++) {
+            let dataString = "";
+            let count: number = 0;
+            for (let t = 0; t < this.cartNew.cartNew[u].Cart.length; t++) {
+                count = 0;
+                if (this.cartNew.cartNew[u].Cart[t].SpecialRequest) {
+
+                    dataString = dataString + this.cartNew.cartNew[u].Cart[t].Id + "," + (this.cartNew.cartNew[u].Cart[t].Price) + "," + this.cartNew.cartNew[u].Cart[t].Qty + "," + this.cartNew.cartNew[u].Cart[t].SpecialRequest;
+                }
+                else {
+                    dataString = dataString + this.cartNew.cartNew[u].Cart[t].Id + "," + (this.cartNew.cartNew[u].Cart[t].Price) + "," + this.cartNew.cartNew[u].Cart[t].Qty;
+                }
+
+                for (let j = 0; j < this.cartNew.cartNew[u].Cart[t].OptionList.length; j++) {
+                    for (let k = 0; k < this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionItemList.length; k++) {
+                        if (this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionItemList[k].Qty > 0) {
+                            count++
+
+                            if (count > 1) {
+                                dataString = dataString + "===" + this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionId + "," + this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionItemList[k].OptionItemId + "," + this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionItemList[k].Price + "," + this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionItemList[k].Qty;
+                            }
+                            else {
+                                dataString = dataString + ",^^^" + this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionId + "," + this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionItemList[k].OptionItemId + "," + this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionItemList[k].Price + "," + this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionItemList[k].Qty;
+                            }
+
+                        }
+                    }
+
+
+                }
+                let str = dataString.slice(dataString.length - 3)
+                if (str === "===" || str === "###") {
+                    dataString = dataString.slice(0, dataString.length - 3)
+                }
+                if (this.cartNew.cartNew[u].Cart.length > 1) {
+                    if (t !== this.cartNew.cartNew[u].Cart.length - 1) {
+                        dataString = dataString + "###";
+                    }
+
+                }
+            }
+            combineInfor=combineInfor+this.cartNew.cartNew[u].MerchantID+";"+this.cartNew.cartNew[u].OuteletID+";"+this._gof3rModule.ParseTo12(this.cartNew.cartNew[u].Total)+";"+dataString+"***"
+
+        }
+        combineInfor= combineInfor.slice(0,combineInfor.length-3)
+        return combineInfor;
     }
 
 }

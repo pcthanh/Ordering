@@ -12,9 +12,13 @@
                 <div class="col-12 col-md-8 col-map-checkout">
                     <div class="map-checkout">
                         <!--<img src="assets/images/img-map4.jpg" alt="" class="img-fluid">-->
-                        <agm-map style="height: 650px" #agmMap [latitude]="this.locations[1].lat" [longitude]="this.locations[1].lng" [zoom]="13" [styles]="styles">
+                        <agm-map *ngIf="!isCombineOrder && isHaveData" style="height: 650px" #agmMap [latitude]="this.locations[1].lat" [longitude]="this.locations[1].lng" [zoom]="13" [styles]="styles">
                                 <agm-marker *ngFor="let item of locations" [latitude]="item.lat" [longitude]="item.lng" [iconUrl]="item.icon"></agm-marker>
                             </agm-map>
+                            <agm-map *ngIf="isCombineOrder && isHaveData" style="height: 650px" #agmMap [latitude]="this.locations[0].lat" [longitude]="this.locations[0].lng" [zoom]="13" [styles]="styles">
+                                <agm-marker *ngFor="let item of locations" [latitude]="item.lat" [longitude]="item.lng" [iconUrl]="item.icon"></agm-marker>
+                            </agm-map>
+
                     </div>
                 </div>
                 <div *ngIf="this.isHaveData" class="col-12 col-md-4 col-cart">
@@ -42,7 +46,7 @@
                                         <div class="tracker-progress">
                                             <ul>
                                                 <li class="completed"><span class="step"></span><span class="inf">Processing</span> <span class="time">{{this.deliveryOrder.DeliveryOrderDetail[0].CurrentStatusDate}}</span></li>
-                                                <li [ngClass]="{completed: isOnTheWay===true,progressing:isOnTheWay===false}"><span class="step"></span><span class="inf">On_The_Way</span><span *ngIf="isOnTheWay" class="time">{{this.deliveryOrder.DeliveryOrderDetail[0].CurrentStatusDate}}</span></li>
+                                                <li [ngClass]="{completed: isOnTheWay===true,progressing:isOnTheWay===false}"><span class="step"></span><span class="inf">On The Way</span><span *ngIf="isOnTheWay" class="time">{{this.deliveryOrder.DeliveryOrderDetail[0].CurrentStatusDate}}</span></li>
                                                 <li [ngClass]="{completed: isDelivered===true,last:isDelivered===true,progressing:isShowProcessingDilivered==true}"><span class="step"></span><span class="inf">Delivered</span><span *ngIf="isDelivered" class="time">{{this.deliveryOrder.DeliveryOrderDetail[0].CurrentStatusDate}}</span></li>
                                                 <!--<li><span class="step"></span><span class="inf">Collecting Your Order</span></li>
                                                 <li class="last"><span class="step"></span><span class="inf">Delivering Your Order</span></li>-->
@@ -89,10 +93,13 @@
                                             {{deliveryOrder.DeliveryOrderDetail[0].Note}}
                                         </div>
                                         <div class="nano-scroll nano">
-                                            <div class="nano-content item-checkout-list no-delete">
+                                            <!--Start order not combine-->
+                                            <div class="nano-content item-checkout-list no-delete" *ngIf="!isCombineOrder && isHaveData">
                                                 <div class="item-checkout-wrap"*ngFor="let item of deliveryOrder.DeliveryItemsPurchased">
                                                     <div class="item-checkout">
-                                                        <div class="number">{{item.OrderDetailQty}}</div>
+                                                       <div class="number" style="color: #000;
+    font-size: 16px;
+    font-weight: 600;">{{item.OrderDetailQty}}X</div>
                                                         <div class="title">{{item.ProductName}} <span class="price">{{item.OrderDtlDisplayPrice}}</span></div>
                                                         <ul class="item-info">
                                                             <!--<li><span class="inf">• Chicken</span></li>-->
@@ -105,37 +112,40 @@
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <!--<div class="item-checkout-wrap">
-                                                    <div class="item-checkout">
-                                                        <div class="number">9</div>
-                                                        <div class="title">Donair Rice Plate <span class="price">$18.08</span></div>
-                                                        <div class="inf-add">“udjhgjhdfghfdjhbjfhbfdbdfdfdgfhgd”<br/><br/>
+                                               
+                                            </div>
+                                            <!--End order not combine-->
+                                            <!---->
+                                            <!--Start order combine-->
+                                            <div class="nano-content item-checkout-list no-delete" *ngIf="isCombineOrder && isHaveData">
+                                                <div *ngFor="let itemOutlet of deliveryOrder.OutletsPurchased">
                                                 
-                                                        </div>
+                                                <div class="item-checkout1">
+                                                        {{itemOutlet.MerchantOutletName}}
+                                                        <span class="price" style="float: right">{{itemOutlet.TotalItems}} Items</span>
+                            </div>
+                                                <div class="item-checkout-wrap" style="border-top: 1px solid #d9d9d9;border-bottom: 1px solid #d9d9d9;" *ngFor="let item of itemOutlet.DeliveryItemsPurchased">
+                                                    
+                                                    <div class="item-checkout">
+                                                        <div class="number" style="color: #000;
+    font-size: 16px;
+    font-weight: 600;">{{item.OrderDetailQty}}X</div>
+                                                        <div class="title">{{item.ProductName}} <span class="price">{{item.OrderDtlDisplayPrice}}</span></div>
                                                         <ul class="item-info">
-                                                            <li><span class="inf">• Beef (Halal)</span></li>
-                                                            <li><span class="inf">• Roasted Red Pepper Hummus</span></li>
-                                                            <li><span class="inf">• Choban Salad </span> <span class="price">$1.25</span></li>
-                                                            <li><span class="inf">• Halifax (Sweet) Sauce</span></li>
-                                                            <li><span class="inf">• Add Extra Meat</span></li>
-                                                            <li><span class="inf">• Add Red Pepper Paste (1.5 oz) </span> <span class="price">$1.10</span></li>
+                                                            <!--<li><span class="inf">• Chicken</span></li>-->
+                                                            <!--<li><span class="inf">• Garlic Paste</span></li>
+                                                            <li><span class="inf">• Donair Sauce (Tzatziki)</span></li>
+                                                            <li><span class="inf">• Lettuce</span></li>-->
+                                                            <li *ngFor="let itemO of item.OrderOptions">
+                                                                <span class="inf">• {{itemO.ProductOptionDetailName}}</span><span class="price">{{itemO.OrderOptionDtlDisplayPrice}}</span>
+                                                            </li>
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <div class="item-checkout-wrap">
-                                                    <div class="item-checkout">
-                                                        <div class="number">8</div>
-                                                        <div class="title">Number of Plastic Cutlery <span class="price">$13.24</span></div>
-                                                        <ul class="item-info">
-                                                            <li><span class="inf">• Chicken</span></li>
-                                                            <li><span class="inf">• Garlic Paste</span></li>
-                                                            <li><span class="inf">• Donair Sauce (Tzatziki)</span></li>
-                                                            <li><span class="inf">• Lettuce</span></li>
-                                                            <li><span class="inf">• Add Feta Chees</span><span class="price">$1.25</span></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>-->
+                                               
                                             </div>
+                                            </div>
+                                            <!--End order combine-->
                                         </div>
 
                                         <div class="order-rec-info">
@@ -344,6 +354,13 @@
             </div>
         </div>
     </main>
+    <div id="add-card"  class="success-popup mfp-hide" style="text-align: center">
+    <div class="" style="text-align: center">{{this.error.ResultDesc}}</div>
+    <!--<div style="cursor: pointer" class="text-center" (click)="trackerOrder()" 
+            ><img src="assets/images/ico-succsess.png" alt=""></div>-->
+
+
+</div>
          <block-ui>
       <!-- Your app markup here -->
     </block-ui>

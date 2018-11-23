@@ -43,4 +43,6 @@ export class PlaceOrderDeliveryModel{
     IsGroupOrder:string=""
     ExpectedDeliveryTime:string=""
     uniqueTransactionCode:string=""
+    IsCombinedOrder:string=""
+    CombinedOrderInfo:string=""
 }

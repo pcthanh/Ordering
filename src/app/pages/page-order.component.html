@@ -142,7 +142,7 @@
 
                                                         </div>-->
                                                         <div class="text-info-wrap display-flex chicken-beef" (click)="showProductDetail(itemP.Id)">
-                                                            <div *ngIf="itemP.HaveImage" class="image-info" [ngStyle]="{'background-image': 'url('+itemP.Image+')'}">
+                                                            <div *ngIf="itemP.HaveImage" class="image-info" [ngStyle]="{'background-image': 'url('+itemP.OriginalImage+')'}">
 
                                                             </div>
 
@@ -305,9 +305,9 @@
 
             <!--start popup update product in cart-->
             <div id="" *ngIf="showUpdateProduct && haveCart && !removeCartFlag" class="chicken-popup-update white-popup mfp-hide">
-                <div class="title-popup">{{this.cart.Cart[IndexItemCartUpdate].Name}}</div>
-                <div class="text-popup">{{this.cart.Cart[IndexItemCartUpdate].Description}}</div>
-                <div *ngFor="let itemOptions of this.cart.Cart[IndexItemCartUpdate].OptionList">
+                <div class="title-popup">{{this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].Name}}</div>
+                <div class="text-popup">{{this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].Description}}</div>
+                <div *ngFor="let itemOptions of this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList">
                     <div class="title-choose">{{itemOptions.OptionName}}</div>
                     <div class="text-small" *ngIf="itemOptions.MinOptionItemSelectionRequired>0">Choose One <span class="not">Required</span></div>
                     <div class="input-choose" *ngFor="let itemOptionItem of itemOptions.OptionItemList;let i=index">
@@ -326,7 +326,7 @@
   font-size: 20px;
   font-weight: bold; display: block" type="text" value="1">-->
   <button (click)="SubtractionItem()" class="counter-minus1"><span style="vertical-align: middle">{{itemOptionItem.Qty}}</span></button>
-                                                            <button (click)="additionQtyOptionItem(itemOptionItem.OptionItemId,itemOptions.OptionId)" class="counter-plus1">+</button>
+                                                            <button (click)="additionQtyOptionItem(itemOptionItem.OptionItemId,itemOptions.OptionId,i)" class="counter-plus1">+</button>
                                                         </div>
                     </div>
                     </div>
@@ -334,7 +334,7 @@
                 <div class="btn-add-special-wrap">
                     <div class="btn-add-special-inner">
                         <button (click)="showAddSpecial()" class="btn-add-special"><span>Add Special instructions for the Restaurant (Optional)</span></button>
-                        <textarea name="" [(ngModel)]="this.cart.Cart[IndexItemCartUpdate].SpecialRequest" class="text-special" style="display: none;"></textarea>
+                        <textarea name="" [(ngModel)]="this.cartNew.cartNew[this.indexCart].Cart[IndexItemCartUpdate].SpecialRequest" class="text-special" style="display: none;"></textarea>
                     </div>
 
 
@@ -344,14 +344,14 @@
                     <!--<a href="#" class="feedback">Send Menu Feeback</a>-->
                     <div class="handle-counter" id="handleCounter">
                         <button (click)="SubtractionItemUpdate()" class="counter-minus"><span>_</span></button>
-                        <input type="text" value="{{this.cart.Cart[IndexItemCartUpdate].Qty}}">
+                        <input type="text" value="{{this.cartNew.cartNew[this.indexCart].Cart[IndexItemCartUpdate].Qty}}">
                         <button (click)="AdditionQtyItemUpdate()" class="counter-plus">+</button>
                     </div>
 
                 </div>
                 <div class="btn-selection-wrap">
                     <button (click)="UpadteCartAndClose()" class="btn-main btn-selection"><span>selections required</span></button>
-                    <div class="price">{{this.cart.Cart[IndexItemCartUpdate].TotalStr}}</div>
+                    <div class="price">{{this.cartNew.cartNew[this.indexCart].Cart[IndexItemCartUpdate].TotalStr}}</div>
                 </div>
             </div>
             <!--end popup update product in cart-->
@@ -364,25 +364,17 @@
                         
                         <div class="nano-scroll nano">
                             <div class="nano-content item-checkout-list">
-                                <!--<div class="item-checkout-wrap" *ngFor="let item of cart.Cart;let i=index">
-                                    <div (click)="upadteProduct(i)" style="cursor: pointer" class="item-checkout">
-                                        <div class="number">{{item.Qty}}</div>
-                                        <div class="title">{{item.Name}} <span class="price">{{item.TotalStr}}</span></div>
-                                        <a (click)="removeCart(i)" class="btn-delete"><img src="assets/images/ico-close.png" alt=""></a>
-                                        <ul class="item-info">
-
-                                            <div *ngFor="let itemOp of item.OptionList">
-                                                <div *ngFor="let itemOPD of itemOp.OptionItemList">
-                                                    <div *ngIf="itemOPD.isCheck==true">
-                                                        <li><span class="inf">• {{itemOPD.OptionItemName}}</span><span class="price">{{itemOPD.PriceDisplay}}</span></li>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </ul>
-                                    </div>
-                                </div>-->
-                                <div class="item-checkout-wrap" *ngFor="let item of cart.Cart;let i=index">
+                                 <div *ngFor="let itemCrt of this.cartNew.cartNew;let j=index">
+                                <div class="outlet-banner-wrap1">
+                                 <div class="outlet-name-rating1"> {{itemCrt.OutletName}} 
+                                     <span [innerHtml]="itemCrt.OutletRating"
+                                    class="rate-gof3r"></span>
+                                   
+                                </div>
+                                
+                            </div>
+                                <div class="item-checkout-wrap" *ngFor="let item of itemCrt.Cart;let i=index">
+                                   
                                     <!--Table-->
                                     <div style="cursor: pointer"  class="table-responsive">
                                         <table  class="table">
@@ -390,9 +382,9 @@
                                             <tbody>
                                                 <tr>
                                                     <td class="number" style="width: 10%;font-weight: 500">{{item.Qty}}X</td>
-                                                    <td (click)="upadteProduct(i)" style="width: 60%; font-size: 15px; font-weight: 500">{{item.Name}}</td>
+                                                    <td (click)="upadteProduct(j,i)" style="width: 60%; font-size: 15px; font-weight: 500">{{item.Name}}</td>
                                                     <td style="width: 20%;font-size: 15px; font-weight: 500;text-align: right">{{item.TotalStr}}</td>
-                                                    <td style="width: 10%; text-align: right;color: #9f9f9f"> <a (click)="removeCart(i)" class="btn-delete"><img src="assets/images/ico-close.png" alt=""></a></td>
+                                                    <td style="width: 10%; text-align: right;color: #9f9f9f"> <a (click)="removeCart(j,i)" class="btn-delete"><img src="assets/images/ico-close.png" alt=""></a></td>
 
 
                                                 </tr>
@@ -415,7 +407,15 @@
                                     </div>
                                     <!--Table-->
                                 </div>
-
+                                <div class="outlet-banner-wrap1">
+                                 <div class="outlet-name-rating1"> Total 
+                                     <span style="float: right"
+                                    class="rate-gof3r">{{itemCrt.TotalDisplay}}</span>
+                                   
+                                </div>
+                                
+                            </div>
+                            </div>
                             </div>
                             <div class="nano-pane"><div class="nano-slider" style="height: 245px; transform: translate(0px, 155px);"></div></div>
                         </div>
@@ -430,6 +430,13 @@
         </div>
     </div>
 </main>
+<div id="add-card"  class="success-popup mfp-hide" style="text-align: center">
+    <div class="" style="text-align: center">{{this.error.ResultDesc}}</div>
+    <!--<div style="cursor: pointer" class="text-center" (click)="trackerOrder()" 
+            ><img src="assets/images/ico-succsess.png" alt=""></div>-->
+
+
+</div>
 <block-ui>
     <!-- Your app markup here -->
 </block-ui>

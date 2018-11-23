@@ -22,6 +22,8 @@ import { OrderModel } from "../models/Order";
 import { ListDeliveryAddress } from "../models/ListDeliveryAddress";
 import { VerifyOrderMainModel } from "../models/VerifyOrderMain";
 import { VerifyOrderRequest } from "../models-request/verify-order-request";
+import { CartOrderNew } from "../models/CartOrderNew";
+import { ErrorModel } from "../models/Error";
 const ORDER_DELIVERY: string = "DELIVERY"
 const ORDER_PICKUP: string = "PICKUP"
 declare var $: any;
@@ -40,6 +42,7 @@ export class PageOrderComponent implements OnInit {
     isCheck = true;
     total: number = 220;
     str: string;
+    error: ErrorModel
     cart: CartOrder;
     specialRequest: string = "";
     haveData: boolean;
@@ -52,6 +55,7 @@ export class PageOrderComponent implements OnInit {
     orderMain: OrderModel;
     showCartEmpty: boolean = false;
     IndexItemCartUpdate: number;
+    indexCart: number;
     showUpdateProduct: boolean = false;
     errorCart: string = ""
     @BlockUI() blockUI: NgBlockUI;
@@ -60,7 +64,8 @@ export class PageOrderComponent implements OnInit {
     verifyOrderMain: VerifyOrderMainModel;
     productWebsiteBannerMessage: string = "";
     hadVeryfiOrder: boolean = false;
-    removeCartFlag:boolean=false
+    removeCartFlag: boolean = false
+    cartNew: CartOrderNew;
     constructor(private _router: Router, private _gof3rUtil: Gof3rUtil, private _gof3rModule: Gof3rModule, private _util: Gof3rUtil, private _pickupService: PickupService, private _instanceService: EventSubscribeService, private active_router: ActivatedRoute) {
         this.blockUI.start('loading ...'); // Start blocking
         this.productDetail = new ProductDetailMainModel();
@@ -72,6 +77,8 @@ export class PageOrderComponent implements OnInit {
         this.outletInfo = new OutletInfoModel();
         this.listDeliveryAddress = new ListDeliveryAddress();
         this.verifyOrderMain = new VerifyOrderMainModel();
+        this.cartNew = new CartOrderNew();
+        this.error = new ErrorModel()
         //this.blockUI.start();
         if (localStorage.getItem("out") != null) {
             this.OutletId = localStorage.getItem("out");
@@ -227,13 +234,12 @@ export class PageOrderComponent implements OnInit {
 
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.productList = data;
-
             this.haveData = true
             this.haveDepartment = this.productList.IsHavingDepartment
 
             for (let i = 0; i < this.productList.ProductList.length; i++) {
                 for (let j = 0; j < this.productList.ProductList[i].Produtcs.length; j++) {
-                    if (this.productList.ProductList[i].Produtcs[j].Image.indexOf("no_image") > -1 || this.productList.ProductList[i].Produtcs[j].Image == "") {
+                    if (this.productList.ProductList[i].Produtcs[j].OriginalImage.indexOf("no_image") > -1 || this.productList.ProductList[i].Produtcs[j].OriginalImage == "") {
 
                         this.productList.ProductList[i].Produtcs[j].HaveImage = false;
                     }
@@ -422,7 +428,7 @@ export class PageOrderComponent implements OnInit {
             });
         }
     }
-    upadteProduct(indexUpdate: number) {
+    upadteProduct(indexCart: number, indexUpdate: number) {
 
         this.showUpdateProduct = true;
         this.removeCartFlag = false;
@@ -436,7 +442,8 @@ export class PageOrderComponent implements OnInit {
             });
         }
         this.IndexItemCartUpdate = indexUpdate;
-        this.productDetailParse=this.cart.Cart[this.IndexItemCartUpdate];
+        this.indexCart = indexCart;
+        this.productDetailParse = this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate];
 
 
     }
@@ -473,7 +480,7 @@ export class PageOrderComponent implements OnInit {
     }
 
     checkOptionItemUpdate(optionItemId: string, optionId: number, index: number) {
-
+        console.log("thanh")
         let countItemChecked = 0;
         let maxselectItem = this.getMaxSelectItemUdate(optionId, index);
         let minselectItem = this.getMinSelectItemUPdate(optionId, index);
@@ -481,12 +488,12 @@ export class PageOrderComponent implements OnInit {
         countItemChecked = this.checkBoxUpdate(optionItemId, optionId);
 
         if (countItemChecked > maxselectItem && maxselectItem != 0) {
-            for (let i = 0; i < this.cart.Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
-                for (let j = 0; j < this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
-                    if (this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck == true && this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId && j != index) {
-                        this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck = false;
-                        this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isLock = false;
-                        this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].Qty = 0;
+            for (let i = 0; i < this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
+                for (let j = 0; j < this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
+                    if (this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck == true && this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId && j != index) {
+                        this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck = false;
+                        this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isLock = false;
+                        this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].Qty = 0;
 
                         break;
                     }
@@ -499,8 +506,8 @@ export class PageOrderComponent implements OnInit {
 
             this.lockCheckBoxUpdate(optionItemId, optionId);
         }
-        this.subTotalOfOptionItemUpdate(optionItemId, optionId, this.cart.Cart[this.IndexItemCartUpdate], index)
-        this.subTotalItem(false, this.cart.Cart[this.IndexItemCartUpdate]);
+        this.subTotalOfOptionItemUpdate(optionItemId, optionId, this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate], index)
+        this.subTotalItem(false, this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate]);
 
     }
     getMaxSelectItem(optionId: number) {
@@ -519,16 +526,16 @@ export class PageOrderComponent implements OnInit {
     }
     getMaxSelectItemUdate(optionId: number, index) {
 
-        for (let i = 0; i < this.cart.Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
-            if (this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId) {
-                return this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].MaxOptionItemSelectionRequired;
+        for (let i = 0; i < this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
+            if (this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId) {
+                return this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].MaxOptionItemSelectionRequired;
             }
         }
     }
     getMinSelectItemUPdate(optionId: number, index) {
-        for (let i = 0; i < this.cart.Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
-            if (this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId) {
-                return this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].MinOptionItemSelectionRequired;
+        for (let i = 0; i < this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
+            if (this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId) {
+                return this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].MinOptionItemSelectionRequired;
             }
         }
     }
@@ -558,22 +565,22 @@ export class PageOrderComponent implements OnInit {
     }
     checkBoxUpdate(optionItemId: string, optionId: number) {
         let countItemChecked = 0;
-        for (let i = 0; i < this.cart.Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
-            for (let j = 0; j < this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
+        for (let i = 0; i < this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
+            for (let j = 0; j < this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
 
-                if (this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].OptionItemId === optionItemId) {
+                if (this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].OptionItemId === optionItemId) {
 
-                    this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck = !this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck
+                    this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck = !this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck
 
-                    if (this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck == true) {
-                        this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].Qty++;
+                    if (this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck == true) {
+                        this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].Qty++;
                     }
                     else {
-                        this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].Qty = 0;
+                        this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].Qty = 0;
                     }
 
                 }
-                if (this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck == true && this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId) {
+                if (this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck == true && this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId) {
                     countItemChecked++;
                 }
             }
@@ -591,10 +598,10 @@ export class PageOrderComponent implements OnInit {
         }
     }
     lockCheckBoxUpdate(optionItemId: string, optionId: number) {
-        for (let i = 0; i < this.cart.Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
-            for (let j = 0; j < this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
-                if (this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck == true && this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId) {
-                    this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isLock = true;
+        for (let i = 0; i < this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
+            for (let j = 0; j < this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
+                if (this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck == true && this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId) {
+                    this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isLock = true;
                 }
             }
         }
@@ -612,9 +619,9 @@ export class PageOrderComponent implements OnInit {
     }
     countCheckBoxUpdate(optionItemId: string, optionId: number) {
         let countChb = 0;
-        for (let i = 0; i < this.cart.Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
-            for (let j = 0; j < this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
-                if (this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck == true && this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId) {
+        for (let i = 0; i < this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
+            for (let j = 0; j < this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
+                if (this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].isCheck == true && this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId) {
                     countChb++;
                 }
             }
@@ -636,7 +643,7 @@ export class PageOrderComponent implements OnInit {
     }
     subTotalOfOptionItemUpdate(optionItem: string, optionId: number, productMain: ProductDetailParseModel, index) {
         for (let i = 0; i < productMain.OptionList.length; i++) {
-            for (let j = 0; j < this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
+            for (let j = 0; j < this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
                 if (productMain.OptionList[i].OptionId == optionId && productMain.OptionList[i].OptionItemList[j].OptionItemId == optionItem) {
                     productMain.OptionList[i].OptionItemList[j].Total = productMain.OptionList[i].OptionItemList[j].Qty * (parseInt(productMain.OptionList[i].OptionItemList[j].Price) / 100);
                     productMain.OptionList[i].OptionItemList[j].TotalStr = this._util.formatCurrency(productMain.OptionList[i].OptionItemList[j].Total, "S$");
@@ -651,10 +658,10 @@ export class PageOrderComponent implements OnInit {
 
     }
     AdditionQtyItemUpdate() {
-        this.cart.Cart[this.IndexItemCartUpdate].Qty++;
+        this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].Qty++;
         let isQtyItem = true;
-        this.subTotalItem(isQtyItem, this.cart.Cart[this.IndexItemCartUpdate]);
-        this.orderMain.ArrayItem = this.cart.Cart;
+        this.subTotalItem(isQtyItem, this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate]);
+        this.orderMain.ArrayItem = this.cartNew.cartNew[this.indexCart].Cart;
         this.subTotalOrder()
         if (this.OrderType === ORDER_DELIVERY) {
             localStorage.setItem("crtd", JSON.stringify(this.cart))
@@ -673,11 +680,11 @@ export class PageOrderComponent implements OnInit {
         }
     }
     SubtractionItemUpdate() {
-        if (this.cart.Cart[this.IndexItemCartUpdate].Qty > 1) {
+        if (this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].Qty > 1) {
             let isQtyItem = true;
             this.cart.Cart[this.IndexItemCartUpdate].Qty--;
-            this.subTotalItem(isQtyItem, this.cart.Cart[this.IndexItemCartUpdate])
-            this.orderMain.ArrayItem = this.cart.Cart;
+            this.subTotalItem(isQtyItem, this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate])
+            this.orderMain.ArrayItem = this.cartNew.cartNew[this.indexCart].Cart;
             this.subTotalOrder()
             if (this.OrderType === ORDER_DELIVERY) {
                 localStorage.setItem("crtd", JSON.stringify(this.cart))
@@ -688,10 +695,10 @@ export class PageOrderComponent implements OnInit {
         }
     }
     addQuatyOptionItem(optionItem: string, optionId: number, index) {
-        for (let i = 0; i < this.cart.Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
-            for (let j = 0; j < this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
-                if (this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId && this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].OptionItemId == optionItem) {
-                    this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].Qty++;
+        for (let i = 0; i < this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
+            for (let j = 0; j < this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
+                if (this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionId == optionId && this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].OptionItemId == optionItem) {
+                    this.cartNew.cartNew[this.indexCart].Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].Qty++;
                 }
             }
         }
@@ -703,142 +710,221 @@ export class PageOrderComponent implements OnInit {
         this.productDetailParse.SpecialRequest = this.specialRequest;
         if (this.OrderType == ORDER_PICKUP) {//cart for pickup
             if (localStorage.getItem("crt") != null) {//check cart exits
-                this.cart = (JSON.parse(localStorage.getItem("crt")));
+                this.cartNew = (JSON.parse(localStorage.getItem("crt")));
             }
+            let haveOutetInCart: boolean = false;
+            if (this.cartNew.cartNew.length > 0) {//check cart not yet item
+                for (let l = 0; l < this.cartNew.cartNew.length; l++) {
+                    if (this.outletInfo.OutletInfo[0].MerchantOutletId === this.cartNew.cartNew[l].OuteletID) {
+                        haveOutetInCart = true;
+                        let isExits: boolean;
+                        let isCompare: boolean;
+                        let countCompare: number = 0;
+                        let arrayOptionInCart: any;
+                        let arrayOptionItem = this.checkGroupOptionOfItem(this.productDetailParse);
+                        for (let i = 0; i < this.cartNew.cartNew[l].Cart.length; i++) {
+                            if (this.cartNew.cartNew[l].Cart[i].Id == this.productDetailParse.Id) {
+                                isExits = true;
 
-            if (this.cart.Cart.length > 0) {//check cart not yet item
-                
-                    let isExits: boolean;
-                    let isCompare: boolean;
-                    let countCompare: number = 0;
-                    let arrayOptionInCart: any;
-                    let arrayOptionItem = this.checkGroupOptionOfItem(this.productDetailParse);
-                    for (let i = 0; i < this.cart.Cart.length; i++) {
-                        if (this.cart.Cart[i].Id == this.productDetailParse.Id) {
-                            isExits = true;
+                                if (isExits) {
+                                    arrayOptionInCart = this.checkGroupOptionOfItem(this.cartNew.cartNew[l].Cart[i]);
 
-                            if (isExits) {
-                                arrayOptionInCart = this.checkGroupOptionOfItem(this.cart.Cart[i]);
-
-                                isCompare = this.checkArrays(JSON.stringify(arrayOptionItem), JSON.stringify(arrayOptionInCart));
-
-                                if (isCompare) {
-                                    this.cart.Cart[i].Qty = this.cart.Cart[i].Qty + this.productDetailParse.Qty;
-                                    for (let j = 0; j < this.productDetailParse.OptionList.length; j++) {
-                                        for (let h = 0; h < this.productDetailParse.OptionList[i].OptionItemList.length; h++) {
-                                            this.cart.Cart[i].OptionList[j].OptionItemList[h].Qty = this.cart.Cart[i].OptionList[j].OptionItemList[h].Qty + this.productDetailParse.OptionList[j].OptionItemList[h].Qty
-                                            this.subTotalOfOptionItem(this.cart.Cart[i].OptionList[j].OptionItemList[h].OptionItemId, this.cart.Cart[i].OptionList[j].OptionId, this.cart.Cart[i]);
-                                            this.subTotalItem(true, this.cart.Cart[i])
+                                    isCompare = this.checkArrays(JSON.stringify(arrayOptionItem), JSON.stringify(arrayOptionInCart));
+                                    console.log("comp:" + isCompare)
+                                    if (isCompare) {
+                                        this.cartNew.cartNew[l].Cart[i].Qty = this.cartNew.cartNew[l].Cart[i].Qty + this.productDetailParse.Qty;
+                                        for (let j = 0; j < this.productDetailParse.OptionList.length; j++) {
+                                            for (let h = 0; h < this.productDetailParse.OptionList[j].OptionItemList.length; h++) {
+                                                console.log("qty:" + this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionItemList[h].Qty)
+                                                this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionItemList[h].Qty = this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionItemList[h].Qty + this.productDetailParse.OptionList[j].OptionItemList[h].Qty
+                                                this.subTotalOfOptionItem(this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionItemList[h].OptionItemId, this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionId, this.cartNew.cartNew[l].Cart[i]);
+                                                this.subTotalItem(true, this.cartNew.cartNew[l].Cart[i])
+                                            }
                                         }
                                     }
                                 }
+
                             }
+                        }
+                        if (!isCompare) {
+                            //this.cart.Cart.push(this.productDetailParse);
+                            this.cartNew.cartNew[l].Cart.push(this.productDetailParse)
 
                         }
                     }
+                }
+                if (!haveOutetInCart) {
+                    let item = new CartOrder();
+                    item.OrderType = this.OrderType;
+                    item.OuteletID = this.outletInfo.OutletInfo[0].MerchantOutletId
+                    item.OutletName = this.outletInfo.OutletInfo[0].MerchantOutletName
+                    item.OutletRating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100))
+                    item.FoodCenterID = this.outletInfo.OutletInfo[0].FoodCentreId
+                    item.MerchantID = this.outletInfo.OutletInfo[0].MerchantId;
+                    item.Cart.push(this.productDetailParse);
+                    this.cartNew.cartNew.push(item);
 
-                    if (!isCompare) {
-                        this.cart.Cart.push(this.productDetailParse);
-
-                    }
-                    localStorage.setItem('crt', JSON.stringify(this.cart));
-                
-                // else {//
-
-                //     setTimeout(() => {
-                //         $.magnificPopup.open({
-                //             items: {
-                //                 src: '#cart-popup'
-                //             },
-                //             type: 'inline'
-                //         });
-                //     }, 50)
-
-                //     this.errorCart = "please delete old your cart";
-                // }
-
+                }
+                localStorage.setItem('crt', JSON.stringify(this.cartNew));
             }
             else {
-                this.cart.OrderType = this.OrderType
-                this.cart.OuteletID = this.outletInfo.OutletInfo[0].MerchantOutletId
-                this.cart.Cart.push(this.productDetailParse);
-                localStorage.setItem('crt', JSON.stringify(this.cart));
+                let item = new CartOrder();
+                item.OrderType = this.OrderType;
+                item.OuteletID = this.outletInfo.OutletInfo[0].MerchantOutletId
+                item.OutletName = this.outletInfo.OutletInfo[0].MerchantOutletName
+                item.OutletRating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100))
+                item.FoodCenterID = this.outletInfo.OutletInfo[0].FoodCentreId
+                item.MerchantID = this.outletInfo.OutletInfo[0].MerchantId;
+                item.Cart.push(this.productDetailParse);
+                this.cartNew.cartNew.push(item);
+                localStorage.setItem('crt', JSON.stringify(this.cartNew));
             }
             this._instanceService.sendCustomEvent("UpdateCart")
 
         } else if (this.OrderType === ORDER_DELIVERY) {//cart for delivery
             if (localStorage.getItem("crtd") != null) {//check cart exits
-                this.cart = (JSON.parse(localStorage.getItem("crtd")));
+                this.cartNew = (JSON.parse(localStorage.getItem("crtd")));
             }
+            let haveOutetInCart: boolean = false;
+            if (this.cartNew.cartNew.length > 0) {//check cart not yet item
+                let flagFoodCenter: boolean = this.checkFoodCenter(this.outletInfo.OutletInfo[0].FoodCentreId)
+                if (!flagFoodCenter) {
+                    setTimeout(() => {
+                        $.magnificPopup.open({
+                            items: {
+                                src: '#cart-popup'
+                            },
+                            type: 'inline'
+                        });
+                    }, 50)
 
-            if (this.cart.Cart.length > 0) {//check cart not yet item
+                    this.errorCart = "please delete old your cart";
+                    return
+                }
+                for (let l = 0; l < this.cartNew.cartNew.length; l++) {
 
-                
-                    let isExits: boolean;
-                    let isCompare: boolean;
-                    let countCompare: number = 0;
-                    let arrayOptionInCart: any;
-                    let arrayOptionItem = this.checkGroupOptionOfItem(this.productDetailParse);
-                    for (let i = 0; i < this.cart.Cart.length; i++) {
-                        if (this.cart.Cart[i].Id == this.productDetailParse.Id) {
-                            isExits = true;
 
-                            if (isExits) {
-                                arrayOptionInCart = this.checkGroupOptionOfItem(this.cart.Cart[i]);
 
-                                isCompare = this.checkArrays(JSON.stringify(arrayOptionItem), JSON.stringify(arrayOptionInCart));
-                                console.log("comp:" + isCompare)
-                                if (isCompare) {
-                                    this.cart.Cart[i].Qty = this.cart.Cart[i].Qty + this.productDetailParse.Qty;
-                                    for (let j = 0; j < this.productDetailParse.OptionList.length; j++) {
-                                        for (let h = 0; h < this.productDetailParse.OptionList[j].OptionItemList.length; h++) {
-                                            console.log("qty:" + this.cart.Cart[i].OptionList[j].OptionItemList[h].Qty)
-                                            this.cart.Cart[i].OptionList[j].OptionItemList[h].Qty = this.cart.Cart[i].OptionList[j].OptionItemList[h].Qty + this.productDetailParse.OptionList[j].OptionItemList[h].Qty
-                                            this.subTotalOfOptionItem(this.cart.Cart[i].OptionList[j].OptionItemList[h].OptionItemId, this.cart.Cart[i].OptionList[j].OptionId, this.cart.Cart[i]);
-                                            this.subTotalItem(true, this.cart.Cart[i])
+                    if (this.outletInfo.OutletInfo[0].MerchantOutletId === this.cartNew.cartNew[l].OuteletID) {
+                        haveOutetInCart = true;
+                        let isExits: boolean;
+                        let isCompare: boolean;
+                        let countCompare: number = 0;
+                        let arrayOptionInCart: any;
+                        let arrayOptionItem = this.checkGroupOptionOfItem(this.productDetailParse);
+                        for (let i = 0; i < this.cartNew.cartNew[l].Cart.length; i++) {
+                            if (this.cartNew.cartNew[l].Cart[i].Id == this.productDetailParse.Id) {
+                                isExits = true;
+
+                                if (isExits) {
+                                    arrayOptionInCart = this.checkGroupOptionOfItem(this.cartNew.cartNew[l].Cart[i]);
+
+                                    isCompare = this.checkArrays(JSON.stringify(arrayOptionItem), JSON.stringify(arrayOptionInCart));
+                                    console.log("comp:" + isCompare)
+                                    if (isCompare) {
+                                        this.cartNew.cartNew[l].Cart[i].Qty = this.cartNew.cartNew[l].Cart[i].Qty + this.productDetailParse.Qty;
+                                        for (let j = 0; j < this.productDetailParse.OptionList.length; j++) {
+                                            for (let h = 0; h < this.productDetailParse.OptionList[j].OptionItemList.length; h++) {
+                                                console.log("qty:" + this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionItemList[h].Qty)
+                                                this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionItemList[h].Qty = this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionItemList[h].Qty + this.productDetailParse.OptionList[j].OptionItemList[h].Qty
+                                                this.subTotalOfOptionItem(this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionItemList[h].OptionItemId, this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionId, this.cartNew.cartNew[l].Cart[i]);
+                                                this.subTotalItem(true, this.cartNew.cartNew[l].Cart[i])
+                                            }
                                         }
                                     }
                                 }
+
                             }
+                        }
+                        if (!isCompare) {
+                            //this.cart.Cart.push(this.productDetailParse);
+                            this.cartNew.cartNew[l].Cart.push(this.productDetailParse)
 
                         }
                     }
+                }
+                if (!haveOutetInCart) {
+                    let item = new CartOrder();
+                    item.OrderType = this.OrderType;
+                    item.OuteletID = this.outletInfo.OutletInfo[0].MerchantOutletId
+                    item.OutletName = this.outletInfo.OutletInfo[0].MerchantOutletName
+                    item.OutletRating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100))
+                    item.FoodCenterID = this.outletInfo.OutletInfo[0].FoodCentreId
+                    item.MerchantID = this.outletInfo.OutletInfo[0].MerchantId;
+                    item.Cart.push(this.productDetailParse);
+                    this.cartNew.cartNew.push(item);
 
-                    if (!isCompare) {
-                        this.cart.Cart.push(this.productDetailParse);
-
-                    }
-                    localStorage.setItem('crtd', JSON.stringify(this.cart));
-                // }
-                // else {
-                //     setTimeout(() => {
-                //         $.magnificPopup.open({
-                //             items: {
-                //                 src: '#cart-popup'
-                //             },
-                //             type: 'inline'
-                //         });
-                //     }, 50)
-
-                //     this.errorCart = "please delete old your cart";
-                // }
-
-
+                }
+                localStorage.setItem('crtd', JSON.stringify(this.cartNew));
             }
             else {
-                this.cart.OrderType = this.OrderType
-                this.cart.OuteletID = this.outletInfo.OutletInfo[0].MerchantOutletId
-                this.cart.Cart.push(this.productDetailParse);
-                localStorage.setItem('crtd', JSON.stringify(this.cart));
+                let item = new CartOrder();
+                item.OrderType = this.OrderType;
+                item.OuteletID = this.outletInfo.OutletInfo[0].MerchantOutletId
+                item.OutletName = this.outletInfo.OutletInfo[0].MerchantOutletName
+                item.OutletRating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100))
+                item.Cart.push(this.productDetailParse);
+                item.FoodCenterID = this.outletInfo.OutletInfo[0].FoodCentreId
+                item.MerchantID = this.outletInfo.OutletInfo[0].MerchantId;
+                this.cartNew.cartNew.push(item);
+                localStorage.setItem('crtd', JSON.stringify(this.cartNew));
             }
+
             this._instanceService.sendCustomEvent("UpdateCart")
 
         }
-        this.orderMain.ArrayItem = this.cart.Cart;
-        this.VerifyOrder();
+        //this.orderMain.ArrayItem = this.cartNew.cartNew;
+
         this.subTotalOrder()
+        this.subTotalEachCart()
+        this.VerifyOrder();
         $.magnificPopup.close()
 
+    }
+    checkFoodCenter(foodCenterId: string) {
+        console.log("foodId:" + foodCenterId)
+        let flagFoodCenter: boolean = false;
+        for (let i = 0; i < this.cartNew.cartNew.length; i++) {
+            if (this.cartNew.cartNew[i].FoodCenterID === foodCenterId) {
+                flagFoodCenter = true;
+            }
+        }
+        return flagFoodCenter;
+    }
+    subTotalEachCart() {
+
+        for (let i = 0; i < this.cartNew.cartNew.length; i++) {
+            let total: number = 0
+            for (let j = 0; j < this.cartNew.cartNew[i].Cart.length; j++) {
+                total = total + this.cartNew.cartNew[i].Cart[j].Total;
+            }
+            this.cartNew.cartNew[i].Total = total;
+            this.cartNew.cartNew[i].TotalDisplay = this._gof3rUtil.formatCurrency(this.cartNew.cartNew[i].Total, "S$")
+        }
+        if (this.OrderType === ORDER_DELIVERY) {
+            localStorage.setItem('crtd', JSON.stringify(this.cartNew));
+        }
+        else {
+            localStorage.setItem('crt', JSON.stringify(this.cartNew));
+        }
+    }
+    addToCart1() {
+        if (this.OrderType === ORDER_DELIVERY) {
+            let haveOutletInCart: boolean = false;
+            if (localStorage.getItem("crtd") != null) {//check cart exits
+                this.cartNew = (JSON.parse(localStorage.getItem("crtd")));
+            }
+            if (this.cartNew.cartNew.length > 0) {// cart da co 1 phan tu tro len
+                for (let i = 0; i < this.cartNew.cartNew.length; i++) {
+                    if (this.cartNew.cartNew[i].OuteletID === this.outletInfo.OutletInfo[0].MerchantOutletId) {
+                        haveOutletInCart = true;
+
+                    }
+                }
+            } else {// cart chua co phan tu nao het
+
+            }
+        }
     }
     checkGroupOrderToCart(itemId: number, speciaRequest: string) {
         let isCompare: boolean;
@@ -887,13 +973,13 @@ export class PageOrderComponent implements OnInit {
         if (this.OrderType === ORDER_PICKUP) {
             if (localStorage.getItem("crt") != null) {//check when had cart
                 this.haveCart = true;
-                this.cart = JSON.parse(localStorage.getItem("crt"));
+                this.cartNew = JSON.parse(localStorage.getItem("crt"));
 
 
                 // this.orderMain.PickupAt = this.outletInfo.OutletInfo[0].Address
                 // this.orderMain.MerchantId = this.outletInfo.OutletInfo[0].MerchantId;
                 if (this.cart.Cart.length > 0) {
-                    this.orderMain.ArrayItem = this.cart.Cart;
+                    //this.orderMain.ArrayItem = this.cart.Cart;
                     if (this.cart.OrderType === ORDER_PICKUP) {
                         // this.isPickup = true;
                         // this.isDelivery = false;
@@ -925,10 +1011,10 @@ export class PageOrderComponent implements OnInit {
         } else if (this.OrderType === ORDER_DELIVERY) {//cart for delivery
             if (localStorage.getItem("crtd") != null) {//check when had cart
                 this.haveCart = true;
-                this.cart = JSON.parse(localStorage.getItem("crtd"));
+                this.cartNew = JSON.parse(localStorage.getItem("crtd"));
                 //this.orderMain.DeliveryTo = this.currentAddress
-                if (this.cart.Cart.length > 0) {
-                    this.orderMain.ArrayItem = this.cart.Cart
+                if (this.cartNew.cartNew.length > 0) {
+                    //this.orderMain.ArrayItem = this.cart.Cart
 
                     this.subTotalOrder();
 
@@ -949,6 +1035,7 @@ export class PageOrderComponent implements OnInit {
         }
         //get option item of item
         this.VerifyOrder();
+        this.subTotalEachCart()
         this.upadteShowOpntionItem()
 
     }
@@ -969,8 +1056,13 @@ export class PageOrderComponent implements OnInit {
     subTotalOrder() {
 
         let subtotal = 0;
-        for (let i = 0; i < this.orderMain.ArrayItem.length; i++) {
-            subtotal = subtotal + this.orderMain.ArrayItem[i].Total;
+        // for (let i = 0; i < this.orderMain.ArrayItem.length; i++) {
+        //     subtotal = subtotal + this.orderMain.ArrayItem[i].Total;
+        // }
+        for (let i = 0; i < this.cartNew.cartNew.length; i++) {
+            for (let j = 0; j < this.cartNew.cartNew[i].Cart.length; j++) {
+                subtotal = subtotal + this.cartNew.cartNew[i].Cart[j].Total
+            }
         }
         this.orderMain.SubTotal = subtotal;
         this.orderMain.SubTotalStr = this._util.formatCurrency(this.orderMain.SubTotal, "S$")
@@ -993,24 +1085,41 @@ export class PageOrderComponent implements OnInit {
         }
 
     }
-    removeCart(index: number) {
-        console.log("delete:"+ index)
-        this.removeCartFlag=true;
-        this.cart.Cart.splice(index, 1);
+    removeCart(indexCart: number, index: number) {
+        console.log("delete:" + index)
+        this.blockUI.start()
+        this.removeCartFlag = true;
+        this.cartNew.cartNew[indexCart].Cart.splice(index, 1);
         if (this.OrderType === ORDER_PICKUP) {
-            localStorage.setItem("crt", JSON.stringify(this.cart))
+            localStorage.setItem("crt", JSON.stringify(this.cartNew))
         }
         else if (this.OrderType === ORDER_DELIVERY) {
-            localStorage.setItem("crtd", JSON.stringify(this.cart))
+            localStorage.setItem("crtd", JSON.stringify(this.cartNew))
         }
 
-        this.orderMain.ArrayItem = this.cart.Cart;
-        this.VerifyOrder();
-        this.subTotalOrder()
-        if (this.cart.Cart.length <= 0) {
+        this.orderMain.ArrayItem = this.cartNew.cartNew[indexCart].Cart;
+
+        console.log("xx:" + this.cartNew.cartNew.length)
+        if (this.cartNew.cartNew[indexCart].Cart.length <= 0) {
+
+
+            this.cartNew.cartNew.splice(indexCart, 1);
+            if (this.OrderType === ORDER_PICKUP) {
+                localStorage.setItem("crt", JSON.stringify(this.cartNew))
+            }
+            else if (this.OrderType === ORDER_DELIVERY) {
+                localStorage.setItem("crtd", JSON.stringify(this.cartNew))
+            }
+        }
+
+        if (this.cartNew.cartNew.length <= 0) {
+
             this.haveCart = false
             //this.showCart = false
         }
+        this.VerifyOrder();
+        this.subTotalOrder()
+        this.subTotalEachCart()
 
 
     }
@@ -1018,19 +1127,19 @@ export class PageOrderComponent implements OnInit {
         $('.text-special').slideDown();
     }
     UpadteCartAndClose() {
-        this.orderMain.ArrayItem = this.cart.Cart;
+        this.orderMain.ArrayItem = this.cartNew.cartNew[this.indexCart].Cart
         this.subTotalOrder()
         if (this.OrderType === ORDER_DELIVERY) {
-            localStorage.setItem("crtd", JSON.stringify(this.cart));
+            localStorage.setItem("crtd", JSON.stringify(this.cartNew));
         } else {
-            localStorage.setItem("crt", JSON.stringify(this.cart));
+            localStorage.setItem("crt", JSON.stringify(this.cartNew));
         }
-
+        this.showUpdateProduct = false
         $.magnificPopup.close()
     }
     checkOut() {
-        if(this.cart.OuteletID===this.outletInfo.OutletInfo[0].MerchantOutletId){
-            if (localStorage.getItem("cus") != null) {
+        // if (this.cart.OuteletID === this.outletInfo.OutletInfo[0].MerchantOutletId) {
+        if (localStorage.getItem("cus") != null) {
             if (this.OrderType === ORDER_PICKUP) {
                 if (!this.orderMain.PickupDateFrom || !this.orderMain.PickupDateTo) {
                     this.errorCart = "please select time to pickup"
@@ -1069,32 +1178,32 @@ export class PageOrderComponent implements OnInit {
                 height: '100%'
             });;
         }
-    }
-    else{
-        setTimeout(() => {
-                        $.magnificPopup.open({
-                            items: {
-                                src: '#cart-popup'
-                            },
-                            type: 'inline'
-                        });
-                    }, 50)
+        //}
+        // else {
+        //     setTimeout(() => {
+        //         $.magnificPopup.open({
+        //             items: {
+        //                 src: '#cart-popup'
+        //             },
+        //             type: 'inline'
+        //         });
+        //     }, 50)
 
-                    this.errorCart = "please delete old your cart";
-    }
-        
+        //     this.errorCart = "please delete old your cart";
+        // }
+
 
     }
     deleteCartOld() {
         if (this.OrderType === ORDER_PICKUP) {
             localStorage.removeItem("crt");
-            this.cart = new CartOrder();
+            this.cartNew = new CartOrderNew();
             this.loadCart()
             $.magnificPopup.close()
         }
         else {
             localStorage.removeItem("crtd");
-            this.cart = new CartOrder();
+            this.cartNew = new CartOrderNew();
             this.loadCart()
             $.magnificPopup.close()
         }
@@ -1163,7 +1272,7 @@ export class PageOrderComponent implements OnInit {
         })
     }
     VerifyOrder() {
-        if (localStorage.getItem("ot") != null) {
+        if (localStorage.getItem("ot") != null && this.cartNew.cartNew.length > 0) {
             this.verifyOrderMain = new VerifyOrderMainModel();
             let common_data = new CommonDataRequest();
             var _location = localStorage.getItem("la");
@@ -1173,17 +1282,42 @@ export class PageOrderComponent implements OnInit {
 
             let requestData = new VerifyOrderRequest();
             requestData.OrderType = this.OrderType;
-            requestData.MerchantId = this.outletInfo.OutletInfo[0].MerchantId;
-            requestData.MerchantOutletId = this.outletInfo.OutletInfo[0].MerchantOutletId;
+            if (this.cartNew.cartNew.length > 1) {
+                requestData.IsCombinedOrder = "Y"
+                requestData.MerchantId = ""
+                requestData.MerchantOutletId = ""
+                requestData.CombinedOrderInfo = this.combinedOrderInfo();
+            }
+            else {
+                requestData.IsCombinedOrder = "N"
+                requestData.MerchantId = this.outletInfo.OutletInfo[0].MerchantId;
+                requestData.MerchantOutletId = this.outletInfo.OutletInfo[0].MerchantOutletId;
+
+            }
+            //requestData.CombinedOrderInfo=this.combinedOrderInfo();
+            console.log("ggg")
+            requestData.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + ''
+            requestData.ProductList = this.listProduct()
             requestData.CurrencyCode = this.outletInfo.OutletInfo[0].CurrencyCode
             let totalRequest = this._gof3rModule.ParseTo12(this.orderMain.SubTotal)
             requestData.Subtotal = totalRequest;
             let requestDataJson = JSON.stringify(requestData);
-            // 
+            console.log("very_json:" + requestDataJson)
             this._pickupService.VerifyOrder(common_data_json, requestDataJson).then(data => {
-                this.verifyOrderMain = data;
-                this.hadVeryfiOrder = true
+                this.verifyOrderMain=data
+                if (this.verifyOrderMain.ResultCode === "000") {
+                    this.verifyOrderMain = data;
+                    this.hadVeryfiOrder = true
+                    if (this.removeCartFlag = true) {
+                        this.blockUI.stop()
+                    }
+                }
+                else {
+                    this.checkError(this.verifyOrderMain.ResultCode, this.verifyOrderMain.ResultDesc, this.verifyOrderMain.ServiceName)
+                }
                 console.log("very:" + JSON.stringify(this.verifyOrderMain))
+
+
             })
         }
     }
@@ -1192,24 +1326,23 @@ export class PageOrderComponent implements OnInit {
     }
     SubtractionQtyOptionItem(optionItemId: string, optionId: number, index: number) {
         console.log('add:' + optionId + '-' + optionItemId)
-        let hadCheck :boolean;
-        
-
+        let hadCheck: boolean;
+        hadCheck = this.checkItemHadCheck(optionItemId, optionId);
         if (hadCheck) {// option item checked
             console.log('co check')
             let minQuanty = this.getMinQuantyOptionItem(optionItemId, optionId);
             let qtyOptionItem = this.getQuantyOfOptionItem(optionItemId, optionId);
             if (qtyOptionItem > minQuanty && minQuanty != 0) {
                 // this.SubQuatyOptionItem1(optionItemId, optionId);
-                
-                    this.SubQuatyOptionItem1(optionItemId, optionId);
-                
+
+                this.SubQuatyOptionItem1(optionItemId, optionId);
+
             }
             if (minQuanty == 0) {
                 if (this.getQuantyOfOptionItem(optionItemId, optionId) > 1) {
-                    
-                        this.SubQuatyOptionItem1(optionItemId, optionId);
-                    
+
+                    this.SubQuatyOptionItem1(optionItemId, optionId);
+
                 }
             }
         } else {//option item no checked
@@ -1298,31 +1431,25 @@ export class PageOrderComponent implements OnInit {
             }
         }
     }
-    additionQtyOptionItem(optionItemId: string, optionId: number) {
+    additionQtyOptionItem(optionItemId: string, optionId: number, index: number) {
         console.log('add:' + optionId + '-' + optionItemId)
         let hadCheck: boolean;
-        
-            hadCheck = this.checkItemHadCheck(optionItemId, optionId);
-
-        
+        hadCheck = this.checkItemHadCheck(optionItemId, optionId)
         if (hadCheck) {// option item checked
-            console.log('co check')
+
             let maxQuanty = this.getMaxQuantyOptionItem(optionItemId, optionId);
-            console.log('co check:' + maxQuanty)
             let qtyOptionItem = this.getQuantyOfOptionItem(optionItemId, optionId);
             if (qtyOptionItem < maxQuanty && maxQuanty != 0) {
-                this.addQuatyOptionItem1(optionItemId, optionId);
-                
-                    this.addQuatyOptionItem1(optionItemId, optionId);
-                
+                this.addQuatyOptionItem1(optionItemId, optionId)
+
             }
             if (maxQuanty == 0) {
-                
-                    this.addQuatyOptionItem1(optionItemId, optionId);
-                
+
+                this.addQuatyOptionItem1(optionItemId, optionId);
+
             }
         } else {//option item no checked
-            console.log('ko check')
+            this.checkOptionItem(optionItemId, optionId, index)
         }
         this.subTotalOfOptionItem(optionItemId, optionId, this.productDetailParse)
         this.subTotalItem(false, this.productDetailParse);
@@ -1336,6 +1463,131 @@ export class PageOrderComponent implements OnInit {
                 }
             }
         }
+    }
+    listProduct(): string {
+        //"81,000000000050,1,^^^23,27,000000000050,1###35,000000000050,1,^^^21,21,000000000050,1===21,23,000000000050,1"
+        let dataString = "";
+        let count: number = 0;
+        this.orderMain.ArrayItem = [];
+        console.log('cartNew:' + JSON.stringify(this.cartNew))
+        for (let t = 0; t < this.cartNew.cartNew.length; t++) {
+            for (let u = 0; u < this.cartNew.cartNew[t].Cart.length; u++) {
+                this.orderMain.ArrayItem.push(this.cartNew.cartNew[t].Cart[u]);
+            }
+
+        }
+
+        for (let i = 0; i < this.orderMain.ArrayItem.length; i++) {
+            count = 0;
+
+            if (this.orderMain.ArrayItem[i].SpecialRequest) {
+
+                dataString = dataString + this.orderMain.ArrayItem[i].Id + "," + (this.orderMain.ArrayItem[i].Price) + "," + this.orderMain.ArrayItem[i].Qty + "," + this.orderMain.ArrayItem[i].SpecialRequest;
+            }
+            else {
+                dataString = dataString + this.orderMain.ArrayItem[i].Id + "," + (this.orderMain.ArrayItem[i].Price) + "," + this.orderMain.ArrayItem[i].Qty;
+            }
+
+            for (let j = 0; j < this.orderMain.ArrayItem[i].OptionList.length; j++) {
+                for (let k = 0; k < this.orderMain.ArrayItem[i].OptionList[j].OptionItemList.length; k++) {
+                    if (this.orderMain.ArrayItem[i].OptionList[j].OptionItemList[k].Qty > 0) {
+                        count++
+
+                        if (count > 1) {
+                            dataString = dataString + "===" + this.orderMain.ArrayItem[i].OptionList[j].OptionId + "," + this.orderMain.ArrayItem[i].OptionList[j].OptionItemList[k].OptionItemId + "," + this.orderMain.ArrayItem[i].OptionList[j].OptionItemList[k].Price + "," + this.orderMain.ArrayItem[i].OptionList[j].OptionItemList[k].Qty;
+                        }
+                        else {
+                            dataString = dataString + ",^^^" + this.orderMain.ArrayItem[i].OptionList[j].OptionId + "," + this.orderMain.ArrayItem[i].OptionList[j].OptionItemList[k].OptionItemId + "," + this.orderMain.ArrayItem[i].OptionList[j].OptionItemList[k].Price + "," + this.orderMain.ArrayItem[i].OptionList[j].OptionItemList[k].Qty;
+                        }
+
+                    }
+                }
+
+
+            }
+
+            let str = dataString.slice(dataString.length - 3)
+            if (str === "===" || str === "###") {
+                dataString = dataString.slice(0, dataString.length - 3)
+            }
+            if (this.orderMain.ArrayItem.length > 1) {
+                if (i !== this.orderMain.ArrayItem.length - 1) {
+                    dataString = dataString + "###";
+                }
+
+            }
+
+        }
+
+        return dataString;
+    }
+    combinedOrderInfo() {
+        //let productList=this.listProduct();
+        let combineInfor: string = ""
+        for (let u = 0; u < this.cartNew.cartNew.length; u++) {
+            let dataString = "";
+            let count: number = 0;
+            for (let t = 0; t < this.cartNew.cartNew[u].Cart.length; t++) {
+                count = 0;
+                if (this.cartNew.cartNew[u].Cart[t].SpecialRequest) {
+
+                    dataString = dataString + this.cartNew.cartNew[u].Cart[t].Id + "," + (this.cartNew.cartNew[u].Cart[t].Price) + "," + this.cartNew.cartNew[u].Cart[t].Qty + "," + this.cartNew.cartNew[u].Cart[t].SpecialRequest;
+                }
+                else {
+                    dataString = dataString + this.cartNew.cartNew[u].Cart[t].Id + "," + (this.cartNew.cartNew[u].Cart[t].Price) + "," + this.cartNew.cartNew[u].Cart[t].Qty;
+                }
+
+                for (let j = 0; j < this.cartNew.cartNew[u].Cart[t].OptionList.length; j++) {
+                    for (let k = 0; k < this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionItemList.length; k++) {
+                        if (this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionItemList[k].Qty > 0) {
+                            count++
+
+                            if (count > 1) {
+                                dataString = dataString + "===" + this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionId + "," + this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionItemList[k].OptionItemId + "," + this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionItemList[k].Price + "," + this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionItemList[k].Qty;
+                            }
+                            else {
+                                dataString = dataString + ",^^^" + this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionId + "," + this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionItemList[k].OptionItemId + "," + this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionItemList[k].Price + "," + this.cartNew.cartNew[u].Cart[t].OptionList[j].OptionItemList[k].Qty;
+                            }
+
+                        }
+                    }
+
+
+                }
+                let str = dataString.slice(dataString.length - 3)
+                if (str === "===" || str === "###") {
+                    dataString = dataString.slice(0, dataString.length - 3)
+                }
+                if (this.cartNew.cartNew[u].Cart.length > 1) {
+                    if (t !== this.cartNew.cartNew[u].Cart.length - 1) {
+                        dataString = dataString + "###";
+                    }
+
+                }
+            }
+            combineInfor = combineInfor + this.cartNew.cartNew[u].MerchantID + ";" + this.cartNew.cartNew[u].OuteletID + ";" + this._gof3rModule.ParseTo12(this.cartNew.cartNew[u].Total) + ";" + dataString + "***"
+
+        }
+        combineInfor = combineInfor.slice(0, combineInfor.length - 3)
+        return combineInfor;
+    }
+    showPopupddCardError() {
+        var el = $('#add-card');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el
+                },
+                type: 'inline'
+            });
+        }
+    }
+    checkError(errorCode: string, ErrorDesc: string, serviceName: string) {
+        this.blockUI.stop()
+        this.error.ResultCode = errorCode
+        this.error.ResultDesc = ErrorDesc
+        this.error.ServiceName = serviceName
+        this.showPopupddCardError()
     }
 
 

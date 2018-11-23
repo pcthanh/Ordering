@@ -8,6 +8,7 @@ export class ProductModel{
     Name:string;
     Description:string;
     Image:string;
+    OriginalImage:string
     IsSoldOut:string;
     IsForPickup:string;
     IsForDelivery:string;
@@ -23,4 +24,5 @@ export class ProductModel{
     SpecialRequest:string;
     Options:OptionsModel[];
     HaveImage:boolean=true;
+    
 }
