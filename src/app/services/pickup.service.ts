@@ -43,7 +43,7 @@ export class PickupService {
       constructor(public util: Gof3rUtil, private http: Http) { }
       GetTopOffers(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-
+            
             return this.http.get(urlAPI).toPromise().then(data => {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
@@ -66,7 +66,10 @@ export class PickupService {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
 
             return this.http.get(urlAPI).toPromise().then(data => {
-                  return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as GetAllOutletListV2Model);
+                 
+                        return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as GetAllOutletListV2Model);
+                 
+                  
             })
       }
       GetProductList(commonData: string, requestData: string) {
@@ -115,6 +118,7 @@ export class PickupService {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
 
             return this.http.get(urlAPI).toPromise().then(data => {
+                  console.log("ddd"+data.status)
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as GetCurrentSystemTimeModel);
             })
       }
@@ -430,7 +434,7 @@ export class PickupService {
             })
       }
       UploadImage (data:any){
-         return  this.http.post('http://localhost:8080/Carrot/UploadCV.jsp',data).toPromise().then(data=>{
+         return  this.http.post(this.util.urlUploadFile(),data).toPromise().then(data=>{
                return Promise.resolve((data.text()));
          })
       }

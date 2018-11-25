@@ -63,7 +63,7 @@ export class PageCheckOutComponent implements OnInit {
     productDetail: ProductDetailMainModel;
     productDetailParse: ProductDetailParseModel;
     isCheck = true;
-    total: number = 220;
+    total: number = 0;
     str: string;
     cart: CartOrder;
     getInitParam: GetInitialParams;
@@ -482,10 +482,10 @@ export class PageCheckOutComponent implements OnInit {
         }
         this.orderMain.SubTotal = subtotal;
         this.orderMain.SubTotalStr = this._util.formatCurrency(this.orderMain.SubTotal, "S$")
-
-        let _total = (this.orderMain.SubTotal + this.orderMain.ServiceFeeValue + this.orderMain.Surcharge + this.orderMain.DeliveryFee + this.orderMain.RiderTip) - (this.orderMain.PromoCodeValue + this.orderMain.Credit + this.orderMain.Discount);
+        let _total = (this.orderMain.SubTotal + this.orderMain.ServiceFeeValue + this.orderMain.Surcharge + this.orderMain.DeliveryFee + this.orderMain.RiderTip) - (parseFloat(this.orderMain.PromoCodeValue+'') + parseFloat( this.orderMain.Credit+'') + parseFloat( this.orderMain.Discount +''));
 
         this.orderMain.Total = _total;
+        console.log( this.orderMain.Total)
         this.orderMain.TotalDisplay = this._util.formatCurrency(this.orderMain.Total, "S$");
     }
     loadCart() {
@@ -493,39 +493,27 @@ export class PageCheckOutComponent implements OnInit {
         if (this.OrderType === ORDER_PICKUP) {
             if (localStorage.getItem("crt") != null) {//check when had cart
                 this.haveCart = true;
-                this.cart = JSON.parse(localStorage.getItem("crt"));
-
-
-                // this.orderMain.PickupAt = this.outletInfo.OutletInfo[0].Address
-                // this.orderMain.MerchantId = this.outletInfo.OutletInfo[0].MerchantId;
-                if (this.cart.Cart.length > 0) {
-                    this.orderMain.ArrayItem = this.cart.Cart;
-                    if (this.cart.OrderType === ORDER_PICKUP) {
-                        // this.isPickup = true;
-                        // this.isDelivery = false;
-
-                    }
-                    else {
-
-                        // this.isDelivery = true;
-                        // this.isPickup = false;
-                    }
+                this.cartNew = JSON.parse(localStorage.getItem("crt"));
+                console.log("cart:" + JSON.stringify(this.cartNew))
+                //this.orderMain.DeliveryTo = this.currentAddress
+                if (this.cartNew.cartNew.length > 0) {
+                    //this.orderMain.ArrayItem = this.cart.Cart;
+                    
                     this.subTotalOrder();
-                    // this.showCartEmpty = false
-                    // this.showCart = true
+
+                    // this.setDeliveryDateAndTimes(true)
                 }
                 else {
-                    // this.showCartEmpty = true
-                    // this.showCart = false
+
                     this.haveCart = false;
 
                 }
 
             }
             else {//init frist time
-                // this.showCartEmpty = true
-                // this.showCart = false
                 this.haveCart = false;
+                this.subTotalOrder()
+                // this.showCart = false
 
             }
         } else if (this.OrderType === ORDER_DELIVERY) {//cart for delivery
@@ -556,6 +544,9 @@ export class PageCheckOutComponent implements OnInit {
             }
         }
         //get option item of item
+        // start set foodecenter item [0]
+        localStorage.setItem("foodCenter",JSON.stringify(this.cartNew.cartNew[0]))
+        // end
         this.subTotalEachCart()
         this.upadteShowOpntionItem()
 
@@ -600,7 +591,7 @@ export class PageCheckOutComponent implements OnInit {
                 this.orderMain.ServiceFee = this.verifyOrderMain.OrderFeeAndDiscountInfo.ServiceFeeDisplay
                 this.orderMain.ServiceFeeValue = parseInt(this.verifyOrderMain.OrderFeeAndDiscountInfo.ServiceFee) / 100;
                 this.orderMain.DiscountDisplay = this.verifyOrderMain.OrderFeeAndDiscountInfo.DiscountAmountDisplay
-                this.orderMain.Discount = parseInt(this.verifyOrderMain.OrderFeeAndDiscountInfo.DiscountAmount) / 100
+                this.orderMain.Discount = parseFloat(this.verifyOrderMain.OrderFeeAndDiscountInfo.DiscountAmount) / 100
                 this.orderMain.Surcharge = parseInt(this.verifyOrderMain.OrderFeeAndDiscountInfo.Surcharge) / 100;
                 this.orderMain.SurchargeDisplay = this.verifyOrderMain.OrderFeeAndDiscountInfo.SurchargeDisplay
                 this.orderMain.DeliveryFee = parseInt(this.verifyOrderMain.OrderFeeAndDiscountInfo.DeliveryFee) / 100
@@ -716,7 +707,7 @@ export class PageCheckOutComponent implements OnInit {
 
 
         if (this.PO) {
-            if (this.outletInfo.OutletInfo[0].FoodCentreId && this.flagShowPopupFoodCenter && this.OrderType === ORDER_DELIVERY) {
+            if (this.cartNew.cartNew[0].FoodCenterID && this.flagShowPopupFoodCenter && this.OrderType === ORDER_DELIVERY && this.cartNew.cartNew.length <this.cartNew.cartNew[0].MaxOutletInCart) {
                 this.showPopupFoodCenter()
             } else {
                 this.blockUI.start('processing ...'); // Start blocking
@@ -1237,19 +1228,28 @@ export class PageCheckOutComponent implements OnInit {
             common_data.Location = _location
             common_data.ServiceName = "ApplyPromoCode";
             let common_data_json = JSON.stringify(common_data);
-
             let requestData = new ApplyPromocodeRequest();
             requestData.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + ''
             requestData.MCC = this.mccGobal;
-
             requestData.Subtotal = this._gof3rModule.ParseTo12(this.orderMain.Total);
             requestData.PromoCode = promocode;
-            let requestDataJson = JSON.stringify(requestData);
+            if (this.cartNew.cartNew.length > 1) {
+                requestData.IsCombinedOrder = "Y"
+                requestData.MerchantId = ""
+                requestData.MerchantOutletId = ""
+                requestData.CombinedOrderInfo=this.combinedOrderInfo();
+            }
+            else {
+                requestData.IsCombinedOrder = "N"
+                requestData.MerchantId = this.cartNew.cartNew[0].MerchantID
+                requestData.MerchantOutletId = this.cartNew.cartNew[0].OuteletID
 
+            }
+            requestData.ProductList = this.paresProductList();
+            let requestDataJson = JSON.stringify(requestData);
             this._pickupService.ApplyPromoCode(common_data_json, requestDataJson).then(data => {
 
                 this.promoCodeMain = data;
-                console.log("promo:" + JSON.stringify(this.promoCodeMain))
                 if (this.promoCodeMain.ResultCode === "000") {
                     this.selectPromoCodeModel.PromoCodeText = this.promoCodeMain.PromoCodeInfo[0].PromoCodeText
                     this.orderMain.PromoCodeDisPlay = this.promoCodeMain.PromoCodeInfo[0].PromoCodeValueDisplay;
@@ -1566,10 +1566,15 @@ export class PageCheckOutComponent implements OnInit {
 
     }
     goToFoodCenter() {
-        let data = { function: "FoodCenter", type: "Delivery", foodcenter: this.outletInfo.OutletInfo[0].FoodCentreId, foodtime: this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue, foodname: this.outletInfo.OutletInfo[0].FoodCentreName }
-        this._instanceService.sendCustomEvent(data)
-        $.magnificPopup.close()
-        this.route.navigateByUrl("search-result");
+        if(localStorage.getItem("foodCenter")!=null){
+            let foodCeneterJson=JSON.parse(localStorage.getItem("foodCenter"))
+            // let data = { function: "FoodCenter", type: "Delivery", foodcenter: this.outletInfo.OutletInfo[0].FoodCentreId, foodtime: this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue, foodname: this.outletInfo.OutletInfo[0].FoodCentreName }
+            let data = { function: "FoodCenter", type: "Delivery", foodcenter: foodCeneterJson.FoodCenterID, foodtime: this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue, foodname: foodCeneterJson.FoodCenterName }
+            this._instanceService.sendCustomEvent(data)
+            $.magnificPopup.close()
+            this.route.navigateByUrl("search-result");
+        }
+        
     }
     subTotalEachCart() {
 

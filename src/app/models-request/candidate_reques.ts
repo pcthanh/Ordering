@@ -4,4 +4,5 @@ export class CandidateRequest{
     Lang:string="En";
     Notes:string=""
     Name:string=""
+    UploadedFileUrl:string=""
 }

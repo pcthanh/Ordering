@@ -761,6 +761,8 @@ export class PageOrderComponent implements OnInit {
                     item.OutletRating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100))
                     item.FoodCenterID = this.outletInfo.OutletInfo[0].FoodCentreId
                     item.MerchantID = this.outletInfo.OutletInfo[0].MerchantId;
+                    item.MaxOutletInCart = this.outletInfo.OutletInfo[0].MaxOutletsInCart;
+                    item.FoodCenterName=this.outletInfo.OutletInfo[0].FoodCentreName
                     item.Cart.push(this.productDetailParse);
                     this.cartNew.cartNew.push(item);
 
@@ -775,6 +777,8 @@ export class PageOrderComponent implements OnInit {
                 item.OutletRating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100))
                 item.FoodCenterID = this.outletInfo.OutletInfo[0].FoodCentreId
                 item.MerchantID = this.outletInfo.OutletInfo[0].MerchantId;
+                item.MaxOutletInCart = this.outletInfo.OutletInfo[0].MaxOutletsInCart;
+                item.FoodCenterName=this.outletInfo.OutletInfo[0].FoodCentreName
                 item.Cart.push(this.productDetailParse);
                 this.cartNew.cartNew.push(item);
                 localStorage.setItem('crt', JSON.stringify(this.cartNew));
@@ -851,6 +855,8 @@ export class PageOrderComponent implements OnInit {
                     item.OutletRating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100))
                     item.FoodCenterID = this.outletInfo.OutletInfo[0].FoodCentreId
                     item.MerchantID = this.outletInfo.OutletInfo[0].MerchantId;
+                    item.MaxOutletInCart = this.outletInfo.OutletInfo[0].MaxOutletsInCart;
+                    item.FoodCenterName=this.outletInfo.OutletInfo[0].FoodCentreName
                     item.Cart.push(this.productDetailParse);
                     this.cartNew.cartNew.push(item);
 
@@ -866,6 +872,8 @@ export class PageOrderComponent implements OnInit {
                 item.Cart.push(this.productDetailParse);
                 item.FoodCenterID = this.outletInfo.OutletInfo[0].FoodCentreId
                 item.MerchantID = this.outletInfo.OutletInfo[0].MerchantId;
+                item.MaxOutletInCart = this.outletInfo.OutletInfo[0].MaxOutletsInCart;
+                item.FoodCenterName=this.outletInfo.OutletInfo[0].FoodCentreName
                 this.cartNew.cartNew.push(item);
                 localStorage.setItem('crtd', JSON.stringify(this.cartNew));
             }
@@ -1272,7 +1280,7 @@ export class PageOrderComponent implements OnInit {
         })
     }
     VerifyOrder() {
-        if (localStorage.getItem("ot") != null && this.cartNew.cartNew.length > 0) {
+        if (localStorage.getItem("ot") != null ) {
             this.verifyOrderMain = new VerifyOrderMainModel();
             let common_data = new CommonDataRequest();
             var _location = localStorage.getItem("la");
@@ -1308,7 +1316,7 @@ export class PageOrderComponent implements OnInit {
                 if (this.verifyOrderMain.ResultCode === "000") {
                     this.verifyOrderMain = data;
                     this.hadVeryfiOrder = true
-                    if (this.removeCartFlag = true) {
+                    if (this.removeCartFlag == true) {
                         this.blockUI.stop()
                     }
                 }

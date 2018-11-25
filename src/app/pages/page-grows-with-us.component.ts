@@ -94,6 +94,7 @@ export class GrowsWithUsComponent implements OnInit {
                 data_request.Name= this.candidateModel.Name
                 data_request.Notes = this.candidateModel.Notes;
                 data_request.Phone = this.candidateModel.Phone;
+                data_request.UploadedFileUrl=urlFile;
                 let data_request_json = JSON.stringify(data_request);
                 this._pickupService.AddCandidateContact(common_data_json,data_request_json).then(data=>{
                     

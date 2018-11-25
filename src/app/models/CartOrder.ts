@@ -9,4 +9,6 @@ export class CartOrder{
     TotalDisplay:string=""
     FoodCenterID:string=""
     Cart:ProductDetailParseModel []=[];
+    MaxOutletInCart:number=0
+    FoodCenterName:string=""
 }

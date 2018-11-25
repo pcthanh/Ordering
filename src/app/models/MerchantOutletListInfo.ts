@@ -34,6 +34,6 @@ export class MerchantOutletListInfoModel{
     ProductWebsitePromotionalBanner:string=""
     FoodCentreId:string="";
     FoodCentreName:string=""
-    MaxOutletsInCart:string=""
+    MaxOutletsInCart:number=0
     MessageForOrderMore:string=""
 ;}
