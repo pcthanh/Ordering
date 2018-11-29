@@ -62,6 +62,40 @@ import {CalendarModule} from 'primeng/calendar';
 import { ClickOutsideModule } from 'ng4-click-outside';
 import { ClipboardModule } from 'ngx-clipboard';
 import { GrowsWithUsComponent } from "./pages/page-grows-with-us.component";
+import {
+    SocialLoginModule,
+    AuthServiceConfig,
+    GoogleLoginProvider,
+    FacebookLoginProvider,
+} from "angular5-social-login";
+
+// let config = new AuthServiceConfig([
+//   {
+//     id: GoogleLoginProvider.PROVIDER_ID,
+//     provider: new GoogleLoginProvider("828794768516-2kds86k22n6a5epe9jso4tn176t619l3.apps.googleusercontent.com")
+//   },
+//   {
+//     id: FacebookLoginProvider.PROVIDER_ID,
+//     provider: new FacebookLoginProvider("202766530652511")
+//   }
+// ]);
+
+// Configs 
+export function getAuthServiceConfigs() {
+  let config = new AuthServiceConfig(
+      [
+        {
+          id: FacebookLoginProvider.PROVIDER_ID,
+          provider: new FacebookLoginProvider("202766530652511")
+        },
+        {
+          id: GoogleLoginProvider.PROVIDER_ID,
+          provider: new GoogleLoginProvider("828794768516-2kds86k22n6a5epe9jso4tn176t619l3.apps.googleusercontent.com")
+        },
+      ]
+  )
+  return config;
+}
 
 @NgModule({
   declarations: [
@@ -123,7 +157,8 @@ import { GrowsWithUsComponent } from "./pages/page-grows-with-us.component";
     HttpClientJsonpModule,
     HttpClientModule,
     NgAutoCompleteModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    SocialLoginModule
   ],
   providers: [
     EventSubscribeService,
@@ -132,7 +167,11 @@ import { GrowsWithUsComponent } from "./pages/page-grows-with-us.component";
     NgModel,
     PickupService,
     Gof3rModule,
-    {provide: LocationStrategy, useClass: HashLocationStrategy}
+    {provide: LocationStrategy, useClass: HashLocationStrategy},
+    {
+      provide: AuthServiceConfig,
+      useFactory: getAuthServiceConfigs
+    }
   ],
   
   bootstrap: [AppComponent]

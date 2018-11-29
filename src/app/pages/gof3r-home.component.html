@@ -51,8 +51,8 @@
                             </div>
                             <div class="social-login">
                                 <span class="or"><span>Or</span></span>
-                                <a href="#" class="fb-login"><span>Log in with Facebook</span></a>
-                                <a href="#" class="gplus-login"><span>Log in with Google</span></a>
+                                <a href="#" (click)="logInWithSocial('facebook')" class="fb-login"><span>Log in with Facebook</span></a>
+                                <a href="#" (click)="logInWithSocial('google')" class="gplus-login"><span>Log in with Google</span></a>
                             </div>
                             <div class="sign-up">
                                 <a href="02_Login_01_SignUp.html">Don’t have an account? Sign up now.</a>
@@ -85,8 +85,9 @@
                             </div>
                             <div class="social-login">
                                 <span class="or"><span>Or</span></span>
-                                <a href="#" class="fb-login"><span>Sign up with Facebook</span></a>
-                                <a href="#" class="gplus-login"><span>Sign up with Google</span></a>
+                                <a href="#" (click)="socialSignIn('facebook')" class="fb-login"><span>Sign up with Facebook</span></a>
+                                
+                                <a href="#" (click)="socialSignIn('google')" class="gplus-login"><span>Sign up with Google</span></a>
                             </div>
                         </div>
                         <div class="login-dropdown-content signup-dropdown-otp">

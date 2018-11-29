@@ -23,6 +23,8 @@
     "@angular/platform-browser-dynamic": "^5.0.0",
     "@angular/router": "^5.0.0",
     "@types/googlemaps": "^3.30.3",
+    "angular4-social-login": "^1.1.1",
+    "angular5-social-login": "^1.0.9",
     "angularjs-social-login": "^2.6.1",
     "core-js": "^2.4.1",
     "crypto-js": "^3.1.9-1",
