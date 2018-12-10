@@ -325,6 +325,7 @@ export class PageCheckOutComponent implements OnInit {
         }
         if (localStorage.getItem("addressDelivery") != null) {
             let address = JSON.parse(localStorage.getItem("addressDelivery"))
+            console.log("addss:"+ JSON.stringify(address))
             this.geoHome = address.GeoLocation;
             let strCut = address.GeoLocation.split(",");
             let lat = parseFloat(strCut[0]);
@@ -578,6 +579,12 @@ export class PageCheckOutComponent implements OnInit {
                 requestData.MerchantOutletId = this.outletInfo.OutletInfo[0].MerchantOutletId;
 
             }
+            if(this.customerInfo.CustomerInfo !=null){
+                requestData.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId +''
+            }
+            else{
+                requestData.CustomerId=''
+            }
             requestData.ProductList=this.listProduct()
             requestData.CurrencyCode = this.outletInfo.OutletInfo[0].CurrencyCode
             let totalRequest = this._gof3rModule.ParseTo12(this.orderMain.SubTotal)
@@ -769,7 +776,8 @@ export class PageCheckOutComponent implements OnInit {
         if (this.PO === "PO_CARD")
             data_request.PaymentOptions = "PO_CARD"
         data_request.PaymentAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.SubTotal.toFixed(2)))
-        let discount=parseFloat((this.orderMain.Discount + this.orderMain.Credit + this.orderMain.PromoCodeValue).toFixed(2))
+        let discountToatl= parseFloat(this.orderMain.Discount+'') + parseFloat(this.orderMain.Credit+'')+ parseFloat(this.orderMain.PromoCodeValue +'')
+        let discount=parseFloat(discountToatl.toFixed(2))
         console.log("discount:"+ discount)
         data_request.DiscountAmount = this._gof3rModule.ParseTo12(discount)
         console.log("discount1:"+ data_request.DiscountAmount)

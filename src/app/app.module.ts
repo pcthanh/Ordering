@@ -140,7 +140,7 @@ export function getAuthServiceConfigs() {
     BrowserAnimationsModule,
     routing,
   
-    BlockUIModule,
+    BlockUIModule.forRoot(),
   CalendarModule,
  DropdownModule,ClickOutsideModule,
  ClipboardModule,

@@ -217,19 +217,34 @@ export class HeaderGof3rComponent implements OnInit {
             this._pickupService.GetDeliveryAddresses(common_data_json, data_request_json).then(data => {
                  
                 this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
-                this.showListDelivery=true;
+               
                 this.showListAddresNotLogin=false
                 this.listDeliveryAddress=data;
+                if(this.listDeliveryAddress.DeliveryAddressList.length>0){
+                     this.showListDelivery=true;
+                }
                 if(localStorage.getItem("addressDelivery")!=null && localStorage.getItem("addressDelivery")!="undefined"){
+                    console.log("thanhxx")
+                    let count=0;
                     let address =JSON.parse(localStorage.getItem("addressDelivery"));
                     for(let i = 0; i< this.listDeliveryAddress.DeliveryAddressList.length; i++){
                         if(this.listDeliveryAddress.DeliveryAddressList[i].AddressId===address.AddressId){
+                            count= count+1;
                             this.listDeliveryAddress.DeliveryAddressList[i].isCheck=true;
                             this.listDeliveryAddressShow.DeliveryAddressList[0]=this.listDeliveryAddress.DeliveryAddressList[i]
                         }
                     }
+                    if(count==0){
+                        if(this.listDeliveryAddress.DeliveryAddressList.length>0){
+                            this.listDeliveryAddress.DeliveryAddressList[0].isCheck=true;
+                        this.listDeliveryAddressShow.DeliveryAddressList[0]=this.listDeliveryAddress.DeliveryAddressList[0]
+                        localStorage.setItem("addressDelivery",JSON.stringify(this.listDeliveryAddressShow.DeliveryAddressList[0]))
+                        }
+                    }
                 }else{
+                    console.log("thanhhere")
                     if(this.listDeliveryAddress.DeliveryAddressList.length>0){
+                        
                         this.listDeliveryAddress.DeliveryAddressList[0].isCheck=true;
                         this.listDeliveryAddressShow.DeliveryAddressList[0]=this.listDeliveryAddress.DeliveryAddressList[0]
                         localStorage.setItem("addressDelivery",JSON.stringify(this.listDeliveryAddressShow.DeliveryAddressList[0]))
@@ -487,12 +502,13 @@ export class HeaderGof3rComponent implements OnInit {
         
     }
     else{
+        console.log("thanh")
         for(let i = 0; i< this.listDeliveryAddress.DeliveryAddressList.length; i++){
             this.listDeliveryAddress.DeliveryAddressList[i].isCheck=false;
         }
         this.listDeliveryAddress.DeliveryAddressList[index].isCheck=true;
         this.listDeliveryAddressShow.DeliveryAddressList[0]=this.listDeliveryAddress.DeliveryAddressList[index]
-        localStorage.setItem("address_login",JSON.stringify(this.listDeliveryAddress))
+        localStorage.setItem("addressDelivery",JSON.stringify(this.listDeliveryAddress))
     }
         
 

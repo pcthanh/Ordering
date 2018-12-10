@@ -1,6 +1,6 @@
 import { Injectable, Inject, Injector } from '@angular/core';
 import { Http, Headers } from "@angular/http";
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { CommonDataRequest } from "../models-request/request-comon-data";
 import { RequestLogOutModel } from "../models-request/request-log-out-customer";
 import { PickupService } from "../services/pickup.service";

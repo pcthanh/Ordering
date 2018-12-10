@@ -1245,7 +1245,10 @@ export class PageOrderComponent implements OnInit {
         common_data.Location = _location
         common_data.ServiceName = "GetDeliveryAddresses";
         let common_data_json = JSON.stringify(common_data);
+        if (localStorage.getItem('cus') != null) {
+            this.customerInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem('cus')));
 
+        }
         let data_request = { CustomerId: this.customerInfo.CustomerInfo[0].CustomerId };
         let data_request_json = JSON.stringify(data_request);
 
@@ -1253,18 +1256,13 @@ export class PageOrderComponent implements OnInit {
             this.listDeliveryAddress = data;
             this._gof3rModule.checkInvalidSessionUser(this.listDeliveryAddress.ResultCode);
             if (this.listDeliveryAddress.DeliveryAddressList.length > 0) {
-                // if(this.orderMain.DeliveryId===""){
-                //      this.errorCart="please select address delivery"
-                //      $.magnificPopup.open({
-                //         items: {
-                //             src: '#pickup-date'
-                //         },
-                //         type: 'inline'
-                //     });
-                // }
-                // else{
+                if(localStorage.getItem("addressDelivery")==null){
+                    localStorage.setItem("addressDelivery", JSON.stringify(this.listDeliveryAddress.DeliveryAddressList[0]))
+                }
+                
+               
                 this._router.navigateByUrl('/check-out')
-                // }
+                
 
             }
             else {
@@ -1303,8 +1301,14 @@ export class PageOrderComponent implements OnInit {
 
             }
             //requestData.CombinedOrderInfo=this.combinedOrderInfo();
-            console.log("ggg")
-            requestData.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + ''
+            
+            if(this.customerInfo.CustomerInfo !=null){
+                requestData.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + ''
+            }
+            else{
+                requestData.CustomerId = ''
+            }
+            
             requestData.ProductList = this.listProduct()
             requestData.CurrencyCode = this.outletInfo.OutletInfo[0].CurrencyCode
             let totalRequest = this._gof3rModule.ParseTo12(this.orderMain.SubTotal)

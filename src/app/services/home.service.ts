@@ -1,8 +1,8 @@
 import { Injectable,Inject, Injector } from '@angular/core';
 import { Http, Headers } from "@angular/http";
-import { Observable }   from 'rxjs/Observable';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/map'
+import { Observable }   from 'rxjs';
+
+
 import { Gof3rUtil } from "../util/gof3r-util";
 import { RegisterCustomerDevice } from "../models/RegisterCustomerDevice";
 import { GetInitialParams } from "../models/GetInitialParams";
