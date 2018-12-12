@@ -164,13 +164,10 @@ export class PageOrderComponent implements OnInit {
         // alert(window.pageYOffset)
         if (window.pageYOffset >= 250) {
             header.classList.add("sticky")
+           
         } else {
             header.classList.remove("sticky");
         }
-
-
-
-
     }
     GetOutletInfo() {
         let commonData = new CommonDataRequest();

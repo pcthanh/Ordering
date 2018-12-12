@@ -697,6 +697,7 @@ export class PageCheckOutComponent implements OnInit {
 
 
             this.allPayment = data
+            console.log("allPayment:"+ JSON.stringify(this.allPayment))
             this.allPaymentget = true
             // this.maskingCardNumber = this.allPayment.CardListInfo[0].MaskedCardNumber;
             // this.orderMain.MaskingCardNumber = this.allPayment.CardListInfo[0].MaskedCardNumber
