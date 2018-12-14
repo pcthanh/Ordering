@@ -99,6 +99,7 @@ export class Gof3rUtil {
     urlAPI() {
         return "https://test.sandbox-technology.com:82/CarrotServices/Service/";
         //return "https://demo.sandbox-technology.com:81/CarrotServices/Service/";
+        //return "https://gof3r.sandbox-technology.com/CarrotServices/Service/";
     }
     urlUploadFile(){
         // return "https://demo.sandbox-technology.com:81/GOF3R/UploadCV.jsp" server demo
