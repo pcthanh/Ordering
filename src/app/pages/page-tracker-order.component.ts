@@ -443,6 +443,7 @@ export class TrackerOrderComponent implements OnInit {
         let data_request_json = JSON.stringify(data_request)
         this._pickupService.GetPickupOrderDetail(common_data_json, data_request_json).then(data => {
             this.pickupOrderDatail = data
+            console.log("Pickupdetail:"+ JSON.stringify(this.pickupOrderDatail))
             //this.pickupOrderDatail.PickupOrderDetail[0].OrderStatus=ORDER_PICKED_UP
             if(this.pickupOrderDatail.ResultCode==="000"){
                 if (this.pickupOrderDatail.PickupOrderDetail[0].OrderStatus === READY_FOR_PICK_UP) {

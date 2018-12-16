@@ -44,6 +44,8 @@ import {
     GoogleLoginProvider
 } from 'angular5-social-login';
 import { SocialUser } from "angular4-social-login";
+import { GetCurrentSystemTimeRequest } from "../models-request/get-current-system-time";
+import * as moment_ from 'moment';
 declare var $: any;
 const ORDER_DELIVERY = "DELIVERY"
 const ORDER_PICKUP = "PICKUP";
@@ -102,6 +104,8 @@ export class Gof3rHomeComponent implements OnInit {
     areaName: string = ""
     parseOutlet: ParseOutletListArea1;
     shortArrays = []
+    mccGobal:string=''
+    errormsg:string=''
     public list1 =
 
     [
@@ -385,7 +389,7 @@ export class Gof3rHomeComponent implements OnInit {
             //this.blockUI.stop()
         });
     }
-    GetAllOutletListV2() {
+    GetAllOutletListV2(orderFor:string,outletID:string) {
         let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
         common_data.Location = _location
@@ -393,31 +397,43 @@ export class Gof3rHomeComponent implements OnInit {
         let common_data_json = JSON.stringify(common_data);
 
         let request_data = new GetAllOutletListV2Request();
-        request_data.OrderType = this.orderType;
-        if (this.orderType === ORDER_PICKUP || !this.orderType) {
-            request_data.OrderFor = "";
-        } else if (this.orderType === ORDER_DELIVERY) {
-            request_data.OrderFor = "ASAP";
-        }
-        request_data.OrderFor = ""
+        request_data.OrderType = ORDER_DELIVERY
+        request_data.OrderFor = orderFor
         request_data.CustomerId = "";
         request_data.FromRow = 0;
-        request_data.MCC = "17";
+        if (this.getInitialParams.MCCInfo.length > 0) {
+            for (let i = 0; i < this.getInitialParams.MCCInfo.length; i++) {
+                
+                if (this.getInitialParams.MCCInfo[i].Value == "Food") {
+                    
+                    this.mccGobal = this.getInitialParams.MCCInfo[i].Id + '';
+                }
+            }
+        }
+        request_data.MCC = this.mccGobal;
         request_data.KeyWords = "";
-        request_data.MerchantOutletId = "";
+        request_data.MerchantOutletId = outletID;
         request_data.SubCategoryId = "";
         let request_data_json = JSON.stringify(request_data);
 
-
+        console.log("request_all:"+ request_data_json)
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             //this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
 
             this.getAllOutletListV2 = data;
-            if (this.getAllOutletListV2.MerchantOutletListInfo.length == 0) {
+            console.log("all:"+ JSON.stringify(this.getAllOutletListV2))
+            if (this.getAllOutletListV2.MerchantOutletListInfo.length >0) {
                 // this.noData=true;
                 // this.haveData=false;
+                localStorage.setItem("out",outletID);
+                localStorage.setItem("orderType",ORDER_DELIVERY)
+                this.router.navigateByUrl("/order")
             }
+            
             else {
+                this.blockUI.stop()
+                this.errormsg ="Can not order";
+                this.showPopupddCardError()
                 //     this.noData=false;
                 //  this.haveData = true;
             }
@@ -1150,5 +1166,59 @@ export class Gof3rHomeComponent implements OnInit {
                 // Now sign-in with userData
             }
         );
+    }
+    GetCurrentSystemTime(merchantOutletID:string) {
+
+
+        let common_data = new CommonDataRequest();
+        var _location = localStorage.getItem("la");
+        common_data.Location = _location
+        common_data.ServiceName = "GetCurrentSystemTime";
+        let common_data_json = JSON.stringify(common_data);
+        let strDatime: string = ""
+        let dataRequest = new GetCurrentSystemTimeRequest();
+        let dataRequestJson = JSON.stringify(dataRequest);
+        this._pickupService.GetCurrentSystemTime(common_data_json, dataRequestJson).then(data => {
+
+            let d = new Date(+data.CurrentTimeMillis);
+            let date = moment_(d).format("DD/MM/YYYY")
+            let time = d.toLocaleTimeString();
+            // this.getCurrentTime.CurrentData = date;
+            // this.getCurrentTime.CurrentTime = moment_(d.getTime()).format("HH:mm:ss")
+            strDatime = date + " " + moment_(d.getTime()).format("HH:mm:ss")
+            
+                this.GetAllOutletListV2(strDatime,merchantOutletID)
+          
+
+        })
+
+    }
+    goToOrder(merchantOutletID:string){
+        if (this.inputAddress) {
+            this.blockUI.start()
+        this.GetCurrentSystemTime(merchantOutletID)
+        }
+        else{
+            this.scroll()
+        }
+        
+    }
+    scroll() {
+        
+            $('html, body').animate({
+                scrollTop: $(".header-content").offset().top
+            }, 1000);
+        
+    }
+    showPopupddCardError() {
+        var el = $('#add-card');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el
+                },
+                type: 'inline'
+            });
+        }
     }
 }
