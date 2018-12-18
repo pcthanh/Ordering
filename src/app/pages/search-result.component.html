@@ -100,40 +100,43 @@
                     
                 </div>-->
                 
-            <div class="popular-near food-slide" *ngIf="haveOffer">
+            <div class=" food-slide" style="overflow-x: scroll" *ngIf="haveOffer">
                 <h2 *ngIf="haveOffer" class="title">Offers you may like</h2>
                 <div class="row">
-                    <div class="col-6 col-md-4" *ngFor="let item of this.OfferList.OffersList">
-                        <div class="food-item wow slideInUp" data-wow-duration="0.5s">
-                            <a class="img-block">
-                                    <img  style="width: 100%;height: 182px"
-                                     class="img-fluid" src="{{item.AdImageURL}}" alt="">
-                                    <!--<span class="label">Free gift</span>-->
-                                    <!--<span class="countdown">
-                                        <span class='cd-sale minute'style=" "><span class='unit'>{{item.EstimatedDeliveryTime}}</span></span>
-                                    </span>-->
-                                </a>
-                            <!--<div class="food-detail-1">
-                                <h3 class="food-title-1"><a href="#">{{item.MerchantOutletName}}</a></h3>
-
-                                <div class="rating-star">
-                                    <span class="go-star checked"></span>
-                                    <span class="go-star checked"></span>
-                                    <span class="go-star checked"></span>
-                                    <span class="go-star checked"></span>
-                                    <span class="go-star"></span>
+                        <div class="card-offer">
+                                <div class="col-6 col-md-4 card-offer--content" *ngFor="let item of this.OfferList.OffersList;let i = index">
+                                    <div class="food-item wow slideInUp" data-wow-duration="0.5s">
+                                        <a class="img-block">
+                                                <img (click)="showDetail(i)"  style="width: 100%;height: 182px"
+                                                 class="img-fluid" src="{{item.AdImageURL}}" alt="">
+                                                <!--<span class="label">Free gift</span>-->
+                                                <!--<span class="countdown">
+                                                    <span class='cd-sale minute'style=" "><span class='unit'>{{item.EstimatedDeliveryTime}}</span></span>
+                                                </span>-->
+                                            </a>
+                                        <!--<div class="food-detail-1">
+                                            <h3 class="food-title-1"><a href="#">{{item.MerchantOutletName}}</a></h3>
+            
+                                            <div class="rating-star">
+                                                <span class="go-star checked"></span>
+                                                <span class="go-star checked"></span>
+                                                <span class="go-star checked"></span>
+                                                <span class="go-star checked"></span>
+                                                <span class="go-star"></span>
+                                            </div>
+                                            <div class="info-1">
+                                                <span *ngFor="let itemSub of item.SubCategoryList">
+                                                        {{itemSub.SubCategoryName}}
+                                                    </span>
+            
+                                            </div>
+                                        </div>-->
+                                    </div>
                                 </div>
-                                <div class="info-1">
-                                    <span *ngFor="let itemSub of item.SubCategoryList">
-                                            {{itemSub.SubCategoryName}}
-                                        </span>
-
-                                </div>
-                            </div>-->
-                        </div>
-                    </div>
-
+            
+                            </div>
                 </div>
+                
                 <!--<div class="owl-carousel" id="popularcarousel">
                     
                             <div class="owl-item" *ngFor="let item of this.OfferList.OffersList" style="width: 225px; margin-right: 30px;">
@@ -159,7 +162,7 @@
                                 </div>
                        
 
-            
+                                
             
             <div class="all-restaurants food-slide" *ngIf="haveData">
                 <h2 class="title" *ngIf="!this.foodCenter">All Retaurants</h2>
@@ -210,6 +213,23 @@
         </div>
     </div>
 </main>
+<!-- popup offer -->
+<div *ngIf="clickDetailOffer" id="offer-popup" class="popup mfp-hide">
+    <div class="title-popup">{{this.OfferList.OffersList[this.indexOffer].AdName}}</div>
+    <div class="card">
+        <img class="card-img-top" src="{{this.OfferList.OffersList[this.indexOffer].AdImageURL}}"
+            height="300" alt="Card image cap">
+        <div class="card-body">
+            
+            <p [innerHtml]="this.OfferList.OffersList[this.indexOffer].AdDescription" class="card-text"></p>
+            <!-- <p class="card-text">desc</p> -->
+                <button *ngIf="this.OfferList.OffersList[this.indexOffer].ProgramType=='APG_DISCOUNT'" (click)="goToOrderNow(this.OfferList.OffersList[this.indexOffer].ProgramId)" style="width: 100%"  class="btn-main btn-select-payment"><span>ORDER NOW</span></button>
+                <button *ngIf="this.OfferList.OffersList[this.indexOffer].ProgramType=='APG_TOPUP_POINT'" (click)="closeOffer()" style="width: 100%"  class="btn-main btn-select-payment"><span>OK</span></button>
+                <button *ngIf="this.OfferList.OffersList[this.indexOffer].ProgramType=='APG_AD'" style="width: 100%" (click)="closeOffer()" class="btn-main btn-select-payment"><span>OK</span></button>
+        </div>
+    </div>
+</div>
+<!-- end -->
      <block-ui>
       <!-- Your app markup here -->
     </block-ui>

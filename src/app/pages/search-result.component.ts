@@ -51,6 +51,9 @@ export class SearchResultComponent implements OnInit {
     txtSearch: string = ""
     foodCenter:boolean=false;
     foodName:string=""
+    indexOffer:number;
+    clickDetailOffer:boolean=false;
+    offerNewLine:string=''
     constructor(private _gof3rModule: Gof3rModule, private _renderer2: Renderer2, @Inject(DOCUMENT) private _document, private router: Router, private active_router: ActivatedRoute, private _pickupService: PickupService, private _gof3rUtil: Gof3rUtil, private _instanceService: EventSubscribeService) {
 
 
@@ -131,7 +134,7 @@ export class SearchResultComponent implements OnInit {
 
     initJQuery() {
         $(".special-offers .owl-carousel").owlCarousel({
-            items: 4,
+            items: 3,
             margin: 30,
             stagePadding: 120,
             nav: true,
@@ -140,7 +143,7 @@ export class SearchResultComponent implements OnInit {
             autoplay: true,
             responsive: {
                 0: {
-                    items: 2,
+                    items: 1,
                     nav: false,
                     stagePadding: 0
                 },
@@ -154,7 +157,7 @@ export class SearchResultComponent implements OnInit {
                     nav: false
                 },
                 1200: {
-                    items: 4
+                    items: 3
                 }
             }
         });
@@ -327,6 +330,7 @@ export class SearchResultComponent implements OnInit {
         
         this._pickupService.GetTopOffers(comomDataJson, requestDataJson).then(data => {
             this.OfferList = data;
+            console.log("topOffer:"+ JSON.stringify(this.OfferList))
             if (this.OfferList.OffersList.length > 0) {
                 this.haveOffer = true
             }
@@ -375,6 +379,34 @@ export class SearchResultComponent implements OnInit {
             }
             
         }
+    }
+
+    showDetail(index:number) {
+        this.clickDetailOffer= true;
+        this.indexOffer = index;
+        this.offerNewLine = this.OfferList.OffersList[this.indexOffer].AdDescription
+        
+        setTimeout(() => {
+            var el = $('#offer-popup');
+            if (el.length) {
+                $.magnificPopup.open({
+                    items: {
+                        src: el
+                    },
+                    type: 'inline'
+                });
+            }
+            }, 100)
+        
+    }
+    goToOrderNow(outletID:string){
+        $.magnificPopup.close()
+        localStorage.setItem("out",outletID);
+        localStorage.setItem("orderType",ORDER_DELIVERY)
+        this.router.navigateByUrl("/order")
+    }
+    closeOffer(){
+        $.magnificPopup.close()
     }
 
 }

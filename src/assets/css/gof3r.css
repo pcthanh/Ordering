@@ -530,4 +530,24 @@
     background: #fff
 }
 
+.card-offer {
+  display: flex;
+  min-width: 100%;
+  min-height: 200px;
+  overflow-x: auto;
+}
+
+.card-offer::-webkit-scrollbar {
+  display: none;
+}
+.card-offer--content {
+  min-width: 300px;
+  box-shadow: 3px 5px rgba(255,255,255,0.05);
+}
+
+.card-offer--content img {
+  width: 100%;
+  height: 100%;
+}
+
 
