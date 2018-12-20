@@ -148,6 +148,7 @@ export class PageOrderComponent implements OnInit {
         //this.initJquery()
         //this.loadCart()
         //this._instanceService.sendCustomEvent("notCheckOut")
+        window.scrollTo(0, 0);
         this.GetOutletInfo()
         window.addEventListener('scroll', this.scroll, true);
 
