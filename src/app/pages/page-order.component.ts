@@ -24,6 +24,12 @@ import { VerifyOrderMainModel } from "../models/VerifyOrderMain";
 import { VerifyOrderRequest } from "../models-request/verify-order-request";
 import { CartOrderNew } from "../models/CartOrderNew";
 import { ErrorModel } from "../models/Error";
+import { GetCurrentSystemTimeRequest } from "../models-request/get-current-system-time";
+import * as moment_ from 'moment';
+import { GetAllOutletListV2Request } from "../models-request/get-all-outlet-list-v2"
+import { GetAllOutletListV2Model } from "../models/GetAllOutletListV2";
+import { GetInitialParams } from "../models/GetInitialParams";
+import { MCCInfoModel } from "../models/MCCInfo";
 const ORDER_DELIVERY: string = "DELIVERY"
 const ORDER_PICKUP: string = "PICKUP"
 declare var $: any;
@@ -66,6 +72,12 @@ export class PageOrderComponent implements OnInit {
     hadVeryfiOrder: boolean = false;
     removeCartFlag: boolean = false
     cartNew: CartOrderNew;
+    haveOuteFromMap:number=1;
+    dataFromOutletMap:string;
+    getInitialParams: GetInitialParams;
+    getAllOutletListV2: GetAllOutletListV2Model;
+    mccGobal:string;
+    mccInfor: MCCInfoModel;
     constructor(private _router: Router, private _gof3rUtil: Gof3rUtil, private _gof3rModule: Gof3rModule, private _util: Gof3rUtil, private _pickupService: PickupService, private _instanceService: EventSubscribeService, private active_router: ActivatedRoute) {
         this.blockUI.start('loading ...'); // Start blocking
         this.productDetail = new ProductDetailMainModel();
@@ -100,6 +112,24 @@ export class PageOrderComponent implements OnInit {
         if (localStorage.getItem("promomes") != null) {
             this.productWebsiteBannerMessage = localStorage.getItem("promomes")
         }
+        if (localStorage.getItem("IN") != null) {
+            this.getInitialParams = new GetInitialParams();
+            this.mccInfor = new MCCInfoModel();
+            this.getInitialParams = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("IN")));
+
+
+            if (this.getInitialParams.MCCInfo.length > 0) {
+                for (let i = 0; i < this.getInitialParams.MCCInfo.length; i++) {
+                    
+                    if (this.getInitialParams.MCCInfo[i].Value == "Food") {
+                        
+                        this.mccGobal = this.getInitialParams.MCCInfo[i].Id + '';
+                    }
+                }
+            }
+
+
+        }
         this._instanceService.$getEventSubject.subscribe(data => {
             if (data.function === "updateTimePickup") {
                 this.orderMain.PickupDateFrom = data.fromDate;
@@ -108,8 +138,11 @@ export class PageOrderComponent implements OnInit {
                 localStorage.setItem("datePickup", JSON.stringify(datePikcup))
 
             }
+            // if(data.function==="outletMap"){
+            //     this.haveOuteFromMap=data.haveOutlet;
+            //     this.dataFromOutletMap = data.msg
+            // }
         })
-
     }
     ngOnInit() {
         //this.initJquery()
@@ -248,7 +281,9 @@ export class PageOrderComponent implements OnInit {
             if (data.ResultCode === "000") {
 
                 this.blockUI.stop()
+                this.goToOrder(this.OutletId)
             }
+            
         })
     }
     loadItemOfCategory(id, haveDepartment, index: number) {
@@ -296,7 +331,8 @@ export class PageOrderComponent implements OnInit {
         }
     }
     showProductDetail(productId: number) {
-        this.blockUI.start("loading...")
+        if(this.haveOuteFromMap==1){
+            this.blockUI.start("loading...")
 
         this.productDetailParse = new ProductDetailParseModel();
         let commonData = new CommonDataRequest();
@@ -401,6 +437,8 @@ export class PageOrderComponent implements OnInit {
             }
 
         })
+        }
+        
     }
     openPopup() {
         this.specialRequest = ""
@@ -702,8 +740,8 @@ export class PageOrderComponent implements OnInit {
     }
 
     addToCart() {
-
-        this.haveCart = true;
+        
+            this.haveCart = true;
         this.productDetailParse.SpecialRequest = this.specialRequest;
         if (this.OrderType == ORDER_PICKUP) {//cart for pickup
             if (localStorage.getItem("crt") != null) {//check cart exits
@@ -884,6 +922,8 @@ export class PageOrderComponent implements OnInit {
         this.subTotalEachCart()
         this.VerifyOrder();
         $.magnificPopup.close()
+        
+        
 
     }
     checkFoodCenter(foodCenterId: string) {
@@ -1596,8 +1636,93 @@ export class PageOrderComponent implements OnInit {
         this.error.ResultCode = errorCode
         this.error.ResultDesc = ErrorDesc
         this.error.ServiceName = serviceName
+        console.log(this.error.ResultDesc)
         this.showPopupddCardError()
     }
+    goToOrder(merchantOutletID:string){
+        console.log("go to order")
+        this.GetCurrentSystemTime(merchantOutletID)
+       
+    }
+    GetCurrentSystemTime(merchantOutletID:string) {
 
+
+        let common_data = new CommonDataRequest();
+        var _location = localStorage.getItem("la");
+        common_data.Location = _location
+        common_data.ServiceName = "GetCurrentSystemTime";
+        let common_data_json = JSON.stringify(common_data);
+        let strDatime: string = ""
+        let dataRequest = new GetCurrentSystemTimeRequest();
+        let dataRequestJson = JSON.stringify(dataRequest);
+        this._pickupService.GetCurrentSystemTime(common_data_json, dataRequestJson).then(data => {
+
+            let d = new Date(+data.CurrentTimeMillis);
+            let date = moment_(d).format("DD/MM/YYYY")
+            let time = d.toLocaleTimeString();
+            // this.getCurrentTime.CurrentData = date;
+            // this.getCurrentTime.CurrentTime = moment_(d.getTime()).format("HH:mm:ss")
+            strDatime = date + " " + moment_(d.getTime()).format("HH:mm:ss")
+            
+                this.GetAllOutletListV2(strDatime,merchantOutletID)
+          
+
+        })
+
+    }
+    GetAllOutletListV2(orderFor:string,outletID:string) {
+        let common_data = new CommonDataRequest();
+        var _location = localStorage.getItem("la");
+        common_data.Location = _location
+        common_data.ServiceName = "GetAllOutletListV2";
+        let common_data_json = JSON.stringify(common_data);
+
+        let request_data = new GetAllOutletListV2Request();
+        request_data.OrderType = ORDER_DELIVERY
+        request_data.OrderFor = orderFor
+        request_data.CustomerId = "";
+        request_data.FromRow = 0;
+        if (this.getInitialParams.MCCInfo.length > 0) {
+            for (let i = 0; i < this.getInitialParams.MCCInfo.length; i++) {
+                
+                if (this.getInitialParams.MCCInfo[i].Value == "Food") {
+                    
+                    this.mccGobal = this.getInitialParams.MCCInfo[i].Id + '';
+                }
+            }
+        }
+        request_data.MCC = this.mccGobal;
+        request_data.KeyWords = "";
+        request_data.MerchantOutletId = outletID;
+        request_data.SubCategoryId = "";
+        let request_data_json = JSON.stringify(request_data);
+
+        console.log("request_all:"+ request_data_json)
+        this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
+            //this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
+
+            this.getAllOutletListV2 = data;
+            console.log("all:"+ JSON.stringify(this.getAllOutletListV2))
+            console.log("lenght:"+this.getAllOutletListV2.MerchantOutletListInfo.length)
+            if (this.getAllOutletListV2.MerchantOutletListInfo.length ===0) {
+                // this.noData=true;
+                // this.haveData=false;
+            //     let data ={function:"outletMap",haveOutlet:1}
+            //    this._instanceService.sendCustomEvent(data)
+                this.haveOuteFromMap=0;
+                console.log("lenght:"+this.getAllOutletListV2.MerchantOutletListInfo.length)
+                this.checkError("",this.getAllOutletListV2.NoMessageDataForOutletList,"")
+            }
+            
+            // else {
+            //     let data ={function:"outletMap",haveOutlet:0,msg:this.getAllOutletListV2.NoMessageDataForOutletList}
+            //    this._instanceService.sendCustomEvent(data)
+            // }
+            // localStorage.setItem("out",outletID);
+            // localStorage.setItem("orderType",ORDER_DELIVERY)
+            // this.router.navigateByUrl("/order")
+
+        })
+    }
 
 }

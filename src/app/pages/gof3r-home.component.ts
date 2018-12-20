@@ -422,21 +422,21 @@ export class Gof3rHomeComponent implements OnInit {
 
             this.getAllOutletListV2 = data;
             console.log("all:"+ JSON.stringify(this.getAllOutletListV2))
+            
             if (this.getAllOutletListV2.MerchantOutletListInfo.length >0) {
                 // this.noData=true;
                 // this.haveData=false;
-                localStorage.setItem("out",outletID);
-                localStorage.setItem("orderType",ORDER_DELIVERY)
-                this.router.navigateByUrl("/order")
+                let data ={function:"outletMap",haveOutlet:1}
+               this._instanceService.sendCustomEvent(data)
             }
             
             else {
-                this.blockUI.stop()
-                this.errormsg ="Can not order";
-                this.showPopupddCardError()
-                //     this.noData=false;
-                //  this.haveData = true;
+                let data ={function:"outletMap",haveOutlet:0,msg:this.getAllOutletListV2.NoMessageDataForOutletList}
+               this._instanceService.sendCustomEvent(data)
             }
+            localStorage.setItem("out",outletID);
+            localStorage.setItem("orderType",ORDER_DELIVERY)
+            this.router.navigateByUrl("/order")
 
         })
     }
@@ -1200,11 +1200,9 @@ export class Gof3rHomeComponent implements OnInit {
         }
         else{
             this.scroll()
-        }
-        
+        } 
     }
     scroll() {
-        
             $('html, body').animate({
                 scrollTop: $(".header-content").offset().top
             }, 1000);
