@@ -1632,6 +1632,17 @@ export class PageOrderComponent implements OnInit {
             });
         }
     }
+    showPopupddMapOutlet() {
+        var el = $('#map-outlet');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el
+                },
+                type: 'inline'
+            });
+        }
+    }
     checkError(errorCode: string, ErrorDesc: string, serviceName: string) {
         this.blockUI.stop()
         this.error.ResultCode = errorCode
@@ -1712,7 +1723,9 @@ export class PageOrderComponent implements OnInit {
             //    this._instanceService.sendCustomEvent(data)
                 this.haveOuteFromMap=0;
                 console.log("lenght:"+this.getAllOutletListV2.MerchantOutletListInfo.length)
-                this.checkError("",this.getAllOutletListV2.NoMessageDataForOutletList,"")
+                // let msg ="This restaurant doesn't deliver to your area. <br />Click here to browse retaurants in your area."
+                //this.checkError("",msg,"")
+                this.showPopupddMapOutlet()
             }
             
             // else {
@@ -1724,6 +1737,10 @@ export class PageOrderComponent implements OnInit {
             // this.router.navigateByUrl("/order")
 
         })
+    }
+    goToListOutlet(){
+        $.magnificPopup.close()
+        this._router.navigateByUrl("/search-result")
     }
 
 }
