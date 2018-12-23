@@ -62,6 +62,7 @@ import {CalendarModule} from 'primeng/calendar';
 import { ClickOutsideModule } from 'ng4-click-outside';
 import { ClipboardModule } from 'ngx-clipboard';
 import { GrowsWithUsComponent } from "./pages/page-grows-with-us.component";
+import { OwlModule } from 'angular-owl-carousel';
 import {
     SocialLoginModule,
     AuthServiceConfig,
@@ -158,7 +159,8 @@ export function getAuthServiceConfigs() {
     HttpClientModule,
     NgAutoCompleteModule,
     AutoCompleteModule,
-    SocialLoginModule
+    SocialLoginModule,
+    OwlModule
   ],
   providers: [
     EventSubscribeService,

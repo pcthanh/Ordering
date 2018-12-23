@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="assets/css/navbar-fixed-left.min.css">
     <link rel="stylesheet" href="assets/css/navbar-fixed-right.min.css">
     <!--  Make sure your always using the latest version of Bootstrap here-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" >
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/js/WOW/css/libs/animate.css">
@@ -22,9 +22,9 @@
     <link rel="stylesheet" href="assets/js/nanoscorll/css/nanoscroller.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/gof3r.css">
-    
-    
-     <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">-->
+
+
+    <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">-->
     <script src="assets/js/jquery-3.3.1.min.js"></script>
     <script src="assets/js/WOW/dist/wow.min.js"></script>
     <script src="assets/js/owl-carousel/owl.carousel.js"></script>
@@ -41,41 +41,65 @@
     <app-root></app-root>
 </body>
 <script>
-    $(document).ready(function(){
-    $(this).scrollTop(0,0);
-});
+    $(document).ready(function () {
+        $(this).scrollTop(0, 0);
+    });
     // jQuery(document).ready(function ($) {
-  //   $('.form-map button').on('click', function (event) {
-  //     event.preventDefault();
-  //     $('.form-map button').removeClass('active');
-  //     $('.map-wrap').slideUp('fast');
-  //     $(this).addClass('active');
-  //     $('.map-wrap').slideDown();
-  //   });
-  // });
-  function Redirect(){
-				if(navigator.userAgent.toLowerCase().indexOf("android") > -1) {
-			        window.location.href= "market://details?id=com.sb.carrot";
-			        $("#err").html("");
-			 }else{
-				 if(navigator.userAgent.toLowerCase().indexOf("iphone") > -1||navigator.userAgent.toLowerCase().indexOf("ipad") > -1) {
-				     window.location.href= "itms-apps://itunes.apple.com/app/id1196135801";
-				     $("#err").html("");
-					}
-				 else{
-					 if (window.navigator.userAgent.indexOf("Mac")!= -1){
-						window.location.href= "https://itunes.apple.com/us/app/carrot-rewards/id1196135801?mt=8";
-					     $("#err").html("");
-						}
-					 else{
-						 window.location.href= "https://play.google.com/store/apps/details?id=com.sb.carrot&hl=en";
-					     $("#err").html("");
-						 
-					 }
-				 }
-				 
-			 } 
-			}
+    //   $('.form-map button').on('click', function (event) {
+    //     event.preventDefault();
+    //     $('.form-map button').removeClass('active');
+    //     $('.map-wrap').slideUp('fast');
+    //     $(this).addClass('active');
+    //     $('.map-wrap').slideDown();
+    //   });
+    // });
+    current = 0;
+    slideW = $('.card-offer').width();
+    $(document).on('click', '#next', function (e) {
+        
+        if (current < $('.card-offer').children().length - 1)
+            current++;
+        
+        e.preventDefault();
+        $('.card-offer').animate({
+            scrollLeft: '+=380'
+        }, 600);
+
+    });
+    $(document).on('click', '#pre', function (e) {
+        
+        if (current < $('.card-offer').children().length - 1)
+            current++;
+        
+        e.preventDefault();
+        $('.card-offer').animate({
+            scrollLeft:  '-=380'
+        }, 600);
+
+    });
+    function Redirect() {
+        if (navigator.userAgent.toLowerCase().indexOf("android") > -1) {
+            window.location.href = "market://details?id=com.sb.carrot";
+            $("#err").html("");
+        } else {
+            if (navigator.userAgent.toLowerCase().indexOf("iphone") > -1 || navigator.userAgent.toLowerCase().indexOf("ipad") > -1) {
+                window.location.href = "itms-apps://itunes.apple.com/app/id1196135801";
+                $("#err").html("");
+            }
+            else {
+                if (window.navigator.userAgent.indexOf("Mac") != -1) {
+                    window.location.href = "https://itunes.apple.com/us/app/carrot-rewards/id1196135801?mt=8";
+                    $("#err").html("");
+                }
+                else {
+                    window.location.href = "https://play.google.com/store/apps/details?id=com.sb.carrot&hl=en";
+                    $("#err").html("");
+
+                }
+            }
+
+        }
+    }
 
 </script>
 <!--<script>
@@ -92,7 +116,7 @@
 <script src="assets/js/bootstrap.min.js"></script>
 <script>
     new WOW().init();
-    
+
 </script>
 
 </html>

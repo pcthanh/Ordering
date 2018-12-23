@@ -1259,6 +1259,7 @@ export class PageCheckOutComponent implements OnInit {
             this._pickupService.ApplyPromoCode(common_data_json, requestDataJson).then(data => {
 
                 this.promoCodeMain = data;
+                console.log("apply:"+ JSON.stringify(this.promoCodeMain))
                 if (this.promoCodeMain.ResultCode === "000") {
                     this.selectPromoCodeModel.PromoCodeText = this.promoCodeMain.PromoCodeInfo[0].PromoCodeText
                     this.orderMain.PromoCodeDisPlay = this.promoCodeMain.PromoCodeInfo[0].PromoCodeValueDisplay;

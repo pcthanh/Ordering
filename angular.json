@@ -27,7 +27,8 @@
               "node_modules/primeicons/primeicons.css"
             ],
             "scripts": [
-              "node_modules/crypto-js/crypto-js.js"
+              "node_modules/crypto-js/crypto-js.js",
+              "node_modules/jquery/dist/jquery.js"
             ]
           },
           "configurations": {

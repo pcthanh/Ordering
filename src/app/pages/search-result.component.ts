@@ -140,7 +140,7 @@ export class SearchResultComponent implements OnInit {
             nav: true,
             dots: false,
             rewind: true,
-            autoplay: true,
+            autoplay: false,
             responsive: {
                 0: {
                     items: 1,
@@ -162,8 +162,8 @@ export class SearchResultComponent implements OnInit {
             }
         });
         // setTimeout(() => {
-        //      $(".popular-near .owl-carousel").owlCarousel({
-        //                         items: 4,
+        //      $(".specialoffer .owl-carousel").owlCarousel({
+        //                         items: 3,
         //                         margin: 30,
         //                         stagePadding: 120,
         //                         nav: true,
