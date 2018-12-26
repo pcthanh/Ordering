@@ -82,22 +82,32 @@
             window.location.href = "market://details?id=com.sb.carrot";
             $("#err").html("");
         } else {
-            if (navigator.userAgent.toLowerCase().indexOf("iphone") > -1 || navigator.userAgent.toLowerCase().indexOf("ipad") > -1) {
+            // if (navigator.userAgent.toLowerCase().indexOf("iphone") > -1 || navigator.userAgent.toLowerCase().indexOf("ipad") > -1) {
+            //     window.location.href = "itms-apps://itunes.apple.com/app/id1196135801";
+            //     $("#err").html("");
+            // }
+            // else {
+            //     if (window.navigator.userAgent.indexOf("Mac") != -1) {
+            //         window.location.href = "https://itunes.apple.com/us/app/carrot-rewards/id1196135801?mt=8";
+            //         $("#err").html("");
+            //     }
+            //     else {
+                window.location.href = "https://play.google.com/store/apps/details?id=com.sb.carrot&hl=en";
+                $("#err").html("");
+
+                // }
+            }
+
+        
+    }
+    function RedirectToIOS(){
+        if (navigator.userAgent.toLowerCase().indexOf("iphone") > -1 || navigator.userAgent.toLowerCase().indexOf("ipad") > -1) {
                 window.location.href = "itms-apps://itunes.apple.com/app/id1196135801";
                 $("#err").html("");
-            }
-            else {
-                if (window.navigator.userAgent.indexOf("Mac") != -1) {
-                    window.location.href = "https://itunes.apple.com/us/app/carrot-rewards/id1196135801?mt=8";
-                    $("#err").html("");
-                }
-                else {
-                    window.location.href = "https://play.google.com/store/apps/details?id=com.sb.carrot&hl=en";
-                    $("#err").html("");
-
-                }
-            }
-
+        }
+        else{
+            window.location.href = "https://itunes.apple.com/us/app/carrot-rewards/id1196135801?mt=8";
+            $("#err").html("");
         }
     }
 
