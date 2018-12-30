@@ -34,6 +34,7 @@ import { ErrorModel } from "../models/Error";
 import { GetInitialParams } from "../models/GetInitialParams";
 import { GetInitParamRequest } from "../models-request/get-init-param-request";
 import { RequestNull } from "../models-request/request-null";
+import { GetDeliveryAddress } from "../models/GetDeliveryAddress";
 declare var $: any
 const ORDER_DELIVERY = "DELIVERY"
 const ORDER_PICKUP = "PICKUP";
@@ -94,6 +95,7 @@ export class HeaderGof3rComponent implements OnInit {
     selectCountryCode:string=""
     showDetail:boolean=true;
     routerThisPage:boolean=true;
+    isSelectNewAddress:boolean;
     constructor(private _route:Router,private _gof3rModule:Gof3rModule,private _pickupService: PickupService, private _gof3rUtil: Gof3rUtil, private _instanceService: EventSubscribeService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private _homeservice: HomeService) {
         this.addressList = new AddressListModel();
         this.signUp = new SingUpModel();
@@ -137,6 +139,9 @@ export class HeaderGof3rComponent implements OnInit {
             }
 
 
+        }
+        if(localStorage.getItem("haveNewAddress")!=null){
+            this.isSelectNewAddress = JSON.parse(localStorage.getItem("haveNewAddress"));
         }
        
     }
@@ -198,8 +203,9 @@ export class HeaderGof3rComponent implements OnInit {
     }
     checkUserLoginChangeAddress() {
         if (localStorage.getItem('cus') == null) {
-            
+            console.log("xxxThanh")
             this.getAddress()
+            console.log(this.addressShowDiplay.AddressListInfo[0].Name)
             this.showListAddresNotLogin=true;
             this.showListDelivery=false;
             //this._router.navigateByUrl('/login')
@@ -223,7 +229,7 @@ export class HeaderGof3rComponent implements OnInit {
                 if(this.listDeliveryAddress.DeliveryAddressList.length>0){
                      this.showListDelivery=true;
                 }
-                if(localStorage.getItem("addressDelivery")!=null && localStorage.getItem("addressDelivery")!="undefined"){
+                if(localStorage.getItem("addressDelivery")!=null && localStorage.getItem("addressDelivery")!="undefined" && !this.isSelectNewAddress)  {
                     console.log("thanhxx")
                     let count=0;
                     let address =JSON.parse(localStorage.getItem("addressDelivery"));
@@ -243,16 +249,27 @@ export class HeaderGof3rComponent implements OnInit {
                     }
                 }else{
                     console.log("thanhhere")
-                    if(this.listDeliveryAddress.DeliveryAddressList.length>0){
+                    if(this.listDeliveryAddress.DeliveryAddressList.length>0 && !this.isSelectNewAddress){
                         
                         this.listDeliveryAddress.DeliveryAddressList[0].isCheck=true;
                         this.listDeliveryAddressShow.DeliveryAddressList[0]=this.listDeliveryAddress.DeliveryAddressList[0]
                         localStorage.setItem("addressDelivery",JSON.stringify(this.listDeliveryAddressShow.DeliveryAddressList[0]))
                     }
                     else{
-                        this.showListAddresNotLogin=true;
-                        this.showListDelivery=false;
-                        this.getAddress()
+                        if(this.isSelectNewAddress){
+                            console.log("thanh111111111111111")
+                            this.showListAddresNotLogin=false;
+                            this.showListDelivery=true;
+                            this.getAddress()
+                            let itemShow = new GetDeliveryAddress();
+                            itemShow.Address = this.addressShowDiplay.AddressListInfo[0].Name;
+                            this.listDeliveryAddressShow.DeliveryAddressList[0]=itemShow;
+                        }else{
+                            this.showListAddresNotLogin=true;
+                            this.showListDelivery=false;
+                            this.getAddress()
+                        }
+                        
                     }
                     
                 }
@@ -508,6 +525,8 @@ export class HeaderGof3rComponent implements OnInit {
         }
         this.listDeliveryAddress.DeliveryAddressList[index].isCheck=true;
         this.listDeliveryAddressShow.DeliveryAddressList[0]=this.listDeliveryAddress.DeliveryAddressList[index]
+        this.isSelectNewAddress=false;
+        localStorage.setItem("haveNewAddress",JSON.stringify(this.isSelectNewAddress));
         localStorage.setItem("addressDelivery",JSON.stringify(this.listDeliveryAddress))
     }
         

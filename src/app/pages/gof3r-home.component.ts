@@ -106,6 +106,7 @@ export class Gof3rHomeComponent implements OnInit {
     shortArrays = []
     mccGobal:string=''
     errormsg:string=''
+    isSelectNewAddress:boolean;
     public list1 =
 
     [
@@ -136,7 +137,8 @@ export class Gof3rHomeComponent implements OnInit {
         this.checkLoginUser();
         this.initJQuery()
         this.registerDeviceRequest()
-
+        this.isSelectNewAddress = false;
+        localStorage.setItem("haveNewAddress",JSON.stringify(this.isSelectNewAddress));
 
 
         var elements = document.getElementsByClassName("gof3r-map");
@@ -240,6 +242,8 @@ export class Gof3rHomeComponent implements OnInit {
             this.orderType = "DELIVERY";
             this.haveData = 1
             localStorage.setItem("orderType", this.orderType)
+            // this.isSelectNewAddress = false;
+            // localStorage.setItem("haveNewAddress",JSON.stringify(this.isSelectNewAddress));
             $('.map-wrap').slideDown()
             // this._homeservice.getLocationAddress(this.lat, this.lng).then(data => {
             //     var address = data["results"][0]["formatted_address"];
@@ -289,6 +293,8 @@ export class Gof3rHomeComponent implements OnInit {
             this.actionClickDlivery = 0;
             this.orderType = "PICKUP"
             this.haveData = 1
+            // this.isSelectNewAddress = false;
+            // localStorage.setItem("haveNewAddress",JSON.stringify(this.isSelectNewAddress));
             localStorage.setItem("orderType", this.orderType)
             $('.map-wrap').slideDown()
             this._homeservice.getLocationAddress(this.lat, this.lng).then(data => {
@@ -703,7 +709,7 @@ export class Gof3rHomeComponent implements OnInit {
 
                         this._homeservice.getLocationAddress(position.coords.latitude, position.coords.longitude).then(data => {
                             var address = data["results"][0]["formatted_address"];
-
+                            this.addressList = new AddressListModel();
                             this.inputAddress = address
                             // var arraySplited = address.split(",");
 
@@ -714,6 +720,19 @@ export class Gof3rHomeComponent implements OnInit {
                             localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
                             this.list = [];
                             this.showListSelectAddress = false;
+                            this.isSelectNewAddress = true;
+                            localStorage.setItem("haveNewAddress",JSON.stringify(this.isSelectNewAddress));
+                            let item = new AddressIteModel();
+                            item.lat = this.lat + ''
+                            item.long = this.lng + ''
+                            item.isCheck = true;
+                            let arrayName = item.StreetAddress.split(',');
+                            item.Name = address
+                            item.StreetAddress= address;
+                            this.addressList.AddressListInfo.push(item);
+                            this.isSelectNewAddress = true;
+                            localStorage.setItem("haveNewAddress",JSON.stringify(this.isSelectNewAddress));
+                            localStorage.setItem('address', JSON.stringify(this.addressList));
                             this.blockUI.stop();
                             //this.locationrequest =this.lang+","+this.long+"#_#_";
 
@@ -986,6 +1005,8 @@ export class Gof3rHomeComponent implements OnInit {
         let arrayName = item.StreetAddress.split(',');
         item.Name = arrayName[0];
         this.addressList.AddressListInfo.push(item);
+        this.isSelectNewAddress = true;
+        localStorage.setItem("haveNewAddress",JSON.stringify(this.isSelectNewAddress));
         localStorage.setItem('address', JSON.stringify(this.addressList));
     }
     GetOutletListByLocation() {

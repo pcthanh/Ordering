@@ -98,6 +98,7 @@ export class PageCheckOutComponent implements OnInit {
     mccInfor: MCCInfoModel;
     mccGobal: string = ""
     getAllOutletListV2: GetAllOutletListV2Model;
+    getAllOutletListV2CheckDelivery: GetAllOutletListV2Model;
     listAddressDelivery: ListDeliveryAddress;
     allPaymentget: boolean = false;
     medthodPayment: string = ""
@@ -129,7 +130,9 @@ export class PageCheckOutComponent implements OnInit {
     selectCredit: boolean = false;
     cardNmuberTemp: string = ""
     flagShowPopupFoodCenter: boolean = true;
-    cartNew:CartOrderNew;
+    cartNew: CartOrderNew;
+    locationDelivery: boolean;
+
     styles = [{
         featureType: "landscape",
         elementType: "geometry.fill",
@@ -298,6 +301,7 @@ export class PageCheckOutComponent implements OnInit {
         this.addCradModel = new AddTransactionRequestModel()
         this.cart = new CartOrder();
         this.getAllOutletListV2 = new GetAllOutletListV2Model();
+        this.getAllOutletListV2CheckDelivery = new GetAllOutletListV2Model();
         this.listAddressDelivery = new ListDeliveryAddress();
         this.selectMethod = new SelectMethodPayment();
         this.promoCodeList = new PromoCodeList();
@@ -325,13 +329,12 @@ export class PageCheckOutComponent implements OnInit {
         }
         if (localStorage.getItem("addressDelivery") != null) {
             let address = JSON.parse(localStorage.getItem("addressDelivery"))
-            console.log("addss:"+ JSON.stringify(address))
+            console.log("addss:" + JSON.stringify(address))
             this.geoHome = address.GeoLocation;
             let strCut = address.GeoLocation.split(",");
             let lat = parseFloat(strCut[0]);
             let lng = parseFloat(strCut[1]);
             this.arrayLocation.push({ lat: lat, lng: lng, icon: "assets/images/pin_home.png" })
-
             this.orderMain.DeliveryId = address.AddressId;
             this.orderMain.DeliveryTo = address.Address
         }
@@ -455,14 +458,14 @@ export class PageCheckOutComponent implements OnInit {
         //     request_data.MerchantOutletId = this.cartNew.cartNew[0].OuteletID;
         // }
         request_data.MerchantOutletId = this.cartNew.cartNew[0].OuteletID;
-        
+
         request_data.SubCategoryId = "";
         let request_data_json = JSON.stringify(request_data);
-        
-        console.log("request:"+ request_data_json)
+
+        console.log("request:" + request_data_json)
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             this.getAllOutletListV2 = data;
-            console.log("getall:"+ JSON.stringify(data))
+            console.log("getall:" + JSON.stringify(data))
             this.getAllPaymentOptionsWithPromotion()
             this.orderMain.DeliveryOn = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeDisplay
             this.orderMain.DeliveryOnRequest = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
@@ -483,10 +486,10 @@ export class PageCheckOutComponent implements OnInit {
         }
         this.orderMain.SubTotal = subtotal;
         this.orderMain.SubTotalStr = this._util.formatCurrency(this.orderMain.SubTotal, "S$")
-        let _total = (this.orderMain.SubTotal + this.orderMain.ServiceFeeValue + this.orderMain.Surcharge + this.orderMain.DeliveryFee + this.orderMain.RiderTip) - (parseFloat(this.orderMain.PromoCodeValue+'') + parseFloat( this.orderMain.Credit+'') + parseFloat( this.orderMain.Discount +''));
+        let _total = (this.orderMain.SubTotal + this.orderMain.ServiceFeeValue + this.orderMain.Surcharge + this.orderMain.DeliveryFee + this.orderMain.RiderTip) - (parseFloat(this.orderMain.PromoCodeValue + '') + parseFloat(this.orderMain.Credit + '') + parseFloat(this.orderMain.Discount + ''));
 
         this.orderMain.Total = _total;
-        console.log( this.orderMain.Total)
+        console.log(this.orderMain.Total)
         this.orderMain.TotalDisplay = this._util.formatCurrency(this.orderMain.Total, "S$");
     }
     loadCart() {
@@ -499,7 +502,7 @@ export class PageCheckOutComponent implements OnInit {
                 //this.orderMain.DeliveryTo = this.currentAddress
                 if (this.cartNew.cartNew.length > 0) {
                     //this.orderMain.ArrayItem = this.cart.Cart;
-                    
+
                     this.subTotalOrder();
 
                     // this.setDeliveryDateAndTimes(true)
@@ -525,7 +528,7 @@ export class PageCheckOutComponent implements OnInit {
                 //this.orderMain.DeliveryTo = this.currentAddress
                 if (this.cartNew.cartNew.length > 0) {
                     //this.orderMain.ArrayItem = this.cart.Cart;
-                    
+
                     this.subTotalOrder();
 
                     // this.setDeliveryDateAndTimes(true)
@@ -546,7 +549,7 @@ export class PageCheckOutComponent implements OnInit {
         }
         //get option item of item
         // start set foodecenter item [0]
-        localStorage.setItem("foodCenter",JSON.stringify(this.cartNew.cartNew[0]))
+        localStorage.setItem("foodCenter", JSON.stringify(this.cartNew.cartNew[0]))
         // end
         this.subTotalEachCart()
         this.upadteShowOpntionItem()
@@ -571,7 +574,7 @@ export class PageCheckOutComponent implements OnInit {
                 requestData.IsCombinedOrder = "Y"
                 requestData.MerchantId = ""
                 requestData.MerchantOutletId = ""
-                requestData.CombinedOrderInfo=this.combinedOrderInfo();
+                requestData.CombinedOrderInfo = this.combinedOrderInfo();
             }
             else {
                 requestData.IsCombinedOrder = "N"
@@ -579,18 +582,18 @@ export class PageCheckOutComponent implements OnInit {
                 requestData.MerchantOutletId = this.outletInfo.OutletInfo[0].MerchantOutletId;
 
             }
-            if(this.customerInfo.CustomerInfo !=null){
-                requestData.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId +''
+            if (this.customerInfo.CustomerInfo != null) {
+                requestData.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + ''
             }
-            else{
-                requestData.CustomerId=''
+            else {
+                requestData.CustomerId = ''
             }
-            requestData.ProductList=this.listProduct()
+            requestData.ProductList = this.listProduct()
             requestData.CurrencyCode = this.outletInfo.OutletInfo[0].CurrencyCode
             let totalRequest = this._gof3rModule.ParseTo12(this.orderMain.SubTotal)
             requestData.Subtotal = totalRequest;
             let requestDataJson = JSON.stringify(requestData);
-            console.log("very_json:"+ requestDataJson)
+            console.log("very_json:" + requestDataJson)
 
             this._pickupService.VerifyOrder(common_data_json, requestDataJson).then(data => {
                 this.verifyOrderMain = data;
@@ -606,7 +609,7 @@ export class PageCheckOutComponent implements OnInit {
                 this.orderMain.OrderingTerminalId = this.verifyOrderMain.OrderFeeAndDiscountInfo.OrderingTerminalId
                 this.orderMain.DiscountProgramAmount = parseInt(this.verifyOrderMain.OrderFeeAndDiscountInfo.DiscountAmount) / 100
                 this.orderMain.MerchantOutletId = this.verifyOrderMain.OrderFeeAndDiscountInfo.OrderingMerchantOutletId
-                
+
                 this.subTotalOrder();
                 this.getAllOutletV2()
             })
@@ -697,7 +700,7 @@ export class PageCheckOutComponent implements OnInit {
 
 
             this.allPayment = data
-            console.log("allPayment:"+ JSON.stringify(this.allPayment))
+            console.log("allPayment:" + JSON.stringify(this.allPayment))
             this.allPaymentget = true
             // this.maskingCardNumber = this.allPayment.CardListInfo[0].MaskedCardNumber;
             // this.orderMain.MaskingCardNumber = this.allPayment.CardListInfo[0].MaskedCardNumber
@@ -712,52 +715,60 @@ export class PageCheckOutComponent implements OnInit {
     placeOrder() {
 
         //this.listProduct()
+       
+       
+            console.log("cxx")
+            if (this.PO) {
+                if (this.cartNew.cartNew[0].FoodCenterID && this.flagShowPopupFoodCenter && this.OrderType === ORDER_DELIVERY && this.cartNew.cartNew.length < this.cartNew.cartNew[0].MaxOutletInCart) {
+                    this.blockUI.stop()
+                    this.showPopupFoodCenter()
+                } else {
+                    this.blockUI.start('processing ...'); // Start blocking
+                    let common_data = new CommonDataRequest();
+                    var _location = localStorage.getItem("la");
+                    common_data.Location = _location
+                    common_data.ServiceName = "AddCardTransaction";
+                    let common_data_json = JSON.stringify(common_data);
 
+                    let data_request = new AddTransactionRequestModel();
+                    data_request.CurrencyCode = this.orderMain.CurrencyCode
+                    data_request.Amount = this._gof3rModule.ParseTo12(this.orderMain.Total)
+                    data_request.MaskedPan = this.orderMain.MaskingCardNumber
+                    data_request.InvoiceNumber = this._gof3rModule.getRandom(12);
+                    let date = new Date()
+                    data_request.TransactionDate = moment_(date).format("DD/MM/YYYY HH:mm:ss")
+                    let data_request_json = JSON.stringify(data_request)
+                    console.log("PO:" + this.PO)
+                    if (this.PO === "PO_CARD") {
+                        this._pickupService.AddCardTransaction(common_data_json, data_request_json).then(data => {
+                            console.log("AddCardTransaction:" + JSON.stringify(data))
+                            if (data.ResultCode === "000") {
+                                localStorage.setItem('addcard', JSON.stringify(data_request))
 
-        if (this.PO) {
-            if (this.cartNew.cartNew[0].FoodCenterID && this.flagShowPopupFoodCenter && this.OrderType === ORDER_DELIVERY && this.cartNew.cartNew.length <this.cartNew.cartNew[0].MaxOutletInCart) {
-                this.showPopupFoodCenter()
-            } else {
-                this.blockUI.start('processing ...'); // Start blocking
+                                this.makePayment()
+                            }
+                            else {
 
-                let common_data = new CommonDataRequest();
-                var _location = localStorage.getItem("la");
-                common_data.Location = _location
-                common_data.ServiceName = "AddCardTransaction";
-                let common_data_json = JSON.stringify(common_data);
+                                this.checkError(data.ResultCode, data.ResultDesc, data.ServiceName);
+                            }
 
-                let data_request = new AddTransactionRequestModel();
-                data_request.CurrencyCode = this.orderMain.CurrencyCode
-                data_request.Amount = this._gof3rModule.ParseTo12(this.orderMain.Total)
-                data_request.MaskedPan = this.orderMain.MaskingCardNumber
-                data_request.InvoiceNumber = this._gof3rModule.getRandom(12);
-                let date = new Date()
-                data_request.TransactionDate = moment_(date).format("DD/MM/YYYY HH:mm:ss")
-                let data_request_json = JSON.stringify(data_request)
-                console.log("PO:"+ this.PO)
-                if (this.PO === "PO_CARD") {
-                    this._pickupService.AddCardTransaction(common_data_json, data_request_json).then(data => {
-                        console.log("AddCardTransaction:"+ JSON.stringify(data))
-                        if (data.ResultCode === "000") {
-                            localStorage.setItem('addcard', JSON.stringify(data_request))
-
-                            this.makePayment()
-                        }
-                        else {
-
-                            this.checkError(data.ResultCode, data.ResultDesc, data.ServiceName);
-                        }
-
-                    })
+                        })
+                    }
+                    if (this.PO === "PO_POINT" || this.PO === "PO_WALLET") {
+                        this.placeOrderRequest("", "", "")
+                    }
                 }
-                if (this.PO === "PO_POINT" || this.PO === "PO_WALLET") {
-                    this.placeOrderRequest("", "", "")
-                }
+
+
+
             }
+            else{
+                console.log("no select")
+                this.checkError("","Please select payment method","");
+            }
+        
 
 
-
-        }
 
 
 
@@ -777,11 +788,11 @@ export class PageCheckOutComponent implements OnInit {
         if (this.PO === "PO_CARD")
             data_request.PaymentOptions = "PO_CARD"
         data_request.PaymentAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.SubTotal.toFixed(2)))
-        let discountToatl= parseFloat(this.orderMain.Discount+'') + parseFloat(this.orderMain.Credit+'')+ parseFloat(this.orderMain.PromoCodeValue +'')
-        let discount=parseFloat(discountToatl.toFixed(2))
-        console.log("discount:"+ discount)
+        let discountToatl = parseFloat(this.orderMain.Discount + '') + parseFloat(this.orderMain.Credit + '') + parseFloat(this.orderMain.PromoCodeValue + '')
+        let discount = parseFloat(discountToatl.toFixed(2))
+        console.log("discount:" + discount)
         data_request.DiscountAmount = this._gof3rModule.ParseTo12(discount)
-        console.log("discount1:"+ data_request.DiscountAmount)
+        console.log("discount1:" + data_request.DiscountAmount)
         data_request.PaymentFee = this._gof3rModule.ParseTo12(this.orderMain.ServiceFeeValue + this.orderMain.Surcharge + this.orderMain.RiderTip)
         data_request.TranxCurrency = "702"//this.orderMain.CurrencyCode
         data_request.UsedPromotionCodeList = this.orderMain.PrmoCodeID
@@ -801,10 +812,10 @@ export class PageCheckOutComponent implements OnInit {
         data_request.ApprovalCode = ""
         data_request.CardHolderName = this.orderMain.CardHoldName
         let data_request_json = JSON.stringify(data_request)
-        console.log("MakePayment_Request:"+ data_request_json)
+        console.log("MakePayment_Request:" + data_request_json)
 
         this._pickupService.MakePayment(common_data_json, data_request_json).then(data => {
-            console.log("MakePayment:"+ JSON.stringify(data))
+            console.log("MakePayment:" + JSON.stringify(data))
             this.makePaymentMain = data;
             if (this.makePaymentMain.ResultCode === "000") {
                 this.placeOrderRequest(this.makePaymentMain.TranxDetailInfo[0].RefNo, this.makePaymentMain.TranxDetailInfo[0].InvoiceNo, this.makePaymentMain.TranxDetailInfo[0].ApprovalCode)
@@ -844,7 +855,7 @@ export class PageCheckOutComponent implements OnInit {
         }
 
         data_request.CreditAmount = this._gof3rModule.ParseTo12(this.orderMain.Credit)
-        
+
         data_request.PaymentAmount = this._gof3rModule.ParseTo12(this.orderMain.SubTotal)
         data_request.OrderType = this.orderMain.OrderType
         data_request.Surcharge = this._gof3rModule.ParseTo12(this.orderMain.Surcharge)
@@ -854,7 +865,7 @@ export class PageCheckOutComponent implements OnInit {
         data_request.MaskedPAN = this.orderMain.MaskingCardNumber
         data_request.PaymentQRCode = ""
         data_request.PromoCodeId = this.orderMain.PrmoCodeID
-        
+
         data_request.RiderTipAmount = this._gof3rModule.ParseTo12(this.orderMain.RiderTip)
         data_request.DiscountProgramAmount = this._gof3rModule.ParseTo12(this.orderMain.DiscountProgramAmount)
         data_request.VoucherList = ""
@@ -867,17 +878,17 @@ export class PageCheckOutComponent implements OnInit {
         data_request.uniqueTransactionCode = InvoiceNo
         data_request.IsGroupOrder = this.orderMain.IsGroupOrder
         data_request.Note = this.orderNote;
-        if(this.cartNew.cartNew.length>1){
+        if (this.cartNew.cartNew.length > 1) {
             data_request.MerchantId = ""
             data_request.MerchantOutletId = ""
-            data_request.IsCombinedOrder="Y"
+            data_request.IsCombinedOrder = "Y"
         }
-        else{
-            data_request.IsCombinedOrder="N"
+        else {
+            data_request.IsCombinedOrder = "N"
             data_request.MerchantId = this.orderMain.MerchantId
             data_request.MerchantOutletId = this.cartNew.cartNew[0].OuteletID
         }
-        data_request.CombinedOrderInfo=this.combinedOrderInfo();
+        data_request.CombinedOrderInfo = this.combinedOrderInfo();
         if (this.PO === "PO_CARD")
             data_request.PaymentOptions = "PO_CARD"
         if (this.PO === "PO_POINT")
@@ -902,7 +913,7 @@ export class PageCheckOutComponent implements OnInit {
         data_request.TranxAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.Total.toFixed(2)))
 
         let data_request_json = JSON.stringify(data_request);
-        console.log("request:"+ data_request_json)
+        console.log("request:" + data_request_json)
         this._pickupService.PlaceOrder(common_data_json, data_request_json).then(data => {
 
 
@@ -938,7 +949,7 @@ export class PageCheckOutComponent implements OnInit {
                                 localStorage.setItem('crtd', JSON.stringify(this.cartNew))
                             }
                             if (this.orderMain.OrderType === ORDER_PICKUP) {
-                                 this.cartNew = new CartOrderNew()
+                                this.cartNew = new CartOrderNew()
                                 localStorage.setItem('crt', JSON.stringify(this.cartNew))
                             }
                             console.log("payment:" + JSON.stringify(this.placeOrderMain))
@@ -957,7 +968,7 @@ export class PageCheckOutComponent implements OnInit {
 
                     }
                     if (this.orderMain.OrderType === ORDER_PICKUP) {
-                       this.cartNew = new CartOrderNew()
+                        this.cartNew = new CartOrderNew()
                         localStorage.setItem('crt', JSON.stringify(this.cartNew))
                     }
                     this.blockUI.stop();
@@ -1019,7 +1030,7 @@ export class PageCheckOutComponent implements OnInit {
         //"81,000000000050,1,^^^23,27,000000000050,1###35,000000000050,1,^^^21,21,000000000050,1===21,23,000000000050,1"
         let dataString = "";
         let count: number = 0;
-        this.orderMain.ArrayItem=[]
+        this.orderMain.ArrayItem = []
         for (let t = 0; t < this.cartNew.cartNew.length; t++) {
             for (let u = 0; u < this.cartNew.cartNew[t].Cart.length; u++) {
                 this.orderMain.ArrayItem.push(this.cartNew.cartNew[t].Cart[u]);
@@ -1246,7 +1257,7 @@ export class PageCheckOutComponent implements OnInit {
                 requestData.IsCombinedOrder = "Y"
                 requestData.MerchantId = ""
                 requestData.MerchantOutletId = ""
-                requestData.CombinedOrderInfo=this.combinedOrderInfo();
+                requestData.CombinedOrderInfo = this.combinedOrderInfo();
             }
             else {
                 requestData.IsCombinedOrder = "N"
@@ -1259,7 +1270,7 @@ export class PageCheckOutComponent implements OnInit {
             this._pickupService.ApplyPromoCode(common_data_json, requestDataJson).then(data => {
 
                 this.promoCodeMain = data;
-                console.log("apply:"+ JSON.stringify(this.promoCodeMain))
+                console.log("apply:" + JSON.stringify(this.promoCodeMain))
                 if (this.promoCodeMain.ResultCode === "000") {
                     this.selectPromoCodeModel.PromoCodeText = this.promoCodeMain.PromoCodeInfo[0].PromoCodeText
                     this.orderMain.PromoCodeDisPlay = this.promoCodeMain.PromoCodeInfo[0].PromoCodeValueDisplay;
@@ -1533,7 +1544,7 @@ export class PageCheckOutComponent implements OnInit {
         $.magnificPopup.close()
         this.route.navigateByUrl('/search-result')
     }
-    removeCart(indexCart:number,index: number) {
+    removeCart(indexCart: number, index: number) {
         console.log("delete:" + index)
         this.cartNew.cartNew[indexCart].Cart.splice(index, 1);
         if (this.OrderType === ORDER_PICKUP) {
@@ -1543,9 +1554,9 @@ export class PageCheckOutComponent implements OnInit {
             localStorage.setItem("crtd", JSON.stringify(this.cartNew))
         }
 
-       this.orderMain.ArrayItem = this.cartNew.cartNew[indexCart].Cart;
-        
-        
+        this.orderMain.ArrayItem = this.cartNew.cartNew[indexCart].Cart;
+
+
         if (this.cartNew.cartNew[indexCart].Cart.length <= 0) {
 
 
@@ -1576,15 +1587,15 @@ export class PageCheckOutComponent implements OnInit {
 
     }
     goToFoodCenter() {
-        if(localStorage.getItem("foodCenter")!=null){
-            let foodCeneterJson=JSON.parse(localStorage.getItem("foodCenter"))
+        if (localStorage.getItem("foodCenter") != null) {
+            let foodCeneterJson = JSON.parse(localStorage.getItem("foodCenter"))
             // let data = { function: "FoodCenter", type: "Delivery", foodcenter: this.outletInfo.OutletInfo[0].FoodCentreId, foodtime: this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue, foodname: this.outletInfo.OutletInfo[0].FoodCentreName }
             let data = { function: "FoodCenter", type: "Delivery", foodcenter: foodCeneterJson.FoodCenterID, foodtime: this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue, foodname: foodCeneterJson.FoodCenterName }
             this._instanceService.sendCustomEvent(data)
             $.magnificPopup.close()
             this.route.navigateByUrl("search-result");
         }
-        
+
     }
     subTotalEachCart() {
 
@@ -1641,11 +1652,63 @@ export class PageCheckOutComponent implements OnInit {
 
                 }
             }
-            combineInfor=combineInfor+this.cartNew.cartNew[u].MerchantID+";"+this.cartNew.cartNew[u].OuteletID+";"+this._gof3rModule.ParseTo12(this.cartNew.cartNew[u].Total)+";"+dataString+"***"
+            combineInfor = combineInfor + this.cartNew.cartNew[u].MerchantID + ";" + this.cartNew.cartNew[u].OuteletID + ";" + this._gof3rModule.ParseTo12(this.cartNew.cartNew[u].Total) + ";" + dataString + "***"
 
         }
-        combineInfor= combineInfor.slice(0,combineInfor.length-3)
+        combineInfor = combineInfor.slice(0, combineInfor.length - 3)
         return combineInfor;
+    }
+    checkLocationDelivery() {
+        this.blockUI.start('processing ...'); // Start blocking
+        let common_data = new CommonDataRequest();
+        var _location = this.geoHome + '#_#_'
+        common_data.Location = _location
+        common_data.ServiceName = "GetAllOutletListV2";
+        let common_data_json = JSON.stringify(common_data);
+
+        let request_data = new GetAllOutletListV2Request();
+        request_data.OrderType = this.OrderType
+        if (this.OrderType === ORDER_PICKUP || !this.OrderType) {
+            request_data.OrderFor = "";
+        } else if (this.OrderType === ORDER_DELIVERY) {
+
+            request_data.OrderFor = localStorage.getItem("whenDelivery")
+
+
+        }
+
+        request_data.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + '';
+        request_data.FromRow = 0;
+        request_data.MCC = this.mccGobal;
+        request_data.KeyWords = "";
+        // if(this.cartNew.cartNew.length>1){
+        //     request_data.MerchantOutletId = ""
+        //     request_data.FoodCentreId=this.cartNew.cartNew[0].FoodCenterID
+        // }
+        // else{
+        //     request_data.MerchantOutletId = this.cartNew.cartNew[0].OuteletID;
+        // }
+        request_data.MerchantOutletId = this.cartNew.cartNew[0].OuteletID;
+
+        request_data.SubCategoryId = "";
+        let request_data_json = JSON.stringify(request_data);
+
+        console.log("request:" + request_data_json)
+        this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
+            this.getAllOutletListV2CheckDelivery = data;
+            console.log("getallCheckDelivery:" + JSON.stringify(data))
+            if (this.getAllOutletListV2CheckDelivery.MerchantOutletListInfo.length == 0) {
+                this.locationDelivery = false;
+                this.checkError('', this.getAllOutletListV2CheckDelivery.NoMessageDataForChangingLocation, '');
+                return;
+            }
+            else{
+               this.placeOrder();
+                
+            }
+
+        })
+
     }
 
 }
