@@ -376,6 +376,10 @@ export class HeaderGof3rComponent implements OnInit {
             $(this).parents('.login-wrap').find('.login-dropdown').hide();
             $(this).parents('.login-wrap').find('.login-dropdown-step3').slideDown();
         });
+        $('.enter').on('click', function (event) {
+            $(this).parents('.login-wrap').find('.login-dropdown-step3').hide();
+            $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
+        });
         $('.login-overlay').on('click', function (event) {
             event.preventDefault();
             $('.login-dropdown').hide();
