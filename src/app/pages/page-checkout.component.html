@@ -213,7 +213,7 @@
                     <div class="payment-otpion-wrap">
                         <div class="title">CREDIT/DEBIT CARDS</div>
                         <div class="payment-item" *ngFor="let item of this.allPayment.CardListInfo;let i = index">
-                            <input type="radio" id="card-{{i}}" name="payment" (click)="selectCardPayment(item.MaskedCardNumber,item.CardToken,item.CardHolderName,item.CardTypeIdValue,item.CardTypeIdImg)">
+                            <input type="radio" id="card-{{i}}" name="payment" (click)="selectCardPayment(item.MaskedCardNumber,item.CardToken,item.CardHolderName,item.CardTypeIdValue,item.CardTypeIdImg,item.PaymentGatewayToken)">
                             <label for="card-{{i}}">
                                                 <span class="img"><img src="{{item.CardTypeIdImg}}" alt="" width="63" height="40"></span>
                                                 <span class="inf">

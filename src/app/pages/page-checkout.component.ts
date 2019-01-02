@@ -811,6 +811,7 @@ export class PageCheckOutComponent implements OnInit {
         data_request.InvoiceNo = ""
         data_request.ApprovalCode = ""
         data_request.CardHolderName = this.orderMain.CardHoldName
+        data_request.StoreCardUniqueID = this.orderMain.PaymentGatewayToken;
         let data_request_json = JSON.stringify(data_request)
         console.log("MakePayment_Request:" + data_request_json)
 
@@ -1091,7 +1092,7 @@ export class PageCheckOutComponent implements OnInit {
         this.error.ServiceName = serviceName
         this.showPopupddCardError()
     }
-    selectCardPayment(MaskedCardNumber: string, CardToken: string, CardHolderName: string, CardTypeIdValue: string, CardTypeIdImg: string) {
+    selectCardPayment(MaskedCardNumber: string, CardToken: string, CardHolderName: string, CardTypeIdValue: string, CardTypeIdImg: string,PaymentGatewayToken:string) {
 
         this.selectMethod.Method = "CARD"
         this.selectMethod.MaskingCardNumber = MaskedCardNumber;
@@ -1100,6 +1101,7 @@ export class PageCheckOutComponent implements OnInit {
         this.selectMethod.CardTypeIdImg = CardTypeIdImg
         this.PO = "PO_CARD"
         this.selectMethod.CardTypeValue = CardTypeIdValue + " " + (MaskedCardNumber.substring(0, 4))
+        this.selectMethod.PaymentGatewayToken =PaymentGatewayToken 
     }
     confirmSelectPayment() {
         if (this.selectMethod.Method === "CARD") {
@@ -1108,6 +1110,7 @@ export class PageCheckOutComponent implements OnInit {
             this.orderMain.CardToken = this.selectMethod.CardToken
             this.orderMain.CardHoldName = this.selectMethod.CardHoldName
             this.orderMain.CardTypeValue = this.selectMethod.CardTypeValue
+            this.orderMain.PaymentGatewayToken = this.selectMethod.PaymentGatewayToken
             this.selectedCard = true;
             $.magnificPopup.close()
         }

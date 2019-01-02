@@ -5,4 +5,5 @@ export class SelectMethodPayment{
     CardHoldName:string=""
     CardTypeValue:string=""
     CardTypeIdImg:string=""
+    PaymentGatewayToken:string=""
 }

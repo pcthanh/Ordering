@@ -53,4 +53,5 @@ export class OrderModel{
     ArrayItem:ProductDetailParseModel[]=[]
     PaymentOptions:string=""
     EstimatedPickupTime:string=""
+    PaymentGatewayToken:string=""
 }
