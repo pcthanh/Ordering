@@ -40,9 +40,14 @@ export class ContactUsComponent implements OnInit {
             let data_request_json = JSON.stringify(data_request);
             this._pickupService.SendGetInTouchRequest(common_data_json,data_request_json).then(data=>{
                 if(data.ResultCode==="000"){
-                    this.message="Thanks You! We’ll be in touch soon."
+                    this.message="Thank You! We’ll be in touch soon."
                     this.sendToucht = new SendGetInTouchModel();
                      this.showSuccess();
+                    this.blockUI.stop()
+                }
+                else{
+                    this.message= data.ResultDesc;
+                    this.showSuccess();
                     this.blockUI.stop()
                 }
             })

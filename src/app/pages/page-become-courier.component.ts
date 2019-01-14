@@ -101,7 +101,7 @@ export class BecomeCourierComponent implements OnInit {
                     this.blockUI.stop();
                 }
                 else {
-                    this.message = "Please try again!."
+                    this.message = data.ResultDesc;
                     this.showSuccess();
                 }
 

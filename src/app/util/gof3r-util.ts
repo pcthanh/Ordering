@@ -103,6 +103,7 @@ export class Gof3rUtil {
     }
     urlUploadFile(){
         // return "https://demo.sandbox-technology.com:81/GOF3R/UploadCV.jsp" server demo
+        // return "https://gof3r.sandbox-technology.com/GOF3R/UploadCV.jsp" server live
         return "https://demo.sandbox-technology.com:82/GOF3R/UploadCV.jsp"
     }
     hexToString(hex) {
