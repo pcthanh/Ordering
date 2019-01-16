@@ -92,7 +92,7 @@ export class BecomeCourierComponent implements OnInit {
             this._pickupService.AddRiderContact(common_data_json, request_data_json).then(data => {
                 console.log(JSON.stringify(data))
                 if (data.ResultCode === "000") {
-                    this.message = "Thanks You! We’ll be in touch soon."
+                    this.message = "Thank You! We’ll be in touch soon."
                     this.email = "";
                     this.selectedArea = "";
                     this.phoneNumber = "";
