@@ -4,6 +4,10 @@ import { Gof3rUtil } from "../util/gof3r-util";
 import { EventSubscribeService } from "../services/instance.service";
 import { ActivatedRoute, Params,Router } from "@angular/router";
 import { SingUpModel } from "../models/SignUp";
+import { RequestLogOutModel } from "../models-request/request-log-out-customer";
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { CommonDataRequest } from "../models-request/request-comon-data";
+import { PickupService } from "../services/pickup.service";
 declare var $: any
 @Component({
     selector: 'header-checkout',
@@ -18,7 +22,8 @@ export class HeaderCheckOutComponent implements OnInit {
     inutUserName: string = ""
     passWord:string=""
     signUp: SingUpModel;
-    constructor(private _gof3rUtil: Gof3rUtil,private _route:Router,private _instanceService: EventSubscribeService) { 
+    @BlockUI() blockUI: NgBlockUI;
+    constructor(private _gof3rUtil: Gof3rUtil,private _route:Router,private _instanceService: EventSubscribeService,private _pickupService: PickupService) { 
         this._instanceService.$getEventSubject.subscribe(data=>{
             if(data==="UpdateProfile"){
                 this.checkLoginUser();
@@ -110,6 +115,7 @@ export class HeaderCheckOutComponent implements OnInit {
             $('.login-dropdown-step3').hide();
             $('.login-overlay').removeClass('show');
             $('.login-wrap .login').removeClass('hide-form');
+            $('.login-dropdown-had').hide();
             $('body').css({
                 overflow: '',
                 height: ''
@@ -225,5 +231,34 @@ export class HeaderCheckOutComponent implements OnInit {
         //     //this.isUserLogin=!this.isUserLogin
         // }
 
+    }
+    logOutUser(userName: string) {
+        this.blockUI.start();
+
+        let common_data = new CommonDataRequest();
+        var _location = localStorage.getItem("la");
+        common_data.Location = _location
+        common_data.ServiceName = "Logout";
+        var common_data_json = JSON.stringify(common_data);
+
+        let result: string = "";
+        let dataRequest = new RequestLogOutModel();
+        dataRequest.UserName = userName;
+        let requestDataJson = JSON.stringify(dataRequest);
+        this._pickupService.LogOutCustomer(common_data_json, requestDataJson).then(data => {
+            if (data.ResultCode === "000") {
+                $('.login-dropdown-had').hide();
+                $('.login-overlay').removeClass('show');
+                $('.login-wrap .login').removeClass('hide-form');
+                $('body').css({
+                    overflow: '',
+                    height: ''
+                });;
+                localStorage.clear();
+                this.isLogin = "LOG IN"
+                this.blockUI.stop()
+                this._route.navigateByUrl('/home')
+            }
+        })
     }
 }

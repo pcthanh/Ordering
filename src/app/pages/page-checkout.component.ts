@@ -429,48 +429,54 @@ export class PageCheckOutComponent implements OnInit {
         });
     }
     getAllOutletV2() {
-        let common_data = new CommonDataRequest();
-        var _location = localStorage.getItem("la");
-        common_data.Location = _location
-        common_data.ServiceName = "GetAllOutletListV2";
-        let common_data_json = JSON.stringify(common_data);
+        if (this.cartNew.cartNew.length > 0) {
+            let common_data = new CommonDataRequest();
+            var _location = localStorage.getItem("la");
+            common_data.Location = _location
+            common_data.ServiceName = "GetAllOutletListV2";
+            let common_data_json = JSON.stringify(common_data);
 
-        let request_data = new GetAllOutletListV2Request();
-        request_data.OrderType = this.OrderType
-        if (this.OrderType === ORDER_PICKUP || !this.OrderType) {
-            request_data.OrderFor = "";
-        } else if (this.OrderType === ORDER_DELIVERY) {
+            let request_data = new GetAllOutletListV2Request();
+            request_data.OrderType = this.OrderType
+            if (this.OrderType === ORDER_PICKUP || !this.OrderType) {
+                request_data.OrderFor = "";
+            } else if (this.OrderType === ORDER_DELIVERY) {
 
-            request_data.OrderFor = localStorage.getItem("whenDelivery")
+                request_data.OrderFor = localStorage.getItem("whenDelivery")
 
 
+            }
+
+            request_data.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + '';
+            request_data.FromRow = 0;
+            request_data.MCC = this.mccGobal;
+            request_data.KeyWords = "";
+            // if(this.cartNew.cartNew.length>1){
+            //     request_data.MerchantOutletId = ""
+            //     request_data.FoodCentreId=this.cartNew.cartNew[0].FoodCenterID
+            // }
+            // else{
+            //     request_data.MerchantOutletId = this.cartNew.cartNew[0].OuteletID;
+            // }
+            request_data.MerchantOutletId = this.cartNew.cartNew[0].OuteletID;
+
+            request_data.SubCategoryId = "";
+            let request_data_json = JSON.stringify(request_data);
+
+            console.log("request:" + request_data_json)
+            this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
+                this.getAllOutletListV2 = data;
+                console.log("getall:" + JSON.stringify(data))
+                this.getAllPaymentOptionsWithPromotion()
+                this.orderMain.DeliveryOn = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeDisplay
+                this.orderMain.DeliveryOnRequest = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
+                this.orderMain.EstimatedPickupTime = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedPickupTime
+            })
+        }
+        else {
+            this.route.navigateByUrl('/order')
         }
 
-        request_data.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + '';
-        request_data.FromRow = 0;
-        request_data.MCC = this.mccGobal;
-        request_data.KeyWords = "";
-        // if(this.cartNew.cartNew.length>1){
-        //     request_data.MerchantOutletId = ""
-        //     request_data.FoodCentreId=this.cartNew.cartNew[0].FoodCenterID
-        // }
-        // else{
-        //     request_data.MerchantOutletId = this.cartNew.cartNew[0].OuteletID;
-        // }
-        request_data.MerchantOutletId = this.cartNew.cartNew[0].OuteletID;
-
-        request_data.SubCategoryId = "";
-        let request_data_json = JSON.stringify(request_data);
-
-        console.log("request:" + request_data_json)
-        this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
-            this.getAllOutletListV2 = data;
-            console.log("getall:" + JSON.stringify(data))
-            this.getAllPaymentOptionsWithPromotion()
-            this.orderMain.DeliveryOn = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeDisplay
-            this.orderMain.DeliveryOnRequest = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
-            this.orderMain.EstimatedPickupTime = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedPickupTime
-        })
 
     }
     subTotalOrder() {
@@ -715,58 +721,58 @@ export class PageCheckOutComponent implements OnInit {
     placeOrder() {
 
         //this.listProduct()
-       
-       
-            console.log("cxx")
-            if (this.PO) {
-                if (this.cartNew.cartNew[0].FoodCenterID && this.flagShowPopupFoodCenter && this.OrderType === ORDER_DELIVERY && this.cartNew.cartNew.length < this.cartNew.cartNew[0].MaxOutletInCart) {
-                    this.blockUI.stop()
-                    this.showPopupFoodCenter()
-                } else {
-                    this.blockUI.start('processing ...'); // Start blocking
-                    let common_data = new CommonDataRequest();
-                    var _location = localStorage.getItem("la");
-                    common_data.Location = _location
-                    common_data.ServiceName = "AddCardTransaction";
-                    let common_data_json = JSON.stringify(common_data);
 
-                    let data_request = new AddTransactionRequestModel();
-                    data_request.CurrencyCode = this.orderMain.CurrencyCode
-                    data_request.Amount = this._gof3rModule.ParseTo12(this.orderMain.Total)
-                    data_request.MaskedPan = this.orderMain.MaskingCardNumber
-                    data_request.InvoiceNumber = this._gof3rModule.getRandom(12);
-                    let date = new Date()
-                    data_request.TransactionDate = moment_(date).format("DD/MM/YYYY HH:mm:ss")
-                    let data_request_json = JSON.stringify(data_request)
-                    console.log("PO:" + this.PO)
-                    if (this.PO === "PO_CARD") {
-                        this._pickupService.AddCardTransaction(common_data_json, data_request_json).then(data => {
-                            console.log("AddCardTransaction:" + JSON.stringify(data))
-                            if (data.ResultCode === "000") {
-                                localStorage.setItem('addcard', JSON.stringify(data_request))
 
-                                this.makePayment()
-                            }
-                            else {
+        console.log("cxx")
+        if (this.PO) {
+            if (this.cartNew.cartNew[0].FoodCenterID && this.flagShowPopupFoodCenter && this.OrderType === ORDER_DELIVERY && this.cartNew.cartNew.length < this.cartNew.cartNew[0].MaxOutletInCart) {
+                this.blockUI.stop()
+                this.showPopupFoodCenter()
+            } else {
+                this.blockUI.start('processing ...'); // Start blocking
+                let common_data = new CommonDataRequest();
+                var _location = localStorage.getItem("la");
+                common_data.Location = _location
+                common_data.ServiceName = "AddCardTransaction";
+                let common_data_json = JSON.stringify(common_data);
 
-                                this.checkError(data.ResultCode, data.ResultDesc, data.ServiceName);
-                            }
+                let data_request = new AddTransactionRequestModel();
+                data_request.CurrencyCode = this.orderMain.CurrencyCode
+                data_request.Amount = this._gof3rModule.ParseTo12(this.orderMain.Total)
+                data_request.MaskedPan = this.orderMain.MaskingCardNumber
+                data_request.InvoiceNumber = this._gof3rModule.getRandom(12);
+                let date = new Date()
+                data_request.TransactionDate = moment_(date).format("DD/MM/YYYY HH:mm:ss")
+                let data_request_json = JSON.stringify(data_request)
+                console.log("PO:" + this.PO)
+                if (this.PO === "PO_CARD") {
+                    this._pickupService.AddCardTransaction(common_data_json, data_request_json).then(data => {
+                        console.log("AddCardTransaction:" + JSON.stringify(data))
+                        if (data.ResultCode === "000") {
+                            localStorage.setItem('addcard', JSON.stringify(data_request))
 
-                        })
-                    }
-                    if (this.PO === "PO_POINT" || this.PO === "PO_WALLET") {
-                        this.placeOrderRequest("", "", "")
-                    }
+                            this.makePayment()
+                        }
+                        else {
+
+                            this.checkError(data.ResultCode, data.ResultDesc, data.ServiceName);
+                        }
+
+                    })
                 }
-
-
-
+                if (this.PO === "PO_POINT" || this.PO === "PO_WALLET") {
+                    this.placeOrderRequest("", "", "")
+                }
             }
-            else{
-                console.log("no select")
-                this.checkError("","Please select payment method","");
-            }
-        
+
+
+
+        }
+        else {
+            console.log("no select")
+            this.checkError("", "Please select payment method", "");
+        }
+
 
 
 
@@ -1092,7 +1098,7 @@ export class PageCheckOutComponent implements OnInit {
         this.error.ServiceName = serviceName
         this.showPopupddCardError()
     }
-    selectCardPayment(MaskedCardNumber: string, CardToken: string, CardHolderName: string, CardTypeIdValue: string, CardTypeIdImg: string,PaymentGatewayToken:string) {
+    selectCardPayment(MaskedCardNumber: string, CardToken: string, CardHolderName: string, CardTypeIdValue: string, CardTypeIdImg: string, PaymentGatewayToken: string) {
 
         this.selectMethod.Method = "CARD"
         this.selectMethod.MaskingCardNumber = MaskedCardNumber;
@@ -1101,7 +1107,7 @@ export class PageCheckOutComponent implements OnInit {
         this.selectMethod.CardTypeIdImg = CardTypeIdImg
         this.PO = "PO_CARD"
         this.selectMethod.CardTypeValue = CardTypeIdValue + " " + (MaskedCardNumber.substring(0, 4))
-        this.selectMethod.PaymentGatewayToken =PaymentGatewayToken 
+        this.selectMethod.PaymentGatewayToken = PaymentGatewayToken
     }
     confirmSelectPayment() {
         if (this.selectMethod.Method === "CARD") {
@@ -1142,9 +1148,11 @@ export class PageCheckOutComponent implements OnInit {
         if (el.length) {
             $.magnificPopup.open({
                 items: {
-                    src: el
+                    src: el,
+                    showCloseBtn: false,
                 },
-                type: 'inline'
+                type: 'inline',
+                modal: true,
             });
         }
     }
@@ -1153,9 +1161,12 @@ export class PageCheckOutComponent implements OnInit {
         if (el.length) {
             $.magnificPopup.open({
                 items: {
-                    src: el
+                    src: el,
+
+                    showCloseBtn: false,
                 },
-                type: 'inline'
+                type: 'inline',
+                modal: true,
             });
         }
     }
@@ -1705,9 +1716,9 @@ export class PageCheckOutComponent implements OnInit {
                 this.checkError('', this.getAllOutletListV2CheckDelivery.NoMessageDataForChangingLocation, '');
                 return;
             }
-            else{
-               this.placeOrder();
-                
+            else {
+                this.placeOrder();
+
             }
 
         })
