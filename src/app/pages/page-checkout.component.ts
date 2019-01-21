@@ -699,14 +699,16 @@ export class PageCheckOutComponent implements OnInit {
         requestData.DiscountAmount = this._gof3rModule.ParseTo12(this.orderMain.Discount)
         requestData.AwardType = "MAT_PORDER";
         let requestDataJson = JSON.stringify(requestData);
-
+        console.log("request:"+ requestDataJson)
         this._pickupService.GetAllPaymentOptionsWithPromotion(common_data_json, requestDataJson).then(data => {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.getPromodeList()
 
 
             this.allPayment = data
+
             console.log("allPayment:" + JSON.stringify(this.allPayment))
+            console.log("bvhgv:"+ this.allPayment.PointWalletListInfo.length)
             this.allPaymentget = true
             // this.maskingCardNumber = this.allPayment.CardListInfo[0].MaskedCardNumber;
             // this.orderMain.MaskingCardNumber = this.allPayment.CardListInfo[0].MaskedCardNumber

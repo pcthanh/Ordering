@@ -312,9 +312,13 @@ export class PageOrderComponent implements OnInit {
         let totalOfOptionItem = 0;
         for (let i = 0; i < productMain.OptionList.length; i++) {
             for (let j = 0; j < productMain.OptionList[i].OptionItemList.length; j++) {
-                totalOfOptionItem = totalOfOptionItem + productMain.OptionList[i].OptionItemList[j].Total
+                if(productMain.OptionList[i].OptionItemList[j].isCheck==true){
+                    totalOfOptionItem = totalOfOptionItem + productMain.OptionList[i].OptionItemList[j].Total
+                }
+                
             }
         }
+        console.log("totalOfOptionItem:"+ totalOfOptionItem)
         if (isQtyItem) {
             if (productMain.Qty >= 1) {
 
@@ -323,10 +327,11 @@ export class PageOrderComponent implements OnInit {
 
                 productMain.TotalStr = this._util.formatCurrency(productMain.Total, "S$");
             }
+           
         }
 
         else {
-
+            
             productMain.Total = (totalOfOptionItem * productMain.Qty) + productMain.Qty * (parseInt(productMain.Price) / 100);
             productMain.TotalStr = this._util.formatCurrency(productMain.Total, "S$");
         }
@@ -670,7 +675,7 @@ export class PageOrderComponent implements OnInit {
                 if (productMain.OptionList[i].OptionId == optionId && productMain.OptionList[i].OptionItemList[j].OptionItemId == optionItem) {
 
                     productMain.OptionList[i].OptionItemList[j].Total = productMain.OptionList[i].OptionItemList[j].Qty * (parseInt(productMain.OptionList[i].OptionItemList[j].Price) / 100);
-
+                    console.log('hehhe:'+ productMain.OptionList[i].OptionItemList[j].Total)
 
                     productMain.OptionList[i].OptionItemList[j].TotalStr = this._util.formatCurrency(productMain.OptionList[i].OptionItemList[j].Total, "S$");
                 }
@@ -1132,7 +1137,7 @@ export class PageOrderComponent implements OnInit {
 
     }
     removeCart(indexCart: number, index: number) {
-        console.log("delete:" + index)
+        
         this.blockUI.start()
         this.removeCartFlag = true;
         this.cartNew.cartNew[indexCart].Cart.splice(index, 1);
@@ -1145,7 +1150,7 @@ export class PageOrderComponent implements OnInit {
 
         this.orderMain.ArrayItem = this.cartNew.cartNew[indexCart].Cart;
 
-        console.log("xx:" + this.cartNew.cartNew.length)
+        
         if (this.cartNew.cartNew[indexCart].Cart.length <= 0) {
 
 
@@ -1412,7 +1417,7 @@ export class PageOrderComponent implements OnInit {
     }
     checkItemHadCheck(optionItemId: string, optionId: number) {
         let hadCheck: boolean;
-        console.log("heh:" + JSON.stringify(this.productDetailParse))
+        
         for (let i = 0; i < this.productDetailParse.OptionList.length; i++) {
             for (let j = 0; j < this.productDetailParse.OptionList[i].OptionItemList.length; j++) {
                 if (this.productDetailParse.OptionList[i].OptionId === optionId && this.productDetailParse.OptionList[i].OptionItemList[j].OptionItemId === optionItemId) {

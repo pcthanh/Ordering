@@ -243,7 +243,7 @@
                             <input type="radio" (click)="selectWallet(item.WalletNo,'PO_WALLET',item.WalletName,item.MerchantIdImg)" id="member-{{i}}"
                                 name="payment">
                             <label for="member-{{i}}">
-                                                <span class="img"><img src="{{item.MerchantIdImg}}" alt=""></span>
+                                                <span class="img"><img src="{{item.MerchantIdImg}}" alt="" width="63" height="40"></span>
                                                 <span class="inf">
                                                    {{item.WalletName}}<br>{{item.BalanceDisplay}}
                                                 </span>
@@ -254,18 +254,18 @@
                         </div>
 
                     </div>
-                    <div class="payment-otpion-wrap" *ngIf="this.allPayment.PointWalletListInfo.lenght>0">
+                    <div class="payment-otpion-wrap" *ngIf="this.allPayment.PointWalletListInfo.length>0">
                         <div class="title">POINTS</div>
                         <div class="payment-item" *ngFor="let item of this.allPayment.PointWalletListInfo">
                             <input type="radio" (click)="selectPointPayment(item.WalletNo,'PO_POINT',item.WalletName)" id="member-{{i}}" name="payment">
                             <label for="member-{{i}}">
-                                                <span class="img"><img src="{{item.MerchantIdImg}}" alt=""></span>
+                                                <span class="img"><img src="{{item.MerchantIdImg}}" alt="" width="63" height="50"></span>
                                                 <span class="inf">
-                                                   {{item.WalletName}}<br>{{item.BalanceDisplay}}
+                                                   {{item.WalletName}}<br>{{item.PointBalanceDisplay}}
                                                 </span>
-                                                <span class="pay-wrap">
+                                                <!-- <span class="pay-wrap">
                                                     <a href="#">Top up</a>
-                                                </span>
+                                                </span> -->
                                             </label>
                         </div>
 

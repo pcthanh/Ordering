@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, enableProdMode } from '@angular/core';
 import { AgmMap, MapsAPILoader } from '@agm/core';
 import { ViewChild, ElementRef, NgZone } from '@angular/core'
 import { FormControl, NgModel } from '@angular/forms';
@@ -46,6 +46,7 @@ import {
 import { SocialUser } from "angular4-social-login";
 import { GetCurrentSystemTimeRequest } from "../models-request/get-current-system-time";
 import * as moment_ from 'moment';
+
 declare var $: any;
 const ORDER_DELIVERY = "DELIVERY"
 const ORDER_PICKUP = "PICKUP";
@@ -133,6 +134,7 @@ export class Gof3rHomeComponent implements OnInit {
         this.blockUI.stop()
     }
     ngOnInit() {
+        
         this.loadAddress()
         this.checkLoginUser();
         this.initJQuery()
