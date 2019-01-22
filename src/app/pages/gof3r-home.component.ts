@@ -1004,6 +1004,7 @@ export class Gof3rHomeComponent implements OnInit {
         item.lat = this.lat + ''
         item.long = this.lng + ''
         item.isCheck = true;
+        item.AddressId="";
         let arrayName = item.StreetAddress.split(',');
         item.Name = arrayName[0];
         this.addressList.AddressListInfo.push(item);

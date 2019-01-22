@@ -532,6 +532,16 @@ export class HeaderGof3rComponent implements OnInit {
         this.isSelectNewAddress=false;
         localStorage.setItem("haveNewAddress",JSON.stringify(this.isSelectNewAddress));
         localStorage.setItem("addressDelivery",JSON.stringify(this.listDeliveryAddress))
+        let addressNew = new AddressListModel();
+        let item = new AddressIteModel();
+        item.AddressId= this.listDeliveryAddress.DeliveryAddressList[index].AddressId;
+        item.Name =this.listDeliveryAddress.DeliveryAddressList[index].Address
+        item.isCheck=true;
+        let [lat,lng] = this.listDeliveryAddress.DeliveryAddressList[index].GeoLocation.split(',');
+        item.lat=lat;
+        item.long= lng;
+        addressNew.AddressListInfo.push(item);
+        localStorage.setItem('address', JSON.stringify(addressNew));
     }
         
 
@@ -759,6 +769,7 @@ export class HeaderGof3rComponent implements OnInit {
                 if(this.customerInfoMain.ResultCode==="000"){
                     localStorage.setItem("cus", this._gof3rUtil.encryptParams(JSON.stringify(this.customerInfoMain)))
                 this.isLogin = this.customerInfoMain.CustomerInfo[0].CustomerName;
+                this.checkUserLoginChangeAddress()
                 $('.login-dropdown').hide();
                 $('.login-overlay').removeClass('show');
                 $('.login-wrap .login').removeClass('hide-form');
@@ -767,6 +778,7 @@ export class HeaderGof3rComponent implements OnInit {
                     height: ''
                 });;
                 this.blockUI.stop()
+
             }
             else{
                 this.error.ResultDesc=this.customerInfoMain.ResultDesc;

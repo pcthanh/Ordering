@@ -30,6 +30,7 @@ import { GetAllOutletListV2Request } from "../models-request/get-all-outlet-list
 import { GetAllOutletListV2Model } from "../models/GetAllOutletListV2";
 import { GetInitialParams } from "../models/GetInitialParams";
 import { MCCInfoModel } from "../models/MCCInfo";
+import { AddressListModel } from "../models/AddressList";
 const ORDER_DELIVERY: string = "DELIVERY"
 const ORDER_PICKUP: string = "PICKUP"
 declare var $: any;
@@ -78,6 +79,7 @@ export class PageOrderComponent implements OnInit {
     getAllOutletListV2: GetAllOutletListV2Model;
     mccGobal:string;
     mccInfor: MCCInfoModel;
+    addressDeli:AddressListModel;
     constructor(private _router: Router, private _gof3rUtil: Gof3rUtil, private _gof3rModule: Gof3rModule, private _util: Gof3rUtil, private _pickupService: PickupService, private _instanceService: EventSubscribeService, private active_router: ActivatedRoute) {
         this.blockUI.start('loading ...'); // Start blocking
         this.productDetail = new ProductDetailMainModel();
@@ -1299,14 +1301,20 @@ export class PageOrderComponent implements OnInit {
             this.listDeliveryAddress = data;
             this._gof3rModule.checkInvalidSessionUser(this.listDeliveryAddress.ResultCode);
             if (this.listDeliveryAddress.DeliveryAddressList.length > 0) {
-                if(localStorage.getItem("addressDelivery")==null){
-                    localStorage.setItem("addressDelivery", JSON.stringify(this.listDeliveryAddress.DeliveryAddressList[0]))
+                // if(localStorage.getItem("addressDelivery")==null){
+                //     localStorage.setItem("addressDelivery", JSON.stringify(this.listDeliveryAddress.DeliveryAddressList[0]))
+                // }
+                if(localStorage.getItem("address")!=null){
+                    this.addressDeli = JSON.parse(localStorage.getItem("address"));
+                    if(this.addressDeli.AddressListInfo[0].AddressId!=""){
+                        this._router.navigateByUrl('/check-out')
+                    }
+                    else{
+                        this.errorCart="Your delivery address do not add, please select other delivery address."
+                        this.showPopupDepivery()
+                    }
                 }
                 
-               
-                this._router.navigateByUrl('/check-out')
-                
-
             }
             else {
                 this.errorCart = "please add address delivery"
@@ -1319,6 +1327,20 @@ export class PageOrderComponent implements OnInit {
             }
 
         })
+    }
+    showPopupDepivery() {
+        var el = $('#pickup-date');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el,
+
+                    showCloseBtn: false,
+                },
+                type: 'inline',
+                modal: true,
+            });
+        }
     }
     VerifyOrder() {
         if (localStorage.getItem("ot") != null ) {

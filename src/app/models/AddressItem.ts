@@ -4,4 +4,5 @@ export class AddressIteModel{
     StreetAddress:string=""
     isCheck:boolean=false;
     Name:string="";
+    AddressId:string=""
 }
