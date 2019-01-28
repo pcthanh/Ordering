@@ -184,8 +184,10 @@
                         </div>
 
                         <div class="methods" *ngIf="haveCart">
-                            <div *ngIf="selectedCard" class="payment selected"><img src="{{this.selectMethod.CardTypeIdImg}}" alt="" width="39" height="28"><span> {{this.selectMethod.MaskingCardNumber}}</span>                                <span (click)="deleteMethod()" class="close-gof3r"></span></div>
-                            <div *ngIf="!selectedCard" class="payment"><img src="assets/images/ico-payment.png" alt=""><span>Select Payment Method</span>
+                            <div *ngIf="selectedCard" class="payment selected"><img src="{{this.selectMethod.CardTypeIdImg}}" alt="" width="39" height="28"><span> {{this.selectMethod.MaskingCardNumber}}</span>                                <span (click)="deleteMethod('PO_CARD')" class="close-gof3r"></span></div>
+                            <div *ngIf="selectPoint" class="payment selected"><img src="{{this.selectMethod.CardTypeIdImg}}" alt="" width="39" height="28"><span> {{this.selectMethod.CardTypeValue}}</span>                                <span (click)="deleteMethod('PO_POINT')" class="close-gof3r"></span></div>
+                            <div *ngIf="selectWalletDsilay" class="payment selected"><img src="{{this.selectMethod.CardTypeIdImg}}" alt="" width="39" height="28"><span> {{this.selectMethod.CardTypeValue}}</span>                                <span (click)="deleteMethod('PO_WALLET')" class="close-gof3r"></span></div>
+                            <div *ngIf="showMethonBegin" class="payment"><img src="assets/images/ico-payment.png" alt=""><span>Select Payment Method</span>
                                 <div (click)="showPopup()"
                                     class="plus"></div>
                             </div>
@@ -237,7 +239,7 @@
                                             </label>
                                         </div>
                                     </div>-->
-                    <div class="payment-otpion-wrap" *ngIf="this.allPayment.PrepaidWalletListInfo.lenght>0">
+                    <div class="payment-otpion-wrap" *ngIf="this.allPayment.PrepaidWalletListInfo.length >0">
                         <div class="title">MEMBERSHIP CARDS</div>
                         <div class="payment-item" *ngFor="let item of this.allPayment.PrepaidWalletListInfo">
                             <input type="radio" (click)="selectWallet(item.WalletNo,'PO_WALLET',item.WalletName,item.MerchantIdImg)" id="member-{{i}}"
@@ -247,9 +249,9 @@
                                                 <span class="inf">
                                                    {{item.WalletName}}<br>{{item.BalanceDisplay}}
                                                 </span>
-                                                <span class="pay-wrap">
+                                                <!-- <span class="pay-wrap">
                                                     <a href="#">Top up</a>
-                                                </span>
+                                                </span> -->
                                             </label>
                         </div>
 
@@ -257,7 +259,7 @@
                     <div class="payment-otpion-wrap" *ngIf="this.allPayment.PointWalletListInfo.length>0">
                         <div class="title">POINTS</div>
                         <div class="payment-item" *ngFor="let item of this.allPayment.PointWalletListInfo">
-                            <input type="radio" (click)="selectPointPayment(item.WalletNo,'PO_POINT',item.WalletName)" id="member-{{i}}" name="payment">
+                            <input type="radio" (click)="selectPointPayment(item.WalletNo,'PO_POINT',item.WalletName,item.MerchantIdImg)" id="member-{{i}}" name="payment">
                             <label for="member-{{i}}">
                                                 <span class="img"><img src="{{item.MerchantIdImg}}" alt="" width="63" height="50"></span>
                                                 <span class="inf">

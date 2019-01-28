@@ -132,7 +132,9 @@ export class PageCheckOutComponent implements OnInit {
     flagShowPopupFoodCenter: boolean = true;
     cartNew: CartOrderNew;
     locationDelivery: boolean;
-
+    selectPoint:boolean=false;
+    showMethonBegin:boolean=true;
+    selectWalletDsilay :boolean=false;
     styles = [{
         featureType: "landscape",
         elementType: "geometry.fill",
@@ -1120,15 +1122,29 @@ export class PageCheckOutComponent implements OnInit {
             this.orderMain.CardTypeValue = this.selectMethod.CardTypeValue
             this.orderMain.PaymentGatewayToken = this.selectMethod.PaymentGatewayToken
             this.selectedCard = true;
+            this.showMethonBegin=false;
+            $.magnificPopup.close()
+        }
+        if (this.selectMethod.Method === "PO_POINT") {
+            this.orderMain.CardToken = this.selectMethod.CardToken;
+            this.orderMain.PaymentOptions = this.selectMethod.Method
+            this.orderMain.CardTypeValue = this.selectMethod.CardTypeValue
+            this.selectPoint = true;
+            this.selectedCard =false
+            this.showMethonBegin=false;
             $.magnificPopup.close()
         }
         if (this.selectMethod.Method === "PO_WALLET") {
-            this.orderMain.CardToken = this.selectMethod.CardToken
-            this.orderMain.PaymentOptions = "PO_WALLET"
+            this.orderMain.CardToken = this.selectMethod.CardToken;
+            this.orderMain.PaymentOptions = this.selectMethod.Method
             this.orderMain.CardTypeValue = this.selectMethod.CardTypeValue
-            this.selectedCard = true;
+            this.selectPoint = false;
+            this.selectedCard =false
+            this.showMethonBegin=false;
+            this.selectWalletDsilay=true;
             $.magnificPopup.close()
         }
+        
 
 
     }
@@ -1202,7 +1218,6 @@ export class PageCheckOutComponent implements OnInit {
         this.selectMethod.CardToken = walletNo;
         this.selectMethod.CardTypeValue = walletName
         this.selectMethod.MaskingCardNumber = walletName
-
         this.selectMethod.CardTypeIdImg = MerchantIdImg
         // this.orderMain.CardToken = walletNo
         this.PO = paymentOption;
@@ -1210,11 +1225,14 @@ export class PageCheckOutComponent implements OnInit {
         // this.orderMain.PaymentOptions = "PO_WALLET"
         // this.orderMain.CardTypeValue = walletName
     }
-    selectPointPayment(pointWalletNo: string, paymentOptoin: string, pointName: string) {
-        this.orderMain.CardToken = pointWalletNo;
+    selectPointPayment(pointWalletNo: string, paymentOptoin: string, pointName: string,img:string) {
+        console.log(pointWalletNo +"-"+ pointName)
+        this.selectMethod.Method="PO_POINT";
+        this.selectMethod.CardToken = pointWalletNo;
         this.PO = paymentOptoin
-        this.orderMain.PaymentOptions = "PO_POINT"
-        this.orderMain.CardTypeValue = pointName
+        this.selectMethod.Method = "PO_POINT"
+        this.selectMethod.CardTypeValue = pointName
+        this.selectMethod.CardTypeIdImg=img
     }
     checkImageExists(imageUrl, callBack) {
         var imageData = new Image();
@@ -1544,8 +1562,17 @@ export class PageCheckOutComponent implements OnInit {
         this.orderMain.RiderTipDisplay = this._util.formatCurrency(this.riderValue, 'S$')
         this.subTotalOrder();
     }
-    deleteMethod() {
-        this.selectedCard = false;
+    deleteMethod(method:string) {
+        if(method==='PO_CARD'){
+            this.selectedCard = false;
+        }
+        if(method==='PO_POINT'){
+            this.selectPoint=false
+        }
+        if(method==='PO_WALLET'){
+            this.selectWalletDsilay=false
+        }
+        this.showMethonBegin=true;
         this.orderMain.MaskingCardNumber = ""
         this.orderMain.CardToken = ""
         this.orderMain.CardHoldName = ""
