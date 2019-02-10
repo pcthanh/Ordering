@@ -63,6 +63,7 @@ import { ClickOutsideModule } from 'ng4-click-outside';
 import { ClipboardModule } from 'ngx-clipboard';
 import { GrowsWithUsComponent } from "./pages/page-grows-with-us.component";
 import { OwlModule } from 'angular-owl-carousel';
+import {NgxMaskModule} from 'ngx-mask'
 import {
     SocialLoginModule,
     AuthServiceConfig,
@@ -160,7 +161,8 @@ export function getAuthServiceConfigs() {
     NgAutoCompleteModule,
     AutoCompleteModule,
     SocialLoginModule,
-    OwlModule
+    OwlModule,
+    NgxMaskModule.forRoot()
   ],
   providers: [
     EventSubscribeService,

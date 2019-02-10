@@ -523,7 +523,7 @@ export class HeaderGof3rComponent implements OnInit {
         
     }
     else{
-        console.log("thanh")
+        
         for(let i = 0; i< this.listDeliveryAddress.DeliveryAddressList.length; i++){
             this.listDeliveryAddress.DeliveryAddressList[i].isCheck=false;
         }

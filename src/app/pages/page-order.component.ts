@@ -73,13 +73,13 @@ export class PageOrderComponent implements OnInit {
     hadVeryfiOrder: boolean = false;
     removeCartFlag: boolean = false
     cartNew: CartOrderNew;
-    haveOuteFromMap:number=1;
-    dataFromOutletMap:string;
+    haveOuteFromMap: number = 1;
+    dataFromOutletMap: string;
     getInitialParams: GetInitialParams;
     getAllOutletListV2: GetAllOutletListV2Model;
-    mccGobal:string;
+    mccGobal: string;
     mccInfor: MCCInfoModel;
-    addressDeli:AddressListModel;
+    addressDeli: AddressListModel;
     constructor(private _router: Router, private _gof3rUtil: Gof3rUtil, private _gof3rModule: Gof3rModule, private _util: Gof3rUtil, private _pickupService: PickupService, private _instanceService: EventSubscribeService, private active_router: ActivatedRoute) {
         this.blockUI.start('loading ...'); // Start blocking
         this.productDetail = new ProductDetailMainModel();
@@ -122,9 +122,9 @@ export class PageOrderComponent implements OnInit {
 
             if (this.getInitialParams.MCCInfo.length > 0) {
                 for (let i = 0; i < this.getInitialParams.MCCInfo.length; i++) {
-                    
+
                     if (this.getInitialParams.MCCInfo[i].Value == "Food") {
-                        
+
                         this.mccGobal = this.getInitialParams.MCCInfo[i].Id + '';
                     }
                 }
@@ -200,7 +200,7 @@ export class PageOrderComponent implements OnInit {
         // alert(window.pageYOffset)
         if (window.pageYOffset >= 250) {
             header.classList.add("sticky")
-           
+
         } else {
             header.classList.remove("sticky");
         }
@@ -286,7 +286,7 @@ export class PageOrderComponent implements OnInit {
                 this.blockUI.stop()
                 this.goToOrder(this.OutletId)
             }
-            
+
         })
     }
     loadItemOfCategory(id, haveDepartment, index: number) {
@@ -314,13 +314,13 @@ export class PageOrderComponent implements OnInit {
         let totalOfOptionItem = 0;
         for (let i = 0; i < productMain.OptionList.length; i++) {
             for (let j = 0; j < productMain.OptionList[i].OptionItemList.length; j++) {
-                if(productMain.OptionList[i].OptionItemList[j].isCheck==true){
+                if (productMain.OptionList[i].OptionItemList[j].isCheck == true) {
                     totalOfOptionItem = totalOfOptionItem + productMain.OptionList[i].OptionItemList[j].Total
                 }
-                
+
             }
         }
-        console.log("totalOfOptionItem:"+ totalOfOptionItem)
+        console.log("totalOfOptionItem:" + totalOfOptionItem)
         if (isQtyItem) {
             if (productMain.Qty >= 1) {
 
@@ -329,124 +329,124 @@ export class PageOrderComponent implements OnInit {
 
                 productMain.TotalStr = this._util.formatCurrency(productMain.Total, "S$");
             }
-           
+
         }
 
         else {
-            
+
             productMain.Total = (totalOfOptionItem * productMain.Qty) + productMain.Qty * (parseInt(productMain.Price) / 100);
             productMain.TotalStr = this._util.formatCurrency(productMain.Total, "S$");
         }
     }
     showProductDetail(productId: number) {
-        if(this.haveOuteFromMap==1){
+        if (this.haveOuteFromMap == 1) {
             this.blockUI.start("loading...")
 
-        this.productDetailParse = new ProductDetailParseModel();
-        let commonData = new CommonDataRequest();
-        let _location = localStorage.getItem('la');
-        commonData.Location = _location;
-        commonData.ServiceName = "GetProductDetail";
-        let commonDataJson = JSON.stringify(commonData);
+            this.productDetailParse = new ProductDetailParseModel();
+            let commonData = new CommonDataRequest();
+            let _location = localStorage.getItem('la');
+            commonData.Location = _location;
+            commonData.ServiceName = "GetProductDetail";
+            let commonDataJson = JSON.stringify(commonData);
 
-        let dataRequest = new GetProductDetailRequest();
-        dataRequest.ProductId = productId;
-        dataRequest.OrderType = this.OrderType
-        let requestDataJson = JSON.stringify(dataRequest);
+            let dataRequest = new GetProductDetailRequest();
+            dataRequest.ProductId = productId;
+            dataRequest.OrderType = this.OrderType
+            let requestDataJson = JSON.stringify(dataRequest);
 
-        this._pickupService.GetProductDetail(commonDataJson, requestDataJson).then(data => {
+            this._pickupService.GetProductDetail(commonDataJson, requestDataJson).then(data => {
 
-            this.productDetail = data
-            console.log("detail:" + JSON.stringify(this.productDetail))
-            this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
-            if (data.ProductDetailInfo.length > 0) {
+                this.productDetail = data
+                console.log("detail:" + JSON.stringify(this.productDetail))
+                this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
+                if (data.ProductDetailInfo.length > 0) {
 
-                this.productDetailParse.Id = this.productDetail.ProductDetailInfo[0].Id;
-                this.productDetailParse.Name = this.productDetail.ProductDetailInfo[0].Name;
-                this.productDetailParse.Description = this.productDetail.ProductDetailInfo[0].Description;
-                this.productDetailParse.Image = data.ProductDetailInfo[0].Image;
-                this.productDetailParse.Image1 = data.ProductDetailInfo[0].Image1;
-                this.productDetailParse.Image2 = data.ProductDetailInfo[0].Image2;
-                this.productDetailParse.IsSoldOut = data.ProductDetailInfo[0].IsSoldOut;
-                this.productDetailParse.CurrencyCode = data.ProductDetailInfo[0].CurrencyCode;
-                this.productDetailParse.Price = data.ProductDetailInfo[0].Price;
-                this.productDetailParse.PriceDisplay = data.ProductDetailInfo[0].PriceDisplay;
-                this.productDetailParse.PickupPrice = data.ProductDetailInfo[0].PickupPrice;
-                this.productDetailParse.PickupPriceDisplay = data.ProductDetailInfo[0].PickupPriceDisplay;
-                this.productDetailParse.DeliveryPrice = data.ProductDetailInfo[0].DeliveryPrice;
-                this.productDetailParse.DeliveryPriceDisplay = data.ProductDetailInfo[0].DeliveryPriceDisplay;
-                for (let i = 0; i < data.ProductDetailInfo[0].OptionList.length; i++) {
-                    let optionsLst = new OptionsDetailOfProductModel();
-                    optionsLst.MinOptionItemSelectionRequired = data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired
-                    optionsLst.MaxOptionItemSelectionRequired = data.ProductDetailInfo[0].OptionList[i].MaxOptionItemSelectionRequired
-                    optionsLst.OptionId = data.ProductDetailInfo[0].OptionList[i].OptionId;
-                    optionsLst.OptionName = data.ProductDetailInfo[0].OptionList[i].OptionName;
-                    for (let j = 0; j < data.ProductDetailInfo[0].OptionList[i].OptionItemList.length; j++) {
-                        let optionItem = new OptionItemListModel();
-                        optionItem.CurrencyCode = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].CurrencyCode
-                        optionItem.DeliveryPrice = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].DeliveryPrice;
-                        optionItem.DeliveryPriceDisplay = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].DeliveryPriceDisplay;
-                        optionItem.isCheck = false;
-                        optionItem.IsSoldOut = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].IsSoldOut;
-                        optionItem.MaxQuantityRequired = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].MaxQuantityRequired;
-                        optionItem.MinQuantityRequired = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].MinQuantityRequired;
-                        optionItem.OptionItemId = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].OptionItemId;
-                        optionItem.OptionItemName = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].OptionItemName;
-                        optionItem.PickupPrice = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].PickupPrice;
-                        optionItem.PickupPriceDisplay = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].PickupPriceDisplay;
-                        optionItem.Price = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].Price;
-                        optionItem.PriceDisplay = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].PriceDisplay;
-                        optionItem.Total = 0;
-                        if (data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].MinQuantityRequired == 1 && data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].MaxQuantityRequired == 1) {
-                            optionItem.isShowQty = false
+                    this.productDetailParse.Id = this.productDetail.ProductDetailInfo[0].Id;
+                    this.productDetailParse.Name = this.productDetail.ProductDetailInfo[0].Name;
+                    this.productDetailParse.Description = this.productDetail.ProductDetailInfo[0].Description;
+                    this.productDetailParse.Image = data.ProductDetailInfo[0].Image;
+                    this.productDetailParse.Image1 = data.ProductDetailInfo[0].Image1;
+                    this.productDetailParse.Image2 = data.ProductDetailInfo[0].Image2;
+                    this.productDetailParse.IsSoldOut = data.ProductDetailInfo[0].IsSoldOut;
+                    this.productDetailParse.CurrencyCode = data.ProductDetailInfo[0].CurrencyCode;
+                    this.productDetailParse.Price = data.ProductDetailInfo[0].Price;
+                    this.productDetailParse.PriceDisplay = data.ProductDetailInfo[0].PriceDisplay;
+                    this.productDetailParse.PickupPrice = data.ProductDetailInfo[0].PickupPrice;
+                    this.productDetailParse.PickupPriceDisplay = data.ProductDetailInfo[0].PickupPriceDisplay;
+                    this.productDetailParse.DeliveryPrice = data.ProductDetailInfo[0].DeliveryPrice;
+                    this.productDetailParse.DeliveryPriceDisplay = data.ProductDetailInfo[0].DeliveryPriceDisplay;
+                    for (let i = 0; i < data.ProductDetailInfo[0].OptionList.length; i++) {
+                        let optionsLst = new OptionsDetailOfProductModel();
+                        optionsLst.MinOptionItemSelectionRequired = data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired
+                        optionsLst.MaxOptionItemSelectionRequired = data.ProductDetailInfo[0].OptionList[i].MaxOptionItemSelectionRequired
+                        optionsLst.OptionId = data.ProductDetailInfo[0].OptionList[i].OptionId;
+                        optionsLst.OptionName = data.ProductDetailInfo[0].OptionList[i].OptionName;
+                        for (let j = 0; j < data.ProductDetailInfo[0].OptionList[i].OptionItemList.length; j++) {
+                            let optionItem = new OptionItemListModel();
+                            optionItem.CurrencyCode = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].CurrencyCode
+                            optionItem.DeliveryPrice = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].DeliveryPrice;
+                            optionItem.DeliveryPriceDisplay = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].DeliveryPriceDisplay;
+                            optionItem.isCheck = false;
+                            optionItem.IsSoldOut = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].IsSoldOut;
+                            optionItem.MaxQuantityRequired = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].MaxQuantityRequired;
+                            optionItem.MinQuantityRequired = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].MinQuantityRequired;
+                            optionItem.OptionItemId = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].OptionItemId;
+                            optionItem.OptionItemName = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].OptionItemName;
+                            optionItem.PickupPrice = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].PickupPrice;
+                            optionItem.PickupPriceDisplay = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].PickupPriceDisplay;
+                            optionItem.Price = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].Price;
+                            optionItem.PriceDisplay = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].PriceDisplay;
+                            optionItem.Total = 0;
+                            if (data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].MinQuantityRequired == 1 && data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].MaxQuantityRequired == 1) {
+                                optionItem.isShowQty = false
+                            }
+
+
+                            optionsLst.OptionItemList.push(optionItem);
                         }
-
-
-                        optionsLst.OptionItemList.push(optionItem);
-                    }
-                    if (data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired == 1) {
-                        if (optionsLst.OptionItemList.length > 0) {//check OptionItemList have data
-                            optionsLst.OptionItemList[0].isCheck = true;
-                            optionsLst.OptionItemList[0].Qty = 1;
-
-                            optionsLst.OptionItemList[0].Total = (optionsLst.OptionItemList[0].Qty * (parseInt(optionsLst.OptionItemList[0].Price) / 100));
-
-
-                            optionsLst.OptionItemList[0].TotalStr = this._util.formatCurrency(optionsLst.OptionItemList[0].Total, "S$");
-                        }
-
-
-                    }
-                    if (data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired != 0 && data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired > 1) {
-                        if (data.ProductDetailInfo[0].OptionList[i].OptionItemList.length > 0) {//check OptionItemList have data
-                            for (let min = 0; min < data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired; min++) {
-                                optionsLst.OptionItemList[min].isCheck = true;
-                                optionsLst.OptionItemList[min].Qty = 1;
+                        if (data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired == 1) {
+                            if (optionsLst.OptionItemList.length > 0) {//check OptionItemList have data
+                                optionsLst.OptionItemList[0].isCheck = true;
+                                optionsLst.OptionItemList[0].Qty = 1;
 
                                 optionsLst.OptionItemList[0].Total = (optionsLst.OptionItemList[0].Qty * (parseInt(optionsLst.OptionItemList[0].Price) / 100));
 
 
                                 optionsLst.OptionItemList[0].TotalStr = this._util.formatCurrency(optionsLst.OptionItemList[0].Total, "S$");
-                                optionsLst.OptionItemList[min].isLock = true
                             }
+
+
                         }
+                        if (data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired != 0 && data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired > 1) {
+                            if (data.ProductDetailInfo[0].OptionList[i].OptionItemList.length > 0) {//check OptionItemList have data
+                                for (let min = 0; min < data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired; min++) {
+                                    optionsLst.OptionItemList[min].isCheck = true;
+                                    optionsLst.OptionItemList[min].Qty = 1;
+
+                                    optionsLst.OptionItemList[0].Total = (optionsLst.OptionItemList[0].Qty * (parseInt(optionsLst.OptionItemList[0].Price) / 100));
+
+
+                                    optionsLst.OptionItemList[0].TotalStr = this._util.formatCurrency(optionsLst.OptionItemList[0].Total, "S$");
+                                    optionsLst.OptionItemList[min].isLock = true
+                                }
+                            }
+
+                        }
+                        this.productDetailParse.TagList = data.ProductDetailInfo[0].TagList;
+                        this.productDetailParse.OptionList.push(optionsLst)
 
                     }
-                    this.productDetailParse.TagList = data.ProductDetailInfo[0].TagList;
-                    this.productDetailParse.OptionList.push(optionsLst)
+                    this.subTotalItem(false, this.productDetailParse);
+                    //this.initJquery();
+                    this.openPopup()
+                    this.blockUI.stop()
+
 
                 }
-                this.subTotalItem(false, this.productDetailParse);
-                //this.initJquery();
-                this.openPopup()
-                this.blockUI.stop()
 
-
-            }
-
-        })
+            })
         }
-        
+
     }
     openPopup() {
         this.specialRequest = ""
@@ -677,7 +677,7 @@ export class PageOrderComponent implements OnInit {
                 if (productMain.OptionList[i].OptionId == optionId && productMain.OptionList[i].OptionItemList[j].OptionItemId == optionItem) {
 
                     productMain.OptionList[i].OptionItemList[j].Total = productMain.OptionList[i].OptionItemList[j].Qty * (parseInt(productMain.OptionList[i].OptionItemList[j].Price) / 100);
-                    console.log('hehhe:'+ productMain.OptionList[i].OptionItemList[j].Total)
+                    console.log('hehhe:' + productMain.OptionList[i].OptionItemList[j].Total)
 
                     productMain.OptionList[i].OptionItemList[j].TotalStr = this._util.formatCurrency(productMain.OptionList[i].OptionItemList[j].Total, "S$");
                 }
@@ -748,8 +748,8 @@ export class PageOrderComponent implements OnInit {
     }
 
     addToCart() {
-        
-            this.haveCart = true;
+
+        this.haveCart = true;
         this.productDetailParse.SpecialRequest = this.specialRequest;
         if (this.OrderType == ORDER_PICKUP) {//cart for pickup
             if (localStorage.getItem("crt") != null) {//check cart exits
@@ -805,7 +805,7 @@ export class PageOrderComponent implements OnInit {
                     item.FoodCenterID = this.outletInfo.OutletInfo[0].FoodCentreId
                     item.MerchantID = this.outletInfo.OutletInfo[0].MerchantId;
                     item.MaxOutletInCart = this.outletInfo.OutletInfo[0].MaxOutletsInCart;
-                    item.FoodCenterName=this.outletInfo.OutletInfo[0].FoodCentreName
+                    item.FoodCenterName = this.outletInfo.OutletInfo[0].FoodCentreName
                     item.Cart.push(this.productDetailParse);
                     this.cartNew.cartNew.push(item);
 
@@ -821,7 +821,7 @@ export class PageOrderComponent implements OnInit {
                 item.FoodCenterID = this.outletInfo.OutletInfo[0].FoodCentreId
                 item.MerchantID = this.outletInfo.OutletInfo[0].MerchantId;
                 item.MaxOutletInCart = this.outletInfo.OutletInfo[0].MaxOutletsInCart;
-                item.FoodCenterName=this.outletInfo.OutletInfo[0].FoodCentreName
+                item.FoodCenterName = this.outletInfo.OutletInfo[0].FoodCentreName
                 item.Cart.push(this.productDetailParse);
                 this.cartNew.cartNew.push(item);
                 localStorage.setItem('crt', JSON.stringify(this.cartNew));
@@ -836,18 +836,25 @@ export class PageOrderComponent implements OnInit {
             if (this.cartNew.cartNew.length > 0) {//check cart not yet item
                 let flagFoodCenter: boolean = this.checkFoodCenter(this.outletInfo.OutletInfo[0].FoodCentreId)
                 if (!flagFoodCenter) {
-                    setTimeout(() => {
-                        $.magnificPopup.open({
-                            items: {
-                                src: '#cart-popup'
-                            },
-                            type: 'inline'
-                        });
-                    }, 50)
+                    $.magnificPopup.close()
+                    // setTimeout(() => {
+                    //     $.magnificPopup.open({
+                    //         items: {
+                    //             src: '#cart-popup'
+                    //         },
+                    //         type: 'inline'
+                    //     });
+                    // }, 50)
 
-                    this.errorCart = "please delete old your cart";
-                    return
+                    // this.errorCart = "please delete old your cart";
+                    this.errorCart = "Adding items from "+ this.outletInfo.OutletInfo[0].MerchantOutletName + " will clear your existing cart.";
+                    setTimeout(() => {
+                        this.showPopupClearCart()
+                    },100)
+                    return;
+                    
                 }
+                
                 for (let l = 0; l < this.cartNew.cartNew.length; l++) {
 
 
@@ -899,7 +906,7 @@ export class PageOrderComponent implements OnInit {
                     item.FoodCenterID = this.outletInfo.OutletInfo[0].FoodCentreId
                     item.MerchantID = this.outletInfo.OutletInfo[0].MerchantId;
                     item.MaxOutletInCart = this.outletInfo.OutletInfo[0].MaxOutletsInCart;
-                    item.FoodCenterName=this.outletInfo.OutletInfo[0].FoodCentreName
+                    item.FoodCenterName = this.outletInfo.OutletInfo[0].FoodCentreName
                     item.Cart.push(this.productDetailParse);
                     this.cartNew.cartNew.push(item);
 
@@ -916,7 +923,7 @@ export class PageOrderComponent implements OnInit {
                 item.FoodCenterID = this.outletInfo.OutletInfo[0].FoodCentreId
                 item.MerchantID = this.outletInfo.OutletInfo[0].MerchantId;
                 item.MaxOutletInCart = this.outletInfo.OutletInfo[0].MaxOutletsInCart;
-                item.FoodCenterName=this.outletInfo.OutletInfo[0].FoodCentreName
+                item.FoodCenterName = this.outletInfo.OutletInfo[0].FoodCentreName
                 this.cartNew.cartNew.push(item);
                 localStorage.setItem('crtd', JSON.stringify(this.cartNew));
             }
@@ -930,22 +937,22 @@ export class PageOrderComponent implements OnInit {
         this.subTotalEachCart()
         this.VerifyOrder();
         $.magnificPopup.close()
-        
-        
+
+
 
     }
     checkFoodCenter(foodCenterId: string) {
         console.log("foodId:" + foodCenterId)
         let flagFoodCenter: boolean = false;
-        if(foodCenterId){
+        if (foodCenterId) {
             for (let i = 0; i < this.cartNew.cartNew.length; i++) {
                 if (this.cartNew.cartNew[i].FoodCenterID === foodCenterId) {
                     flagFoodCenter = true;
                 }
             }
         }
-        else{
-            flagFoodCenter=false;
+        else {
+            flagFoodCenter = false;
         }
         return flagFoodCenter;
     }
@@ -1144,7 +1151,7 @@ export class PageOrderComponent implements OnInit {
 
     }
     removeCart(indexCart: number, index: number) {
-        
+
         this.blockUI.start()
         this.removeCartFlag = true;
         this.cartNew.cartNew[indexCart].Cart.splice(index, 1);
@@ -1157,7 +1164,7 @@ export class PageOrderComponent implements OnInit {
 
         this.orderMain.ArrayItem = this.cartNew.cartNew[indexCart].Cart;
 
-        
+
         if (this.cartNew.cartNew[indexCart].Cart.length <= 0) {
 
 
@@ -1213,6 +1220,7 @@ export class PageOrderComponent implements OnInit {
                 }
             }
             else {
+                console.log("checkout")
                 this.DeliveryAddress()
                 // if(this.orderMain.DeliveryId===""){
                 //      this.errorCart="please select address delivery"
@@ -1298,40 +1306,86 @@ export class PageOrderComponent implements OnInit {
         if (localStorage.getItem('cus') != null) {
             this.customerInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem('cus')));
 
-        }
-        let data_request = { CustomerId: this.customerInfo.CustomerInfo[0].CustomerId };
-        let data_request_json = JSON.stringify(data_request);
 
-        this._pickupService.GetDeliveryAddresses(common_data_json, data_request_json).then(data => {
-            this.listDeliveryAddress = data;
-            this._gof3rModule.checkInvalidSessionUser(this.listDeliveryAddress.ResultCode);
-            if (this.listDeliveryAddress.DeliveryAddressList.length > 0) {
-                // if(localStorage.getItem("addressDelivery")==null){
-                //     localStorage.setItem("addressDelivery", JSON.stringify(this.listDeliveryAddress.DeliveryAddressList[0]))
-                // }
-                if(localStorage.getItem("address")!=null){
-                    this.addressDeli = JSON.parse(localStorage.getItem("address"));
-                    if(this.addressDeli.AddressListInfo[0].AddressId!=""){
-                        this._router.navigateByUrl('/check-out')
+            let data_request = { CustomerId: this.customerInfo.CustomerInfo[0].CustomerId };
+            let data_request_json = JSON.stringify(data_request);
+
+            this._pickupService.GetDeliveryAddresses(common_data_json, data_request_json).then(data => {
+                this.listDeliveryAddress = data;
+                this._gof3rModule.checkInvalidSessionUser(this.listDeliveryAddress.ResultCode);
+                if (this.listDeliveryAddress.DeliveryAddressList.length > 0) {
+                    // if(localStorage.getItem("addressDelivery")==null){
+                    //     localStorage.setItem("addressDelivery", JSON.stringify(this.listDeliveryAddress.DeliveryAddressList[0]))
+                    // }
+                    // if (localStorage.getItem("address") != null) {
+                    //     this.addressDeli = JSON.parse(localStorage.getItem("address"));
+                    //     if (this.addressDeli.AddressListInfo[0].AddressId != "") {
+                    //         this._router.navigateByUrl('/check-out')
+                    //     }
+                    //     else {
+                    //         this.errorCart = "Your delivery address do not add, please select other delivery address."
+                    //         this.showPopupDepivery()
+                    //     }
+                    // }
+                    // else {
+                    if (localStorage.getItem("haveNewAddress") != null) {
+                        let haveNew: boolean = JSON.parse(localStorage.getItem("haveNewAddress"));
+                        if (haveNew) {
+                            if (localStorage.getItem("address") != null) {
+                                this.addressDeli = JSON.parse(localStorage.getItem("address"));
+                                if (this.addressDeli.AddressListInfo[0].AddressId != "") {
+                                    this._router.navigateByUrl('/check-out')
+                                }
+                                else {
+                                    this.errorCart = "Your delivery address do not add, please select other delivery address."
+                                    this.showPopupDepivery()
+                                }
+                            }
+                        }
+                        else{
+                            if (localStorage.getItem("addressDelivery") != null) {
+                                let addressDelivery = JSON.parse(localStorage.getItem("addressDelivery"));
+                                if (addressDelivery.AddressId != "") {
+                                    this._router.navigateByUrl('/check-out')
+                                }
+                                else {
+                                    this.errorCart = "Your delivery address do not add, please select other delivery address."
+                                    this.showPopupDepivery()
+                                }
+                            }
+                            
+                        }
                     }
                     else{
-                        this.errorCart="Your delivery address do not add, please select other delivery address."
-                        this.showPopupDepivery()
+                        if (localStorage.getItem("addressDelivery") != null) {
+                            let addressDelivery = JSON.parse(localStorage.getItem("addressDelivery"));
+                            if (addressDelivery.AddressId != "") {
+                                this._router.navigateByUrl('/check-out')
+                            }
+                            else {
+                                this.errorCart = "Your delivery address do not add, please select other delivery address."
+                                this.showPopupDepivery()
+                            }
+                        }
                     }
-                }
-                
-            }
-            else {
-                this.errorCart = "please add address delivery"
-                $.magnificPopup.open({
-                    items: {
-                        src: '#pickup-date'
-                    },
-                    type: 'inline'
-                });
-            }
+                    
 
-        })
+                    //}
+
+                }
+                else {
+                    this.errorCart = "please add address delivery"
+                    $.magnificPopup.open({
+                        items: {
+                            src: '#pickup-date'
+                        },
+                        type: 'inline'
+                    });
+                }
+
+            })
+        }
+
     }
     showPopupDepivery() {
         var el = $('#pickup-date');
@@ -1348,7 +1402,7 @@ export class PageOrderComponent implements OnInit {
         }
     }
     VerifyOrder() {
-        if (localStorage.getItem("ot") != null ) {
+        if (localStorage.getItem("ot") != null) {
             this.verifyOrderMain = new VerifyOrderMainModel();
             let common_data = new CommonDataRequest();
             var _location = localStorage.getItem("la");
@@ -1371,14 +1425,14 @@ export class PageOrderComponent implements OnInit {
 
             }
             //requestData.CombinedOrderInfo=this.combinedOrderInfo();
-            
-            if(this.customerInfo.CustomerInfo !=null){
+
+            if (this.customerInfo.CustomerInfo != null) {
                 requestData.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + ''
             }
-            else{
+            else {
                 requestData.CustomerId = ''
             }
-            
+
             requestData.ProductList = this.listProduct()
             requestData.CurrencyCode = this.outletInfo.OutletInfo[0].CurrencyCode
             let totalRequest = this._gof3rModule.ParseTo12(this.orderMain.SubTotal)
@@ -1386,7 +1440,7 @@ export class PageOrderComponent implements OnInit {
             let requestDataJson = JSON.stringify(requestData);
             console.log("very_json:" + requestDataJson)
             this._pickupService.VerifyOrder(common_data_json, requestDataJson).then(data => {
-                this.verifyOrderMain=data
+                this.verifyOrderMain = data
                 if (this.verifyOrderMain.ResultCode === "000") {
                     this.verifyOrderMain = data;
                     this.hadVeryfiOrder = true
@@ -1444,7 +1498,7 @@ export class PageOrderComponent implements OnInit {
     }
     checkItemHadCheck(optionItemId: string, optionId: number) {
         let hadCheck: boolean;
-        
+
         for (let i = 0; i < this.productDetailParse.OptionList.length; i++) {
             for (let j = 0; j < this.productDetailParse.OptionList[i].OptionItemList.length; j++) {
                 if (this.productDetailParse.OptionList[i].OptionId === optionId && this.productDetailParse.OptionList[i].OptionItemList[j].OptionItemId === optionItemId) {
@@ -1683,12 +1737,12 @@ export class PageOrderComponent implements OnInit {
         console.log(this.error.ResultDesc)
         this.showPopupddCardError()
     }
-    goToOrder(merchantOutletID:string){
+    goToOrder(merchantOutletID: string) {
         console.log("go to order")
         this.GetCurrentSystemTime(merchantOutletID)
-       
+
     }
-    GetCurrentSystemTime(merchantOutletID:string) {
+    GetCurrentSystemTime(merchantOutletID: string) {
 
 
         let common_data = new CommonDataRequest();
@@ -1707,14 +1761,14 @@ export class PageOrderComponent implements OnInit {
             // this.getCurrentTime.CurrentData = date;
             // this.getCurrentTime.CurrentTime = moment_(d.getTime()).format("HH:mm:ss")
             strDatime = date + " " + moment_(d.getTime()).format("HH:mm:ss")
-            
-                this.GetAllOutletListV2(strDatime,merchantOutletID)
-          
+
+            this.GetAllOutletListV2(strDatime, merchantOutletID)
+
 
         })
 
     }
-    GetAllOutletListV2(orderFor:string,outletID:string) {
+    GetAllOutletListV2(orderFor: string, outletID: string) {
         let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
         common_data.Location = _location
@@ -1728,9 +1782,9 @@ export class PageOrderComponent implements OnInit {
         request_data.FromRow = 0;
         if (this.getInitialParams.MCCInfo.length > 0) {
             for (let i = 0; i < this.getInitialParams.MCCInfo.length; i++) {
-                
+
                 if (this.getInitialParams.MCCInfo[i].Value == "Food") {
-                    
+
                     this.mccGobal = this.getInitialParams.MCCInfo[i].Id + '';
                 }
             }
@@ -1741,25 +1795,25 @@ export class PageOrderComponent implements OnInit {
         request_data.SubCategoryId = "";
         let request_data_json = JSON.stringify(request_data);
 
-        console.log("request_all:"+ request_data_json)
+        console.log("request_all:" + request_data_json)
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             //this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
 
             this.getAllOutletListV2 = data;
-            console.log("all:"+ JSON.stringify(this.getAllOutletListV2))
-            console.log("lenght:"+this.getAllOutletListV2.MerchantOutletListInfo.length)
-            if (this.getAllOutletListV2.MerchantOutletListInfo.length ===0) {
+            console.log("all:" + JSON.stringify(this.getAllOutletListV2))
+            console.log("lenght:" + this.getAllOutletListV2.MerchantOutletListInfo.length)
+            if (this.getAllOutletListV2.MerchantOutletListInfo.length === 0) {
                 // this.noData=true;
                 // this.haveData=false;
-            //     let data ={function:"outletMap",haveOutlet:1}
-            //    this._instanceService.sendCustomEvent(data)
-                this.haveOuteFromMap=0;
-                console.log("lenght:"+this.getAllOutletListV2.MerchantOutletListInfo.length)
+                //     let data ={function:"outletMap",haveOutlet:1}
+                //    this._instanceService.sendCustomEvent(data)
+                this.haveOuteFromMap = 0;
+                console.log("lenght:" + this.getAllOutletListV2.MerchantOutletListInfo.length)
                 // let msg ="This restaurant doesn't deliver to your area. <br />Click here to browse retaurants in your area."
                 //this.checkError("",msg,"")
                 this.showPopupddMapOutlet()
             }
-            
+
             // else {
             //     let data ={function:"outletMap",haveOutlet:0,msg:this.getAllOutletListV2.NoMessageDataForOutletList}
             //    this._instanceService.sendCustomEvent(data)
@@ -1770,9 +1824,40 @@ export class PageOrderComponent implements OnInit {
 
         })
     }
-    goToListOutlet(){
+    goToListOutlet() {
         $.magnificPopup.close()
         this._router.navigateByUrl("/search-result")
+    }
+    showPopupClearCart() {
+        var el = $('#clear-cart');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el,
+                    showCloseBtn: false
+                },
+                type: 'inline',
+                modal: true
+            });
+        }
+    }
+    goBack(){
+        $.magnificPopup.close()
+    }
+    clearCart(){
+        if (this.OrderType === ORDER_PICKUP) {
+            localStorage.removeItem("crt");
+            this.cartNew = new CartOrderNew();
+            this.loadCart()
+            $.magnificPopup.close()
+        }
+        else {
+            localStorage.removeItem("crtd");
+            this.cartNew = new CartOrderNew();
+            this.loadCart()
+            $.magnificPopup.close()
+        }
+        this.addToCart()
     }
 
 }

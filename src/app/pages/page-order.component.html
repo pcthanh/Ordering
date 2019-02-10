@@ -249,7 +249,17 @@
                     <button (click)="deleteCartOld()" class="btn-main btn-selection"><span>Confirm</span></button>
                 </div>
             </div>
+
+            <div id="clear-cart" class="success-popup mfp-hide" style="text-align: center">
+                <div class="" style="font-size: 16px; text-align:  center; margin-bottom: 0;font-weight: 600">START A NEW ORDER?</div>
+                <div class="title" style="font-size: 16px">{{this.errorCart}}</div>
+                <!--<div style="cursor: pointer" class="text-center" (click)="trackerOrder()" 
+                        ><img src="assets/images/ico-succsess.png" alt=""></div>-->
+                <button type="button" style="width: 150px" class="btn-main btn-select-payment" style="background: #ffad4c" (click)="goBack()">GO BACK</button>
+                <button type="button" style="width: 150px" class="btn-main btn-select-payment" (click)="clearCart()">CLEAR CART</button>
+            </div>
             <!--end show popup when add product difference-->
+
             <!--start show popup when not select date pickup-->
             <div id="pickup-date" class="pickup-date white-popup mfp-hide">
                 <div class="title-popup" style="font-size: 18px">{{this.errorCart}}</div>

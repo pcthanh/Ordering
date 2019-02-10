@@ -185,7 +185,7 @@
 
                         <div class="methods" *ngIf="haveCart">
                             <div *ngIf="selectedCard" class="payment selected"><img src="{{this.selectMethod.CardTypeIdImg}}" alt="" width="39" height="28"><span> {{this.selectMethod.MaskingCardNumber}}</span>                                <span (click)="deleteMethod('PO_CARD')" class="close-gof3r"></span></div>
-                            <div *ngIf="selectPoint" class="payment selected"><img src="{{this.selectMethod.CardTypeIdImg}}" alt="" width="39" height="28"><span> {{this.selectMethod.CardTypeValue}}</span>                                <span (click)="deleteMethod('PO_POINT')" class="close-gof3r"></span></div>
+                            <div *ngIf="selectPoint" class="payment selected"><img src="{{this.selectMethod.CardTypeIdImg}}" alt="" width="39" height="28"><span> {{this.selectMethod.CardTypeValue}} {{this.selectMethod.Point}} PTS (~{{this.selectMethod.CashEquivalenceDisplay}})</span>                                <span (click)="deleteMethod('PO_POINT')" class="close-gof3r"></span></div>
                             <div *ngIf="selectWalletDsilay" class="payment selected"><img src="{{this.selectMethod.CardTypeIdImg}}" alt="" width="39" height="28"><span> {{this.selectMethod.CardTypeValue}}</span>                                <span (click)="deleteMethod('PO_WALLET')" class="close-gof3r"></span></div>
                             <div *ngIf="showMethonBegin" class="payment"><img src="assets/images/ico-payment.png" alt=""><span>Select Payment Method</span>
                                 <div (click)="showPopup()"
@@ -259,11 +259,11 @@
                     <div class="payment-otpion-wrap" *ngIf="this.allPayment.PointWalletListInfo.length>0">
                         <div class="title">POINTS</div>
                         <div class="payment-item" *ngFor="let item of this.allPayment.PointWalletListInfo">
-                            <input type="radio" (click)="selectPointPayment(item.WalletNo,'PO_POINT',item.WalletName,item.MerchantIdImg)" id="member-{{i}}" name="payment">
+                            <input type="radio" (click)="selectPointPayment(item.WalletNo,'PO_POINT',item.WalletName,item.MerchantIdImg,item.CashEquivalenceDisplay,item.PointBalance)" id="member-{{i}}" name="payment">
                             <label for="member-{{i}}">
                                                 <span class="img"><img src="{{item.MerchantIdImg}}" alt="" width="63" height="50"></span>
                                                 <span class="inf">
-                                                   {{item.WalletName}}<br>{{item.PointBalanceDisplay}}
+                                                   {{item.WalletName}}<br>{{item.PointBalance}} PTS (~{{item.CashEquivalenceDisplay}})
                                                 </span>
                                                 <!-- <span class="pay-wrap">
                                                     <a href="#">Top up</a>
@@ -283,7 +283,7 @@
 
 
                     <div class="name-card">
-                        <label for="credit-number-input">Name Card</label>
+                        <label for="credit-number-input">Name On Card</label>
                         <input [(ngModel)]="this.addCardData.NameCard" name="name-card" type="text" id="credit-number-input">
                     </div>
                     <div class="credit-number">
@@ -423,6 +423,13 @@
 
 
 </div>
+<div id="apply-promocde-error" class="success-popup mfp-hide" style="text-align: center">
+        <div class="" style="text-align: center">{{this.error.ResultDesc}}</div>
+        <!--<div style="cursor: pointer" class="text-center" (click)="trackerOrder()" 
+                ><img src="assets/images/ico-succsess.png" alt=""></div>-->
+    
+    
+    </div>
 
 <block-ui>
     <!-- Your app markup here -->

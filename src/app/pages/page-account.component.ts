@@ -84,7 +84,7 @@ export class AccountComponent implements OnInit {
         request_data.MaritalStatus=this.customerInfoMain.CustomerInfo[0].MaritalStatus
         request_data.Mobile=this.customerInfoMain.CustomerInfo[0].Mobile
         let request_data_json= JSON.stringify(request_data);
-        
+        console.log("request:"+ this.customerInfoMain.CustomerInfo[0].Dob)
         this._pickupService.UpdateCustomer(common_data_json,request_data_json).then(data=>{
            
             if(data.ResultCode==="000"){

@@ -6,4 +6,6 @@ export class SelectMethodPayment{
     CardTypeValue:string=""
     CardTypeIdImg:string=""
     PaymentGatewayToken:string=""
+    CashEquivalenceDisplay:string=""
+    Point:string=""
 }
