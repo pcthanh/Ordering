@@ -590,5 +590,17 @@
     border: none;
     right: -55px;
 }
+.location-add-address-order {
+  text-align: center;
+  position: absolute;
+  z-index: 10;
+  top: 5%;
+  left: 20%;
+  padding: 10px;
+  max-width: 290px;
+  background: #fff;
+  width: 100%;
+  color: #333;
+}
 
 

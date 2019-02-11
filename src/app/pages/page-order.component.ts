@@ -31,6 +31,9 @@ import { GetAllOutletListV2Model } from "../models/GetAllOutletListV2";
 import { GetInitialParams } from "../models/GetInitialParams";
 import { MCCInfoModel } from "../models/MCCInfo";
 import { AddressListModel } from "../models/AddressList";
+import { AddeliveryAddressModel } from "../models-request/add-delivery-address";
+import { AddressIteModel } from "../models/AddressItem";
+
 const ORDER_DELIVERY: string = "DELIVERY"
 const ORDER_PICKUP: string = "PICKUP"
 declare var $: any;
@@ -80,6 +83,10 @@ export class PageOrderComponent implements OnInit {
     mccGobal: string;
     mccInfor: MCCInfoModel;
     addressDeli: AddressListModel;
+    lat:string="";
+    lng:string="";
+    nameAddress:string=""
+    addressList: AddressListModel;
     constructor(private _router: Router, private _gof3rUtil: Gof3rUtil, private _gof3rModule: Gof3rModule, private _util: Gof3rUtil, private _pickupService: PickupService, private _instanceService: EventSubscribeService, private active_router: ActivatedRoute) {
         this.blockUI.start('loading ...'); // Start blocking
         this.productDetail = new ProductDetailMainModel();
@@ -1337,8 +1344,12 @@ export class PageOrderComponent implements OnInit {
                                     this._router.navigateByUrl('/check-out')
                                 }
                                 else {
-                                    this.errorCart = "Your delivery address do not add, please select other delivery address."
-                                    this.showPopupDepivery()
+                                    // this.errorCart = "Your delivery address do not add, please select other delivery address."
+                                    // this.showPopupDepivery()
+                                    this.lat = this.addressDeli.AddressListInfo[0].lat;
+                                    this.lng = this.addressDeli.AddressListInfo[0].long;
+                                    this.nameAddress=this.addressDeli.AddressListInfo[0].Name
+                                    this.showPopupAddAddreess()
                                 }
                             }
                         }
@@ -1349,8 +1360,9 @@ export class PageOrderComponent implements OnInit {
                                     this._router.navigateByUrl('/check-out')
                                 }
                                 else {
-                                    this.errorCart = "Your delivery address do not add, please select other delivery address."
-                                    this.showPopupDepivery()
+                                    // this.errorCart = "Your delivery address do not add, please select other delivery address."
+                                    // this.showPopupDepivery()
+                                    this.showPopupAddAddreess()
                                 }
                             }
                             
@@ -1841,6 +1853,20 @@ export class PageOrderComponent implements OnInit {
             });
         }
     }
+    
+    showPopupAddAddreess() {
+        var el = $('#address-popup');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el,
+                    
+                },
+                type: 'inline',
+                
+            });
+        }
+    }
     goBack(){
         $.magnificPopup.close()
     }
@@ -1858,6 +1884,57 @@ export class PageOrderComponent implements OnInit {
             $.magnificPopup.close()
         }
         this.addToCart()
+    }
+    addDeliveryAddress() {
+        if (parseFloat(this.lat) > 0 && parseFloat(this.lng) > 0) {
+            let common_data = new CommonDataRequest();
+            var _location = localStorage.getItem("la");
+            common_data.Location = _location
+            common_data.ServiceName = "AddDeliveryAddress";
+            let common_data_json = JSON.stringify(common_data);
+
+            let data_request = new AddeliveryAddressModel();
+
+
+
+
+            
+            data_request.Address = this.nameAddress
+            data_request.ApartmentNoBuildingName = ""
+            data_request.InstructionForRider = ""
+            data_request.Nickname = "";
+            data_request.PhoneNumber = ""
+            data_request.PostalCode = ""
+            data_request.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + ''
+            data_request.GeoLocation = this.lat + ',' + this.lng;
+            let data_request_json = JSON.stringify(data_request);
+
+            this._pickupService.AddDeliveryAddress(common_data_json, data_request_json).then(data => {
+
+                if (data.ResultCode === '000') {
+                    console.log(data)
+                    this.addressList = new AddressListModel();
+                    localStorage.setItem("haveNewAddress",JSON.stringify(false));
+                    let item = new AddressIteModel();
+                    item.lat = this.lat + ''
+                    item.long = this.lng + ''
+                    item.isCheck = true;
+                    item.Name = this.nameAddress
+                    item.StreetAddress= this.nameAddress;
+                    this.addressList.AddressListInfo.push(item);
+                    localStorage.setItem('address', JSON.stringify(this.addressList));
+                    let addressDelivery={AddressId:data.AddressId, GeoLocation:this.lat + ',' + this.lng,Address:this.nameAddress}
+                    localStorage.setItem("addressDelivery",JSON.stringify(addressDelivery))
+                    this.orderMain.DeliveryId=data.AddressId
+                    this.lat = "0";
+                    this.lng = "0";
+                    $("#input-address-1").val("");
+                    this.nameAddress=""
+                    $.magnificPopup.close()
+                }
+            })
+
+        }
     }
 
 }

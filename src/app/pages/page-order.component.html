@@ -221,6 +221,8 @@
                                                     </div>
                                                 </div>
                                                 <!--end popup outlet info-->
+
+                                               
                                             </div>
                                         </div>
                                     </div>
@@ -424,6 +426,45 @@
         
 
 </div>
+ <!--popup add address info-->
+
+
+ <div id="address-popup" class="popup mfp-hide">
+    <div class="title-popup">Do you want add this address?</div>
+    <!-- <div class="card">
+        <img class="card-img-top" src="{{outletInfo.OutletInfo[0].MerchantOutletImage}}"
+            height="300" alt="Card image cap">
+        <div class="card-body">
+            <p class="card-text">{{outletInfo.OutletInfo[0].MerchantOutletName}}
+                <span [innerHtml]="this.outletInfo.OutletInfo[0].Rating"
+                    class="rate-gof3r"></span></p>
+            <p class="card-text">{{outletInfo.OutletInfo[0].MerchantDescription}}</p>
+            <p class="card-text">{{outletInfo.OutletInfo[0].Address}}</p>
+
+        </div>
+    </div> -->
+    <div class="delivery-address-wrap">
+        
+        <!--<input id="input-address-1" (keyup)="checkInputPostalCode($event)" class="new-address" type="text" placeholder="Enter your Address" #search [formControl]="searchControl">-->
+        <input id="input-address-1"  class="new-address" type="text" [(ngModel)]="this.nameAddress" placeholder="Enter your Address" >
+         <!-- <div *ngIf="showListSelectAddress" class="add-wrap">
+<ul class="list-group">
+<li style="cursor: pointer" *ngFor="let item of list.AddressList" (click)="selectAddress(item.Address,item.Latitude,item.Longitude)" class="list-group-item">{{item.Address}}</li>
+
+</ul>
+</div> -->
+        <div class="map-address">
+            <div class="location-add-address-order">
+                <div><strong>Is this your location?</strong></div>
+                <button (click)="addDeliveryAddress()" class="btn-main btn-add-this"><span>ADD THIS ADDRESS</span></button>
+            </div>
+            <img class="img-fluid" src="https://maps.googleapis.com/maps/api/staticmap?size=500x297&scale=1&center={{this.lat}},{{this.lng}}&markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C{{this.lat}},{{this.lng}}&maptype=roadmap&format=png32&visual_refresh=true&zoom=16&style=feature:administrative%7Cvisibility:off&style=feature:transit%7Cvisibility:off&style=feature:landscape%7Celement:geometry.fill%7Ccolor:0xE8E4DBstyle=feature:landscape%7Celement:geometry.stroke%7Cvisibility:off&style=feature:landscape.natural%7Celement:geometry.fill%7Ccolor:0xF0ECE4&style=feature:poi%7Celement:geometry.fill%7Ccolor:0xF0ECE4&style=feature:poi%7Celement:geometry.stroke%7Cvisibility:off&style=feature:poi%7Celement:labels.text%7Cvisibility:off&style=feature:poi%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.icon%7Cvisibility:off&style=feature:road%7Celement:labels.text.fill%7Ccolor:0x635E5A&style=feature:road%7Celement:labels.text.stroke%7Ccolor:0xFFFFFF&style=feature:road%7Celement:geometry.fill%7Ccolor:0xFFFFFF&style=feature:road%7Celement:geometry.stroke%7Ccolor:0xDCD6CD&style=feature:road.local%7Celement:geometry.fill%7Ccolor:0xDCD6CD&style=feature:road.local%7Celement:geometry.stroke%7Cvisibility:off&style=feature:water%7Cvisibility:on&style=feature:water%7Celement:labels.text%7Cvisibility:off&style=feature:water%7Celement:geometry.fill%7Ccolor:0xC8D1DF&key=AIzaSyAVdsuXFE3Ca3vwy_lopgMUHTfJLdd3_Ck"
+                alt="">
+        </div>
+    </div>
+</div>
+
+<!--end popup add address info-->
 <block-ui>
     <!-- Your app markup here -->
 </block-ui>
