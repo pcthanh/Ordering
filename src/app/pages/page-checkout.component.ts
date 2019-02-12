@@ -1377,7 +1377,6 @@ export class PageCheckOutComponent implements OnInit {
                     this.orderMain.PromoCodeDisPlay = this.promoCodeMain.PromoCodeInfo[0].PromoCodeValueDisplay;
                     this.orderMain.PromoCodeValue = this.promoCodeMain.PromoCodeInfo[0].PromoCodeValue
                     this.orderMain.PrmoCodeID = this.promoCodeMain.PromoCodeInfo[0].PromoCodeId
-
                     this.orderMain.PrmoCodeID = this.promoCodeMain.PromoCodeInfo[0].PromoCodeId
                     this.subTotalOrder()
                     this.selectedPromoCode = true
@@ -1386,6 +1385,18 @@ export class PageCheckOutComponent implements OnInit {
                    
 
                 } else {
+                    this.orderMain.PromoCodeDisPlay ="";
+                    this.orderMain.PromoCodeValue=0;
+                    this.orderMain.PrmoCodeID="";
+                    this.selectPromoCodeModel = new SelectPromoCode()
+                    this.selectedPromoCode = false
+                    this.selectPromoCodeModel.PromoCodeText = "Browse rewards or use promo code"
+                    this.selectPromoCodeModel.PromoCodeTextRequest =''
+                    this.selectPromoCodeModel.PromoCodeValue= 0;
+                    this.inputPromoCode=''
+                    this.VerifyOrder();
+                    this.subTotalOrder()
+                    this.subTotalEachCart()
                     this.checkPromoCode=true;
                     console.log(this.promoCodeMain.ErrorMessage)
                     this.errorAddCard = true;
