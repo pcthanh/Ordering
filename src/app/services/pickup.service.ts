@@ -64,7 +64,7 @@ export class PickupService {
       }
       GetAllOutletListV2(commonData: string, requestData: string) {
             let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
-
+            console.log("GetAllOutletListV2:"+ urlAPI)
             return this.http.get(urlAPI).toPromise().then(data => {
                  
                         return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())) as GetAllOutletListV2Model);
@@ -437,6 +437,12 @@ export class PickupService {
          return  this.http.post(this.util.urlUploadFile(),data).toPromise().then(data=>{
                return Promise.resolve((data.text()));
          })
+      }
+      ChangeUserPassWord(commonData: string, requestData: string) {
+            let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
+            return this.http.get(urlAPI).toPromise().then(data => {
+                  return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
+            })
       }
 
 }

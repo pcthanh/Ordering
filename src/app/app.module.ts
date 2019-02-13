@@ -70,6 +70,7 @@ import {
     GoogleLoginProvider,
     FacebookLoginProvider,
 } from "angular5-social-login";
+import { ChangePasswordComponent } from "./pages/page-change-password.component";
 
 // let config = new AuthServiceConfig([
 //   {
@@ -130,7 +131,8 @@ export function getAuthServiceConfigs() {
     DeliveryAddressComponent,
     OrderHistoryPickupComponent,
     OrderHistoryDetailComponent,
-    GrowsWithUsComponent
+    GrowsWithUsComponent,
+    ChangePasswordComponent
     //Import Component
 
     

@@ -243,7 +243,7 @@ export class SearchResultComponent implements OnInit {
             request_data.OrderFor = orderFor
         request_data.FoodCentreId=foodcenter;
         let request_data_json = JSON.stringify(request_data);
-
+        console.log("common_requet:"+ (common_data_json))
         console.log("data_requet:"+ (request_data_json))
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode);

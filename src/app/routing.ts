@@ -25,7 +25,7 @@ import { DeliveryAddressComponent } from "./pages/page-delivery.component";
 import { OrderHistoryPickupComponent } from "./pages/page-order-history-pickup.component";
 import { OrderHistoryDetailComponent } from "./pages/page-order-history-detail.component";
 import { GrowsWithUsComponent } from "./pages/page-grows-with-us.component";
-
+import { ChangePasswordComponent } from "./pages/page-change-password.component";
 const routes: Routes = [
     
     { path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -53,6 +53,7 @@ const routes: Routes = [
     { path: 'order-history-pickup',component:OrderHistoryPickupComponent},
     { path: 'order-history-detail/:orderType/:customerOrderId',component:OrderHistoryDetailComponent},
     { path: 'grows-with-us',component:GrowsWithUsComponent},
+    { path: 'change-password',component:ChangePasswordComponent},
     { path: 'hoc', component: HocComponent },
     
 ]

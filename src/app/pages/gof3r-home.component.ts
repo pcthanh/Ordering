@@ -1126,10 +1126,12 @@ export class Gof3rHomeComponent implements OnInit {
             socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
         } else if (socialPlatform == "google") {
             socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
+            console.log("google:"+ socialPlatformProvider)
         }
 
         this.socialAuthService.signIn(socialPlatformProvider).then(
             (userData) => {
+                console.log("google:"+ userData.email)
                 //this.signUp.Email = userData.email
                 //console.log(socialPlatform + " sign in data : ", userData);
                 // Now sign-in with userData
@@ -1145,12 +1147,14 @@ export class Gof3rHomeComponent implements OnInit {
 
                 let requestData = new CheckLogonRequest();
                 requestData.UserName = this.userName
-                //requestData.Password = this.passWord;
+                requestData.Password = "";
                 requestData.OTP = ""
                 let requestDataJson = JSON.stringify(requestData)
+                console.log("requestDataJsonLogin:"+ requestDataJson)
                 this._pickupService.CheckLogon(common_data_json, requestDataJson).then(data => {
 
                     this.customerInfoMain = data;
+                    console.log("login1:" + JSON.stringify(data))
                     if (this.customerInfoMain.ResultCode === "000") {
                         console.log("login:" + JSON.stringify(this.customerInfoMain))
                         localStorage.setItem("cus", this._gof3rUtil.encryptParams(JSON.stringify(this.customerInfoMain)))

@@ -71,7 +71,7 @@
                                             <input [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Email" type="text" id="acc-email">
                                         </div>
                                         <div class="acc-input">
-                                            <label for="acc-pass"><span>Password</span> <a href="02_Login_03_ForgotPassword.html" class="right">Change Password Now?</a></label>
+                                            <label for="acc-pass"><span>Password</span> <a [routerLink]="['/change-password']"  class="right">Change Password Now?</a></label>
                                             <input [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Password" type="password"  id="acc-pass">
                                         </div>
                                         <button (click)="updateProfile()" class="btn-main btn-save-acc"><span>SAVE</span></button>
