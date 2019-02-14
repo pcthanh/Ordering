@@ -253,28 +253,30 @@ export class SearchResultComponent implements OnInit {
             console.log("getallOutlet:"+ JSON.stringify(this.getAllOutletListV2))
             if(this.getAllOutletListV2.ResultCode==="000"){
                 localStorage.setItem("promomes",this.getAllOutletListV2.ProductWebsitePromotionalMessage)
-            }
-            
-
-            if (this.getAllOutletListV2.MerchantOutletListInfo.length > 0) {
-                for (let i = 0; i < this.getAllOutletListV2.MerchantOutletListInfo.length; i++) {
-                let rating:string="";
-                let strTemp: string = ""
-                for (let j = 0; j < this.getAllOutletListV2.MerchantOutletListInfo[i].SubCategoryList.length; j++) {
-                    strTemp = strTemp + this.getAllOutletListV2.MerchantOutletListInfo[i].SubCategoryList[j].SubCategoryName + " • "
+                if (this.getAllOutletListV2.MerchantOutletListInfo.length > 0) {
+                    for (let i = 0; i < this.getAllOutletListV2.MerchantOutletListInfo.length; i++) {
+                    let rating:string="";
+                    let strTemp: string = ""
+                    for (let j = 0; j < this.getAllOutletListV2.MerchantOutletListInfo[i].SubCategoryList.length; j++) {
+                        strTemp = strTemp + this.getAllOutletListV2.MerchantOutletListInfo[i].SubCategoryList[j].SubCategoryName + " • "
+                    }
+                    rating = this.getStars((parseInt(this.getAllOutletListV2.MerchantOutletListInfo[i].MerchantOutletRating) / 100));
+                    
+                    this.getAllOutletListV2.MerchantOutletListInfo[i].Rating = rating;
+                    this.getAllOutletListV2.MerchantOutletListInfo[i].subCatgoryTemp = strTemp.substring(0, strTemp.length - 2)
                 }
-                rating = this.getStars((parseInt(this.getAllOutletListV2.MerchantOutletListInfo[i].MerchantOutletRating) / 100));
-                
-                this.getAllOutletListV2.MerchantOutletListInfo[i].Rating = rating;
-                this.getAllOutletListV2.MerchantOutletListInfo[i].subCatgoryTemp = strTemp.substring(0, strTemp.length - 2)
+                    // this.noData=true;
+                    this.haveData = true;
+                    this.noData = false
+                }
+                else {
+                    this.noData = true;
+                    this.haveData = false;
+                }
             }
-                // this.noData=true;
-                this.haveData = true;
-                this.noData = false
-            }
-            else {
-                this.noData = true;
-                this.haveData = false;
+            else{
+                this.blockUI.stop();
+                this.showPopupddAllOutletError()
             }
             this.getTopOffers()
 
@@ -406,6 +408,22 @@ export class SearchResultComponent implements OnInit {
         this.router.navigateByUrl("/order")
     }
     closeOffer(){
+        $.magnificPopup.close()
+    }
+    showPopupddAllOutletError() {
+        var el = $('#alloutlet-error');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el,
+                    showCloseBtn: false
+                },
+                type: 'inline',
+                modal: true
+            });
+        }
+    }
+    okay(){
         $.magnificPopup.close()
     }
 
