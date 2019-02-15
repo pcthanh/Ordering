@@ -55,7 +55,7 @@ export class SearchResultComponent implements OnInit {
     clickDetailOffer:boolean=false;
     offerNewLine:string=''
     constructor(private _gof3rModule: Gof3rModule, private _renderer2: Renderer2, @Inject(DOCUMENT) private _document, private router: Router, private active_router: ActivatedRoute, private _pickupService: PickupService, private _gof3rUtil: Gof3rUtil, private _instanceService: EventSubscribeService) {
-
+    this.blockUI.start()
 
        
         if (localStorage.getItem('cus') != null) {
@@ -120,7 +120,7 @@ export class SearchResultComponent implements OnInit {
 
 
     ngOnInit() {
-
+        this.blockUI.start()
         this.initJQuery()
         
 
@@ -283,7 +283,7 @@ export class SearchResultComponent implements OnInit {
         })
     }
     GetCurrentSystemTime(keyWord: string) {
-
+        this.blockUI.start()
 
         let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");

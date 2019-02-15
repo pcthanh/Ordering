@@ -8,4 +8,6 @@ export class SelectMethodPayment{
     PaymentGatewayToken:string=""
     CashEquivalenceDisplay:string=""
     Point:string=""
+    Discount: number =0;
+    DislayDiscount:string=""
 }

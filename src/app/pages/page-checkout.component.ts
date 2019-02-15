@@ -136,6 +136,7 @@ export class PageCheckOutComponent implements OnInit {
     showMethonBegin:boolean=true;
     selectWalletDsilay :boolean=false;
     checkPromoCode:boolean=false;
+    rebateProgramDesscription:string=""
     styles = [{
         featureType: "landscape",
         elementType: "geometry.fill",
@@ -710,8 +711,14 @@ export class PageCheckOutComponent implements OnInit {
 
             this.allPayment = data
 
-            console.log("allPayment:" + JSON.stringify(this.allPayment))
-            
+            console.log("allPayment:" + JSON.stringify(data))
+            for(let i =0;i< this.allPayment.PointWalletListInfo.length; i++){
+                for(let j = 0; j< this.allPayment.PointWalletListInfo[i].RebateProgramInfo.length; j++){
+                    this.rebateProgramDesscription = this.allPayment.PointWalletListInfo[i].RebateProgramInfo[j].ProgramDescription
+                }
+            }
+            this.rebateProgramDesscription= this.rebateProgramDesscription.replace("/n","<br>");
+            console.log("newline:"+ this.rebateProgramDesscription)
             this.allPaymentget = true
             // this.maskingCardNumber = this.allPayment.CardListInfo[0].MaskedCardNumber;
             // this.orderMain.MaskingCardNumber = this.allPayment.CardListInfo[0].MaskedCardNumber
@@ -1133,6 +1140,9 @@ export class PageCheckOutComponent implements OnInit {
             this.selectPoint = true;
             this.selectedCard =false
             this.showMethonBegin=false;
+            this.orderMain.Discount=this.selectMethod.Discount;
+            this.orderMain.DiscountDisplay= this.selectMethod.DislayDiscount
+            this.subTotalOrder()
             $.magnificPopup.close()
         }
         if (this.selectMethod.Method === "PO_WALLET") {
@@ -1226,7 +1236,7 @@ export class PageCheckOutComponent implements OnInit {
         // this.orderMain.PaymentOptions = "PO_WALLET"
         // this.orderMain.CardTypeValue = walletName
     }
-    selectPointPayment(pointWalletNo: string, paymentOptoin: string, pointName: string,img:string,CashEquivalenceDisplay:string,Point:string) {
+    selectPointPayment(pointWalletNo: string, paymentOptoin: string, pointName: string,img:string,CashEquivalenceDisplay:string,Point:string, index:number) {
         console.log(pointWalletNo +"-"+ pointName)
         this.selectMethod.Method="PO_POINT";
         this.selectMethod.CardToken = pointWalletNo;
@@ -1236,6 +1246,10 @@ export class PageCheckOutComponent implements OnInit {
         this.selectMethod.CardTypeIdImg=img
         this.selectMethod.CashEquivalenceDisplay=CashEquivalenceDisplay
         this.selectMethod.Point=Point
+        if(this.allPayment.PointWalletListInfo[index].RebateProgramInfo.length>0){
+            this.selectMethod.Discount=parseFloat(this.allPayment.PointWalletListInfo[index].RebateProgramInfo[0].TotalDiscount)/100;
+            this.selectMethod.DislayDiscount=this.allPayment.PointWalletListInfo[index].RebateProgramInfo[0].TotalDiscountDisplay
+        }
     }
     checkImageExists(imageUrl, callBack) {
         var imageData = new Image();
@@ -1680,6 +1694,8 @@ export class PageCheckOutComponent implements OnInit {
         this.selectMethod.CardHoldName = ""
         this.selectMethod.CardTypeValue = ""
         this.selectMethod.Method = ""
+        this.selectMethod.Discount=0;
+        this.selectMethod.DislayDiscount=''
     }
     orderMore() {
         $.magnificPopup.close()

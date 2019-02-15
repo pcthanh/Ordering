@@ -1,4 +1,5 @@
 import { CustomerTranxFeeModel } from "../models/CustomerTranxFee";
+import { RebateProgram } from "./RebateProgram";
 export class PointWalletItemInfo{
     RowNum:string=""
     WalletNo:string=""
@@ -23,6 +24,7 @@ export class PointWalletItemInfo{
     CurrencyCode:string=""
     CurrencyCodeValue:string=""
     CustomerTranxFee:CustomerTranxFeeModel[]=[]
+    RebateProgramInfo:RebateProgram []=[]
     HavingPromotion:string=""
 
 }

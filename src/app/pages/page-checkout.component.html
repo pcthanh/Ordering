@@ -151,7 +151,7 @@
                                 class="gst">
                                 <span class="inf">Rider Tip</span> <span class="price">{{this.orderMain.RiderTipDisplay}}</span>
                             </div>
-                            <div *ngIf="this.orderMain.DiscountDisplay!=''" class="gst"><span class="inf">Discount</span> <span class="price">{{this.orderMain.DiscountDisplay}}</span></div>
+                            <div *ngIf="this.orderMain.DiscountDisplay!=''" class="gst"><span class="inf">Discount</span> <span class="price">-{{this.orderMain.DiscountDisplay}}</span></div>
                             <div *ngIf="this.orderMain.PromoCodeDisPlay!=''" class="gst"><span class="inf">PromoCode</span> <span class="price">{{this.orderMain.PromoCodeDisPlay}}</span></div>
                             <div *ngIf="this.orderMain.OrderType==='DELIVERY'" class="courier-tip">
                                 <!--<div class="tip-title">Rider Tip</div>
@@ -258,12 +258,12 @@
                     </div>
                     <div class="payment-otpion-wrap" *ngIf="this.allPayment.PointWalletListInfo.length>0">
                         <div class="title">POINTS</div>
-                        <div class="payment-item" *ngFor="let item of this.allPayment.PointWalletListInfo">
-                            <input type="radio" (click)="selectPointPayment(item.WalletNo,'PO_POINT',item.WalletName,item.MerchantIdImg,item.CashEquivalenceDisplay,item.PointBalance)" id="member-{{i}}" name="payment">
+                        <div class="payment-item" *ngFor="let item of this.allPayment.PointWalletListInfo; let i = index">
+                            <input type="radio" (click)="selectPointPayment(item.WalletNo,'PO_POINT',item.WalletName,item.MerchantIdImg,item.CashEquivalenceDisplay,item.PointBalance,i)" id="member-{{i}}" name="payment">
                             <label for="member-{{i}}">
                                                 <span class="img"><img src="{{item.MerchantIdImg}}" alt="" width="63" height="50"></span>
                                                 <span class="inf">
-                                                   {{item.WalletName}}<br>{{item.PointBalance}} PTS (~{{item.CashEquivalenceDisplay}})
+                                                   {{item.WalletName}}<br>{{item.PointBalance}} PTS (~{{item.CashEquivalenceDisplay}}) <br>  <span style="white-space:pre; color: red" [innerHtml]="this.rebateProgramDesscription"></span>
                                                 </span>
                                                 <!-- <span class="pay-wrap">
                                                     <a href="#">Top up</a>
