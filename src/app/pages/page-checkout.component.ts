@@ -137,6 +137,7 @@ export class PageCheckOutComponent implements OnInit {
     selectWalletDsilay :boolean=false;
     checkPromoCode:boolean=false;
     rebateProgramDesscription:string=""
+    discountPromo:string=""
     styles = [{
         featureType: "landscape",
         elementType: "geometry.fill",
@@ -1134,16 +1135,41 @@ export class PageCheckOutComponent implements OnInit {
             $.magnificPopup.close()
         }
         if (this.selectMethod.Method === "PO_POINT") {
-            this.orderMain.CardToken = this.selectMethod.CardToken;
-            this.orderMain.PaymentOptions = this.selectMethod.Method
-            this.orderMain.CardTypeValue = this.selectMethod.CardTypeValue
-            this.selectPoint = true;
-            this.selectedCard =false
-            this.showMethonBegin=false;
-            this.orderMain.Discount=this.selectMethod.Discount;
-            this.orderMain.DiscountDisplay= this.selectMethod.DislayDiscount
-            this.subTotalOrder()
-            $.magnificPopup.close()
+            console.log(this.orderMain.PromoCodeValue)
+            if(this.orderMain.PromoCodeValue >0){
+                this.discountPromo="We're sorry. Promo code is not valid because a discount has been applied to your order total."
+                this.orderMain.PromoCodeValue =0;
+                this.orderMain.PromoCodeDisPlay=''
+                this.orderMain.PrmoCodeID=''
+                this.selectedPromoCode = false
+                this.selectPromoCodeModel.PromoCodeText = "Browse rewards or use promo code"
+                $.magnificPopup.close()
+                this.orderMain.CardToken = this.selectMethod.CardToken;
+                this.orderMain.PaymentOptions = this.selectMethod.Method
+                this.orderMain.CardTypeValue = this.selectMethod.CardTypeValue
+                this.selectPoint = true;
+                this.selectedCard =false
+                this.showMethonBegin=false;
+                this.orderMain.Discount=this.selectMethod.Discount;
+                this.orderMain.DiscountDisplay= this.selectMethod.DislayDiscount
+                this.subTotalOrder()
+                this.showPopupDiscountPromo()
+            }
+            else{
+                this.orderMain.CardToken = this.selectMethod.CardToken;
+                this.orderMain.PaymentOptions = this.selectMethod.Method
+                this.orderMain.CardTypeValue = this.selectMethod.CardTypeValue
+                this.selectPoint = true;
+                this.selectedCard =false
+                this.showMethonBegin=false;
+                this.orderMain.Discount=this.selectMethod.Discount;
+                this.orderMain.DiscountDisplay= this.selectMethod.DislayDiscount
+                this.subTotalOrder()
+                $.magnificPopup.close()
+            }
+            
+            
+            
         }
         if (this.selectMethod.Method === "PO_WALLET") {
             this.orderMain.CardToken = this.selectMethod.CardToken;
@@ -1160,6 +1186,7 @@ export class PageCheckOutComponent implements OnInit {
 
     }
     showPopup() {
+        
         $('input[name=payment]').prop('checked', false);
         this.selectedCard = false
         var el = $('#payment-otpion-popup');
@@ -1427,16 +1454,24 @@ export class PageCheckOutComponent implements OnInit {
 
     }
     showPopupPromoCode() {
-        this.selectedPromoCode = false
-        var el = $('#reward-popup');
-        if (el.length) {
-            $.magnificPopup.open({
-                items: {
-                    src: el
-                },
-                type: 'inline'
-            });
+        console.log(this.orderMain.Discount)
+        if(this.orderMain.Discount>0){
+            this.discountPromo = "Sorry, multiple discount and promo codes cannot be used at same time. Please choose either one to enjoy the offer."
+            this.showPopupDiscountPromo()
         }
+        else{
+            this.selectedPromoCode = false
+            var el = $('#reward-popup');
+            if (el.length) {
+                $.magnificPopup.open({
+                    items: {
+                        src: el
+                    },
+                    type: 'inline'
+                });
+        }
+        }
+        
     }
     showPopupRiderTip() {
 
@@ -1579,6 +1614,19 @@ export class PageCheckOutComponent implements OnInit {
             });
         }
     }
+    showPopupDiscountPromo() {
+        var el = $('#show-popup-discount-promo');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el,
+                    showCloseBtn: false,
+                },
+                type: 'inline',
+                modal :true
+            });
+        }
+    }
 
     confirmCard() {
         //this.addCard()
@@ -1696,6 +1744,8 @@ export class PageCheckOutComponent implements OnInit {
         this.selectMethod.Method = ""
         this.selectMethod.Discount=0;
         this.selectMethod.DislayDiscount=''
+        this.orderMain.Discount=0;
+        this.orderMain.DiscountDisplay=''
     }
     orderMore() {
         $.magnificPopup.close()
@@ -1872,5 +1922,7 @@ export class PageCheckOutComponent implements OnInit {
         
 
     }
-
+    closePopup(){
+        $.magnificPopup.close()
+    }
 }

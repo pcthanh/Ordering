@@ -46,7 +46,7 @@
                                 <div class="text">Your referral link.<br><a ngxClipboard [cbContent] ="this.getInitialParams.CustomerInfo[0].ReferralURL"class="link-refer">{{this.getInitialParams.CustomerInfo[0].ReferralURL}}</a></div>
 
                                 <div class="or"><span>OR</span></div>
-                                <a href="#" class="btn-main btn-refer"><span>SHARE</span></a>
+                                <!-- <a href="#" class="btn-main btn-refer"><span>SHARE</span></a> -->
                                 <a style="color: #ffffff" (click)="copyToClipboard(this.getInitialParams.CustomerInfo[0].ReferralURL)" class="btn-main btn-refer"><span>{{textCopy}}</span></a>
                             </div>
                         </div>
