@@ -35,6 +35,7 @@ import { GetInitialParams } from "../models/GetInitialParams";
 import { GetInitParamRequest } from "../models-request/get-init-param-request";
 import { RequestNull } from "../models-request/request-null";
 import { GetDeliveryAddress } from "../models/GetDeliveryAddress";
+import { OutletInfoModel } from "../models/OutletInfo";
 declare var $: any
 const ORDER_DELIVERY = "DELIVERY"
 const ORDER_PICKUP = "PICKUP";
@@ -96,6 +97,7 @@ export class HeaderGof3rComponent implements OnInit {
     showDetail:boolean=true;
     routerThisPage:boolean=true;
     isSelectNewAddress:boolean;
+    outletInfo: OutletInfoModel;
     constructor(private _route:Router,private _gof3rModule:Gof3rModule,private _pickupService: PickupService, private _gof3rUtil: Gof3rUtil, private _instanceService: EventSubscribeService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private _homeservice: HomeService) {
         this.addressList = new AddressListModel();
         this.signUp = new SingUpModel();
@@ -113,8 +115,18 @@ export class HeaderGof3rComponent implements OnInit {
                 this.showDetail=false;
                 this.routerThisPage=false;
             }
+            if(data==="LoadTimePickup"){
+                if (localStorage.getItem("ot") != null) {
+                    this.outletInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("ot")));
+                    this.loadDateDelivery(new Date())
+                }
+            }
             
         })
+        if (localStorage.getItem("ot") != null) {
+            this.outletInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("ot")));
+            
+        }
         if (localStorage.getItem("orderType") != null) {
 
             this.orderType = localStorage.getItem("orderType");
@@ -148,10 +160,12 @@ export class HeaderGof3rComponent implements OnInit {
 
     ngOnInit() {
         this.searchControl = new FormControl();
+        
         this.checkLoginUser();
         this.GetCurrentSystemTime()
         this.loadTimesDelivery(true,this.currentDate);
-        this.loadTimesDeliveryPickup(true,this.currentDate)
+        //this.loadTimesDeliveryPickup(true,this.currentDate)
+        //this.createTimesPickup(this.DateDeliveryList.DateList[0].arraydate[0].StartTime,this.DateDeliveryList.DateList[0].arraydate[0].EndTime,this.DateDeliveryList.DateList[0].arraydate[0].isToday,this.DateDeliveryList.DateList[0].arraydate[0].DateTtr)
         //this.checkUserLoginChangeAddress()
         this.mapsAPILoader.load().then(() => {
             let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
@@ -887,29 +901,46 @@ export class HeaderGof3rComponent implements OnInit {
         let arrayDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
         let _date = new Date();
-        
-        for (let i = 0; i <= 6; i++) {
+        for(let i = 0; i< this.outletInfo.OutletInfo[0].PickupTimeInfo.length; i++){
             let itemDate = new DeliveryItemModel();
-            if (i == 0) {
-                _date = this.addDays(_date, 0);
+            itemDate.DateTtr = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom,"DD/MM/YYYY HH:mm:SS").format("DD/MM/YYYY");
+            itemDate.DayStrs=arrayDays[moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom,"DD/MM/YYYY HH:mm:SS").days()];
+            itemDate.DayStr1 = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom,"DD/MM/YYYY HH:mm:SS").dates() +'';
+            itemDate.StartTime=moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom,"DD/MM/YYYY HH:mm:SS").format("HH:mm:SS");
+            itemDate.EndTime=moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingTo,"DD/MM/YYYY HH:mm:SS").format("HH:mm:SS");
+            // if (moment_(itemDate.DateTtr).date() === moment_(currentDate).date()) {
+            //     itemDate.isToday = true;
+            // }
+            if(i===0){
+                itemDate.isToday=true
             }
-            else
-                _date = this.addDays(_date, 1);
-           
-                itemDate.DateTtr = moment_(_date).format("DD/MM/YYYY");
-                itemDate.DayStrs = arrayDays[moment_(_date).days()];
-                itemDate.DayStr1 = moment_(_date).date() + '';
-                if (moment_(_date).date() == moment_(currentDate).date()) {
-                    itemDate.isToday = true;
-                }
-                this.arrayDateDelivery1.arraydate.push(itemDate);
-                this.arrayDateDelivery1.Month = moment_(_date).format("MMM")
-
-           
+            this.arrayDateDelivery1.arraydate.push(itemDate);
 
         }
         this.DateDeliveryList.DateList.push(this.arrayDateDelivery1)
-        this.DateDeliveryList.DateList.push(this.arrayDateDelivery2)
+        console.log("LoadPickupTime:"+ JSON.stringify(this.DateDeliveryList.DateList))
+        // for (let i = 0; i <= 6; i++) {
+        //     let itemDate = new DeliveryItemModel();
+        //     if (i == 0) {
+        //         _date = this.addDays(_date, 0);
+        //     }
+        //     else
+        //         _date = this.addDays(_date, 1);
+           
+        //         itemDate.DateTtr = moment_(_date).format("DD/MM/YYYY");
+        //         itemDate.DayStrs = arrayDays[moment_(_date).days()];
+        //         itemDate.DayStr1 = moment_(_date).date() + '';
+        //         if (moment_(_date).date() == moment_(currentDate).date()) {
+        //             itemDate.isToday = true;
+        //         }
+        //         this.arrayDateDelivery1.arraydate.push(itemDate);
+        //         this.arrayDateDelivery1.Month = moment_(_date).format("MMM")
+
+           
+
+        // }
+        // this.DateDeliveryList.DateList.push(this.arrayDateDelivery1)
+        // this.DateDeliveryList.DateList.push(this.arrayDateDelivery2)
         this.haveDateList=true
         
 
@@ -940,8 +971,9 @@ export class HeaderGof3rComponent implements OnInit {
     }
     createTimesPickup(startTimes: any, endTimes: any, isToday: boolean,date:string) {
         //let nowDate = this.getCurrentTime.CurrentTime;
+        console.log(startTimes+"-"+ endTimes)
         let nowDateTemp = moment_(startTimes, "HH:mm:ss");
-        let endDateTemp = moment_(END_TIME_LIMIT, "HH:mm:ss")
+        let endDateTemp = moment_(endTimes, "HH:mm:ss")
         
         while (nowDateTemp.isBefore(endDateTemp)) {
             
@@ -1027,6 +1059,40 @@ export class HeaderGof3rComponent implements OnInit {
                 this.createTimesPickup(startTime, END_TIME_LIMIT, isToday,dateInput)
             }
         })
+
+    }
+    loadTimesPickup(isToday: boolean,dateInput:string, StartTime:string,endTime:string) {
+        this.timesPickup= [];
+        console.log("heheh")
+        console.log("isToday:"+ isToday)
+        this.createTimesPickup(StartTime, endTime, isToday,dateInput)
+        // this.getCurrentTime = new GetCurrentSystemTimeModel();
+        // let common_data = new CommonDataRequest();
+        // var _location = localStorage.getItem("la");
+        // common_data.Location = _location
+        // common_data.ServiceName = "GetCurrentSystemTime";
+        // let common_data_json = JSON.stringify(common_data);
+
+        // let dataRequest = new GetCurrentSystemTimeRequest();
+        // let dataRequestJson = JSON.stringify(dataRequest);
+        // this._pickupService.GetCurrentSystemTime(common_data_json, dataRequestJson).then(data => {
+        //     let d = new Date(+data.CurrentTimeMillis);
+        //     let startTime = "08:00:00"
+        //      let date = moment_(d).format("DD/MM/YYYY")
+            
+        //     if (isToday){
+        //         this.createTimesPickup(startTime, END_TIME_LIMIT, isToday,date)
+        //     }
+        //     else {
+        //         let [h, m, s] = START_TIME_LIMINT.split(":");
+        //         let _date = new Date();
+        //         _date.setHours(parseInt(h));
+        //         _date.setMinutes(parseInt(m));
+        //         _date.setSeconds(parseInt(s));
+        //         let startTime = moment_(_date).format("HH:mm:ss")
+        //         this.createTimesPickup(startTime, END_TIME_LIMIT, isToday,dateInput)
+        //     }
+        // })
 
     }
     selectTime(value:string,label:string){
@@ -1244,5 +1310,10 @@ move() {
     closeCountry(){
          this.signUp.PhoneCode=this.selectCountryCode;
         $.magnificPopup.close()
+    }
+    loadTimePickupFirst(){
+        console.log("first")
+        this.createTimesPickup(this.DateDeliveryList.DateList[0].arraydate[0].StartTime,this.DateDeliveryList.DateList[0].arraydate[0].EndTime,this.DateDeliveryList.DateList[0].arraydate[0].isToday,this.DateDeliveryList.DateList[0].arraydate[0].DateTtr)
+
     }
 }

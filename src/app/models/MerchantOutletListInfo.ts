@@ -2,6 +2,7 @@ import { SubCategoryListModel } from "../models/SubCategoryList";
 import { DepartmentCategoryModel } from "../models/DepartmentCategory";
 import { RecentOrderInfoModel } from "../models/RecentOrderInfo";
 import { OffersListModel } from "../models/OffersList";
+import { PickupTime } from "../models/PickupTime";
 export class MerchantOutletListInfoModel{
     RowNum:number;
     MerchantId:string;
@@ -23,6 +24,7 @@ export class MerchantOutletListInfoModel{
     SubCategoryStr:string;
     DepartmentCategoryList:DepartmentCategoryModel[];
     RecentOrderInfo:RecentOrderInfoModel[];
+    PickupTimeInfo:PickupTime [] =[]
     OffersList:OffersListModel[]
     Address:string
     ResultCode:string="";

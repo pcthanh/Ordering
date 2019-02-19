@@ -382,7 +382,7 @@
                         <div class="when-top user-account" [hidden]="!this.showDetail">
                             <div class="account">When</div>
                             <div class="login-wrap">
-                                <div class="login"><span *ngIf="showWhen">{{whenStr}}</span></div>
+                                <div class="login"(click)="loadTimePickupFirst()" ><span *ngIf="showWhen">{{whenStr}}</span></div>
                                 
                                 <div class="login-dropdown" *ngIf="haveDateList && selectOrderTypeDeivery">
                                     <div class="order-time-wrap">
@@ -413,14 +413,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--start select order time for pickup-->
+                                <!--start select order time for pickup for web-->
                                   <div class="login-dropdown" *ngIf="haveDateList && selectOrderTypePickup">
                                     <div class="order-time-wrap">
                                         <div class="title">Select Order Time Pickup</div>
                                         <div class="date-select-wrap">
                                           
                                                 <div class="date-select" *ngFor="let item of this.DateDeliveryList.DateList[0].arraydate;let i = index">
-                                                <input type="radio" id="date2-{{i}}" name="date-select"[checked]=item.isToday (click)="loadTimesDeliveryPickup(item.isToday,item.DateTtr)">
+                                                <input type="radio" id="date2-{{i}}" name="date-select"[checked]=item.isToday (click)="loadTimesPickup(item.isToday,item.DateTtr,item.StartTime,item.EndTime)">
                                                 <label for="date2-{{i}}">
                                                     <span>{{item.DayStrs|uppercase}}</span>
                                                     <span class="num">{{item.DayStr1}}</span>

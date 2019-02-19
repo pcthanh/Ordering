@@ -236,6 +236,7 @@ export class PageOrderComponent implements OnInit {
             this.haveDataOutlet = true
             this.loadCart();
             this.GetProductList("", "");
+            
 
         })
 
@@ -292,6 +293,7 @@ export class PageOrderComponent implements OnInit {
 
                 this.blockUI.stop()
                 this.goToOrder(this.OutletId)
+                this._instanceService.sendCustomEvent("LoadTimePickup")
             }
 
         })
@@ -1050,7 +1052,7 @@ export class PageOrderComponent implements OnInit {
 
                 // this.orderMain.PickupAt = this.outletInfo.OutletInfo[0].Address
                 // this.orderMain.MerchantId = this.outletInfo.OutletInfo[0].MerchantId;
-                if (this.cart.Cart.length > 0) {
+                if (this.cartNew.cartNew.length > 0) {
                     //this.orderMain.ArrayItem = this.cart.Cart;
                     if (this.cart.OrderType === ORDER_PICKUP) {
                         // this.isPickup = true;
