@@ -47,9 +47,10 @@
                                         <div class="acc-input">
                                             <label for="acc-birth"><span>Birthday (DD/MM/YYYY)</span></label>
                                             <!--<input type="text" [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Dob" id="acc-birth">-->
-                                            <p-calendar (textChange)="changeBOD()" [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Dob" dateFormat="dd/mm/yy" ></p-calendar>
+                                            <!-- <p-calendar (textChange)="changeBOD()" [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Dob" dateFormat="dd/mm/yy" ></p-calendar> -->
                                             <!-- <p-calendar [(ngModel)]="date6" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" dateFormat="dd/mm/yy"></p-calendar> -->
                                             <!-- <input type="text" mask ="00/00/0000" [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Dob" id="acc-birth"> -->
+                                            <input id="date" [(ngModel)]="this.customerInfoMain.CustomerInfo[0].Dob" type="text">
                                         </div>
                                         <div class="acc-radio">
                                             <div class="title">Gender</div>

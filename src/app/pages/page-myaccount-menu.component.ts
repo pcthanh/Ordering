@@ -84,7 +84,9 @@ export class MyAccountMenuComponent implements OnInit {
         this.isHelp=false;
         this.isOrderHistoryPickup=false;
         this.instaneService.sendCustomEvent('');
+        
         this.route.navigateByUrl("/account")
+        //window.location.href=("/account");
     }
     orderHistoryClick(){
         this.isMyProfile=false;

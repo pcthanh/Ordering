@@ -36,7 +36,7 @@
     <script src="assets/js/app.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript" src="https://demo2.2c2p.com/2C2PFrontEnd/SecurePayment/api/my2c2p.1.6.9.min.js"></script>
-
+    <script src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
 </head>
 
 <body>
@@ -45,6 +45,13 @@
 <script>
     $(document).ready(function () {
         $(this).scrollTop(0, 0);
+        $('#date').inputmask("datetime",{
+            mask: "1/2/y", 
+            placeholder: "dd/mm/yyyy", 
+            leapday: "-02-29", 
+            separator: "/", 
+            alias: "dd/mm/yyyy"
+          });
     });
     // jQuery(document).ready(function ($) {
     //   $('.form-map button').on('click', function (event) {

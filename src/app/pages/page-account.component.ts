@@ -22,12 +22,23 @@ export class AccountComponent implements OnInit {
     @BlockUI() blockUI: NgBlockUI;
     isChangeBod:boolean=false;
     mess:string=""
+    birthday:string=""
     constructor(private _pickupService:PickupService,private route:Router,private _instaneService:EventSubscribeService,private _gof3rUtil: Gof3rUtil) { 
         this.customerInfoMain= new CustomerInfoMainModel();
+        
     }
 
     ngOnInit() {
-        
+        setTimeout(()=>{
+            $('#date').inputmask("datetime",{
+                mask: "1/2/y", 
+                placeholder: "DD/MM/YYYY", 
+                leapday: "-02-29", 
+                separator: "/", 
+                alias: "DD/MM/YYYY"
+              });
+        },50)
+       
         this._instaneService.sendCustomEvent("MyProfile")
         this.checkLoginUser()
     }
@@ -35,6 +46,12 @@ export class AccountComponent implements OnInit {
     checkLoginUser() {
         if (localStorage.getItem("cus") != null) {
             this.customerInfoMain = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("cus")));
+            if(this.customerInfoMain.CustomerInfo[0].Gender ==='M'){
+                this.gender= "M"
+            }
+            else{
+                this.gender='F'
+            }
             this.isHaveDate=true;
            
         }
@@ -61,14 +78,16 @@ export class AccountComponent implements OnInit {
         request_data.CustomerId=this.customerInfoMain.CustomerInfo[0].CustomerId+''
         request_data.CustomerName=this.customerInfoMain.CustomerInfo[0].CustomerName
         request_data.DisabledMerchantCategoryList=""
-        
-        if(this.customerInfoMain.CustomerInfo[0].Dob.toString().indexOf("/")>-1){
-            request_data.Dob=this.customerInfoMain.CustomerInfo[0].Dob.toString();
+       
+        let birthday =$("#date").val();
+       
+        if(birthday){
+            request_data.Dob= birthday
         }
         else{
-            let d:Date =this.customerInfoMain.CustomerInfo[0].Dob;
+            this.blockUI.stop()
+            return;
             
-            request_data.Dob= moment_(d).format("DD/MM/YYYY");
         }
         
         request_data.Email=this.customerInfoMain.CustomerInfo[0].Email
