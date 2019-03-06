@@ -5,7 +5,7 @@ export class RegisterDeviceRequest
     AppId:string="1.0";
     ServiceName:string="RegisterCustomerDevice";
     Lang:string="en";
-    DeviceOS:string="9999";
+    DeviceOS:string="WEB";
     Location:string="";
     datetime:string="";
     KEY:string="120000001200000012000000"

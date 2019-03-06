@@ -901,6 +901,7 @@ export class HeaderGof3rComponent implements OnInit {
         let arrayDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
         let _date = new Date();
+        
         for(let i = 0; i< this.outletInfo.OutletInfo[0].PickupTimeInfo.length; i++){
             let itemDate = new DeliveryItemModel();
             itemDate.DateTtr = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom,"DD/MM/YYYY HH:mm:SS").format("DD/MM/YYYY");

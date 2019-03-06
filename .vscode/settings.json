@@ -1,0 +1,5 @@
+{
+    "appService.showBuildDuringDeployPrompt": false,
+    "appService.defaultWebAppToDeploy": "/subscriptions/34c1043e-eb84-4d0c-ad50-abbd9e60eca6/resourceGroups/appsvc_rg_linux_centralus/providers/Microsoft.Web/sites/GOF3R",
+    "appService.deploySubpath": ""
+}

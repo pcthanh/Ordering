@@ -4,6 +4,6 @@ export class CommonDataRequest{
     ServiceName:string;
     Lang:string="en";
     Location:string;
-    DeviceOS:string="9999"
+    DeviceOS:string="WEB"
     DeviceToken:string="9999";
 }
