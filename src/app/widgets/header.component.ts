@@ -252,12 +252,18 @@ export class HeaderGof3rComponent implements OnInit {
                             count= count+1;
                             this.listDeliveryAddress.DeliveryAddressList[i].isCheck=true;
                             this.listDeliveryAddressShow.DeliveryAddressList[0]=this.listDeliveryAddress.DeliveryAddressList[i]
+                            let [lattemp,longtemp]=this.listDeliveryAddress.DeliveryAddressList[i].GeoLocation.split(",");
+                            this.lat=parseFloat(lattemp);
+                            this.lng=parseFloat(longtemp);
                         }
                     }
                     if(count==0){
                         if(this.listDeliveryAddress.DeliveryAddressList.length>0){
                             this.listDeliveryAddress.DeliveryAddressList[0].isCheck=true;
                         this.listDeliveryAddressShow.DeliveryAddressList[0]=this.listDeliveryAddress.DeliveryAddressList[0]
+                        let [lattemp,longtemp]=this.listDeliveryAddress.DeliveryAddressList[0].GeoLocation.split(",");
+                        this.lat=parseFloat(lattemp);
+                        this.lng=parseFloat(longtemp);
                         localStorage.setItem("addressDelivery",JSON.stringify(this.listDeliveryAddressShow.DeliveryAddressList[0]))
                         }
                     }
@@ -307,7 +313,8 @@ export class HeaderGof3rComponent implements OnInit {
                     item.StreetAddress = item.lat = this.addressList.AddressListInfo[i].StreetAddress
                     item.Name = this.addressList.AddressListInfo[i].Name
                     this.addressShowDiplay.AddressListInfo.push(item)
-
+                    this.lat = parseFloat(this.addressList.AddressListInfo[i].lat)
+                    this.lng= parseFloat(this.addressList.AddressListInfo[i].long)
                     this.isShowAdd = true
                     
                 }

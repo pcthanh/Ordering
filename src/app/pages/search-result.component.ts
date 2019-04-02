@@ -276,6 +276,7 @@ export class SearchResultComponent implements OnInit {
             }
             else{
                 this.blockUI.stop();
+                this.haveData=true;
                 this.showPopupddAllOutletError()
             }
             this.getTopOffers()
@@ -333,12 +334,19 @@ export class SearchResultComponent implements OnInit {
         this._pickupService.GetTopOffers(comomDataJson, requestDataJson).then(data => {
             this.OfferList = data;
             console.log("topOffer:"+ JSON.stringify(this.OfferList))
-            if (this.OfferList.OffersList.length > 0) {
-                this.haveOffer = true
+            if(this.OfferList.ResultCode==="000"){
+                if (this.OfferList.OffersList.length > 0) {
+                    this.haveOffer = true
+                }
+                else {
+                    this.haveOffer = false
+                }
             }
-            else {
-                this.haveOffer = false
+            else{
+                
+                this.showPopupddAllOutletError()
             }
+            
 
             
             this.blockUI.stop()

@@ -11,7 +11,7 @@ export class GetInitParamRequest{
     // Location:string="";
     // Lang:string="en";
     // DeviceNumber:string="Bm9qK4ZgQ1MosW5yv92wp";
-    // DeviceOS:string="iOS";
+    DeviceOS:string="WEB";
     // AppId:string="3.5";
     // datetime:string="2018.02.21 16:04:19"
       

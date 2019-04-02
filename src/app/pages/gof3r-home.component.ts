@@ -347,6 +347,7 @@ export class Gof3rHomeComponent implements OnInit {
         this._homeservice.registerDevice(jsonRequest).then(data => {
 
             this.registerDevice = (data);
+            console.log("regis:"+ JSON.stringify(this.registerDevice))
             localStorage.setItem('KEK', (this.registerDevice.KEKWorkingKey));
             localStorage.setItem('WK', (this.registerDevice.APIWorkingKey));
 
@@ -377,13 +378,15 @@ export class Gof3rHomeComponent implements OnInit {
 
         var requestData = new RequestNull();
         var jsonCommon = JSON.stringify(comomrequest);
+        console.log("common:"+ jsonCommon);
 
         var jsonRequest = JSON.stringify(requestData);
 
+        console.log("request:"+ jsonRequest)
         this._homeservice.getServiceHome(jsonCommon, jsonRequest).then(data => {
 
             this.getInitialParams = data;
-
+            console.log("init:"+ JSON.stringify(this.getInitialParams))
             for (let i = 0; i < this.getInitialParams.CountryInfo.length; i++) {
 
                 if (this.getInitialParams.CountryInfo[i].CountryCode === "65") {
