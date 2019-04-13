@@ -951,7 +951,6 @@ export class PageOrderComponent implements OnInit {
 
     }
     checkFoodCenter(foodCenterId: string) {
-        console.log("foodId:" + foodCenterId)
         let flagFoodCenter: boolean = false;
         if (foodCenterId) {
             for (let i = 0; i < this.cartNew.cartNew.length; i++) {
@@ -961,7 +960,13 @@ export class PageOrderComponent implements OnInit {
             }
         }
         else {
-            flagFoodCenter = false;
+            if(this.cartNew.cartNew[0].OuteletID==this.outletInfo.OutletInfo[0].MerchantOutletId){
+                flagFoodCenter = true;
+            }
+            else{
+                flagFoodCenter = false;
+            }
+            
         }
         return flagFoodCenter;
     }
