@@ -187,6 +187,7 @@
                             <div *ngIf="selectedCard" class="payment selected"><img src="{{this.selectMethod.CardTypeIdImg}}" alt="" width="39" height="28"><span> {{this.selectMethod.MaskingCardNumber}}</span>                                <span (click)="deleteMethod('PO_CARD')" class="close-gof3r"></span></div>
                             <div *ngIf="selectPoint" class="payment selected"><img src="{{this.selectMethod.CardTypeIdImg}}" alt="" width="39" height="28"><span> {{this.selectMethod.CardTypeValue}} {{this.selectMethod.Point}} PTS (~{{this.selectMethod.CashEquivalenceDisplay}})</span>                                <span (click)="deleteMethod('PO_POINT')" class="close-gof3r"></span></div>
                             <div *ngIf="selectWalletDsilay" class="payment selected"><img src="{{this.selectMethod.CardTypeIdImg}}" alt="" width="39" height="28"><span> {{this.selectMethod.CardTypeValue}}</span>                                <span (click)="deleteMethod('PO_WALLET')" class="close-gof3r"></span></div>
+                            <div *ngIf="selectedNetPay" class="payment selected"><img src="{{this.selectMethod.CardTypeIdImg}}" alt="" width="39" height="28"><span> {{this.selectMethod.MaskingCardNumber}}</span>                                <span (click)="deleteMethod('PO_NETS')" class="close-gof3r"></span></div>
                             <div *ngIf="showMethonBegin" class="payment"><img src="assets/images/ico-payment.png" alt=""><span>Select Payment Method</span>
                                 <div (click)="showPopup()"
                                     class="plus"></div>
@@ -272,6 +273,18 @@
                         </div>
 
                     </div>
+                    <!-- <div class="payment-otpion-wrap">
+                        <div class="title">NETPays</div>
+                        <div class="payment-item" >
+                            <input type="radio" (click)="selectPaymentNetPays('PO_NETS')" id="member-net" name="payment">
+                            <label for="member-net">
+                                                <span class="img"><img src="assets/images/eNETS_DD.png" alt="" width="63" height="50"></span>
+                                                
+                                                
+                                            </label>
+                        </div>
+
+                    </div> -->
                 </div>
                 <div class="btn-selection-wrap">
                     <button (click)="confirmSelectPayment()" class="btn-main btn-selection"><span>Confirm</span></button>
@@ -440,4 +453,9 @@
 <block-ui>
     <!-- Your app markup here -->
 </block-ui>
+<div id="netPays"  class="payment-section">
+    <fieldset>
+      <div id="ajaxResponse"></div>
+    </fieldset>
+  </div>
 <gof3r-footer></gof3r-footer>

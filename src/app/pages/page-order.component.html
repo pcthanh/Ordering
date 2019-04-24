@@ -102,7 +102,7 @@
                                                             <div class="text">{{itemP.Description}}.</div>
 
                                                         </div>-->
-                                                        <div class="text-info-wrap display-flex chicken-beef" (click)="showProductDetail(itemP.Id)">
+                                                        <div class="text-info-wrap display-flex chicken-beef" [ngClass]="{soldOut: itemP.IsSoldOut=='Y'}" (click)="showProductDetail(itemP.Id,itemP.IsSoldOut)">
                                                             <div *ngIf="itemP.HaveImage" class="image-info" [ngStyle]="{'background-image': 'url('+itemP.OriginalImage+')'}">
 
                                                             </div>
@@ -117,6 +117,9 @@
                                                                 </div>
                                                                 <div class="item-rice">
                                                                     {{itemP.PriceDisplay}}
+                                                                </div>
+                                                                <div class="item-sold-out" *ngIf="itemP.IsSoldOut=='Y'">
+                                                                    Sold out
                                                                 </div>
                                                             </div>
                                                         </div>

@@ -34,4 +34,7 @@ export class OtherParamsModel{
     AutoRefreshOutletListInterval:string;
     FoodPickupTimeCalendar:string;
     FoodDeliveryTimeCalendar:string;
+    NetsApiKey:string=""
+    NetsSecretKey:string=""
+    NetsMerchantId:string=""
 }

@@ -9,6 +9,7 @@ import { GetInTouchNumberModel } from "../models/GetInTouchNumber";
 import { PaymentGatewayInfoModel } from "../models/PaymentGatewayInfo";
 import { FeeCollectionInfoModel } from "../models/FeeCollectionInfo";
 import { OtherParamsModel } from "../models/OtherParams";
+import { OtherParam } from "../models/OtherParam";
 export class GetInitialParams{
     CustomerInfo:any=[];
     UserAppMenu:any=[];

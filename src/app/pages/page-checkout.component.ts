@@ -46,10 +46,13 @@ import { AddNewCardModel } from "../models-request/add-new-card";
 import { SelectItem } from 'primeng/primeng';
 import { CartOrderNew } from "../models/CartOrderNew";
 import * as moment_ from 'moment';
+import { NetPaysRequest } from "../models-request/netpays-request";
+import { sendRequest } from 'selenium-webdriver/http';
 const ORDER_DELIVERY: string = "DELIVERY"
 const ORDER_PICKUP: string = "PICKUP"
 declare var $: any;
 declare var My2c2p: any;
+declare function sendPayLoad(txnReq:string,hmac:string,keyId:string):any;
 @Component({
     selector: 'page-checkout',
     templateUrl: 'page-checkout.component.html'
@@ -104,6 +107,7 @@ export class PageCheckOutComponent implements OnInit {
     medthodPayment: string = ""
     selectMethod: SelectMethodPayment;
     selectedCard: boolean = false;
+    selectedNetPay:boolean=false;
     loadPromoCodeComplete: boolean = false;
     selectPromoCodeModel: SelectPromoCode;
     promoCodeMain: PromoCodeMainModel;
@@ -738,59 +742,63 @@ export class PageCheckOutComponent implements OnInit {
 
         
         if (this.PO) {
-            if (this.cartNew.cartNew[0].FoodCenterID && this.flagShowPopupFoodCenter && this.OrderType === ORDER_DELIVERY && this.cartNew.cartNew.length < this.cartNew.cartNew[0].MaxOutletInCart) {
+            if(this.PO==="PO_NETS"){
+               // this.blockUI.start('processing ...'); // Start blocking
+                this.netPaysRequest() 
                 this.blockUI.stop()
-                this.showPopupFoodCenter()
-            } else {
-                this.blockUI.start('processing ...'); // Start blocking
-                let common_data = new CommonDataRequest();
-                var _location = localStorage.getItem("la");
-                common_data.Location = _location
-                common_data.ServiceName = "AddCardTransaction";
-                let common_data_json = JSON.stringify(common_data);
-
-                let data_request = new AddTransactionRequestModel();
-                data_request.CurrencyCode = this.orderMain.CurrencyCode
-                data_request.Amount = this._gof3rModule.ParseTo12(this.orderMain.Total)
-                data_request.MaskedPan = this.orderMain.MaskingCardNumber
-                data_request.InvoiceNumber = this._gof3rModule.getRandom(12);
-                let date = new Date()
-                data_request.TransactionDate = moment_(date).format("DD/MM/YYYY HH:mm:ss")
-                let data_request_json = JSON.stringify(data_request)
-                console.log("PO:" + this.PO)
-                if (this.PO === "PO_CARD") {
-                    this._pickupService.AddCardTransaction(common_data_json, data_request_json).then(data => {
-                        console.log("AddCardTransaction:" + JSON.stringify(data))
-                        if (data.ResultCode === "000") {
-                            localStorage.setItem('addcard', JSON.stringify(data_request))
-
-                            this.makePayment()
-                        }
-                        else {
-
-                            this.checkError(data.ResultCode, data.ResultDesc, data.ServiceName);
-                        }
-
-                    })
-                }
-                if (this.PO === "PO_POINT" || this.PO === "PO_WALLET") {
-                    this.placeOrderRequest("", "", "")
+                
+                setTimeout(()=>{
+                    $('html, body').animate({
+                        scrollTop: $(".payment-section").offset().top
+                    }, 1000);
+                },3000)
+            }
+            else{
+                if (this.cartNew.cartNew[0].FoodCenterID && this.flagShowPopupFoodCenter && this.OrderType === ORDER_DELIVERY && this.cartNew.cartNew.length < this.cartNew.cartNew[0].MaxOutletInCart) {
+                    this.blockUI.stop()
+                    this.showPopupFoodCenter()
+                } else {
+                    this.blockUI.start('processing ...'); // Start blocking
+                    let common_data = new CommonDataRequest();
+                    var _location = localStorage.getItem("la");
+                    common_data.Location = _location
+                    common_data.ServiceName = "AddCardTransaction";
+                    let common_data_json = JSON.stringify(common_data);
+    
+                    let data_request = new AddTransactionRequestModel();
+                    data_request.CurrencyCode = this.orderMain.CurrencyCode
+                    data_request.Amount = this._gof3rModule.ParseTo12(this.orderMain.Total)
+                    data_request.MaskedPan = this.orderMain.MaskingCardNumber
+                    data_request.InvoiceNumber = this._gof3rModule.getRandom(12);
+                    let date = new Date()
+                    data_request.TransactionDate = moment_(date).format("DD/MM/YYYY HH:mm:ss")
+                    let data_request_json = JSON.stringify(data_request)
+                    console.log("PO:" + this.PO)
+                    if (this.PO === "PO_CARD") {
+                        this._pickupService.AddCardTransaction(common_data_json, data_request_json).then(data => {
+                            console.log("AddCardTransaction:" + JSON.stringify(data))
+                            if (data.ResultCode === "000") {
+                                localStorage.setItem('addcard', JSON.stringify(data_request))
+    
+                                this.makePayment()
+                            }
+                            else {
+    
+                                this.checkError(data.ResultCode, data.ResultDesc, data.ServiceName);
+                            }
+    
+                        })
+                    }
+                    if (this.PO === "PO_POINT" || this.PO === "PO_WALLET") {
+                        this.placeOrderRequest("", "", "")
+                    }
                 }
             }
-
-
-
         }
         else {
             console.log("no select")
             this.checkError("", "Please select payment method", "");
         }
-
-
-
-
-
-
     }
     makePayment() {
         let common_data = new CommonDataRequest();
@@ -1122,6 +1130,13 @@ export class PageCheckOutComponent implements OnInit {
         this.selectMethod.CardTypeValue = CardTypeIdValue + " " + (MaskedCardNumber.substring(0, 4))
         this.selectMethod.PaymentGatewayToken = PaymentGatewayToken
     }
+    selectPaymentNetPays(po_net:string)
+    {
+        this.PO=po_net;
+        this.selectMethod.Method=po_net;
+    }
+
+    
     confirmSelectPayment() {
         if (this.selectMethod.Method === "CARD") {
 
@@ -1181,8 +1196,18 @@ export class PageCheckOutComponent implements OnInit {
             this.selectWalletDsilay=true;
             $.magnificPopup.close()
         }
-        
-
+        if(this.selectMethod.Method==="PO_NETS")
+        {
+            this.orderMain.PaymentOptions=this.selectMethod.Method;
+            this.orderMain.MaskingCardNumber="NETSPay"
+            this.orderMain.CardTypeValue="NETSPay"
+            this.selectedNetPay= true;
+            this.selectPoint = false;
+            this.selectedCard =false
+            this.showMethonBegin=false;
+            this.selectMethod.CardTypeIdImg='assets/images/eNETS_DD.png';
+            $.magnificPopup.close()
+        }
 
     }
     showPopup() {
@@ -1732,6 +1757,9 @@ export class PageCheckOutComponent implements OnInit {
         if(method==='PO_WALLET'){
             this.selectWalletDsilay=false
         }
+        if(method==="PO_NETS"){
+            this.selectedNetPay=false;
+        }
         this.showMethonBegin=true;
         this.orderMain.MaskingCardNumber = ""
         this.orderMain.CardToken = ""
@@ -1789,9 +1817,15 @@ export class PageCheckOutComponent implements OnInit {
 
     }
     payNow() {
-        this.flagShowPopupFoodCenter = false;
-        $.magnificPopup.close()
-        this.placeOrder();
+        if(this.selectMethod.Method==="PO_NETS"){
+            this.flagShowPopupFoodCenter = false;
+            $.magnificPopup.close()
+        }else{
+            this.flagShowPopupFoodCenter = false;
+            $.magnificPopup.close()
+            this.placeOrder();
+        }
+        
 
     }
     goToFoodCenter() {
@@ -1924,5 +1958,48 @@ export class PageCheckOutComponent implements OnInit {
     }
     closePopup(){
         $.magnificPopup.close()
+    }
+    netPaysRequest(){
+        let net_request = new NetPaysRequest();
+        net_request.txnAmount="10"
+        let date = new Date()
+        net_request.merchantTxnRef= moment_(date).format("YYYYMMDD HH:mm:ss")
+        net_request.b2sTxnEndURL=""
+        net_request.s2sTxnEndURL="https://webhook.site/3c1aa9ec-32a3-43ec-b801-caf1302b109b"
+        net_request.netsMid="UMID_877772003"
+        net_request.merchantTxnDtm=moment_(date).format("YYYYMMDD HH:mm:ss.SSS")
+        net_request.submissionMode="B"
+        net_request.paymentType="SALE"
+        net_request.paymentMode=""
+        net_request.clientType="W"
+        net_request.currencyCode="SGD"
+        net_request.merchantTimeZone="+8:00"
+        net_request.netsMidIndicator="U"
+        net_request.ipAddress="127.0.0.1"
+        net_request.tid=""
+        net_request.b2sTxnEndURLParam=""
+        net_request.supMsg=""
+        net_request.s2sTxnEndURLParam=""
+        let json ={"ss":"1","msg": net_request};
+        let json_request = JSON.stringify(json) ;
+        let hmac =this._gof3rUtil.test(json_request +"38a4b473-0295-439d-92e1-ad26a8c60279");
+        console.log("hmac:"+ hmac)
+        let keyId="154eb31c-0f72-45bb-9249-84a1036fd1ca";
+        sendPayLoad(json_request,hmac,keyId);
+        
+    }
+    showPopupNetPays() {
+        var el = $('#netPays');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el,
+
+                    showCloseBtn: false,
+                },
+                type: 'inline',
+                modal: true,
+            });
+        }
     }
 }

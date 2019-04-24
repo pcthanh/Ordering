@@ -1140,7 +1140,7 @@ export class HeaderGof3rComponent implements OnInit {
 
         let requestData = new RequestRegisterOTP();
         requestData.Email = this.signUp.Email;
-        requestData.Mobile = this.signUp.PhoneNumber;
+        requestData.Mobile =this.signUp.PhoneCode+ this.signUp.PhoneNumber;
         let request_data_json = JSON.stringify(requestData);
         this._pickupService.RequestRegistrationOTP(common_data_json, request_data_json).then(data => {
             this.responseData = data;

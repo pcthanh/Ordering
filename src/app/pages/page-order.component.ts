@@ -275,6 +275,7 @@ export class PageOrderComponent implements OnInit {
 
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.productList = data;
+            console.log("productlist:"+ JSON.stringify(this.productList));
             this.haveData = true
             this.haveDepartment = this.productList.IsHavingDepartment
 
@@ -347,114 +348,120 @@ export class PageOrderComponent implements OnInit {
             productMain.TotalStr = this._util.formatCurrency(productMain.Total, "S$");
         }
     }
-    showProductDetail(productId: number) {
-        if (this.haveOuteFromMap == 1) {
-            this.blockUI.start("loading...")
-
-            this.productDetailParse = new ProductDetailParseModel();
-            let commonData = new CommonDataRequest();
-            let _location = localStorage.getItem('la');
-            commonData.Location = _location;
-            commonData.ServiceName = "GetProductDetail";
-            let commonDataJson = JSON.stringify(commonData);
-
-            let dataRequest = new GetProductDetailRequest();
-            dataRequest.ProductId = productId;
-            dataRequest.OrderType = this.OrderType
-            let requestDataJson = JSON.stringify(dataRequest);
-
-            this._pickupService.GetProductDetail(commonDataJson, requestDataJson).then(data => {
-
-                this.productDetail = data
-                console.log("detail:" + JSON.stringify(this.productDetail))
-                this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
-                if (data.ProductDetailInfo.length > 0) {
-
-                    this.productDetailParse.Id = this.productDetail.ProductDetailInfo[0].Id;
-                    this.productDetailParse.Name = this.productDetail.ProductDetailInfo[0].Name;
-                    this.productDetailParse.Description = this.productDetail.ProductDetailInfo[0].Description;
-                    this.productDetailParse.Image = data.ProductDetailInfo[0].Image;
-                    this.productDetailParse.Image1 = data.ProductDetailInfo[0].Image1;
-                    this.productDetailParse.Image2 = data.ProductDetailInfo[0].Image2;
-                    this.productDetailParse.IsSoldOut = data.ProductDetailInfo[0].IsSoldOut;
-                    this.productDetailParse.CurrencyCode = data.ProductDetailInfo[0].CurrencyCode;
-                    this.productDetailParse.Price = data.ProductDetailInfo[0].Price;
-                    this.productDetailParse.PriceDisplay = data.ProductDetailInfo[0].PriceDisplay;
-                    this.productDetailParse.PickupPrice = data.ProductDetailInfo[0].PickupPrice;
-                    this.productDetailParse.PickupPriceDisplay = data.ProductDetailInfo[0].PickupPriceDisplay;
-                    this.productDetailParse.DeliveryPrice = data.ProductDetailInfo[0].DeliveryPrice;
-                    this.productDetailParse.DeliveryPriceDisplay = data.ProductDetailInfo[0].DeliveryPriceDisplay;
-                    for (let i = 0; i < data.ProductDetailInfo[0].OptionList.length; i++) {
-                        let optionsLst = new OptionsDetailOfProductModel();
-                        optionsLst.MinOptionItemSelectionRequired = data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired
-                        optionsLst.MaxOptionItemSelectionRequired = data.ProductDetailInfo[0].OptionList[i].MaxOptionItemSelectionRequired
-                        optionsLst.OptionId = data.ProductDetailInfo[0].OptionList[i].OptionId;
-                        optionsLst.OptionName = data.ProductDetailInfo[0].OptionList[i].OptionName;
-                        for (let j = 0; j < data.ProductDetailInfo[0].OptionList[i].OptionItemList.length; j++) {
-                            let optionItem = new OptionItemListModel();
-                            optionItem.CurrencyCode = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].CurrencyCode
-                            optionItem.DeliveryPrice = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].DeliveryPrice;
-                            optionItem.DeliveryPriceDisplay = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].DeliveryPriceDisplay;
-                            optionItem.isCheck = false;
-                            optionItem.IsSoldOut = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].IsSoldOut;
-                            optionItem.MaxQuantityRequired = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].MaxQuantityRequired;
-                            optionItem.MinQuantityRequired = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].MinQuantityRequired;
-                            optionItem.OptionItemId = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].OptionItemId;
-                            optionItem.OptionItemName = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].OptionItemName;
-                            optionItem.PickupPrice = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].PickupPrice;
-                            optionItem.PickupPriceDisplay = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].PickupPriceDisplay;
-                            optionItem.Price = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].Price;
-                            optionItem.PriceDisplay = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].PriceDisplay;
-                            optionItem.Total = 0;
-                            if (data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].MinQuantityRequired == 1 && data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].MaxQuantityRequired == 1) {
-                                optionItem.isShowQty = false
-                            }
-
-
-                            optionsLst.OptionItemList.push(optionItem);
-                        }
-                        if (data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired == 1) {
-                            if (optionsLst.OptionItemList.length > 0) {//check OptionItemList have data
-                                optionsLst.OptionItemList[0].isCheck = true;
-                                optionsLst.OptionItemList[0].Qty = 1;
-
-                                optionsLst.OptionItemList[0].Total = (optionsLst.OptionItemList[0].Qty * (parseInt(optionsLst.OptionItemList[0].Price) / 100));
-
-
-                                optionsLst.OptionItemList[0].TotalStr = this._util.formatCurrency(optionsLst.OptionItemList[0].Total, "S$");
-                            }
-
-
-                        }
-                        if (data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired != 0 && data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired > 1) {
-                            if (data.ProductDetailInfo[0].OptionList[i].OptionItemList.length > 0) {//check OptionItemList have data
-                                for (let min = 0; min < data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired; min++) {
-                                    optionsLst.OptionItemList[min].isCheck = true;
-                                    optionsLst.OptionItemList[min].Qty = 1;
-
-                                    optionsLst.OptionItemList[0].Total = (optionsLst.OptionItemList[0].Qty * (parseInt(optionsLst.OptionItemList[0].Price) / 100));
-
-
-                                    optionsLst.OptionItemList[0].TotalStr = this._util.formatCurrency(optionsLst.OptionItemList[0].Total, "S$");
-                                    optionsLst.OptionItemList[min].isLock = true
+    showProductDetail(productId: number,soldOut:string) {
+        if(soldOut!=="Y"){
+            if (this.haveOuteFromMap == 1) {
+                this.blockUI.start("loading...")
+    
+                this.productDetailParse = new ProductDetailParseModel();
+                let commonData = new CommonDataRequest();
+                let _location = localStorage.getItem('la');
+                commonData.Location = _location;
+                commonData.ServiceName = "GetProductDetail";
+                let commonDataJson = JSON.stringify(commonData);
+    
+                let dataRequest = new GetProductDetailRequest();
+                dataRequest.ProductId = productId;
+                dataRequest.OrderType = this.OrderType
+                let requestDataJson = JSON.stringify(dataRequest);
+    
+                this._pickupService.GetProductDetail(commonDataJson, requestDataJson).then(data => {
+    
+                    this.productDetail = data
+                    console.log("detail:" + JSON.stringify(this.productDetail))
+                    this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
+                    if (data.ProductDetailInfo.length > 0) {
+    
+                        this.productDetailParse.Id = this.productDetail.ProductDetailInfo[0].Id;
+                        this.productDetailParse.Name = this.productDetail.ProductDetailInfo[0].Name;
+                        this.productDetailParse.Description = this.productDetail.ProductDetailInfo[0].Description;
+                        this.productDetailParse.Image = data.ProductDetailInfo[0].Image;
+                        this.productDetailParse.Image1 = data.ProductDetailInfo[0].Image1;
+                        this.productDetailParse.Image2 = data.ProductDetailInfo[0].Image2;
+                        this.productDetailParse.IsSoldOut = data.ProductDetailInfo[0].IsSoldOut;
+                        this.productDetailParse.CurrencyCode = data.ProductDetailInfo[0].CurrencyCode;
+                        this.productDetailParse.Price = data.ProductDetailInfo[0].Price;
+                        this.productDetailParse.PriceDisplay = data.ProductDetailInfo[0].PriceDisplay;
+                        this.productDetailParse.PickupPrice = data.ProductDetailInfo[0].PickupPrice;
+                        this.productDetailParse.PickupPriceDisplay = data.ProductDetailInfo[0].PickupPriceDisplay;
+                        this.productDetailParse.DeliveryPrice = data.ProductDetailInfo[0].DeliveryPrice;
+                        this.productDetailParse.DeliveryPriceDisplay = data.ProductDetailInfo[0].DeliveryPriceDisplay;
+                        for (let i = 0; i < data.ProductDetailInfo[0].OptionList.length; i++) {
+                            let optionsLst = new OptionsDetailOfProductModel();
+                            optionsLst.MinOptionItemSelectionRequired = data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired
+                            optionsLst.MaxOptionItemSelectionRequired = data.ProductDetailInfo[0].OptionList[i].MaxOptionItemSelectionRequired
+                            optionsLst.OptionId = data.ProductDetailInfo[0].OptionList[i].OptionId;
+                            optionsLst.OptionName = data.ProductDetailInfo[0].OptionList[i].OptionName;
+                            for (let j = 0; j < data.ProductDetailInfo[0].OptionList[i].OptionItemList.length; j++) {
+                                let optionItem = new OptionItemListModel();
+                                optionItem.CurrencyCode = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].CurrencyCode
+                                optionItem.DeliveryPrice = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].DeliveryPrice;
+                                optionItem.DeliveryPriceDisplay = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].DeliveryPriceDisplay;
+                                optionItem.isCheck = false;
+                                optionItem.IsSoldOut = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].IsSoldOut;
+                                optionItem.MaxQuantityRequired = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].MaxQuantityRequired;
+                                optionItem.MinQuantityRequired = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].MinQuantityRequired;
+                                optionItem.OptionItemId = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].OptionItemId;
+                                optionItem.OptionItemName = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].OptionItemName;
+                                optionItem.PickupPrice = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].PickupPrice;
+                                optionItem.PickupPriceDisplay = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].PickupPriceDisplay;
+                                optionItem.Price = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].Price;
+                                optionItem.PriceDisplay = data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].PriceDisplay;
+                                optionItem.Total = 0;
+                                if (data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].MinQuantityRequired == 1 && data.ProductDetailInfo[0].OptionList[i].OptionItemList[j].MaxQuantityRequired == 1) {
+                                    optionItem.isShowQty = false
                                 }
+    
+    
+                                optionsLst.OptionItemList.push(optionItem);
                             }
-
+                            if (data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired == 1) {
+                                if (optionsLst.OptionItemList.length > 0) {//check OptionItemList have data
+                                    optionsLst.OptionItemList[0].isCheck = true;
+                                    optionsLst.OptionItemList[0].Qty = 1;
+    
+                                    optionsLst.OptionItemList[0].Total = (optionsLst.OptionItemList[0].Qty * (parseInt(optionsLst.OptionItemList[0].Price) / 100));
+    
+    
+                                    optionsLst.OptionItemList[0].TotalStr = this._util.formatCurrency(optionsLst.OptionItemList[0].Total, "S$");
+                                }
+    
+    
+                            }
+                            if (data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired != 0 && data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired > 1) {
+                                if (data.ProductDetailInfo[0].OptionList[i].OptionItemList.length > 0) {//check OptionItemList have data
+                                    for (let min = 0; min < data.ProductDetailInfo[0].OptionList[i].MinOptionItemSelectionRequired; min++) {
+                                        optionsLst.OptionItemList[min].isCheck = true;
+                                        optionsLst.OptionItemList[min].Qty = 1;
+    
+                                        optionsLst.OptionItemList[0].Total = (optionsLst.OptionItemList[0].Qty * (parseInt(optionsLst.OptionItemList[0].Price) / 100));
+    
+    
+                                        optionsLst.OptionItemList[0].TotalStr = this._util.formatCurrency(optionsLst.OptionItemList[0].Total, "S$");
+                                        optionsLst.OptionItemList[min].isLock = true
+                                    }
+                                }
+    
+                            }
+                            this.productDetailParse.TagList = data.ProductDetailInfo[0].TagList;
+                            this.productDetailParse.OptionList.push(optionsLst)
+    
                         }
-                        this.productDetailParse.TagList = data.ProductDetailInfo[0].TagList;
-                        this.productDetailParse.OptionList.push(optionsLst)
-
+                        this.subTotalItem(false, this.productDetailParse);
+                        //this.initJquery();
+                        this.openPopup()
+                        this.blockUI.stop()
+    
+    
                     }
-                    this.subTotalItem(false, this.productDetailParse);
-                    //this.initJquery();
-                    this.openPopup()
-                    this.blockUI.stop()
-
-
-                }
-
-            })
+    
+                })
+            }
         }
+        else{
+            return;
+        }
+        
 
     }
     openPopup() {
