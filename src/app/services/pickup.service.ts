@@ -444,5 +444,11 @@ export class PickupService {
                   return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
             })
       }
+      AddAppTransaction(commonData: string, requestData: string) {
+            let urlAPI = this.util.urlAPI() + this.util.encryptKEK(commonData) + "/" + this.util.encryptAPIWorking(requestData);
+            return this.http.get(urlAPI).toPromise().then(data => {
+                  return Promise.resolve(JSON.parse(this.util.decryptByDESAPIWorking(data.text())));
+            })
+      }
 
 }

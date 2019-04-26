@@ -48,6 +48,7 @@ import { CartOrderNew } from "../models/CartOrderNew";
 import * as moment_ from 'moment';
 import { NetPaysRequest } from "../models-request/netpays-request";
 import { sendRequest } from 'selenium-webdriver/http';
+import { AddAppTransactionModel } from "../models/AddAppTransaction";
 const ORDER_DELIVERY: string = "DELIVERY"
 const ORDER_PICKUP: string = "PICKUP"
 declare var $: any;
@@ -142,6 +143,7 @@ export class PageCheckOutComponent implements OnInit {
     checkPromoCode:boolean=false;
     rebateProgramDesscription:string=""
     discountPromo:string=""
+    addAppTransaction :AddAppTransactionModel;
     styles = [{
         featureType: "landscape",
         elementType: "geometry.fill",
@@ -322,7 +324,7 @@ export class PageCheckOutComponent implements OnInit {
         this.verifycard = new VerifyCard()
         this.getInitParam = new GetInitialParams();
         this.cartNew = new CartOrderNew();
-
+        this.addAppTransaction = new AddAppTransactionModel()
         if (localStorage.getItem("ot") != null) {
             this.outletInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("ot")));
             this.outletInfo.OutletInfo[0].Rating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100));
@@ -744,14 +746,27 @@ export class PageCheckOutComponent implements OnInit {
         if (this.PO) {
             if(this.PO==="PO_NETS"){
                // this.blockUI.start('processing ...'); // Start blocking
-                this.netPaysRequest() 
-                this.blockUI.stop()
+               let common_data = new CommonDataRequest();
+               var _location = localStorage.getItem("la");
+               common_data.Location = _location
+               common_data.ServiceName = "AddAppTransaction";
+               let common_data_json = JSON.stringify(common_data);
+               let data_request={CustomerId:this.customerInfo.CustomerInfo[0].CustomerId,MerchantOutletId:this.outletInfo.OutletInfo[0].MerchantOutletId,AppName:'NETSPay',Amount:this._gof3rModule.ParseTo12(this.orderMain.Total),CurrencyCode:this.getInitParam.CurrencyInfo[0].CurrencyName}
+               let data_request_json = JSON.stringify(data_request);
+               this._pickupService.AddAppTransaction(common_data_json,data_request_json).then(data=>{
+                    this.addAppTransaction = data;
+                    if(this.addAppTransaction.ResultCode==="000"){
+                        this.netPaysRequest() 
+                        this.blockUI.stop()
+                        
+                        setTimeout(()=>{
+                            $('html, body').animate({
+                                scrollTop: $(".payment-section").offset().top
+                            }, 1000);
+                        },3000)
+                            }
+               })
                 
-                setTimeout(()=>{
-                    $('html, body').animate({
-                        scrollTop: $(".payment-section").offset().top
-                    }, 1000);
-                },3000)
             }
             else{
                 if (this.cartNew.cartNew[0].FoodCenterID && this.flagShowPopupFoodCenter && this.OrderType === ORDER_DELIVERY && this.cartNew.cartNew.length < this.cartNew.cartNew[0].MaxOutletInCart) {
@@ -1961,19 +1976,19 @@ export class PageCheckOutComponent implements OnInit {
     }
     netPaysRequest(){
         let net_request = new NetPaysRequest();
-        net_request.txnAmount="10"
+        net_request.txnAmount= (this.orderMain.Total*100).toString() //"10"
         let date = new Date()
-        net_request.merchantTxnRef= moment_(date).format("YYYYMMDD HH:mm:ss")
-        net_request.b2sTxnEndURL=""
-        net_request.s2sTxnEndURL="https://webhook.site/3c1aa9ec-32a3-43ec-b801-caf1302b109b"
-        net_request.netsMid="UMID_877772003"
-        net_request.merchantTxnDtm=moment_(date).format("YYYYMMDD HH:mm:ss.SSS")
+        net_request.merchantTxnRef=this.addAppTransaction.InvoiceNumber //moment_(date).format("YYYYMMDD HH:mm:ss")
+        //net_request.b2sTxnEndURL="#/check-out"
+        net_request.s2sTxnEndURL="http://171.248.158.185:8080/Carrot/CarrotService/s2sTxnEnd"
+        net_request.netsMid= this.getInitParam.OtherParams[0].NetsMerchantId//"UMID_877772003"
+        net_request.merchantTxnDtm= this.addAppTransaction.TransactionDate//moment_(date).format("YYYYMMDD HH:mm:ss.SSS")
         net_request.submissionMode="B"
         net_request.paymentType="SALE"
         net_request.paymentMode=""
         net_request.clientType="W"
-        net_request.currencyCode="SGD"
-        net_request.merchantTimeZone="+8:00"
+        net_request.currencyCode=this.getInitParam.CurrencyInfo[0].CurrencyName
+        net_request.merchantTimeZone=this.addAppTransaction.TimeZone
         net_request.netsMidIndicator="U"
         net_request.ipAddress="127.0.0.1"
         net_request.tid=""
@@ -1982,9 +1997,9 @@ export class PageCheckOutComponent implements OnInit {
         net_request.s2sTxnEndURLParam=""
         let json ={"ss":"1","msg": net_request};
         let json_request = JSON.stringify(json) ;
-        let hmac =this._gof3rUtil.test(json_request +"38a4b473-0295-439d-92e1-ad26a8c60279");
+        let hmac =this._gof3rUtil.hashBase64(json_request +this.getInitParam.OtherParams[0].NetsSecretKey)//"38a4b473-0295-439d-92e1-ad26a8c60279");
         console.log("hmac:"+ hmac)
-        let keyId="154eb31c-0f72-45bb-9249-84a1036fd1ca";
+        let keyId=this.getInitParam.OtherParams[0].NetsApiKey//"154eb31c-0f72-45bb-9249-84a1036fd1ca";
         sendPayLoad(json_request,hmac,keyId);
         
     }

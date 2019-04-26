@@ -247,12 +247,12 @@ export class Gof3rUtil {
         console.log("Output string is: " + outString);
         return outString;
     }
-    test(hh){
-        var utf8arr = CryptoJS.enc.Utf8.parse(hh);
-var hash = CryptoJS.SHA256(utf8arr);
-var base64 = CryptoJS.enc.Base64.stringify(hash);
-console.log(base64);
-return base64
+    hashBase64(str:string){
+        var utf8arr = CryptoJS.enc.Utf8.parse(str);
+        var hash = CryptoJS.SHA256(utf8arr);
+        var base64 = CryptoJS.enc.Base64.stringify(hash);
+        console.log(base64);
+        return base64
     }
 
 }
