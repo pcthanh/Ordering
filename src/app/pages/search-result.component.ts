@@ -243,14 +243,13 @@ export class SearchResultComponent implements OnInit {
             request_data.OrderFor = orderFor
         request_data.FoodCentreId=foodcenter;
         let request_data_json = JSON.stringify(request_data);
-        console.log("common_requet:"+ (common_data_json))
-        console.log("data_requet:"+ (request_data_json))
+        
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
 
             
             this.getAllOutletListV2 = data;
-            console.log("getallOutlet:"+ JSON.stringify(this.getAllOutletListV2))
+            
             if(this.getAllOutletListV2.ResultCode==="000"){
                 localStorage.setItem("promomes",this.getAllOutletListV2.ProductWebsitePromotionalMessage)
                 if (this.getAllOutletListV2.MerchantOutletListInfo.length > 0) {
@@ -304,7 +303,7 @@ export class SearchResultComponent implements OnInit {
             strDatime = date + " " + moment_(d.getTime()).format("HH:mm:ss")
             if(!this.foodCenter)
             {
-                console.log("than")
+                
                 this.GetAllOutletListV2("", "", strDatime, keyWord,"")
             }
             //this.orderMain.PickupTime = this.getCurrentTime.CurrentTime + " - " + this.getCurrentTime.CurrentTimeTo;
@@ -333,7 +332,7 @@ export class SearchResultComponent implements OnInit {
         
         this._pickupService.GetTopOffers(comomDataJson, requestDataJson).then(data => {
             this.OfferList = data;
-            console.log("topOffer:"+ JSON.stringify(this.OfferList))
+            
             if(this.OfferList.ResultCode==="000"){
                 if (this.OfferList.OffersList.length > 0) {
                     this.haveOffer = true

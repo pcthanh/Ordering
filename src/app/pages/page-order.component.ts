@@ -231,7 +231,7 @@ export class PageOrderComponent implements OnInit {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
             localStorage.setItem('ot', this._util.encryptParams(JSON.stringify(data)));//set outlet info
             this.outletInfo = data;
-            console.log("outletinfor:" + JSON.stringify(this.outletInfo))
+            
             this.outletInfo.OutletInfo[0].Rating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100));
             this.haveDataOutlet = true
             this.loadCart();
@@ -275,7 +275,7 @@ export class PageOrderComponent implements OnInit {
 
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.productList = data;
-            console.log("productlist:"+ JSON.stringify(this.productList));
+           
             this.haveData = true
             this.haveDepartment = this.productList.IsHavingDepartment
 
@@ -330,7 +330,7 @@ export class PageOrderComponent implements OnInit {
 
             }
         }
-        console.log("totalOfOptionItem:" + totalOfOptionItem)
+        
         if (isQtyItem) {
             if (productMain.Qty >= 1) {
 
@@ -368,7 +368,7 @@ export class PageOrderComponent implements OnInit {
                 this._pickupService.GetProductDetail(commonDataJson, requestDataJson).then(data => {
     
                     this.productDetail = data
-                    console.log("detail:" + JSON.stringify(this.productDetail))
+                   
                     this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
                     if (data.ProductDetailInfo.length > 0) {
     
@@ -539,7 +539,7 @@ export class PageOrderComponent implements OnInit {
     }
 
     checkOptionItemUpdate(optionItemId: string, optionId: number, index: number) {
-        console.log("thanh")
+        
         let countItemChecked = 0;
         let maxselectItem = this.getMaxSelectItemUdate(optionId, index);
         let minselectItem = this.getMinSelectItemUPdate(optionId, index);
@@ -693,7 +693,7 @@ export class PageOrderComponent implements OnInit {
                 if (productMain.OptionList[i].OptionId == optionId && productMain.OptionList[i].OptionItemList[j].OptionItemId == optionItem) {
 
                     productMain.OptionList[i].OptionItemList[j].Total = productMain.OptionList[i].OptionItemList[j].Qty * (parseInt(productMain.OptionList[i].OptionItemList[j].Price) / 100);
-                    console.log('hehhe:' + productMain.OptionList[i].OptionItemList[j].Total)
+                   
 
                     productMain.OptionList[i].OptionItemList[j].TotalStr = this._util.formatCurrency(productMain.OptionList[i].OptionItemList[j].Total, "S$");
                 }
@@ -789,12 +789,15 @@ export class PageOrderComponent implements OnInit {
                                     arrayOptionInCart = this.checkGroupOptionOfItem(this.cartNew.cartNew[l].Cart[i]);
 
                                     isCompare = this.checkArrays(JSON.stringify(arrayOptionItem), JSON.stringify(arrayOptionInCart));
-                                    console.log("comp:" + isCompare)
+                                    
                                     if (isCompare) {
                                         this.cartNew.cartNew[l].Cart[i].Qty = this.cartNew.cartNew[l].Cart[i].Qty + this.productDetailParse.Qty;
+                                        this.cartNew.cartNew[l].Cart[i].Total = this.cartNew.cartNew[l].Cart[i].Qty * (this.productDetailParse.Total) ;
+                                        this.cartNew.cartNew[l].Cart[i].TotalStr= this._gof3rUtil.formatCurrency(this.cartNew.cartNew[l].Cart[i].Total, "S$")
+                                       
                                         for (let j = 0; j < this.productDetailParse.OptionList.length; j++) {
                                             for (let h = 0; h < this.productDetailParse.OptionList[j].OptionItemList.length; h++) {
-                                                console.log("qty:" + this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionItemList[h].Qty)
+                                                
                                                 this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionItemList[h].Qty = this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionItemList[h].Qty + this.productDetailParse.OptionList[j].OptionItemList[h].Qty
                                                 this.subTotalOfOptionItem(this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionItemList[h].OptionItemId, this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionId, this.cartNew.cartNew[l].Cart[i]);
                                                 this.subTotalItem(true, this.cartNew.cartNew[l].Cart[i])
@@ -890,12 +893,14 @@ export class PageOrderComponent implements OnInit {
                                     arrayOptionInCart = this.checkGroupOptionOfItem(this.cartNew.cartNew[l].Cart[i]);
 
                                     isCompare = this.checkArrays(JSON.stringify(arrayOptionItem), JSON.stringify(arrayOptionInCart));
-                                    console.log("comp:" + isCompare)
+                                    
                                     if (isCompare) {
                                         this.cartNew.cartNew[l].Cart[i].Qty = this.cartNew.cartNew[l].Cart[i].Qty + this.productDetailParse.Qty;
+                                        this.cartNew.cartNew[l].Cart[i].Total = this.cartNew.cartNew[l].Cart[i].Qty * (this.productDetailParse.Total) ;
+                                        this.cartNew.cartNew[l].Cart[i].TotalStr= this._gof3rUtil.formatCurrency(this.cartNew.cartNew[l].Cart[i].Total, "S$")
                                         for (let j = 0; j < this.productDetailParse.OptionList.length; j++) {
                                             for (let h = 0; h < this.productDetailParse.OptionList[j].OptionItemList.length; h++) {
-                                                console.log("qty:" + this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionItemList[h].Qty)
+                                                
                                                 this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionItemList[h].Qty = this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionItemList[h].Qty + this.productDetailParse.OptionList[j].OptionItemList[h].Qty
                                                 this.subTotalOfOptionItem(this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionItemList[h].OptionItemId, this.cartNew.cartNew[l].Cart[i].OptionList[j].OptionId, this.cartNew.cartNew[l].Cart[i]);
                                                 this.subTotalItem(true, this.cartNew.cartNew[l].Cart[i])
@@ -1022,7 +1027,7 @@ export class PageOrderComponent implements OnInit {
     }
     checkGroupOptionOfItem(item: ProductDetailParseModel) {
         let arryOptionItemId = [];
-        console.log("note:" + JSON.stringify(item))
+        
         if (item.OptionList.length > 0) {
             for (let i = 0; i < item.OptionList.length; i++) {
                 for (let j = 0; j < item.OptionList[i].OptionItemList.length; j++) {
@@ -1036,14 +1041,13 @@ export class PageOrderComponent implements OnInit {
             arryOptionItemId.push({ 'idOptionItem': item.Id, 'Qty': item.Qty, 'note': item.SpecialRequest })
         }
 
-        console.log('array1:' + arryOptionItemId)
+        
         return arryOptionItemId;
     }
     checkArrays(arrA, arrB) {
 
         //check if lengths are different
-        console.log("array:" + arrA)
-        console.log("array:" + arrB)
+       
         if (arrA.length !== arrB.length) return false;
 
 
@@ -1241,7 +1245,7 @@ export class PageOrderComponent implements OnInit {
                 }
             }
             else {
-                console.log("checkout")
+               
                 this.DeliveryAddress()
                 // if(this.orderMain.DeliveryId===""){
                 //      this.errorCart="please select address delivery"
@@ -1464,7 +1468,7 @@ export class PageOrderComponent implements OnInit {
             let totalRequest = this._gof3rModule.ParseTo12(this.orderMain.SubTotal)
             requestData.Subtotal = totalRequest;
             let requestDataJson = JSON.stringify(requestData);
-            console.log("very_json:" + requestDataJson)
+            
             this._pickupService.VerifyOrder(common_data_json, requestDataJson).then(data => {
                 this.verifyOrderMain = data
                 if (this.verifyOrderMain.ResultCode === "000") {
@@ -1477,7 +1481,7 @@ export class PageOrderComponent implements OnInit {
                 else {
                     this.checkError(this.verifyOrderMain.ResultCode, this.verifyOrderMain.ResultDesc, this.verifyOrderMain.ServiceName)
                 }
-                console.log("very:" + JSON.stringify(this.verifyOrderMain))
+                
 
 
             })
@@ -1487,11 +1491,11 @@ export class PageOrderComponent implements OnInit {
         this.openPopupOutletInfor()
     }
     SubtractionQtyOptionItem(optionItemId: string, optionId: number, index: number) {
-        console.log('add:' + optionId + '-' + optionItemId)
+        
         let hadCheck: boolean;
         hadCheck = this.checkItemHadCheck(optionItemId, optionId);
         if (hadCheck) {// option item checked
-            console.log('co check')
+            
             let minQuanty = this.getMinQuantyOptionItem(optionItemId, optionId);
             let qtyOptionItem = this.getQuantyOfOptionItem(optionItemId, optionId);
             if (qtyOptionItem > minQuanty && minQuanty != 0) {
@@ -1508,7 +1512,7 @@ export class PageOrderComponent implements OnInit {
                 }
             }
         } else {//option item no checked
-            console.log('ko check')
+            
         }
         this.subTotalOfOptionItem(optionItemId, optionId, this.productDetailParse)
         this.subTotalItem(false, this.productDetailParse);
@@ -1538,7 +1542,7 @@ export class PageOrderComponent implements OnInit {
     }
     checkItemHadCheck1(optionItemId: string, optionId: number) {
         let hadCheck: boolean;
-        console.log("heh:" + JSON.stringify(this.productDetailParse))
+        
         for (let i = 0; i < this.cart.Cart[this.IndexItemCartUpdate].OptionList.length; i++) {
             for (let j = 0; j < this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList.length; j++) {
                 if (this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionId === optionId && this.cart.Cart[this.IndexItemCartUpdate].OptionList[i].OptionItemList[j].OptionItemId === optionItemId) {
@@ -1594,7 +1598,7 @@ export class PageOrderComponent implements OnInit {
         }
     }
     additionQtyOptionItem(optionItemId: string, optionId: number, index: number) {
-        console.log('add:' + optionId + '-' + optionItemId)
+        
         let hadCheck: boolean;
         hadCheck = this.checkItemHadCheck(optionItemId, optionId)
         if (hadCheck) {// option item checked
@@ -1615,7 +1619,7 @@ export class PageOrderComponent implements OnInit {
         }
         this.subTotalOfOptionItem(optionItemId, optionId, this.productDetailParse)
         this.subTotalItem(false, this.productDetailParse);
-        console.log(JSON.stringify(this.productDetailParse))
+        
     }
     addQuatyOptionItem1(optionItem: string, optionId: number) {
         for (let i = 0; i < this.productDetailParse.OptionList.length; i++) {
@@ -1631,7 +1635,7 @@ export class PageOrderComponent implements OnInit {
         let dataString = "";
         let count: number = 0;
         this.orderMain.ArrayItem = [];
-        console.log('cartNew:' + JSON.stringify(this.cartNew))
+        
         for (let t = 0; t < this.cartNew.cartNew.length; t++) {
             for (let u = 0; u < this.cartNew.cartNew[t].Cart.length; u++) {
                 this.orderMain.ArrayItem.push(this.cartNew.cartNew[t].Cart[u]);
@@ -1755,16 +1759,27 @@ export class PageOrderComponent implements OnInit {
             });
         }
     }
+    showPopupddMapOutletPickup() {
+        var el = $('#map-outlet-pickup');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el
+                },
+                type: 'inline'
+            });
+        }
+    }
     checkError(errorCode: string, ErrorDesc: string, serviceName: string) {
         this.blockUI.stop()
         this.error.ResultCode = errorCode
         this.error.ResultDesc = ErrorDesc
         this.error.ServiceName = serviceName
-        console.log(this.error.ResultDesc)
+        
         this.showPopupddCardError()
     }
     goToOrder(merchantOutletID: string) {
-        console.log("go to order")
+        
         this.GetCurrentSystemTime(merchantOutletID)
 
     }
@@ -1802,7 +1817,7 @@ export class PageOrderComponent implements OnInit {
         let common_data_json = JSON.stringify(common_data);
 
         let request_data = new GetAllOutletListV2Request();
-        request_data.OrderType = ORDER_DELIVERY
+        request_data.OrderType = this.OrderType
         request_data.OrderFor = orderFor
         request_data.CustomerId = "";
         request_data.FromRow = 0;
@@ -1821,23 +1836,30 @@ export class PageOrderComponent implements OnInit {
         request_data.SubCategoryId = "";
         let request_data_json = JSON.stringify(request_data);
 
-        console.log("request_all:" + request_data_json)
+        
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             //this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
 
             this.getAllOutletListV2 = data;
-            console.log("all:" + JSON.stringify(this.getAllOutletListV2))
-            console.log("lenght:" + this.getAllOutletListV2.MerchantOutletListInfo.length)
+            
             if (this.getAllOutletListV2.MerchantOutletListInfo.length === 0) {
                 // this.noData=true;
                 // this.haveData=false;
                 //     let data ={function:"outletMap",haveOutlet:1}
                 //    this._instanceService.sendCustomEvent(data)
                 this.haveOuteFromMap = 0;
-                console.log("lenght:" + this.getAllOutletListV2.MerchantOutletListInfo.length)
+                
                 // let msg ="This restaurant doesn't deliver to your area. <br />Click here to browse retaurants in your area."
                 //this.checkError("",msg,"")
+                
+               if(this.OrderType==ORDER_DELIVERY)
+               {
                 this.showPopupddMapOutlet()
+               }
+               else{
+                   this.showPopupddMapOutletPickup()
+               }
+                   
             }
 
             // else {
@@ -1926,7 +1948,7 @@ export class PageOrderComponent implements OnInit {
             this._pickupService.AddDeliveryAddress(common_data_json, data_request_json).then(data => {
 
                 if (data.ResultCode === '000') {
-                    console.log(data)
+                    
                     this.addressList = new AddressListModel();
                     localStorage.setItem("haveNewAddress",JSON.stringify(false));
                     let item = new AddressIteModel();

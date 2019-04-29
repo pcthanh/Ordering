@@ -46,12 +46,12 @@ export class OrderHistoryomponent implements OnInit {
 
         let data_request = { CurrentCustomerId: this.customerInfo.CustomerInfo[0].CustomerId, Lang: "en", FromRow: "" }
         let data_request_json = JSON.stringify(data_request);
-       console.log("gegeg:"+ data_request_json)
+       
         this._pickupService.GetDeliveryOrderList(common_data_json, data_request_json).then(data => {
            
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.customerOrderListMain = data;
-            console.log("order:"+ JSON.stringify(this.customerOrderListMain))
+            
             this.isHaveData=true;
             this.blockUI.stop()
         })

@@ -63,11 +63,11 @@ export class BecomeCourierComponent implements OnInit {
         let common_data_json = JSON.stringify(common_data);
         let data_request = { Lang: "en" };
         let data_request_json = JSON.stringify(data_request);
-        console.log("com:"+ common_data_json)
+        
         this._pickupService.GetOutletListByLocation(common_data_json, data_request_json).then(data => {
 
             this.responseArea = data;
-            console.log("outlet:"+ JSON.stringify(this.responseArea))
+            
             for (let i = 0; i < this.responseArea.MerchantOutletList.length; i++) {
                 let item = new ListArea;
                 item.name = this.responseArea.MerchantOutletList[i].LocationName;
@@ -90,7 +90,7 @@ export class BecomeCourierComponent implements OnInit {
             let request_data = { Lang: "en", Email: this.email, DesiredWorkingCluster: this.selectedArea, Phone: this.phoneNumber, Name: this.fullName };
             let request_data_json = JSON.stringify(request_data);
             this._pickupService.AddRiderContact(common_data_json, request_data_json).then(data => {
-                console.log(JSON.stringify(data))
+                
                 if (data.ResultCode === "000") {
                     this.message = "Thank You! We’ll be in touch soon."
                     this.email = "";

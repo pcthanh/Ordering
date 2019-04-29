@@ -58,7 +58,7 @@ export class RetaurantOwnerComponent implements OnInit {
             data_request.Notes = this.merchantContact.Notes;
             let data_request_json = JSON.stringify(data_request);
             this._pickupService.AddMerchantContact(common_data_json, data_request_json).then(data => {
-                console.log("merchants:"+ JSON.stringify(data))
+                
                 if (data.ResultCode === "000") {
                     this.message = "Thank You! We’ll be in touch soon."
                     this.merchantContact = new MerchantContact();

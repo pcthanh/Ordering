@@ -136,7 +136,7 @@ export class FotgotPasswordComponent implements OnInit {
                 let data_requet_json = JSON.stringify(data_request);
                  
                 this._pickupService.ResetUserPassword(common_data_json, data_requet_json).then(data => {
-                     console.log("reste:"+ JSON.stringify(Date))
+                     
                     if(data.ResultCode==="000"){
                         this.blockUI.stop();
                         this._route.navigateByUrl('/home');

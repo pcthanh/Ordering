@@ -49,7 +49,7 @@ export class Gof3rModule {
     }
     ParseTo12(n1: number): string {
         let total =Math.round((n1) * 100) + '';
-        console.log("total:"+ total)
+        
         let lengthTotal = 12 - total.length;
         let totalStr = "";
         for (let i = 0; i < lengthTotal; i++) {

@@ -15,7 +15,7 @@ export class InvietFriendComponent implements OnInit {
         this.getInitialParams = new GetInitialParams();
         if(localStorage.getItem("IN")!=null){
             this.getInitialParams = JSON.parse(this._util.decryptByDESParams(localStorage.getItem("IN")));
-            console.log("in:"+ JSON.stringify(this.getInitialParams))
+            
         }
     }
 

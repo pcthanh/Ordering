@@ -131,6 +131,9 @@ export class Gof3rHomeComponent implements OnInit {
         this.mapLocation = new Area();
         this.outletLocation = new Area();
         this.parseOutlet = new ParseOutletListArea1();
+        if (localStorage.getItem("orderType") != null) {
+            this.orderType = localStorage.getItem("orderType");
+        }
         this.blockUI.stop()
     }
     ngOnInit() {
@@ -347,7 +350,7 @@ export class Gof3rHomeComponent implements OnInit {
         this._homeservice.registerDevice(jsonRequest).then(data => {
 
             this.registerDevice = (data);
-            console.log("regis:"+ JSON.stringify(this.registerDevice))
+            
             localStorage.setItem('KEK', (this.registerDevice.KEKWorkingKey));
             localStorage.setItem('WK', (this.registerDevice.APIWorkingKey));
 
@@ -378,15 +381,15 @@ export class Gof3rHomeComponent implements OnInit {
 
         var requestData = new RequestNull();
         var jsonCommon = JSON.stringify(comomrequest);
-        console.log("common:"+ jsonCommon);
+        
 
         var jsonRequest = JSON.stringify(requestData);
 
-        console.log("request:"+ jsonRequest)
+       
         this._homeservice.getServiceHome(jsonCommon, jsonRequest).then(data => {
 
             this.getInitialParams = data;
-            console.log("init:"+ JSON.stringify(this.getInitialParams))
+            
             for (let i = 0; i < this.getInitialParams.CountryInfo.length; i++) {
 
                 if (this.getInitialParams.CountryInfo[i].CountryCode === "65") {
@@ -427,12 +430,12 @@ export class Gof3rHomeComponent implements OnInit {
         request_data.SubCategoryId = "";
         let request_data_json = JSON.stringify(request_data);
 
-        console.log("request_all:"+ request_data_json)
+       
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             //this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
 
             this.getAllOutletListV2 = data;
-            console.log("all:"+ JSON.stringify(this.getAllOutletListV2))
+            
             
             if (this.getAllOutletListV2.MerchantOutletListInfo.length >0) {
                 // this.noData=true;
@@ -446,7 +449,8 @@ export class Gof3rHomeComponent implements OnInit {
                this._instanceService.sendCustomEvent(data)
             }
             localStorage.setItem("out",outletID);
-            localStorage.setItem("orderType",ORDER_DELIVERY)
+            //localStorage.setItem("orderType",ORDER_DELIVERY)
+            localStorage.setItem("orderType",this.orderType)
             this.router.navigateByUrl("/order")
 
         })
@@ -662,7 +666,7 @@ export class Gof3rHomeComponent implements OnInit {
 
                 this.customerInfoMain = data;
                 if (this.customerInfoMain.ResultCode === "000") {
-                    console.log("login:" + JSON.stringify(this.customerInfoMain))
+                    
                     localStorage.setItem("cus", this._gof3rUtil.encryptParams(JSON.stringify(this.customerInfoMain)))
 
                     this.isLogin = this.customerInfoMain.CustomerInfo[0].CustomerName;
@@ -816,7 +820,7 @@ export class Gof3rHomeComponent implements OnInit {
             let request_data_json = JSON.stringify(requestData);
             this._pickupService.RequestRegistrationOTP(common_data_json, request_data_json).then(data => {
                 this.responseData = data;
-                console.log("RegisterOPT" + JSON.stringify(this.responseData))
+                
                 if (this.responseData.ResultCode == "000") {
                     let requestRegister = new RequestRegisterCustomerModel();
                     requestRegister.CustomerName = this.signUp.FullName;
@@ -1024,11 +1028,11 @@ export class Gof3rHomeComponent implements OnInit {
         let common_data_json = JSON.stringify(common_data);
         let data_request = { Lang: "en" };
         let data_request_json = JSON.stringify(data_request);
-        console.log("com:" + common_data_json)
+       
         this._pickupService.GetOutletListByLocation(common_data_json, data_request_json).then(data => {
 
             this.mapLocation = data;
-            console.log("location:" + JSON.stringify(this.mapLocation))
+           
             //this.mapLocation.MerchantOutletList[0].Enabled="N"
             let isMatch: boolean = true;
             for (let i = 0; i < this.names.length; i++) {
@@ -1056,13 +1060,12 @@ export class Gof3rHomeComponent implements OnInit {
     }
     getOutlet(name: string) {
         this.areaName = name
-        console.log(name)
+        
         this.shortArrays = []
-        console.log("l:" + this.mapLocation.MerchantOutletList.length)
+        
         for (let i = 0; i < this.mapLocation.MerchantOutletList.length; i++) {
             if (this.mapLocation.MerchantOutletList[i].LocationName.toLocaleLowerCase().indexOf(name.toLocaleLowerCase()) > -1) {
-                console.log("a:" + this.mapLocation.MerchantOutletList[i].LocationName.toLocaleLowerCase())
-                console.log("b:" + name.toLocaleLowerCase())
+                
                 this.outletLocation.MerchantOutletList[0] = this.mapLocation.MerchantOutletList[i];
                 this.shortArrays = this.chunkArray(this.mapLocation.MerchantOutletList[i].OutletList, 5);
                 break;
@@ -1071,12 +1074,6 @@ export class Gof3rHomeComponent implements OnInit {
                 this.shortArrays = []
             }
         }
-
-
-
-
-
-        console.log(this.shortArrays)
 
     }
     chunkArray(arr, size) {
@@ -1129,12 +1126,12 @@ export class Gof3rHomeComponent implements OnInit {
             socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
         } else if (socialPlatform == "google") {
             socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
-            console.log("google:"+ socialPlatformProvider)
+            
         }
 
         this.socialAuthService.signIn(socialPlatformProvider).then(
             (userData) => {
-                console.log("google:"+ userData.email)
+                
                 //this.signUp.Email = userData.email
                 //console.log(socialPlatform + " sign in data : ", userData);
                 // Now sign-in with userData
@@ -1153,13 +1150,13 @@ export class Gof3rHomeComponent implements OnInit {
                 requestData.Password = "";
                 requestData.OTP = ""
                 let requestDataJson = JSON.stringify(requestData)
-                console.log("requestDataJsonLogin:"+ requestDataJson)
+                
                 this._pickupService.CheckLogon(common_data_json, requestDataJson).then(data => {
 
                     this.customerInfoMain = data;
-                    console.log("login1:" + JSON.stringify(data))
+                    
                     if (this.customerInfoMain.ResultCode === "000") {
-                        console.log("login:" + JSON.stringify(this.customerInfoMain))
+                        
                         localStorage.setItem("cus", this._gof3rUtil.encryptParams(JSON.stringify(this.customerInfoMain)))
 
                         this.isLogin = this.customerInfoMain.CustomerInfo[0].CustomerName;

@@ -99,7 +99,7 @@ export class GrowsWithUsComponent implements OnInit {
                     data_request.UploadedFileUrl = urlFile;
                     let data_request_json = JSON.stringify(data_request);
                     this._pickupService.AddCandidateContact(common_data_json, data_request_json).then(data => {
-                        console.log("merchants:" + JSON.stringify(data))
+                        
                         if (data.ResultCode === "000") {
                             $.magnificPopup.close()
                             this.message = "Thank You! We’ll be in touch soon."
@@ -126,7 +126,7 @@ export class GrowsWithUsComponent implements OnInit {
         }
         else{
             $.magnificPopup.close()
-            console.log('jkhk')
+            
             this.message = "Please choose file to upload."
             this.showSuccess1();
             

@@ -340,7 +340,7 @@ export class PageCheckOutComponent implements OnInit {
         }
         if (localStorage.getItem("addressDelivery") != null) {
             let address = JSON.parse(localStorage.getItem("addressDelivery"))
-            console.log("addss:" + JSON.stringify(address))
+            
             this.geoHome = address.GeoLocation;
             let strCut = address.GeoLocation.split(",");
             let lat = parseFloat(strCut[0]);
@@ -474,10 +474,10 @@ export class PageCheckOutComponent implements OnInit {
             request_data.SubCategoryId = "";
             let request_data_json = JSON.stringify(request_data);
 
-            console.log("request:" + request_data_json)
+           
             this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
                 this.getAllOutletListV2 = data;
-                console.log("getall:" + JSON.stringify(data))
+                
                 this.getAllPaymentOptionsWithPromotion()
                 this.orderMain.DeliveryOn = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeDisplay
                 this.orderMain.DeliveryOnRequest = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
@@ -506,7 +506,7 @@ export class PageCheckOutComponent implements OnInit {
         let _total = (this.orderMain.SubTotal + this.orderMain.ServiceFeeValue + this.orderMain.Surcharge + this.orderMain.DeliveryFee + this.orderMain.RiderTip) - (parseFloat(this.orderMain.PromoCodeValue + '') + parseFloat(this.orderMain.Credit + '') + parseFloat(this.orderMain.Discount + ''));
 
         this.orderMain.Total = _total;
-        console.log(this.orderMain.Total)
+        
         this.orderMain.TotalDisplay = this._util.formatCurrency(this.orderMain.Total, "S$");
     }
     loadCart() {
@@ -515,7 +515,7 @@ export class PageCheckOutComponent implements OnInit {
             if (localStorage.getItem("crt") != null) {//check when had cart
                 this.haveCart = true;
                 this.cartNew = JSON.parse(localStorage.getItem("crt"));
-                console.log("cart:" + JSON.stringify(this.cartNew))
+                
                 //this.orderMain.DeliveryTo = this.currentAddress
                 if (this.cartNew.cartNew.length > 0) {
                     //this.orderMain.ArrayItem = this.cart.Cart;
@@ -541,7 +541,7 @@ export class PageCheckOutComponent implements OnInit {
             if (localStorage.getItem("crtd") != null) {//check when had cart
                 this.haveCart = true;
                 this.cartNew = JSON.parse(localStorage.getItem("crtd"));
-                console.log("cart:" + JSON.stringify(this.cartNew))
+               
                 //this.orderMain.DeliveryTo = this.currentAddress
                 if (this.cartNew.cartNew.length > 0) {
                     //this.orderMain.ArrayItem = this.cart.Cart;
@@ -610,11 +610,11 @@ export class PageCheckOutComponent implements OnInit {
             let totalRequest = this._gof3rModule.ParseTo12(this.orderMain.SubTotal)
             requestData.Subtotal = totalRequest;
             let requestDataJson = JSON.stringify(requestData);
-            console.log("very_json:" + requestDataJson)
+            
 
             this._pickupService.VerifyOrder(common_data_json, requestDataJson).then(data => {
                 this.verifyOrderMain = data;
-                console.log("veryfiyOrder:" + JSON.stringify(this.verifyOrderMain))
+                
                 this.orderMain.ServiceFee = this.verifyOrderMain.OrderFeeAndDiscountInfo.ServiceFeeDisplay
                 this.orderMain.ServiceFeeValue = parseInt(this.verifyOrderMain.OrderFeeAndDiscountInfo.ServiceFee) / 100;
                 this.orderMain.DiscountDisplay = this.verifyOrderMain.OrderFeeAndDiscountInfo.DiscountAmountDisplay
@@ -710,7 +710,7 @@ export class PageCheckOutComponent implements OnInit {
         requestData.DiscountAmount = this._gof3rModule.ParseTo12(this.orderMain.Discount)
         requestData.AwardType = "MAT_PORDER";
         let requestDataJson = JSON.stringify(requestData);
-        console.log("request:"+ requestDataJson)
+        
         this._pickupService.GetAllPaymentOptionsWithPromotion(common_data_json, requestDataJson).then(data => {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.getPromodeList()
@@ -718,14 +718,14 @@ export class PageCheckOutComponent implements OnInit {
 
             this.allPayment = data
 
-            console.log("allPayment:" + JSON.stringify(data))
+            
             for(let i =0;i< this.allPayment.PointWalletListInfo.length; i++){
                 for(let j = 0; j< this.allPayment.PointWalletListInfo[i].RebateProgramInfo.length; j++){
                     this.rebateProgramDesscription = this.allPayment.PointWalletListInfo[i].RebateProgramInfo[j].ProgramDescription
                 }
             }
             this.rebateProgramDesscription= this.rebateProgramDesscription.replace("/n","<br>");
-            console.log("newline:"+ this.rebateProgramDesscription)
+            
             this.allPaymentget = true
             // this.maskingCardNumber = this.allPayment.CardListInfo[0].MaskedCardNumber;
             // this.orderMain.MaskingCardNumber = this.allPayment.CardListInfo[0].MaskedCardNumber
@@ -788,10 +788,10 @@ export class PageCheckOutComponent implements OnInit {
                     let date = new Date()
                     data_request.TransactionDate = moment_(date).format("DD/MM/YYYY HH:mm:ss")
                     let data_request_json = JSON.stringify(data_request)
-                    console.log("PO:" + this.PO)
+                    
                     if (this.PO === "PO_CARD") {
                         this._pickupService.AddCardTransaction(common_data_json, data_request_json).then(data => {
-                            console.log("AddCardTransaction:" + JSON.stringify(data))
+                            
                             if (data.ResultCode === "000") {
                                 localStorage.setItem('addcard', JSON.stringify(data_request))
     
@@ -811,7 +811,7 @@ export class PageCheckOutComponent implements OnInit {
             }
         }
         else {
-            console.log("no select")
+           
             this.checkError("", "Please select payment method", "");
         }
     }
@@ -832,9 +832,9 @@ export class PageCheckOutComponent implements OnInit {
         data_request.PaymentAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.SubTotal.toFixed(2)))
         let discountToatl = parseFloat(this.orderMain.Discount + '') + parseFloat(this.orderMain.Credit + '') + parseFloat(this.orderMain.PromoCodeValue + '')
         let discount = parseFloat(discountToatl.toFixed(2))
-        console.log("discount:" + discount)
+        
         data_request.DiscountAmount = this._gof3rModule.ParseTo12(discount)
-        console.log("discount1:" + data_request.DiscountAmount)
+        
         data_request.PaymentFee = this._gof3rModule.ParseTo12(this.orderMain.ServiceFeeValue + this.orderMain.Surcharge + this.orderMain.RiderTip)
         data_request.TranxCurrency = "702"//this.orderMain.CurrencyCode
         data_request.UsedPromotionCodeList = this.orderMain.PrmoCodeID
@@ -855,10 +855,10 @@ export class PageCheckOutComponent implements OnInit {
         data_request.CardHolderName = this.orderMain.CardHoldName
         data_request.StoreCardUniqueID = this.orderMain.PaymentGatewayToken;
         let data_request_json = JSON.stringify(data_request)
-        console.log("MakePayment_Request:" + data_request_json)
+        
 
         this._pickupService.MakePayment(common_data_json, data_request_json).then(data => {
-            console.log("MakePayment:" + JSON.stringify(data))
+            
             this.makePaymentMain = data;
             if (this.makePaymentMain.ResultCode === "000") {
                 this.placeOrderRequest(this.makePaymentMain.TranxDetailInfo[0].RefNo, this.makePaymentMain.TranxDetailInfo[0].InvoiceNo, this.makePaymentMain.TranxDetailInfo[0].ApprovalCode)
@@ -956,7 +956,7 @@ export class PageCheckOutComponent implements OnInit {
         data_request.TranxAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.Total.toFixed(2)))
 
         let data_request_json = JSON.stringify(data_request);
-        console.log("request:" + data_request_json)
+        
         this._pickupService.PlaceOrder(common_data_json, data_request_json).then(data => {
 
 
@@ -995,7 +995,7 @@ export class PageCheckOutComponent implements OnInit {
                                 this.cartNew = new CartOrderNew()
                                 localStorage.setItem('crt', JSON.stringify(this.cartNew))
                             }
-                            console.log("payment:" + JSON.stringify(this.placeOrderMain))
+                            
                             this.showPopupPaymentSuccess()
                             //this._router.navigateByUrl("/payment-success")
                         }
@@ -1165,7 +1165,7 @@ export class PageCheckOutComponent implements OnInit {
             $.magnificPopup.close()
         }
         if (this.selectMethod.Method === "PO_POINT") {
-            console.log(this.orderMain.PromoCodeValue)
+            
             if(this.orderMain.PromoCodeValue >0){
                 this.discountPromo="We're sorry. Promo code is not valid because a discount has been applied to your order total."
                 this.orderMain.PromoCodeValue =0;
@@ -1304,7 +1304,7 @@ export class PageCheckOutComponent implements OnInit {
         // this.orderMain.CardTypeValue = walletName
     }
     selectPointPayment(pointWalletNo: string, paymentOptoin: string, pointName: string,img:string,CashEquivalenceDisplay:string,Point:string, index:number) {
-        console.log(pointWalletNo +"-"+ pointName)
+        
         this.selectMethod.Method="PO_POINT";
         this.selectMethod.CardToken = pointWalletNo;
         this.PO = paymentOptoin
@@ -1388,7 +1388,7 @@ export class PageCheckOutComponent implements OnInit {
             this._pickupService.ApplyPromoCode(common_data_json, requestDataJson).then(data => {
 
                 this.promoCodeMain = data;
-                console.log("apply:" + JSON.stringify(this.promoCodeMain))
+               
                 if (this.promoCodeMain.ResultCode === "000") {
                     this.selectPromoCodeModel.PromoCodeText = this.promoCodeMain.PromoCodeInfo[0].PromoCodeText
                     this.orderMain.PromoCodeDisPlay = this.promoCodeMain.PromoCodeInfo[0].PromoCodeValueDisplay;
@@ -1448,11 +1448,11 @@ export class PageCheckOutComponent implements OnInit {
             }
             requestData.ProductList = this.paresProductList();
             let requestDataJson = JSON.stringify(requestData);
-            console.log("app:"+ requestDataJson)
+            
             this._pickupService.ApplyPromoCode(common_data_json, requestDataJson).then(data => {
 
                 this.promoCodeMain = data;
-                console.log("apply:" + JSON.stringify(this.promoCodeMain))
+                
                 if (this.promoCodeMain.ResultCode === "000") {
                     this.selectPromoCodeModel.PromoCodeText = this.promoCodeMain.PromoCodeInfo[0].PromoCodeText
                     this.orderMain.PromoCodeDisPlay = this.promoCodeMain.PromoCodeInfo[0].PromoCodeValueDisplay;
@@ -1479,9 +1479,12 @@ export class PageCheckOutComponent implements OnInit {
                     this.subTotalOrder()
                     this.subTotalEachCart()
                     this.checkPromoCode=true;
-                    console.log(this.promoCodeMain.ErrorMessage)
+                    
                     this.errorAddCard = true;
-                    this.error.ResultDesc = this.promoCodeMain.ErrorMessage
+                    if(this.promoCodeMain.PromoCodeInfo.length=0)
+                        this.error.ResultDesc = this.promoCodeMain.ErrorMessage
+                    else
+                        this.error.ResultDesc = this.promoCodeMain.ResultDesc
                     this.showPopupddApplyPromoceError()
                     this.blockUI.stop();
                     
@@ -1494,7 +1497,7 @@ export class PageCheckOutComponent implements OnInit {
 
     }
     showPopupPromoCode() {
-        console.log(this.orderMain.Discount)
+        
         if(this.orderMain.Discount>0){
             this.discountPromo = "Sorry, multiple discount and promo codes cannot be used at same time. Please choose either one to enjoy the offer."
             this.showPopupDiscountPromo()
@@ -1583,7 +1586,7 @@ export class PageCheckOutComponent implements OnInit {
             let data_request_json = JSON.stringify(data_request)
             this._pickupService.VerifyCard(common_data_json, data_request_json).then(data => {
                 this.verifycard = data;
-                console.log("vryfi:" + JSON.stringify(this.verifycard))
+                
                 if (this.verifycard.ResultCode === "000") {
                     common_data.ServiceName = "AddNewCardWeb"
                     let common_data_json = JSON.stringify(common_data);
@@ -1604,9 +1607,9 @@ export class PageCheckOutComponent implements OnInit {
                     data_request.MaskedCardNumber = this.masKingNumberCard(this.addCardData.CardNumber.replace(/\s/g, ''));
                     data_request.EncryptedCardInfo = encryptedCardInfo;
                     let data_request_json = JSON.stringify(data_request)
-                    console.log("json:" + data_request_json)
+                   
                     this._pickupService.AddNewCard(common_data_json, data_request_json).then(data => {
-                        console.log("card:" + JSON.stringify(data))
+                        
                         if (data.ResultCode === "000") {
                             this.allPayment.CardListInfo = []
                             this.allPayment.CardListInfo = data.CardListInfo;
@@ -1758,7 +1761,7 @@ export class PageCheckOutComponent implements OnInit {
     closeRiderTip() {
         $.magnificPopup.close()
         this.orderMain.RiderTip = (this.riderValue);
-        console.log("rider:" + this.riderValue)
+        
         this.orderMain.RiderTipDisplay = this._util.formatCurrency(this.riderValue, 'S$')
         this.subTotalOrder();
     }
@@ -1795,7 +1798,7 @@ export class PageCheckOutComponent implements OnInit {
         this.route.navigateByUrl('/search-result')
     }
     removeCart(indexCart: number, index: number) {
-        console.log("delete:" + index)
+        
         this.cartNew.cartNew[indexCart].Cart.splice(index, 1);
         if (this.OrderType === ORDER_PICKUP) {
             localStorage.setItem("crt", JSON.stringify(this.cartNew))
@@ -1824,7 +1827,6 @@ export class PageCheckOutComponent implements OnInit {
             this.haveCart = false
             //this.showCart = false
         }
-        
         this.VerifyOrder();
         this.subTotalOrder()
         this.subTotalEachCart()
@@ -1916,8 +1918,8 @@ export class PageCheckOutComponent implements OnInit {
         return combineInfor;
     }
     checkLocationDelivery() {
-        this.applyPromoCodeRemoveCart();
-        if(!this.checkPromoCode){
+        //this.applyPromoCodeRemoveCart();
+        // if(!this.checkPromoCode){
             this.blockUI.start('processing ...'); // Start blocking
         let common_data = new CommonDataRequest();
         var _location = this.geoHome + '#_#_'
@@ -1952,10 +1954,10 @@ export class PageCheckOutComponent implements OnInit {
         request_data.SubCategoryId = "";
         let request_data_json = JSON.stringify(request_data);
 
-        console.log("request:" + request_data_json)
+        
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             this.getAllOutletListV2CheckDelivery = data;
-            console.log("getallCheckDelivery:" + JSON.stringify(data))
+            
             if (this.getAllOutletListV2CheckDelivery.MerchantOutletListInfo.length == 0) {
                 this.locationDelivery = false;
                 this.checkError('', this.getAllOutletListV2CheckDelivery.NoMessageDataForChangingLocation, '');
@@ -1967,7 +1969,7 @@ export class PageCheckOutComponent implements OnInit {
             }
 
         })
-        }
+        
         
 
     }
@@ -1980,7 +1982,9 @@ export class PageCheckOutComponent implements OnInit {
         let date = new Date()
         net_request.merchantTxnRef=this.addAppTransaction.InvoiceNumber //moment_(date).format("YYYYMMDD HH:mm:ss")
         //net_request.b2sTxnEndURL="#/check-out"
-        net_request.s2sTxnEndURL="http://171.248.158.185:8080/Carrot/CarrotService/s2sTxnEnd"
+        //net_request.s2sTxnEndURL="http://171.248.158.185:8080/Carrot/CarrotService/s2sTxnEnd"
+        
+        net_request.s2sTxnEndURL="https://test.sandbox-technology.com:82/GOF3R/Gof3rService/s2sTxnEnd"
         net_request.netsMid= this.getInitParam.OtherParams[0].NetsMerchantId//"UMID_877772003"
         net_request.merchantTxnDtm= this.addAppTransaction.TransactionDate//moment_(date).format("YYYYMMDD HH:mm:ss.SSS")
         net_request.submissionMode="B"
@@ -1998,7 +2002,7 @@ export class PageCheckOutComponent implements OnInit {
         let json ={"ss":"1","msg": net_request};
         let json_request = JSON.stringify(json) ;
         let hmac =this._gof3rUtil.hashBase64(json_request +this.getInitParam.OtherParams[0].NetsSecretKey)//"38a4b473-0295-439d-92e1-ad26a8c60279");
-        console.log("hmac:"+ hmac)
+        
         let keyId=this.getInitParam.OtherParams[0].NetsApiKey//"154eb31c-0f72-45bb-9249-84a1036fd1ca";
         sendPayLoad(json_request,hmac,keyId);
         

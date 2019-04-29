@@ -106,7 +106,7 @@ export class HeaderGof3rComponent implements OnInit {
         this.error = new ErrorModel();
         this.getInitialParams= new GetInitialParams();
         this._instanceService.$getEventSubject.subscribe(data=>{
-            console.log(data)
+           
             if(data==="CheckOut"){
                 
                 //this.checkOut=false;
@@ -204,7 +204,7 @@ export class HeaderGof3rComponent implements OnInit {
         if (localStorage.getItem("cus") != null && localStorage.getItem("cus")!="undefined") {
 
             this.customerInfoMain = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("cus")));
-            console.log("cus:"+ JSON.stringify(this.customerInfoMain))
+            
             this.isLogin = this.customerInfoMain.CustomerInfo[0].CustomerName
             this.userNameLogOut = this.customerInfoMain.CustomerInfo[0].UserName;
             this.isUserLogin = true;
@@ -217,9 +217,9 @@ export class HeaderGof3rComponent implements OnInit {
     }
     checkUserLoginChangeAddress() {
         if (localStorage.getItem('cus') == null) {
-            console.log("xxxThanh")
+           
             this.getAddress()
-            console.log(this.addressShowDiplay.AddressListInfo[0].Name)
+            
             this.showListAddresNotLogin=true;
             this.showListDelivery=false;
             //this._router.navigateByUrl('/login')
@@ -244,7 +244,7 @@ export class HeaderGof3rComponent implements OnInit {
                      this.showListDelivery=true;
                 }
                 if(localStorage.getItem("addressDelivery")!=null && localStorage.getItem("addressDelivery")!="undefined" && !this.isSelectNewAddress)  {
-                    console.log("thanhxx")
+                    
                     let count=0;
                     let address =JSON.parse(localStorage.getItem("addressDelivery"));
                     for(let i = 0; i< this.listDeliveryAddress.DeliveryAddressList.length; i++){
@@ -268,7 +268,7 @@ export class HeaderGof3rComponent implements OnInit {
                         }
                     }
                 }else{
-                    console.log("thanhhere")
+                    
                     if(this.listDeliveryAddress.DeliveryAddressList.length>0 && !this.isSelectNewAddress){
                         
                         this.listDeliveryAddress.DeliveryAddressList[0].isCheck=true;
@@ -277,7 +277,7 @@ export class HeaderGof3rComponent implements OnInit {
                     }
                     else{
                         if(this.isSelectNewAddress){
-                            console.log("thanh111111111111111")
+                            
                             this.showListAddresNotLogin=false;
                             this.showListDelivery=true;
                             this.getAddress()
@@ -926,7 +926,7 @@ export class HeaderGof3rComponent implements OnInit {
 
         }
         this.DateDeliveryList.DateList.push(this.arrayDateDelivery1)
-        console.log("LoadPickupTime:"+ JSON.stringify(this.DateDeliveryList.DateList))
+        
         // for (let i = 0; i <= 6; i++) {
         //     let itemDate = new DeliveryItemModel();
         //     if (i == 0) {
@@ -979,7 +979,7 @@ export class HeaderGof3rComponent implements OnInit {
     }
     createTimesPickup(startTimes: any, endTimes: any, isToday: boolean,date:string) {
         //let nowDate = this.getCurrentTime.CurrentTime;
-        console.log(startTimes+"-"+ endTimes)
+        
         let nowDateTemp = moment_(startTimes, "HH:mm:ss");
         let endDateTemp = moment_(endTimes, "HH:mm:ss")
         
@@ -1071,8 +1071,7 @@ export class HeaderGof3rComponent implements OnInit {
     }
     loadTimesPickup(isToday: boolean,dateInput:string, StartTime:string,endTime:string) {
         this.timesPickup= [];
-        console.log("heheh")
-        console.log("isToday:"+ isToday)
+        
         this.createTimesPickup(StartTime, endTime, isToday,dateInput)
         // this.getCurrentTime = new GetCurrentSystemTimeModel();
         // let common_data = new CommonDataRequest();
@@ -1144,7 +1143,7 @@ export class HeaderGof3rComponent implements OnInit {
         let request_data_json = JSON.stringify(requestData);
         this._pickupService.RequestRegistrationOTP(common_data_json, request_data_json).then(data => {
             this.responseData = data;
-            console.log("RegisterOPT"+ JSON.stringify(this.responseData))
+           
             if (this.responseData.ResultCode == "000") {
                 let requestRegister = new RequestRegisterCustomerModel();
                 requestRegister.CustomerName = this.signUp.FullName;
@@ -1320,7 +1319,7 @@ move() {
         $.magnificPopup.close()
     }
     loadTimePickupFirst(){
-        console.log("first")
+        
         this.createTimesPickup(this.DateDeliveryList.DateList[0].arraydate[0].StartTime,this.DateDeliveryList.DateList[0].arraydate[0].EndTime,this.DateDeliveryList.DateList[0].arraydate[0].isToday,this.DateDeliveryList.DateList[0].arraydate[0].DateTtr)
 
     }

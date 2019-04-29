@@ -78,7 +78,7 @@ export class PaymentOptionComponent implements OnInit {
         let data_request_json = JSON.stringify(data_request)
         this._pickupService.GetAllPaymentOptions(common_data_json, data_request_json).then(data => {
             this.allPaymentOption = data
-            console.log("all:"+ JSON.stringify(this.allPaymentOption.PointWalletListInfo.length))
+            
             //this._gof3rModule.checkInvalidSessionUser(this.allPaymentOption.ResultCode)
 
             this._module.checkInvalidSessionUser(this.allPaymentOption.ResultCode)
@@ -147,10 +147,10 @@ export class PaymentOptionComponent implements OnInit {
             iin = iin.substring(0, 6);
             let data_request = { IIN: iin }
             let data_request_json = JSON.stringify(data_request)
-            console.log("v:"+ data_request_json);
+            
             this._pickupService.VerifyCard(common_data_json, data_request_json).then(data => {
                 this.verifycard = data;
-                console.log("c1:"+ JSON.stringify(this.verifycard))
+                
                 if (this.verifycard.ResultCode === "000") {
                     common_data.ServiceName = "AddNewCardWeb"
                     let common_data_json = JSON.stringify(common_data);
@@ -171,9 +171,9 @@ export class PaymentOptionComponent implements OnInit {
                     data_request.MaskedCardNumber = this.masKingNumberCard(this.addCardData.CardNumber.replace(/\s/g, ''));
                     data_request.EncryptedCardInfo=encryptedCardInfo;
                     let data_request_json = JSON.stringify(data_request)
-                    console.log("a:"+ data_request_json)
+                    
                     this._pickupService.AddNewCard(common_data_json, data_request_json).then(data => {
-                        console.log("card:"+ JSON.stringify(data))
+                        
                         if (data.ResultCode === "000") {
                             this.allPaymentOption.CardListInfo = []
                             this.allPaymentOption.CardListInfo = data.CardListInfo;
