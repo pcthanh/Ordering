@@ -989,12 +989,13 @@ export class HeaderGof3rComponent implements OnInit {
                 
                 let roundTime = this.roundTime(dateAdd.hours(), dateAdd.minutes(), 5);
                 let timeNext = moment_(roundTime,"HH:mm").add(30,"minutes");
-                let jsonDate = { label:this.tConvert(moment_(roundTime).format('HH:mm')) +" - "+this.tConvert(moment_(timeNext).format('HH:mm')), value:date+" "+ moment_(roundTime).format('HH:mm:ss'),fromDate: date+" "+ moment_(roundTime).format('HH:mm:ss'),toDate:date+" "+ moment_(timeNext).format('HH:mm:ss'),fromDateDisplay:date+" "+this.tConvert(moment_(roundTime).format('HH:mm')),toDateDisplay:date+" "+this.tConvert(moment_(timeNext).format('HH:mm'))}
+                let jsonDate = { label:this.tConvert(moment_(roundTime).format('HH:mm')) +" - "+this.tConvert(moment_(timeNext).format('HH:mm')), value:date+" "+ moment_(roundTime).format('HH:mm:ss'),fromDate: date+" "+ moment_(roundTime).format('HH:mm:ss'),toDate:date+" "+ moment_(timeNext).format('HH:mm:ss'),fromDateDisplay:date+" "+this.tConvert(moment_(roundTime).format('HH:mm')),toDateDisplay:date+" "+this.tConvert(moment_(timeNext).format('HH:mm')),d:date}
                 this.timesPickup.push(jsonDate);
                 nowDateTemp = moment_(timeNext, "HH:mm").add(ADD_MINUTE_TIME_AFTER_FROM_SERVER, "minutes")
             
 
         }
+
         this.showWhen=true
         
         //this.whenStr = this.timesDelivery[0].label;
@@ -1115,9 +1116,11 @@ export class HeaderGof3rComponent implements OnInit {
         });;
         this._instanceService.sendCustomEvent(dataSend);
     }
-    selectTimePickup(fromDate:string,toDate:string,fromDateDisplay:string,toDateDisplay:string){
+    selectTimePickup(fromDate:string,toDate:string,fromDateDisplay:string,toDateDisplay:string,d:string,lable:string){
         
         let dataSend = { function: 'updateTimePickup', fromDate: fromDate,toDate:toDate,fromDateDisplay:fromDateDisplay,toDateDisplay:toDateDisplay };
+        let dcut = d.slice(0,d.length-5)
+        this.whenStr=dcut +" " + lable
         $('.login-dropdown').hide();
         $('.login-overlay').removeClass('show');
         $('.login-wrap .login').removeClass('hide-form');

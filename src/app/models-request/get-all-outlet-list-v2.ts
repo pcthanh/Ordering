@@ -8,4 +8,5 @@ export class GetAllOutletListV2Request{
     SubCategoryId:string;
     MerchantOutletId:string;
     FoodCentreId:string=""
+    IsBuyAndPayOutlet:string
 }

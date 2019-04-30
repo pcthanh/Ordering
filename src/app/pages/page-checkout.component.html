@@ -25,11 +25,17 @@
                             <div class="time"><img src="assets/images/clock-2.png" alt=""> <span>{{fromDate}} - {{toDate}}</span></div>
                             <div class="addr"><img src="assets/images/home-1.png" alt=""> <span>{{this.outletInfo.OutletInfo[0].Address}}</span></div>
                         </div>
+                        <div class="text" style="margin-bottom: 5px;">
+                            <div  class="small">if any item(s) in this order is unavaiable</div>
+            
+                            <input class="order-sold-out" style="cursor: pointer" readonly=true [(ngModel)]="this.soldOut" type="text" id="order-sold-out" (click)="showPopupSoldOut()">
+                        </div>
                         <div class="text">
                             <div *ngIf="this.orderMain.OrderType==='DELIVERY'" class="small">Delivery Instructions</div>
                             <div *ngIf="this.orderMain.OrderType==='PICKUP'" class="small">Pickup Instructions</div>
                             <input class="order-note-1" [(ngModel)]="this.orderNote" type="text" id="order-note">
                         </div>
+                        
                     </div>
                     <div class="map-info">
                         <!--<div class="pin-home"><img src="assets/images/pin_home.png" alt=""></div>
@@ -144,7 +150,7 @@
                         </div>
                         <div class="info-top" *ngIf="haveCart">
                             <div class="sub-total"><span class="inf">Subtotal </span> <span class="price">{{this.orderMain.SubTotalStr}}</span></div>
-                            <!--<div class="gst"><span class="inf">Service fee</span> <span class="price">{{this.orderMain.ServiceFee}}</span></div>-->
+                            <div *ngIf="this.orderMain.OrderType==='PICKUP'" class="gst"><span class="inf">Service fee</span> <span class="price">{{this.orderMain.ServiceFee}}</span></div>
                             <div *ngIf="this.orderMain.OrderType==='DELIVERY'" class="delivery-fee"><span class="inf">Delivery Fee</span> <span class="price">{{this.orderMain.DeliveryFeeDisplay}}</span></div>
                             <div *ngIf="this.orderMain.Surcharge!=0" class="gst"><span class="inf">Surchagre</span> <span class="price">{{this.orderMain.SurchargeDisplay}}</span></div>
                             <div style="cursor: pointer;font-weight: 600" *ngIf="this.orderMain.OrderType==='DELIVERY'" (click)="showPopupRiderTip()"
@@ -273,7 +279,7 @@
                         </div>
 
                     </div>
-                    <div class="payment-otpion-wrap">
+                    <div *ngIf="this.allPayment.NetsPayEnabled=='Y'" class="payment-otpion-wrap">
                         <div class="title">NETPays</div>
                         <div class="payment-item" >
                             <input type="radio" (click)="selectPaymentNetPays('PO_NETS')" id="member-net" name="payment">
@@ -380,10 +386,10 @@
                     <label for="reward-number-input">Use Promo Code</label>
                     <input type="text" [(ngModel)]="inputPromoCode" id="reward-number-input">
                 </div>
-                <div *ngIf="noData && this.promoCodeMain.PromoCodeInfo.length ==0" class="alert alert-danger" role="alert">
+                <div *ngIf="noData && this.promoCodeMain.ErrorMessage !=''" class="alert alert-danger" role="alert">
                     {{this.promoCodeMain.ErrorMessage}}
                 </div>
-                <div *ngIf="noData && this.promoCodeMain.PromoCodeInfo.length >0" class="alert alert-danger" role="alert">
+                <div *ngIf="noData && this.promoCodeMain.ErrorMessage==''" class="alert alert-danger" role="alert">
                     {{this.promoCodeMain.ResultDesc}}
                 </div>
 
@@ -461,4 +467,22 @@
       <div id="ajaxResponse"></div>
     </fieldset>
   </div>
+  <div id="sold-out" class="payment-otpion-popup white-popup mfp-hide">
+    <div class="payment-otpion-popup-wrap">
+        
+        <div class="payment-otpion-wrap">
+            
+            <div *ngFor="let item of this.soldOutArray;let i = index" class="payment-item">
+                <input type="radio"[checked]="item.isCheck" id="soldout-{{i}}" name="e-wallet">
+                <label for="soldout-{{i}}"(click)="selectSoldOut(i)">
+                    <span class="inf">
+                       {{item.name}}
+                    </span>
+                </label>
+            </div>
+        </div>
+        
+    </div>
+    
+</div>
 <gof3r-footer></gof3r-footer>

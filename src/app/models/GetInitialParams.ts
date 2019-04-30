@@ -29,4 +29,5 @@ export class GetInitialParams{
     ResultCode:string;
     ResultDesc:string;
     ServiceName:string
+    ActionsForSoldOutItem:any[]=[];
 }

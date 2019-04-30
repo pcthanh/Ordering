@@ -11,4 +11,5 @@ export class CartOrder{
     Cart:ProductDetailParseModel []=[];
     MaxOutletInCart:number=0
     FoodCenterName:string=""
+    IsBuyAndPayOutlet:string=""
 }

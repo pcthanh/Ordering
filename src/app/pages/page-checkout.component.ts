@@ -49,6 +49,7 @@ import * as moment_ from 'moment';
 import { NetPaysRequest } from "../models-request/netpays-request";
 import { sendRequest } from 'selenium-webdriver/http';
 import { AddAppTransactionModel } from "../models/AddAppTransaction";
+import { SoldOutModel } from "../models/SoldOut";
 const ORDER_DELIVERY: string = "DELIVERY"
 const ORDER_PICKUP: string = "PICKUP"
 declare var $: any;
@@ -144,6 +145,9 @@ export class PageCheckOutComponent implements OnInit {
     rebateProgramDesscription:string=""
     discountPromo:string=""
     addAppTransaction :AddAppTransactionModel;
+    soldOut:string=""
+    soldOutArray :SoldOutModel[]=[];
+    soldItem:SoldOutModel;
     styles = [{
         featureType: "landscape",
         elementType: "geometry.fill",
@@ -325,6 +329,7 @@ export class PageCheckOutComponent implements OnInit {
         this.getInitParam = new GetInitialParams();
         this.cartNew = new CartOrderNew();
         this.addAppTransaction = new AddAppTransactionModel()
+        
         if (localStorage.getItem("ot") != null) {
             this.outletInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("ot")));
             this.outletInfo.OutletInfo[0].Rating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100));
@@ -364,7 +369,9 @@ export class PageCheckOutComponent implements OnInit {
             this.mccInfor = new MCCInfoModel();
             this.getInitialParams = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("IN")));
 
-
+            
+            this.soldOut=this.getInitialParams.ActionsForSoldOutItem[0];
+            
             if (this.getInitialParams.MCCInfo.length > 0) {
                 for (let i = 0; i < this.getInitialParams.MCCInfo.length; i++) {
 
@@ -374,6 +381,23 @@ export class PageCheckOutComponent implements OnInit {
                     }
                 }
             }
+            for(let i = 0; i< this.getInitialParams.ActionsForSoldOutItem.length;i++){
+                this.soldItem= new SoldOutModel();
+
+                if(i==0){
+                    this.soldItem.name=this.getInitialParams.ActionsForSoldOutItem[i]
+                    this.soldItem.isCheck=true;
+                    
+                }
+                else{
+                    this.soldItem.name=this.getInitialParams.ActionsForSoldOutItem[i]
+                    this.soldItem.isCheck=false;
+                   
+                }
+                this.soldOutArray.push(this.soldItem)
+                
+            }
+
 
 
         }
@@ -477,10 +501,9 @@ export class PageCheckOutComponent implements OnInit {
            
             this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
                 this.getAllOutletListV2 = data;
-                
                 this.getAllPaymentOptionsWithPromotion()
-                this.orderMain.DeliveryOn = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeDisplay
-                this.orderMain.DeliveryOnRequest = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
+                this.orderMain.DeliveryOn = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
+                this.orderMain.DeliveryOnRequest = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeDisplay
                 this.orderMain.EstimatedPickupTime = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedPickupTime
             })
         }
@@ -717,7 +740,7 @@ export class PageCheckOutComponent implements OnInit {
 
 
             this.allPayment = data
-
+           
             
             for(let i =0;i< this.allPayment.PointWalletListInfo.length; i++){
                 for(let j = 0; j< this.allPayment.PointWalletListInfo[i].RebateProgramInfo.length; j++){
@@ -855,8 +878,7 @@ export class PageCheckOutComponent implements OnInit {
         data_request.CardHolderName = this.orderMain.CardHoldName
         data_request.StoreCardUniqueID = this.orderMain.PaymentGatewayToken;
         let data_request_json = JSON.stringify(data_request)
-        
-
+    
         this._pickupService.MakePayment(common_data_json, data_request_json).then(data => {
             
             this.makePaymentMain = data;
@@ -884,7 +906,7 @@ export class PageCheckOutComponent implements OnInit {
             data_request.Description = "PAYMENT FOR DELIVERY ORDER"
         else
             data_request.Description = "PAYMENT FOR PICKUP ORDER"
-        data_request.DeliverOn = this.orderMain.DeliveryOnRequest //this.orderMain.DeliveryOnRequest.trim()
+        data_request.DeliverOn = this.orderMain.DeliveryOn //this.orderMain.DeliveryOnRequest.trim()
         data_request.DeliveryOnRequest = ""
         data_request.ExpectedDeliveryTime = this.orderMain.DeliveryOnRequest
         if (this.orderMain.OrderType === ORDER_DELIVERY) {
@@ -921,6 +943,7 @@ export class PageCheckOutComponent implements OnInit {
         data_request.uniqueTransactionCode = InvoiceNo
         data_request.IsGroupOrder = this.orderMain.IsGroupOrder
         data_request.Note = this.orderNote;
+        data_request.ActionForSoldOutItem=this.soldOut;
         if (this.cartNew.cartNew.length > 1) {
             data_request.MerchantId = ""
             data_request.MerchantOutletId = ""
@@ -956,7 +979,6 @@ export class PageCheckOutComponent implements OnInit {
         data_request.TranxAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.Total.toFixed(2)))
 
         let data_request_json = JSON.stringify(data_request);
-        
         this._pickupService.PlaceOrder(common_data_json, data_request_json).then(data => {
 
 
@@ -984,7 +1006,7 @@ export class PageCheckOutComponent implements OnInit {
                     let data_request_json = JSON.stringify(data_request)
 
                     this._pickupService.UpdateCardTransaction(common_data_json, data_request_json).then(data => {
-
+                      
                         if (data.ResultCode === "000") {
                             this.blockUI.stop(); //end block ui
                             if (this.orderMain.OrderType === ORDER_DELIVERY) {
@@ -1369,8 +1391,10 @@ export class PageCheckOutComponent implements OnInit {
             let requestData = new ApplyPromocodeRequest();
             requestData.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + ''
             requestData.MCC = this.mccGobal;
-            requestData.Subtotal = this._gof3rModule.ParseTo12(this.orderMain.Total);
+            // requestData.Subtotal = this._gof3rModule.ParseTo12(this.orderMain.Total);
+            requestData.Subtotal = this._gof3rModule.ParseTo12(this.orderMain.SubTotal);
             requestData.PromoCode = promocode;
+            requestData.OrderType= this.orderMain.OrderType
             if (this.cartNew.cartNew.length > 1) {
                 requestData.IsCombinedOrder = "Y"
                 requestData.MerchantId = ""
@@ -1385,10 +1409,11 @@ export class PageCheckOutComponent implements OnInit {
             }
             requestData.ProductList = this.paresProductList();
             let requestDataJson = JSON.stringify(requestData);
+            
             this._pickupService.ApplyPromoCode(common_data_json, requestDataJson).then(data => {
 
                 this.promoCodeMain = data;
-               
+                
                 if (this.promoCodeMain.ResultCode === "000") {
                     this.selectPromoCodeModel.PromoCodeText = this.promoCodeMain.PromoCodeInfo[0].PromoCodeText
                     this.orderMain.PromoCodeDisPlay = this.promoCodeMain.PromoCodeInfo[0].PromoCodeValueDisplay;
@@ -1432,7 +1457,8 @@ export class PageCheckOutComponent implements OnInit {
             let requestData = new ApplyPromocodeRequest();
             requestData.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + ''
             requestData.MCC = this.mccGobal;
-            requestData.Subtotal = this._gof3rModule.ParseTo12(this.orderMain.Total);
+            // requestData.Subtotal = this._gof3rModule.ParseTo12(this.orderMain.Total);
+            requestData.Subtotal = this._gof3rModule.ParseTo12(this.orderMain.SubTotal);
             requestData.PromoCode = promocode;
             if (this.cartNew.cartNew.length > 1) {
                 requestData.IsCombinedOrder = "Y"
@@ -1447,6 +1473,7 @@ export class PageCheckOutComponent implements OnInit {
 
             }
             requestData.ProductList = this.paresProductList();
+            requestData.OrderType= this.orderMain.OrderType
             let requestDataJson = JSON.stringify(requestData);
             
             this._pickupService.ApplyPromoCode(common_data_json, requestDataJson).then(data => {
@@ -1481,7 +1508,7 @@ export class PageCheckOutComponent implements OnInit {
                     this.checkPromoCode=true;
                     
                     this.errorAddCard = true;
-                    if(this.promoCodeMain.PromoCodeInfo.length=0)
+                    if(this.promoCodeMain.ErrorMessage !=='')
                         this.error.ResultDesc = this.promoCodeMain.ErrorMessage
                     else
                         this.error.ResultDesc = this.promoCodeMain.ResultDesc
@@ -1849,7 +1876,7 @@ export class PageCheckOutComponent implements OnInit {
         if (localStorage.getItem("foodCenter") != null) {
             let foodCeneterJson = JSON.parse(localStorage.getItem("foodCenter"))
             // let data = { function: "FoodCenter", type: "Delivery", foodcenter: this.outletInfo.OutletInfo[0].FoodCentreId, foodtime: this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue, foodname: this.outletInfo.OutletInfo[0].FoodCentreName }
-            let data = { function: "FoodCenter", type: "Delivery", foodcenter: foodCeneterJson.FoodCenterID, foodtime: this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue, foodname: foodCeneterJson.FoodCenterName }
+            let data = { function: "FoodCenter", type: "Delivery", foodcenter: foodCeneterJson.FoodCenterID, foodtime: this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue, foodname: foodCeneterJson.FoodCenterName,IsBuyAndPayOutlet: foodCeneterJson.IsBuyAndPayOutlet}
             this._instanceService.sendCustomEvent(data)
             $.magnificPopup.close()
             this.route.navigateByUrl("search-result");
@@ -1918,8 +1945,8 @@ export class PageCheckOutComponent implements OnInit {
         return combineInfor;
     }
     checkLocationDelivery() {
-        //this.applyPromoCodeRemoveCart();
-        // if(!this.checkPromoCode){
+        this.applyPromoCodeWhenPlaceOrder();
+         if(!this.checkPromoCode){
             this.blockUI.start('processing ...'); // Start blocking
         let common_data = new CommonDataRequest();
         var _location = this.geoHome + '#_#_'
@@ -1969,7 +1996,7 @@ export class PageCheckOutComponent implements OnInit {
             }
 
         })
-        
+    }
         
 
     }
@@ -2021,4 +2048,79 @@ export class PageCheckOutComponent implements OnInit {
             });
         }
     }
+    applyPromoCodeWhenPlaceOrder() {
+        this.blockUI.start();
+        let promocode: string = "";
+        if (this.selectPromoCodeModel.PromoCodeTextRequest != '') {
+            promocode = this.selectPromoCodeModel.PromoCodeTextRequest;
+        }
+        else {// not select promocode
+            if (this.inputPromoCode != '') {
+                promocode = this.inputPromoCode;
+            }
+        }
+        if (promocode != '') {
+            let common_data = new CommonDataRequest();
+            var _location = localStorage.getItem("la");
+            common_data.Location = _location
+            common_data.ServiceName = "ApplyPromoCode";
+            let common_data_json = JSON.stringify(common_data);
+            let requestData = new ApplyPromocodeRequest();
+            requestData.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + ''
+            requestData.MCC = this.mccGobal;
+            requestData.Subtotal = this._gof3rModule.ParseTo12(this.orderMain.SubTotal);
+            requestData.OrderType=this.orderMain.OrderType
+            requestData.PromoCode = promocode;
+            if (this.cartNew.cartNew.length > 1) {
+                requestData.IsCombinedOrder = "Y"
+                requestData.MerchantId = ""
+                requestData.MerchantOutletId = ""
+                requestData.CombinedOrderInfo = this.combinedOrderInfo();
+            }
+            else {
+                requestData.IsCombinedOrder = "N"
+                requestData.MerchantId = this.cartNew.cartNew[0].MerchantID
+                requestData.MerchantOutletId = this.cartNew.cartNew[0].OuteletID
+
+            }
+            requestData.ProductList = this.paresProductList();
+            let requestDataJson = JSON.stringify(requestData);
+            this._pickupService.ApplyPromoCode(common_data_json, requestDataJson).then(data => {
+
+                this.promoCodeMain = data;
+                
+                if (this.promoCodeMain.ResultCode === "000") {
+                   
+                    this.checkPromoCode=false
+                   
+
+                }
+
+            })
+        } else {
+            this.checkPromoCode=false;
+        }
+
+    }
+    showPopupSoldOut() {
+        
+        
+        var el = $('#sold-out');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el,
+                    showCloseBtn: false,
+                },
+                type: 'inline',
+                modal: true,
+            });
+        }
+    }
+    selectSoldOut(index:number){
+        this.soldOutArray[index].isCheck=true;
+        this.soldOut=this.soldOutArray[index].name;
+        $.magnificPopup.close()
+    }
+    
 }

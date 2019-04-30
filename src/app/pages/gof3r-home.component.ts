@@ -151,7 +151,7 @@ export class Gof3rHomeComponent implements OnInit {
             this.names.push(elements[i].id);
         }
 
-        console.log(this.names)
+       
 
         //     this.authService.authState.subscribe((user) => {
         //     if(this.fbClick){
@@ -389,6 +389,7 @@ export class Gof3rHomeComponent implements OnInit {
         this._homeservice.getServiceHome(jsonCommon, jsonRequest).then(data => {
 
             this.getInitialParams = data;
+            console.log("test:"+ this.getInitialParams.ActionsForSoldOutItem[0])
             
             for (let i = 0; i < this.getInitialParams.CountryInfo.length; i++) {
 

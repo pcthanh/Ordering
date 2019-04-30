@@ -90,30 +90,30 @@ export class SearchResultComponent implements OnInit {
 
                 
                 let lacation = dataParse.la;
-                this.GetAllOutletListV2(lacation, "", "", "","")
+                this.GetAllOutletListV2(lacation, "", "", "","","N")
                 this.getTopOffers()
                 this.initJQuery()
             }
             if (dataParse.function === 'Delivery') {
                 this.initJQuery()
-                this.GetAllOutletListV2("", dataParse.type, "", "","");
+                this.GetAllOutletListV2("", dataParse.type, "", "","","N");
                 //this.getTopOffers();
 
             }
             if (dataParse.function === 'Pickup') {
                 this.initJQuery()
-                this.GetAllOutletListV2("", dataParse.type, "", "","");
+                this.GetAllOutletListV2("", dataParse.type, "", "","","N");
                 //this.getTopOffers();
 
             }
             if (dataParse.function === 'changeTime') {
-                this.GetAllOutletListV2("", "", dataParse.date, "","");
+                this.GetAllOutletListV2("", "", dataParse.date, "","","N");
             }
             if(dataParse.function==="FoodCenter"){
                 
                 this.foodCenter=true
                 this.foodName=dataParse.foodname;
-                this.GetAllOutletListV2("",dataParse.type,dataParse.foodtime,"",dataParse.foodcenter);
+                this.GetAllOutletListV2("",dataParse.type,dataParse.foodtime,"",dataParse.foodcenter,dataParse.IsBuyAndPayOutlet);
             }
         })
     }
@@ -194,7 +194,7 @@ export class SearchResultComponent implements OnInit {
         // }, 3500)
 
     }
-    GetAllOutletListV2(location: string, orderMethod: string, orderFor: string, keyWord: string,foodcenter:string) {
+    GetAllOutletListV2(location: string, orderMethod: string, orderFor: string, keyWord: string,foodcenter:string,IsBuyAndPayOutlet:string) {
         this.blockUI.start()
         let common_data = new CommonDataRequest();
         if (location === '') {
@@ -242,8 +242,8 @@ export class SearchResultComponent implements OnInit {
         if(this.foodCenter)
             request_data.OrderFor = orderFor
         request_data.FoodCentreId=foodcenter;
+        request_data.IsBuyAndPayOutlet=IsBuyAndPayOutlet
         let request_data_json = JSON.stringify(request_data);
-        
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
 
@@ -304,7 +304,7 @@ export class SearchResultComponent implements OnInit {
             if(!this.foodCenter)
             {
                 
-                this.GetAllOutletListV2("", "", strDatime, keyWord,"")
+                this.GetAllOutletListV2("", "", strDatime, keyWord,"","N")
             }
             //this.orderMain.PickupTime = this.getCurrentTime.CurrentTime + " - " + this.getCurrentTime.CurrentTimeTo;
             // this.orderMain.PickupDate = "select pick up time";

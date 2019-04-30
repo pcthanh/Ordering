@@ -16,5 +16,6 @@ export class GetAllPaymentOptionsWithPromotionModle{
     ResultDesc:string="";
     ServiceName:String=""
     CVVMessage:string=""
+    NetsPayEnabled:string=""
     
 }

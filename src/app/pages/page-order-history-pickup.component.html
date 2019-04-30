@@ -48,7 +48,7 @@
                                     </div>
                                     <div class="order-address">
                                         <div class="time">{{itemOrder.OrderDate}}</div>
-                                        <div class="address">1010 Main Street, Saskatoon, SK, Canada</div>
+                                        <div class="address">{{itemOrder.PickUpAt }}</div>
                                     </div>
                                     <div class="order-detail">
                                         <a *ngIf="itemOrder.OrderStatus!=='PICKED_UP'" [routerLink]="['/tracker-order','pickup',itemOrder.CustomerOrderId]" style="color: #ffffff" class="btn-main btn-order-detail">Order tracker</a>

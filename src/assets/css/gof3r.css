@@ -632,4 +632,9 @@
 .form-horizontal .form-group{
   margin-right: -250px !important 
 } */
-
+.order-sold-out{
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  width: 100%;
+}

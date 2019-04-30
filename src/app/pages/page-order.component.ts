@@ -126,7 +126,6 @@ export class PageOrderComponent implements OnInit {
             this.mccInfor = new MCCInfoModel();
             this.getInitialParams = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("IN")));
 
-
             if (this.getInitialParams.MCCInfo.length > 0) {
                 for (let i = 0; i < this.getInitialParams.MCCInfo.length; i++) {
 
@@ -231,7 +230,6 @@ export class PageOrderComponent implements OnInit {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
             localStorage.setItem('ot', this._util.encryptParams(JSON.stringify(data)));//set outlet info
             this.outletInfo = data;
-            
             this.outletInfo.OutletInfo[0].Rating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100));
             this.haveDataOutlet = true
             this.loadCart();
@@ -825,6 +823,7 @@ export class PageOrderComponent implements OnInit {
                     item.MerchantID = this.outletInfo.OutletInfo[0].MerchantId;
                     item.MaxOutletInCart = this.outletInfo.OutletInfo[0].MaxOutletsInCart;
                     item.FoodCenterName = this.outletInfo.OutletInfo[0].FoodCentreName
+                    item.IsBuyAndPayOutlet=this.outletInfo.OutletInfo[0].IsBuyAndPayOutlet
                     item.Cart.push(this.productDetailParse);
                     this.cartNew.cartNew.push(item);
 
@@ -841,6 +840,7 @@ export class PageOrderComponent implements OnInit {
                 item.MerchantID = this.outletInfo.OutletInfo[0].MerchantId;
                 item.MaxOutletInCart = this.outletInfo.OutletInfo[0].MaxOutletsInCart;
                 item.FoodCenterName = this.outletInfo.OutletInfo[0].FoodCentreName
+                item.IsBuyAndPayOutlet=this.outletInfo.OutletInfo[0].IsBuyAndPayOutlet
                 item.Cart.push(this.productDetailParse);
                 this.cartNew.cartNew.push(item);
                 localStorage.setItem('crt', JSON.stringify(this.cartNew));
@@ -928,6 +928,7 @@ export class PageOrderComponent implements OnInit {
                     item.MerchantID = this.outletInfo.OutletInfo[0].MerchantId;
                     item.MaxOutletInCart = this.outletInfo.OutletInfo[0].MaxOutletsInCart;
                     item.FoodCenterName = this.outletInfo.OutletInfo[0].FoodCentreName
+                    item.IsBuyAndPayOutlet=this.outletInfo.OutletInfo[0].IsBuyAndPayOutlet
                     item.Cart.push(this.productDetailParse);
                     this.cartNew.cartNew.push(item);
 
@@ -945,6 +946,7 @@ export class PageOrderComponent implements OnInit {
                 item.MerchantID = this.outletInfo.OutletInfo[0].MerchantId;
                 item.MaxOutletInCart = this.outletInfo.OutletInfo[0].MaxOutletsInCart;
                 item.FoodCenterName = this.outletInfo.OutletInfo[0].FoodCentreName
+                item.IsBuyAndPayOutlet=this.outletInfo.OutletInfo[0].IsBuyAndPayOutlet
                 this.cartNew.cartNew.push(item);
                 localStorage.setItem('crtd', JSON.stringify(this.cartNew));
             }

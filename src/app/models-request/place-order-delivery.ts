@@ -45,4 +45,5 @@ export class PlaceOrderDeliveryModel{
     uniqueTransactionCode:string=""
     IsCombinedOrder:string=""
     CombinedOrderInfo:string=""
+    ActionForSoldOutItem:string=""
 }

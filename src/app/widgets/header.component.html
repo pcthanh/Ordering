@@ -435,7 +435,7 @@
                                         <div class="time-select-wrap">
                                             
                                             <div class="time-select" *ngFor="let item of timesPickup;let i = index">
-                                                <input type="radio" id="time2-{{i}}" name="time-select" (click)="selectTimePickup(item.fromDate,item.toDate,item.fromDateDisplay,item.toDateDisplay)">
+                                                <input type="radio" id="time2-{{i}}" name="time-select" (click)="selectTimePickup(item.fromDate,item.toDate,item.fromDateDisplay,item.toDateDisplay,item.d,item.label)">
                                                 <label for="time2-{{i}}">
                                                     <span class="check"></span>
                                                     <span class="inf">{{item.label}}</span>

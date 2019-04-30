@@ -8,4 +8,5 @@ export class ApplyPromocodeRequest{
     MerchantOutletId:string="";
     ProductList:string="";
     CombinedOrderInfo:string=""
+    OrderType:string=""
 }

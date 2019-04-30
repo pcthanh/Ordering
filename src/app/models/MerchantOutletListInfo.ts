@@ -38,4 +38,5 @@ export class MerchantOutletListInfoModel{
     FoodCentreName:string=""
     MaxOutletsInCart:number=0
     MessageForOrderMore:string=""
+    IsBuyAndPayOutlet:string
 ;}
