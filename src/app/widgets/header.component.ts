@@ -24,7 +24,7 @@ import { DeliveryItemModel } from "../models/DeliveryDateItem";
 import { DeliveryMainModel } from "../models/DeliveryDateMain";
 import { ListDeliveryAddress } from "../models/ListDeliveryAddress";
 import { Gof3rModule } from "../util/gof3r-module";
-import { ActivatedRoute, Params,Router } from "@angular/router";
+import { ActivatedRoute, Params, Router } from "@angular/router";
 import { AddeliveryAddressModel } from "../models-request/add-delivery-address";
 import { InputOTPModel } from "../models/InputOTP";
 import { RequestRegisterCustomerModel } from "../models-request/request-register-customer";
@@ -75,57 +75,58 @@ export class HeaderGof3rComponent implements OnInit {
     userNamestr: string = "";
     getCurrentTime: GetCurrentSystemTimeModel;
     passWord: string = "";
-     listDeliveryAddress: ListDeliveryAddress;
+    listDeliveryAddress: ListDeliveryAddress;
     userNameLogOut: string = ""
     whenStr: string = ""
-    checkOut:boolean=true;
+    checkOut: boolean = true;
     arrayDateDelivery1: DeliveryDateModle
     arrayDateDelivery2: DeliveryDateModle
     DateDeliveryList: DeliveryMainModel;
-    currentDate:string=""
-    haveDateList:boolean=false;
-    showListDelivery:boolean=false
-    showListAddresNotLogin:boolean=false;
-    listDeliveryAddressShow:ListDeliveryAddress
-    showWhen:boolean=false;
+    currentDate: string = ""
+    haveDateList: boolean = false;
+    showListDelivery: boolean = false
+    showListAddresNotLogin: boolean = false;
+    listDeliveryAddressShow: ListDeliveryAddress
+    showWhen: boolean = false;
     inputOTPStr: string = "";
-    isDelivery:boolean=false;
-    isPickup:boolean=false;
-    error:ErrorModel;
+    isDelivery: boolean = false;
+    isPickup: boolean = false;
+    error: ErrorModel;
     getInitialParams: GetInitialParams;
-    selectCountryCode:string=""
-    showDetail:boolean=true;
-    routerThisPage:boolean=true;
-    isSelectNewAddress:boolean;
+    selectCountryCode: string = ""
+    showDetail: boolean = true;
+    routerThisPage: boolean = true;
+    isSelectNewAddress: boolean;
     outletInfo: OutletInfoModel;
-    constructor(private _route:Router,private _gof3rModule:Gof3rModule,private _pickupService: PickupService, private _gof3rUtil: Gof3rUtil, private _instanceService: EventSubscribeService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private _homeservice: HomeService) {
+    errorCart:string=""
+    constructor(private _route: Router, private _gof3rModule: Gof3rModule, private _pickupService: PickupService, private _gof3rUtil: Gof3rUtil, private _instanceService: EventSubscribeService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private _homeservice: HomeService) {
         this.addressList = new AddressListModel();
         this.signUp = new SingUpModel();
         this.listDeliveryAddress = new ListDeliveryAddress();
         this.listDeliveryAddressShow = new ListDeliveryAddress();
         this.error = new ErrorModel();
-        this.getInitialParams= new GetInitialParams();
-        this._instanceService.$getEventSubject.subscribe(data=>{
-           
-            if(data==="CheckOut"){
-                
+        this.getInitialParams = new GetInitialParams();
+        this._instanceService.$getEventSubject.subscribe(data => {
+
+            if (data === "CheckOut") {
+
                 //this.checkOut=false;
             }
-            if(data==="About" ||data==="FAQ"|| data==="PRIVACY"||data==="TERMS"||data==="ContactUS"||data==="Grows"){
-                this.showDetail=false;
-                this.routerThisPage=false;
+            if (data === "About" || data === "FAQ" || data === "PRIVACY" || data === "TERMS" || data === "ContactUS" || data === "Grows") {
+                this.showDetail = false;
+                this.routerThisPage = false;
             }
-            if(data==="LoadTimePickup"){
+            if (data === "LoadTimePickup") {
                 if (localStorage.getItem("ot") != null) {
                     this.outletInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("ot")));
                     this.loadDateDelivery(new Date())
                 }
             }
-            
+
         })
         if (localStorage.getItem("ot") != null) {
             this.outletInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("ot")));
-            
+
         }
         if (localStorage.getItem("orderType") != null) {
 
@@ -139,31 +140,31 @@ export class HeaderGof3rComponent implements OnInit {
         }
         if (localStorage.getItem("IN") != null) {
             this.getInitialParams = new GetInitialParams();
-           
+
             this.getInitialParams = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("IN")));
 
 
-            for(let i = 0; i< this.getInitialParams.CountryInfo.length; i++){
-               
-                if(this.getInitialParams.CountryInfo[i].CountryCode==="65"){
-                    this.signUp.PhoneCode="+"+this.getInitialParams.CountryInfo[i].CountryCode;
+            for (let i = 0; i < this.getInitialParams.CountryInfo.length; i++) {
+
+                if (this.getInitialParams.CountryInfo[i].CountryCode === "65") {
+                    this.signUp.PhoneCode = "+" + this.getInitialParams.CountryInfo[i].CountryCode;
                 }
             }
 
 
         }
-        if(localStorage.getItem("haveNewAddress")!=null){
+        if (localStorage.getItem("haveNewAddress") != null) {
             this.isSelectNewAddress = JSON.parse(localStorage.getItem("haveNewAddress"));
         }
-       
+
     }
 
     ngOnInit() {
         this.searchControl = new FormControl();
-        
+
         this.checkLoginUser();
         this.GetCurrentSystemTime()
-        this.loadTimesDelivery(true,this.currentDate);
+        this.loadTimesDelivery(true, this.currentDate);
         //this.loadTimesDeliveryPickup(true,this.currentDate)
         //this.createTimesPickup(this.DateDeliveryList.DateList[0].arraydate[0].StartTime,this.DateDeliveryList.DateList[0].arraydate[0].EndTime,this.DateDeliveryList.DateList[0].arraydate[0].isToday,this.DateDeliveryList.DateList[0].arraydate[0].DateTtr)
         //this.checkUserLoginChangeAddress()
@@ -191,7 +192,7 @@ export class HeaderGof3rComponent implements OnInit {
                         var address = data["results"][0]["formatted_address"];
                         this.inputChangeAddress = address;
                     })
-                    
+
                 });
             });
         });
@@ -201,27 +202,27 @@ export class HeaderGof3rComponent implements OnInit {
     }
     checkLoginUser() {
 
-        if (localStorage.getItem("cus") != null && localStorage.getItem("cus")!="undefined") {
+        if (localStorage.getItem("cus") != null && localStorage.getItem("cus") != "undefined") {
 
             this.customerInfoMain = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("cus")));
-            
+
             this.isLogin = this.customerInfoMain.CustomerInfo[0].CustomerName
             this.userNameLogOut = this.customerInfoMain.CustomerInfo[0].UserName;
             this.isUserLogin = true;
 
         }
         else {
-            
+
             this.isUserLogin = false;
         }
     }
     checkUserLoginChangeAddress() {
         if (localStorage.getItem('cus') == null) {
-           
+
             this.getAddress()
-            
-            this.showListAddresNotLogin=true;
-            this.showListDelivery=false;
+
+            this.showListAddresNotLogin = true;
+            this.showListDelivery = false;
             //this._router.navigateByUrl('/login')
         } else {
             this.customerInfoMain = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("cus")));
@@ -230,70 +231,70 @@ export class HeaderGof3rComponent implements OnInit {
             common_data.Location = _location
             common_data.ServiceName = "GetDeliveryAddresses";
             let common_data_json = JSON.stringify(common_data);
-            
+
             let data_request = { CustomerId: this.customerInfoMain.CustomerInfo[0].CustomerId };
             let data_request_json = JSON.stringify(data_request);
-            
+
             this._pickupService.GetDeliveryAddresses(common_data_json, data_request_json).then(data => {
-                 
+
                 this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
-               
-                this.showListAddresNotLogin=false
-                this.listDeliveryAddress=data;
-                if(this.listDeliveryAddress.DeliveryAddressList.length>0){
-                     this.showListDelivery=true;
+
+                this.showListAddresNotLogin = false
+                this.listDeliveryAddress = data;
+                if (this.listDeliveryAddress.DeliveryAddressList.length > 0) {
+                    this.showListDelivery = true;
                 }
-                if(localStorage.getItem("addressDelivery")!=null && localStorage.getItem("addressDelivery")!="undefined" && !this.isSelectNewAddress)  {
-                    
-                    let count=0;
-                    let address =JSON.parse(localStorage.getItem("addressDelivery"));
-                    for(let i = 0; i< this.listDeliveryAddress.DeliveryAddressList.length; i++){
-                        if(this.listDeliveryAddress.DeliveryAddressList[i].AddressId===address.AddressId){
-                            count= count+1;
-                            this.listDeliveryAddress.DeliveryAddressList[i].isCheck=true;
-                            this.listDeliveryAddressShow.DeliveryAddressList[0]=this.listDeliveryAddress.DeliveryAddressList[i]
-                            let [lattemp,longtemp]=this.listDeliveryAddress.DeliveryAddressList[i].GeoLocation.split(",");
-                            this.lat=parseFloat(lattemp);
-                            this.lng=parseFloat(longtemp);
+                if (localStorage.getItem("addressDelivery") != null && localStorage.getItem("addressDelivery") != "undefined" && !this.isSelectNewAddress) {
+
+                    let count = 0;
+                    let address = JSON.parse(localStorage.getItem("addressDelivery"));
+                    for (let i = 0; i < this.listDeliveryAddress.DeliveryAddressList.length; i++) {
+                        if (this.listDeliveryAddress.DeliveryAddressList[i].AddressId === address.AddressId) {
+                            count = count + 1;
+                            this.listDeliveryAddress.DeliveryAddressList[i].isCheck = true;
+                            this.listDeliveryAddressShow.DeliveryAddressList[0] = this.listDeliveryAddress.DeliveryAddressList[i]
+                            let [lattemp, longtemp] = this.listDeliveryAddress.DeliveryAddressList[i].GeoLocation.split(",");
+                            this.lat = parseFloat(lattemp);
+                            this.lng = parseFloat(longtemp);
                         }
                     }
-                    if(count==0){
-                        if(this.listDeliveryAddress.DeliveryAddressList.length>0){
-                            this.listDeliveryAddress.DeliveryAddressList[0].isCheck=true;
-                        this.listDeliveryAddressShow.DeliveryAddressList[0]=this.listDeliveryAddress.DeliveryAddressList[0]
-                        let [lattemp,longtemp]=this.listDeliveryAddress.DeliveryAddressList[0].GeoLocation.split(",");
-                        this.lat=parseFloat(lattemp);
-                        this.lng=parseFloat(longtemp);
-                        localStorage.setItem("addressDelivery",JSON.stringify(this.listDeliveryAddressShow.DeliveryAddressList[0]))
+                    if (count == 0) {
+                        if (this.listDeliveryAddress.DeliveryAddressList.length > 0) {
+                            this.listDeliveryAddress.DeliveryAddressList[0].isCheck = true;
+                            this.listDeliveryAddressShow.DeliveryAddressList[0] = this.listDeliveryAddress.DeliveryAddressList[0]
+                            let [lattemp, longtemp] = this.listDeliveryAddress.DeliveryAddressList[0].GeoLocation.split(",");
+                            this.lat = parseFloat(lattemp);
+                            this.lng = parseFloat(longtemp);
+                            localStorage.setItem("addressDelivery", JSON.stringify(this.listDeliveryAddressShow.DeliveryAddressList[0]))
                         }
                     }
-                }else{
-                    
-                    if(this.listDeliveryAddress.DeliveryAddressList.length>0 && !this.isSelectNewAddress){
-                        
-                        this.listDeliveryAddress.DeliveryAddressList[0].isCheck=true;
-                        this.listDeliveryAddressShow.DeliveryAddressList[0]=this.listDeliveryAddress.DeliveryAddressList[0]
-                        localStorage.setItem("addressDelivery",JSON.stringify(this.listDeliveryAddressShow.DeliveryAddressList[0]))
+                } else {
+
+                    if (this.listDeliveryAddress.DeliveryAddressList.length > 0 && !this.isSelectNewAddress) {
+
+                        this.listDeliveryAddress.DeliveryAddressList[0].isCheck = true;
+                        this.listDeliveryAddressShow.DeliveryAddressList[0] = this.listDeliveryAddress.DeliveryAddressList[0]
+                        localStorage.setItem("addressDelivery", JSON.stringify(this.listDeliveryAddressShow.DeliveryAddressList[0]))
                     }
-                    else{
-                        if(this.isSelectNewAddress){
-                            
-                            this.showListAddresNotLogin=false;
-                            this.showListDelivery=true;
+                    else {
+                        if (this.isSelectNewAddress) {
+
+                            this.showListAddresNotLogin = false;
+                            this.showListDelivery = true;
                             this.getAddress()
                             let itemShow = new GetDeliveryAddress();
                             itemShow.Address = this.addressShowDiplay.AddressListInfo[0].Name;
-                            this.listDeliveryAddressShow.DeliveryAddressList[0]=itemShow;
-                        }else{
-                            this.showListAddresNotLogin=true;
-                            this.showListDelivery=false;
+                            this.listDeliveryAddressShow.DeliveryAddressList[0] = itemShow;
+                        } else {
+                            this.showListAddresNotLogin = true;
+                            this.showListDelivery = false;
                             this.getAddress()
                         }
-                        
+
                     }
-                    
+
                 }
-                
+
                 //this.listDeliveryAddress = data;
             })
         }
@@ -304,7 +305,7 @@ export class HeaderGof3rComponent implements OnInit {
         if (localStorage.getItem('address') != null) {
 
             this.addressList = JSON.parse(localStorage.getItem('address'));
-            
+
             for (let i = 0; i < this.addressList.AddressListInfo.length; i++) {
                 if (this.addressList.AddressListInfo[i].isCheck == true) {
                     let item = new AddressIteModel();
@@ -314,9 +315,9 @@ export class HeaderGof3rComponent implements OnInit {
                     item.Name = this.addressList.AddressListInfo[i].Name
                     this.addressShowDiplay.AddressListInfo.push(item)
                     this.lat = parseFloat(this.addressList.AddressListInfo[i].lat)
-                    this.lng= parseFloat(this.addressList.AddressListInfo[i].long)
+                    this.lng = parseFloat(this.addressList.AddressListInfo[i].long)
                     this.isShowAdd = true
-                    
+
                 }
             }
         }
@@ -324,7 +325,7 @@ export class HeaderGof3rComponent implements OnInit {
     initJQuery() {
         $('.header-top').append('<div class="login-overlay"></div>');
         $('.login-wrap .login').on('click', function (event) {
-            
+
             event.preventDefault();
             $('.login-dropdown').hide();
             $('.login-dropdown-step2').hide();
@@ -341,47 +342,47 @@ export class HeaderGof3rComponent implements OnInit {
                     height: ''
                 });;
             } else {
-                 
-            
+
+
                 var valueCheckUser = $('#check-user').text();
-                
-                if(event.target.id==='user'){
-                   
+
+                if (event.target.id === 'user') {
+
                     if (valueCheckUser === 'true') {
 
                         $(this).parents('.login-wrap').find('.login-dropdown-had').slideDown();
 
                     }
                     else if (valueCheckUser === 'false') {
-                        
+
                         $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
                     }
                 }
-                else if (event.target.id==='user1'){
-                  
+                else if (event.target.id === 'user1') {
+
                     if (valueCheckUser === 'true') {
 
                         $(this).parents('.login-wrap').find('.login-dropdown-had').slideDown();
 
                     }
                     else if (valueCheckUser === 'false') {
-                        
+
                         $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
                     }
                 }
-                else{
-                   
-                        $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
-                    
-                     
+                else {
+
+                    $(this).parents('.login-wrap').find('.login-dropdown').slideDown();
+
+
                 }
-                    
+
                 $('.back-login').on('click', function (event) {
-            event.preventDefault();
-            $('.signup-dropdown').hide();
-            $('.loginform-dropdown').fadeIn();
-        });
-                
+                    event.preventDefault();
+                    $('.signup-dropdown').hide();
+                    $('.loginform-dropdown').fadeIn();
+                });
+
 
                 $('.login-overlay').addClass('show');
                 $(this).addClass('hide-form');
@@ -414,9 +415,9 @@ export class HeaderGof3rComponent implements OnInit {
                 height: ''
             });;
         });
-         $('.loginform-dropdown .sign-up a').on('click', function (event) {
+        $('.loginform-dropdown .sign-up a').on('click', function (event) {
             event.preventDefault();
-            
+
             $('.signup-dropdown').fadeIn();
             $('.loginform-dropdown').hide();
         });
@@ -488,6 +489,11 @@ export class HeaderGof3rComponent implements OnInit {
                 }, 1000);
             });
         }
+        $('.back-login').on('click', function (event) {
+            event.preventDefault();
+            $('.signup-dropdown').hide();
+            $('.loginform-dropdown').fadeIn();
+        });
         // $("#enter-new-address").on("keydown", function (event) {
         //     if (event.which == 13) {
         //         $(this).parents('.login-wrap').find('.login-dropdown-step3').slideDown();
@@ -513,13 +519,13 @@ export class HeaderGof3rComponent implements OnInit {
         this._instanceService.sendCustomEvent(dataSendChangeAddreesV2);
 
     }
-    changeAddressOutletV2Login(geo:string,index:number,itemAddress:any){
-        
+    changeAddressOutletV2Login(geo: string, index: number, itemAddress: any) {
+
         let strCut = geo.split(",");
         let location = strCut[0] + ',' + strCut[1] + "#_#_"
         let dataSendChangeAddreesV2 = { function: 'changeAddressV2', la: location };
         this.changeCheckAddress(index)
-        localStorage.setItem("addressDelivery",JSON.stringify(itemAddress))
+        localStorage.setItem("addressDelivery", JSON.stringify(itemAddress))
         localStorage.setItem('la', location);
         $('.login-dropdown').hide();
         $('.login-overlay').removeClass('show');
@@ -532,39 +538,39 @@ export class HeaderGof3rComponent implements OnInit {
     }
     changeCheckAddress(index) {
 
-        if(localStorage.getItem("cus")==null){
+        if (localStorage.getItem("cus") == null) {
             for (let i = 0; i < this.addressList.AddressListInfo.length; i++) {
 
-            this.addressList.AddressListInfo[i].isCheck = false
+                this.addressList.AddressListInfo[i].isCheck = false
+
+            }
+            this.addressList.AddressListInfo[index].isCheck = true
+            this.addressShowDiplay.AddressListInfo[0] = this.addressList.AddressListInfo[index]
+            localStorage.setItem('address', JSON.stringify(this.addressList))
 
         }
-        this.addressList.AddressListInfo[index].isCheck = true
-        this.addressShowDiplay.AddressListInfo[0] = this.addressList.AddressListInfo[index]
-        localStorage.setItem('address', JSON.stringify(this.addressList))
-        
-    }
-    else{
-        
-        for(let i = 0; i< this.listDeliveryAddress.DeliveryAddressList.length; i++){
-            this.listDeliveryAddress.DeliveryAddressList[i].isCheck=false;
+        else {
+
+            for (let i = 0; i < this.listDeliveryAddress.DeliveryAddressList.length; i++) {
+                this.listDeliveryAddress.DeliveryAddressList[i].isCheck = false;
+            }
+            this.listDeliveryAddress.DeliveryAddressList[index].isCheck = true;
+            this.listDeliveryAddressShow.DeliveryAddressList[0] = this.listDeliveryAddress.DeliveryAddressList[index]
+            this.isSelectNewAddress = false;
+            localStorage.setItem("haveNewAddress", JSON.stringify(this.isSelectNewAddress));
+            localStorage.setItem("addressDelivery", JSON.stringify(this.listDeliveryAddress))
+            let addressNew = new AddressListModel();
+            let item = new AddressIteModel();
+            item.AddressId = this.listDeliveryAddress.DeliveryAddressList[index].AddressId;
+            item.Name = this.listDeliveryAddress.DeliveryAddressList[index].Address
+            item.isCheck = true;
+            let [lat, lng] = this.listDeliveryAddress.DeliveryAddressList[index].GeoLocation.split(',');
+            item.lat = lat;
+            item.long = lng;
+            addressNew.AddressListInfo.push(item);
+            localStorage.setItem('address', JSON.stringify(addressNew));
         }
-        this.listDeliveryAddress.DeliveryAddressList[index].isCheck=true;
-        this.listDeliveryAddressShow.DeliveryAddressList[0]=this.listDeliveryAddress.DeliveryAddressList[index]
-        this.isSelectNewAddress=false;
-        localStorage.setItem("haveNewAddress",JSON.stringify(this.isSelectNewAddress));
-        localStorage.setItem("addressDelivery",JSON.stringify(this.listDeliveryAddress))
-        let addressNew = new AddressListModel();
-        let item = new AddressIteModel();
-        item.AddressId= this.listDeliveryAddress.DeliveryAddressList[index].AddressId;
-        item.Name =this.listDeliveryAddress.DeliveryAddressList[index].Address
-        item.isCheck=true;
-        let [lat,lng] = this.listDeliveryAddress.DeliveryAddressList[index].GeoLocation.split(',');
-        item.lat=lat;
-        item.long= lng;
-        addressNew.AddressListInfo.push(item);
-        localStorage.setItem('address', JSON.stringify(addressNew));
-    }
-        
+
 
     }
     deliveryClick() {
@@ -606,40 +612,40 @@ export class HeaderGof3rComponent implements OnInit {
                 position => {
 
                     this.geolocationPosition = position,
-                        
-                    this._homeservice.getLocationAddress(position.coords.latitude, position.coords.longitude).then(data => {
-                        var address = data["results"][0]["formatted_address"];
-                        
-                        this.inputChangeAddress = address
-                        // var arraySplited = address.split(",");
 
-                        this.lat = position.coords.latitude;
-                        this.lng = position.coords.longitude;
-                        localStorage.setItem('lat', this.lat + '');
-                        localStorage.setItem('long', this.lng + '');
-                        localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
-                        this.blockUI.stop();
-                        //this.locationrequest =this.lang+","+this.long+"#_#_";
-                        
-                        // localStorage.setItem('la',this.locationrequest);
-                        // localStorage.setItem('lat',position.coords.latitude+'');
-                        // localStorage.setItem('long',position.coords.longitude+'');
-                        // localStorage.setItem('latcur',position.coords.latitude+'');
-                        // localStorage.setItem('longcur',position.coords.longitude+'')
-                        // this.registerDeviceRequest()
+                        this._homeservice.getLocationAddress(position.coords.latitude, position.coords.longitude).then(data => {
+                            var address = data["results"][0]["formatted_address"];
 
-                    })
+                            this.inputChangeAddress = address
+                            // var arraySplited = address.split(",");
+
+                            this.lat = position.coords.latitude;
+                            this.lng = position.coords.longitude;
+                            localStorage.setItem('lat', this.lat + '');
+                            localStorage.setItem('long', this.lng + '');
+                            localStorage.setItem('la', this.lat + ',' + this.lng + "#_#_")
+                            this.blockUI.stop();
+                            //this.locationrequest =this.lang+","+this.long+"#_#_";
+
+                            // localStorage.setItem('la',this.locationrequest);
+                            // localStorage.setItem('lat',position.coords.latitude+'');
+                            // localStorage.setItem('long',position.coords.longitude+'');
+                            // localStorage.setItem('latcur',position.coords.latitude+'');
+                            // localStorage.setItem('longcur',position.coords.longitude+'')
+                            // this.registerDeviceRequest()
+
+                        })
                 },
                 error => {
                     switch (error.code) {
                         case 1:
-                            
+
                             break;
                         case 2:
-                            
+
                             break;
                         case 3:
-                            
+
                             break;
                     }
                 }
@@ -647,51 +653,51 @@ export class HeaderGof3rComponent implements OnInit {
         };
     }
     saveChangeAddress() {
-        
-        if(localStorage.getItem("cus")!=null){
+
+        if (localStorage.getItem("cus") != null) {
             this.addDeliveryAddress(this.inputChangeAddress)
             let location = this.lat + ',' + this.lng + "#_#_"
             let dataSendChangeAddreesV2 = { function: 'changeAddressV2', la: location };
             this.checkUserLoginChangeAddress();
             this._instanceService.sendCustomEvent(dataSendChangeAddreesV2);
         }
-        else{
+        else {
             if (localStorage.getItem("address") != null) {
-            this.addressList = JSON.parse(localStorage.getItem("address"));
-            for (let j = 0; j < this.addressList.AddressListInfo.length; j++) {
-                this.addressList.AddressListInfo[j].isCheck = false;
+                this.addressList = JSON.parse(localStorage.getItem("address"));
+                for (let j = 0; j < this.addressList.AddressListInfo.length; j++) {
+                    this.addressList.AddressListInfo[j].isCheck = false;
+                }
+
             }
+            let item = new AddressIteModel();
 
-        }
-        let item = new AddressIteModel();
+            item.StreetAddress = this.inputChangeAddress;
+            item.lat = this.lat + ''
+            item.long = this.lng + ''
+            item.isCheck = true;
+            let arrayName = item.StreetAddress.split(',');
+            item.Name = arrayName[0];
+            this.addressList.AddressListInfo.push(item);
+            this.addressShowDiplay.AddressListInfo.pop()
 
-        item.StreetAddress = this.inputChangeAddress;
-        item.lat = this.lat + ''
-        item.long = this.lng + ''
-        item.isCheck = true;
-        let arrayName = item.StreetAddress.split(',');
-        item.Name = arrayName[0];
-        this.addressList.AddressListInfo.push(item);
-        this.addressShowDiplay.AddressListInfo.pop()
-        
-        this.addressShowDiplay.AddressListInfo.push(item)
-        
-        localStorage.setItem('address', JSON.stringify(this.addressList));
-        $('.login-dropdown-step3').hide();
-        $('.login-overlay').removeClass('show');
-        $('.login-wrap .login').removeClass('hide-form');
-        $('body').css({
-            overflow: '',
-            height: ''
-        });;
-        let location = this.lat + ',' + this.lng + "#_#_"
-        let dataSendChangeAddreesV2 = { function: 'changeAddressV2', la: location };
-        this._instanceService.sendCustomEvent(dataSendChangeAddreesV2);
+            this.addressShowDiplay.AddressListInfo.push(item)
+
+            localStorage.setItem('address', JSON.stringify(this.addressList));
+            $('.login-dropdown-step3').hide();
+            $('.login-overlay').removeClass('show');
+            $('.login-wrap .login').removeClass('hide-form');
+            $('body').css({
+                overflow: '',
+                height: ''
+            });;
+            let location = this.lat + ',' + this.lng + "#_#_"
+            let dataSendChangeAddreesV2 = { function: 'changeAddressV2', la: location };
+            this._instanceService.sendCustomEvent(dataSendChangeAddreesV2);
         }
-        
+
 
     }
-     addDeliveryAddress(address:string) {
+    addDeliveryAddress(address: string) {
         let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
         common_data.Location = _location
@@ -700,7 +706,7 @@ export class HeaderGof3rComponent implements OnInit {
 
         let data_request = new AddeliveryAddressModel();
         data_request.Address = address
-        data_request.ApartmentNoBuildingName =""
+        data_request.ApartmentNoBuildingName = ""
         data_request.InstructionForRider = ""
         data_request.Nickname = "";
         data_request.PhoneNumber = ""
@@ -708,13 +714,13 @@ export class HeaderGof3rComponent implements OnInit {
         data_request.CustomerId = this.customerInfoMain.CustomerInfo[0].CustomerId + ''
         data_request.GeoLocation = this.lat + ',' + this.lng;
         let data_request_json = JSON.stringify(data_request);
-         
-        
+
+
         this._pickupService.AddDeliveryAddress(common_data_json, data_request_json).then(data => {
-            
+
             if (data.ResultCode === '000') {
-                let addressDelivery={AddressId:data.AddressId, GeoLocation:this.lat + ',' + this.lng,Address:this.inputChangeAddress}
-                localStorage.setItem("addressDelivery",JSON.stringify(addressDelivery))
+                let addressDelivery = { AddressId: data.AddressId, GeoLocation: this.lat + ',' + this.lng, Address: this.inputChangeAddress }
+                localStorage.setItem("addressDelivery", JSON.stringify(addressDelivery))
                 $('.login-dropdown-step3').hide();
                 $('.login-overlay').removeClass('show');
                 $('.login-wrap .login').removeClass('hide-form');
@@ -722,13 +728,13 @@ export class HeaderGof3rComponent implements OnInit {
                     overflow: '',
                     height: ''
                 });;
-               
+
             }
         })
 
     }
     checkShowPopup() {
-        
+
         this.checkLoginUser();
 
         // if(this.isUserLogin===true){
@@ -787,32 +793,32 @@ export class HeaderGof3rComponent implements OnInit {
             this._pickupService.CheckLogon(common_data_json, requestDataJson).then(data => {
 
                 this.customerInfoMain = data;
-                if(this.customerInfoMain.ResultCode==="000"){
+                if (this.customerInfoMain.ResultCode === "000") {
                     localStorage.setItem("cus", this._gof3rUtil.encryptParams(JSON.stringify(this.customerInfoMain)))
-                this.isLogin = this.customerInfoMain.CustomerInfo[0].CustomerName;
-                this.checkUserLoginChangeAddress()
-                $('.login-dropdown').hide();
-                $('.login-overlay').removeClass('show');
-                $('.login-wrap .login').removeClass('hide-form');
-                $('body').css({
-                    overflow: '',
-                    height: ''
-                });;
-                this.blockUI.stop()
+                    this.isLogin = this.customerInfoMain.CustomerInfo[0].CustomerName;
+                    this.checkUserLoginChangeAddress()
+                    $('.login-dropdown').hide();
+                    $('.login-overlay').removeClass('show');
+                    $('.login-wrap .login').removeClass('hide-form');
+                    $('body').css({
+                        overflow: '',
+                        height: ''
+                    });;
+                    this.blockUI.stop()
 
-            }
-            else{
-                this.error.ResultDesc=this.customerInfoMain.ResultDesc;
+                }
+                else {
+                    this.error.ResultDesc = this.customerInfoMain.ResultDesc;
                     this.showPopupPaymentSuccess()
                     this.blockUI.stop()
-            }
-                
-                
+                }
+
+
             })
         }
 
     }
-     showPopupPaymentSuccess() {
+    showPopupPaymentSuccess() {
         var el = $('#success-popup');
         if (el.length) {
             $.magnificPopup.open({
@@ -838,9 +844,9 @@ export class HeaderGof3rComponent implements OnInit {
 
             let d = new Date(+data.CurrentTimeMillis);
             let date = moment_(d).format("DD/MM/YYYY")
-            this.currentDate=date;
+            this.currentDate = date;
             let time = d.toLocaleTimeString();
-            
+
             this.getCurrentTime.CurrentData = date;
             this.getCurrentTime.CurrentTime = moment_(d.getTime()).format("HH:mm:ss")
             this.getCurrentTime.CurrentTimeMillis = data.CurrentTimeMillis;
@@ -853,9 +859,9 @@ export class HeaderGof3rComponent implements OnInit {
             let round = this.roundTime(hours, minutes, 5);
             let dateAdd = moment_(this.getCurrentTime.CurrentTime, "HH:mm").add(ADD_MINUTE_TIME_FROM_SERVER, "minutes");
             let roundTime = this.roundTime(dateAdd.hours(), dateAdd.minutes(), 15);
-            
+
             this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
-            localStorage.setItem("whenDelivery",moment_(roundTime).format("DD/MM/YYYY :HH:mm:ss"))
+            localStorage.setItem("whenDelivery", moment_(roundTime).format("DD/MM/YYYY :HH:mm:ss"))
             this.loadDateDelivery(d);
 
         })
@@ -901,32 +907,32 @@ export class HeaderGof3rComponent implements OnInit {
         date.setDate(date.getDate() + days);
         return date;
     }
-    loadDateDelivery(currentDate:Date) {
+    loadDateDelivery(currentDate: Date) {
         this.arrayDateDelivery1 = new DeliveryDateModle();
         this.arrayDateDelivery2 = new DeliveryDateModle();
         this.DateDeliveryList = new DeliveryMainModel();
         let arrayDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
         let _date = new Date();
-        
-        for(let i = 0; i< this.outletInfo.OutletInfo[0].PickupTimeInfo.length; i++){
+
+        for (let i = 0; i < this.outletInfo.OutletInfo[0].PickupTimeInfo.length; i++) {
             let itemDate = new DeliveryItemModel();
-            itemDate.DateTtr = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom,"DD/MM/YYYY HH:mm:SS").format("DD/MM/YYYY");
-            itemDate.DayStrs=arrayDays[moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom,"DD/MM/YYYY HH:mm:SS").days()];
-            itemDate.DayStr1 = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom,"DD/MM/YYYY HH:mm:SS").dates() +'';
-            itemDate.StartTime=moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom,"DD/MM/YYYY HH:mm:SS").format("HH:mm:SS");
-            itemDate.EndTime=moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingTo,"DD/MM/YYYY HH:mm:SS").format("HH:mm:SS");
+            itemDate.DateTtr = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom, "DD/MM/YYYY HH:mm:SS").format("DD/MM/YYYY");
+            itemDate.DayStrs = arrayDays[moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom, "DD/MM/YYYY HH:mm:SS").days()];
+            itemDate.DayStr1 = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom, "DD/MM/YYYY HH:mm:SS").dates() + '';
+            itemDate.StartTime = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom, "DD/MM/YYYY HH:mm:SS").format("HH:mm:SS");
+            itemDate.EndTime = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingTo, "DD/MM/YYYY HH:mm:SS").format("HH:mm:SS");
             // if (moment_(itemDate.DateTtr).date() === moment_(currentDate).date()) {
             //     itemDate.isToday = true;
             // }
-            if(i===0){
-                itemDate.isToday=true
+            if (i === 0) {
+                itemDate.isToday = true
             }
             this.arrayDateDelivery1.arraydate.push(itemDate);
 
         }
         this.DateDeliveryList.DateList.push(this.arrayDateDelivery1)
-        
+
         // for (let i = 0; i <= 6; i++) {
         //     let itemDate = new DeliveryItemModel();
         //     if (i == 0) {
@@ -934,7 +940,7 @@ export class HeaderGof3rComponent implements OnInit {
         //     }
         //     else
         //         _date = this.addDays(_date, 1);
-           
+
         //         itemDate.DateTtr = moment_(_date).format("DD/MM/YYYY");
         //         itemDate.DayStrs = arrayDays[moment_(_date).days()];
         //         itemDate.DayStr1 = moment_(_date).date() + '';
@@ -944,25 +950,25 @@ export class HeaderGof3rComponent implements OnInit {
         //         this.arrayDateDelivery1.arraydate.push(itemDate);
         //         this.arrayDateDelivery1.Month = moment_(_date).format("MMM")
 
-           
+
 
         // }
         // this.DateDeliveryList.DateList.push(this.arrayDateDelivery1)
         // this.DateDeliveryList.DateList.push(this.arrayDateDelivery2)
-        this.haveDateList=true
-        
+        this.haveDateList = true
+
 
     }
-    createTimesDelivery(startTimes: any, endTimes: any, isToday: boolean,date:string) {
+    createTimesDelivery(startTimes: any, endTimes: any, isToday: boolean, date: string) {
         //let nowDate = this.getCurrentTime.CurrentTime;
         let nowDateTemp = moment_(startTimes, "HH:mm:ss");
         let endDateTemp = moment_(END_TIME_LIMIT, "HH:mm:ss")
         while (nowDateTemp.isBefore(endDateTemp)) {
             if (moment_(nowDateTemp, "HH:mm").add(ADD_MINUTE_TIME_FROM_SERVER, "minutes").isBefore(endDateTemp)) {
                 let dateAdd = moment_(nowDateTemp, "HH:mm").add(ADD_MINUTE_TIME_FROM_SERVER, "minutes");
-                
+
                 let roundTime = this.roundTime(dateAdd.hours(), dateAdd.minutes(), 15);
-                let jsonDate = { label: moment_(roundTime).format('HH:mm'), value:date+" "+ moment_(roundTime).format('HH:mm:ss') }
+                let jsonDate = { label: moment_(roundTime).format('HH:mm'), value: date + " " + moment_(roundTime).format('HH:mm:ss') }
                 this.timesDelivery.push(jsonDate);
                 nowDateTemp = moment_(nowDateTemp, "HH:mm").add(ADD_MINUTE_TIME_AFTER_FROM_SERVER, "minutes")
             }
@@ -971,39 +977,39 @@ export class HeaderGof3rComponent implements OnInit {
             }
 
         }
-        this.showWhen=true
-        
+        this.showWhen = true
+
         //this.whenStr = this.timesDelivery[0].label;
-        
-        
+
+
     }
-    createTimesPickup(startTimes: any, endTimes: any, isToday: boolean,date:string) {
+    createTimesPickup(startTimes: any, endTimes: any, isToday: boolean, date: string) {
         //let nowDate = this.getCurrentTime.CurrentTime;
-        
+
         let nowDateTemp = moment_(startTimes, "HH:mm:ss");
         let endDateTemp = moment_(endTimes, "HH:mm:ss")
-        
+        //this.timesPickup=[]
         while (nowDateTemp.isBefore(endDateTemp)) {
-            
-                let dateAdd = moment_(nowDateTemp, "HH:mm");
-                
-                let roundTime = this.roundTime(dateAdd.hours(), dateAdd.minutes(), 5);
-                let timeNext = moment_(roundTime,"HH:mm").add(30,"minutes");
-                let jsonDate = { label:this.tConvert(moment_(roundTime).format('HH:mm')) +" - "+this.tConvert(moment_(timeNext).format('HH:mm')), value:date+" "+ moment_(roundTime).format('HH:mm:ss'),fromDate: date+" "+ moment_(roundTime).format('HH:mm:ss'),toDate:date+" "+ moment_(timeNext).format('HH:mm:ss'),fromDateDisplay:date+" "+this.tConvert(moment_(roundTime).format('HH:mm')),toDateDisplay:date+" "+this.tConvert(moment_(timeNext).format('HH:mm')),d:date}
-                this.timesPickup.push(jsonDate);
-                nowDateTemp = moment_(timeNext, "HH:mm").add(ADD_MINUTE_TIME_AFTER_FROM_SERVER, "minutes")
-            
+
+            let dateAdd = moment_(nowDateTemp, "HH:mm");
+
+            let roundTime = this.roundTime(dateAdd.hours(), dateAdd.minutes(), 5);
+            let timeNext = moment_(roundTime, "HH:mm").add(30, "minutes");
+            let jsonDate = { label: this.tConvert(moment_(roundTime).format('HH:mm')) + " - " + this.tConvert(moment_(timeNext).format('HH:mm')), value: date + " " + moment_(roundTime).format('HH:mm:ss'), fromDate: date + " " + moment_(roundTime).format('HH:mm:ss'), toDate: date + " " + moment_(timeNext).format('HH:mm:ss'), fromDateDisplay: date + " " + this.tConvert(moment_(roundTime).format('HH:mm')), toDateDisplay: date + " " + this.tConvert(moment_(timeNext).format('HH:mm')), d: date }
+            this.timesPickup.push(jsonDate);
+            nowDateTemp = moment_(timeNext, "HH:mm").add(ADD_MINUTE_TIME_AFTER_FROM_SERVER, "minutes")
+
 
         }
 
-        this.showWhen=true
-        
+        this.showWhen = true
+
         //this.whenStr = this.timesDelivery[0].label;
-        
-        
+
+
     }
-    loadTimesDelivery(isToday: boolean,date:string) {
-        this.timesDelivery= [];
+    loadTimesDelivery(isToday: boolean, date: string) {
+        this.timesDelivery = [];
         this.getCurrentTime = new GetCurrentSystemTimeModel();
         let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
@@ -1015,16 +1021,16 @@ export class HeaderGof3rComponent implements OnInit {
         let dataRequestJson = JSON.stringify(dataRequest);
         this._pickupService.GetCurrentSystemTime(common_data_json, dataRequestJson).then(data => {
             let d = new Date(+data.CurrentTimeMillis);
-            
+
             let startTime = moment_(d).format("HH:mm:ss")
             let date = moment_(d).format("DD/MM/YYYY")
-            
-            if (isToday){
-                let [h,m,s]=startTime.split(":");
-                if(parseInt(h)<8){
-                    startTime="08:00:00";
+
+            if (isToday) {
+                let [h, m, s] = startTime.split(":");
+                if (parseInt(h) < 8) {
+                    startTime = "08:00:00";
                 }
-                this.createTimesDelivery(startTime, END_TIME_LIMIT, isToday,date)
+                this.createTimesDelivery(startTime, END_TIME_LIMIT, isToday, date)
             }
             else {
                 let [h, m, s] = START_TIME_LIMINT.split(":");
@@ -1033,14 +1039,14 @@ export class HeaderGof3rComponent implements OnInit {
                 _date.setMinutes(parseInt(m));
                 _date.setSeconds(parseInt(s));
                 let startTime = moment_(_date).format("HH:mm:ss")
-                this.createTimesDelivery(startTime, END_TIME_LIMIT, isToday,date)
+                this.createTimesDelivery(startTime, END_TIME_LIMIT, isToday, date)
             }
         })
 
     }
-    loadTimesDeliveryPickup(isToday: boolean,dateInput:string) {
-        this.timesPickup= [];
-        
+    loadTimesDeliveryPickup(isToday: boolean, dateInput: string) {
+        this.timesPickup = [];
+
         this.getCurrentTime = new GetCurrentSystemTimeModel();
         let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
@@ -1053,10 +1059,10 @@ export class HeaderGof3rComponent implements OnInit {
         this._pickupService.GetCurrentSystemTime(common_data_json, dataRequestJson).then(data => {
             let d = new Date(+data.CurrentTimeMillis);
             let startTime = "08:00:00"
-             let date = moment_(d).format("DD/MM/YYYY")
-            
-            if (isToday){
-                this.createTimesPickup(startTime, END_TIME_LIMIT, isToday,date)
+            let date = moment_(d).format("DD/MM/YYYY")
+
+            if (isToday) {
+                this.createTimesPickup(startTime, END_TIME_LIMIT, isToday, date)
             }
             else {
                 let [h, m, s] = START_TIME_LIMINT.split(":");
@@ -1065,15 +1071,15 @@ export class HeaderGof3rComponent implements OnInit {
                 _date.setMinutes(parseInt(m));
                 _date.setSeconds(parseInt(s));
                 let startTime = moment_(_date).format("HH:mm:ss")
-                this.createTimesPickup(startTime, END_TIME_LIMIT, isToday,dateInput)
+                this.createTimesPickup(startTime, END_TIME_LIMIT, isToday, dateInput)
             }
         })
 
     }
-    loadTimesPickup(isToday: boolean,dateInput:string, StartTime:string,endTime:string) {
-        this.timesPickup= [];
-        
-        this.createTimesPickup(StartTime, endTime, isToday,dateInput)
+    loadTimesPickup(isToday: boolean, dateInput: string, StartTime: string, endTime: string) {
+        this.timesPickup = [];
+
+        this.createTimesPickup(StartTime, endTime, isToday, dateInput)
         // this.getCurrentTime = new GetCurrentSystemTimeModel();
         // let common_data = new CommonDataRequest();
         // var _location = localStorage.getItem("la");
@@ -1087,7 +1093,7 @@ export class HeaderGof3rComponent implements OnInit {
         //     let d = new Date(+data.CurrentTimeMillis);
         //     let startTime = "08:00:00"
         //      let date = moment_(d).format("DD/MM/YYYY")
-            
+
         //     if (isToday){
         //         this.createTimesPickup(startTime, END_TIME_LIMIT, isToday,date)
         //     }
@@ -1103,10 +1109,11 @@ export class HeaderGof3rComponent implements OnInit {
         // })
 
     }
-    selectTime(value:string,label:string){
+    selectTime(value: string, label: string) {
         let dataSend = { function: 'changeTime', date: value };
-        this.whenStr=this.tConvert(label);
-        localStorage.setItem("whenDelivery",value)
+        this.whenStr = this.tConvert(label);
+        localStorage.setItem("whenDelivery", value)
+
         $('.login-dropdown').hide();
         $('.login-overlay').removeClass('show');
         $('.login-wrap .login').removeClass('hide-form');
@@ -1116,79 +1123,72 @@ export class HeaderGof3rComponent implements OnInit {
         });;
         this._instanceService.sendCustomEvent(dataSend);
     }
-    selectTimePickup(fromDate:string,toDate:string,fromDateDisplay:string,toDateDisplay:string,d:string,lable:string){
-        
-        let dataSend = { function: 'updateTimePickup', fromDate: fromDate,toDate:toDate,fromDateDisplay:fromDateDisplay,toDateDisplay:toDateDisplay };
-        let dcut = d.slice(0,d.length-5)
-        this.whenStr=dcut +" " + lable
-        $('.login-dropdown').hide();
-        $('.login-overlay').removeClass('show');
-        $('.login-wrap .login').removeClass('hide-form');
-        $('body').css({
-            overflow: '',
-            height: ''
-        });;
-        this._instanceService.sendCustomEvent(dataSend);
+    selectTimePickup(fromDate: string, toDate: string, fromDateDisplay: string, toDateDisplay: string, d: string, lable: string,index:number) {
+
+
+        this.checkPickUpTime(fromDate, toDate, fromDateDisplay, toDateDisplay, d, lable, index)
+
+
     }
-     RegisterOPT() {
+    RegisterOPT() {
 
 
-        if(this.signUp.Password===this.signUp.ConfrimPassword){
+        if (this.signUp.Password === this.signUp.ConfrimPassword) {
             let common_data = new CommonDataRequest();
-        var _location = localStorage.getItem("la");
-        common_data.Location = _location
-        common_data.ServiceName = "RequestRegistrationOTP";
-        var common_data_json = JSON.stringify(common_data);
+            var _location = localStorage.getItem("la");
+            common_data.Location = _location
+            common_data.ServiceName = "RequestRegistrationOTP";
+            var common_data_json = JSON.stringify(common_data);
 
-        let requestData = new RequestRegisterOTP();
-        requestData.Email = this.signUp.Email;
-        requestData.Mobile =this.signUp.PhoneCode+ this.signUp.PhoneNumber;
-        let request_data_json = JSON.stringify(requestData);
-        this._pickupService.RequestRegistrationOTP(common_data_json, request_data_json).then(data => {
-            this.responseData = data;
-           
-            if (this.responseData.ResultCode == "000") {
-                let requestRegister = new RequestRegisterCustomerModel();
-                requestRegister.CustomerName = this.signUp.FullName;
-                requestRegister.Email = this.signUp.Email
-                requestRegister.Mobile =this.signUp.PhoneCode+ this.signUp.PhoneNumber;
-                requestRegister.Password = this.signUp.Password
-                $('.signup-dropdown-otp').fadeIn();
-                $('.signup-dropdown').hide();
-                 this.move()
-                // this._instanceService.sendCustomEvent(requestRegister);
-                // this._router.navigateByUrl('/login-otp')
+            let requestData = new RequestRegisterOTP();
+            requestData.Email = this.signUp.Email;
+            requestData.Mobile = this.signUp.PhoneCode + this.signUp.PhoneNumber;
+            let request_data_json = JSON.stringify(requestData);
+            this._pickupService.RequestRegistrationOTP(common_data_json, request_data_json).then(data => {
+                this.responseData = data;
 
+                if (this.responseData.ResultCode == "000") {
+                    let requestRegister = new RequestRegisterCustomerModel();
+                    requestRegister.CustomerName = this.signUp.FullName;
+                    requestRegister.Email = this.signUp.Email
+                    requestRegister.Mobile = this.signUp.PhoneCode + this.signUp.PhoneNumber;
+                    requestRegister.Password = this.signUp.Password
+                    $('.signup-dropdown-otp').fadeIn();
+                    $('.signup-dropdown').hide();
+                    this.move()
+                    // this._instanceService.sendCustomEvent(requestRegister);
+                    // this._router.navigateByUrl('/login-otp')
+
+                } else {
+                    // this.isError=true
+                    this.error.ResultDesc = this.responseData.ResultDesc;
+                    this.showPopupPaymentSuccess()
+                    //   $('.signup-dropdown-otp').fadeIn();
+                    // $('.signup-dropdown').hide();
+                    //this.move()
+
+                }
+            })
+        }
+        else {
+            this.error.ResultDesc = "The password is not match"
+            this.showPopupPaymentSuccess();
+        }
+
+    }
+    move() {
+        var elem = document.getElementById("per");
+        var width = 1;
+        var id = setInterval(frame, 100);
+        function frame() {
+            if (width >= 100) {
+                clearInterval(id);
             } else {
-                // this.isError=true
-                this.error.ResultDesc = this.responseData.ResultDesc;
-                this.showPopupPaymentSuccess()
-                //   $('.signup-dropdown-otp').fadeIn();
-                // $('.signup-dropdown').hide();
-                //this.move()
-
+                width++;
+                elem.style.width = width + '%';
             }
-        })
-    }
-    else{
-        this.error.ResultDesc="The password is not match"
-        this.showPopupPaymentSuccess();
-    }
-
-}
-move() {
-    var elem = document.getElementById("per"); 
-    var width = 1;
-    var id = setInterval(frame, 100);
-    function frame() {
-        if (width >= 100) {
-            clearInterval(id);
-        } else {
-            width++; 
-            elem.style.width = width + '%'; 
         }
     }
-}
     inputOTP(even) {
         let lenght = (even.target.value.length)
         if (lenght == 6) {
@@ -1207,7 +1207,7 @@ move() {
         let requestRegister = new RequestRegisterCustomerModel();
         requestRegister.CustomerName = this.signUp.FullName
         requestRegister.Email = this.signUp.Email
-        requestRegister.Mobile =this.signUp.PhoneCode+ this.signUp.PhoneNumber
+        requestRegister.Mobile = this.signUp.PhoneCode + this.signUp.PhoneNumber
         requestRegister.OTP = otp
         requestRegister.Password = this.signUp.Password
         let request_data_json = JSON.stringify(requestRegister);
@@ -1223,8 +1223,8 @@ move() {
                 this.getInitParam();
                 this.blockUI.stop();
             }
-            else{
-                this.error.ResultDesc=this.customerInfoMain.ResultDesc;
+            else {
+                this.error.ResultDesc = this.customerInfoMain.ResultDesc;
                 this.showPopupPaymentSuccess();
                 this.blockUI.stop()
             }
@@ -1259,11 +1259,11 @@ move() {
         this._homeservice.getServiceHome(jsonCommon, jsonRequest).then(data => {
 
             this.getInitialParams = data;
-            
-            for(let i = 0; i< this.getInitialParams.CountryInfo.length; i++){
-               
-                if(this.getInitialParams.CountryInfo[i].CountryCode==="65"){
-                    this.signUp.PhoneCode="+"+this.getInitialParams.CountryInfo[i].CountryCode;
+
+            for (let i = 0; i < this.getInitialParams.CountryInfo.length; i++) {
+
+                if (this.getInitialParams.CountryInfo[i].CountryCode === "65") {
+                    this.signUp.PhoneCode = "+" + this.getInitialParams.CountryInfo[i].CountryCode;
                 }
             }
             //this.haveDataInit=true
@@ -1272,29 +1272,29 @@ move() {
             //this.blockUI.stop()
         });
     }
-    accountClick(){
+    accountClick() {
         this._instanceService.sendCustomEvent("")
         this._instanceService.sendCustomEvent("MyProfile");
         this._route.navigateByUrl("/account")
         ///this.router.navigate(["/account"])
     }
-    orderHistoryClick(){
+    orderHistoryClick() {
         this._instanceService.sendCustomEvent("")
         this._instanceService.sendCustomEvent("OrderHistory");
         this._route.navigateByUrl("/order-history")
     }
-    inviteFriend(){
+    inviteFriend() {
         this._instanceService.sendCustomEvent("")
         this._instanceService.sendCustomEvent("Invite");
         this._route.navigateByUrl("/invite");
     }
-    help(){
+    help() {
         this._instanceService.sendCustomEvent("")
         this._instanceService.sendCustomEvent("Help");
         this._route.navigateByUrl("/help");
     }
-    closeInfor(){
-         $('.login-dropdown').hide();
+    closeInfor() {
+        $('.login-dropdown').hide();
         $('.login-overlay').removeClass('show');
         $('.login-wrap .login').removeClass('hide-form');
         $('body').css({
@@ -1302,7 +1302,7 @@ move() {
             height: ''
         });;
     }
-    showSelectCountry(){
+    showSelectCountry() {
         var el = $('#country-popup');
         if (el.length) {
             $.magnificPopup.open({
@@ -1313,17 +1313,101 @@ move() {
             });
         }
     }
-    selectCountry(countryCode:string){
-        this.selectCountryCode="+"+countryCode;;
-       
+    selectCountry(countryCode: string) {
+        this.selectCountryCode = "+" + countryCode;;
+
     }
-    closeCountry(){
-         this.signUp.PhoneCode=this.selectCountryCode;
+    closeCountry() {
+        this.signUp.PhoneCode = this.selectCountryCode;
         $.magnificPopup.close()
     }
-    loadTimePickupFirst(){
-        
-        this.createTimesPickup(this.DateDeliveryList.DateList[0].arraydate[0].StartTime,this.DateDeliveryList.DateList[0].arraydate[0].EndTime,this.DateDeliveryList.DateList[0].arraydate[0].isToday,this.DateDeliveryList.DateList[0].arraydate[0].DateTtr)
+    loadTimePickupFirst() {
 
+        this.createTimesPickup(this.DateDeliveryList.DateList[0].arraydate[0].StartTime, this.DateDeliveryList.DateList[0].arraydate[0].EndTime, this.DateDeliveryList.DateList[0].arraydate[0].isToday, this.DateDeliveryList.DateList[0].arraydate[0].DateTtr)
+
+    }
+    checkPickUpTime(fromDate: string, toDate: string, fromDateDisplay: string, toDateDisplay: string, dateSelect: string, lable: string,index:number) {
+        this.getCurrentTime = new GetCurrentSystemTimeModel();
+        let rs: boolean = false;
+        let common_data = new CommonDataRequest();
+        var _location = localStorage.getItem("la");
+        common_data.Location = _location
+        common_data.ServiceName = "GetCurrentSystemTime";
+        let common_data_json = JSON.stringify(common_data);
+
+        let dataRequest = new GetCurrentSystemTimeRequest();
+        let dataRequestJson = JSON.stringify(dataRequest);
+        this._pickupService.GetCurrentSystemTime(common_data_json, dataRequestJson).then(data => {
+
+            let d = new Date(+data.CurrentTimeMillis);
+            let date = moment_(d).format("DD/MM/YYYY")
+
+            let selectDate = moment_(dateSelect).format("DD/MM/YYYY")
+            console.log("currentDateCompare1:" + date)
+            console.log("selectDate:" + selectDate)
+            if (selectDate == this.currentDate) {
+                let hoursCurrent = parseInt(moment_(d.getTime()).format("HH"));
+                let [date, h, apm] = fromDate.split(" ")
+                let [hh, mm] = h.split(":");
+                let h1:number=0
+                if(apm=="PM"){
+                    if(parseInt(hh)>12){
+                        h1= parseInt(hh)+12
+                    }
+                    else{
+                        h1=parseInt(hh)
+                    }
+                }
+                else{
+                    h1=parseInt(hh)
+                }
+                
+                console.log("hh1:"+ h1)
+                if (h1< hoursCurrent) {
+                    rs = false;
+                    this.errorCart = "Can not pickup this time"
+                    $.magnificPopup.open({
+                        items: {
+                            src: '#pickup-date-error'
+                        },
+                        type: 'inline'
+                    });
+                }
+                else {
+                    let dataSend = { function: 'updateTimePickup', fromDate: fromDate, toDate: toDate, fromDateDisplay: fromDateDisplay, toDateDisplay: toDateDisplay };
+                    let dcut = dateSelect.slice(0, dateSelect.length - 5)
+                    this.whenStr = dcut + " " + lable
+                    $('.login-dropdown').hide();
+                    $('.login-overlay').removeClass('show');
+                    $('.login-wrap .login').removeClass('hide-form');
+                    $('body').css({
+                        overflow: '',
+                        height: ''
+                    });;
+                    this._instanceService.sendCustomEvent(dataSend);
+                    rs = true
+                }
+
+            }
+            else {
+                console.log("true1:" + "jjjj")
+                let dataSend = { function: 'updateTimePickup', fromDate: fromDate, toDate: toDate, fromDateDisplay: fromDateDisplay, toDateDisplay: toDateDisplay };
+                let dcut = dateSelect.slice(0, dateSelect.length - 5)
+                this.whenStr = dcut + " " + lable
+                $('.login-dropdown').hide();
+                $('.login-overlay').removeClass('show');
+                $('.login-wrap .login').removeClass('hide-form');
+                $('body').css({
+                    overflow: '',
+                    height: ''
+                });;
+                this._instanceService.sendCustomEvent(dataSend);
+                rs = true
+            }
+        })
+        return rs;
+    }
+    closePopupSelectTimes() {
+        $.magnificPopup.close()
     }
 }

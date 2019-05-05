@@ -6,4 +6,5 @@ export class GetCurrentSystemTimeModel{
     CurrentData:string;
     CurrentTime:string;
     CurrentTimeTo:string
+    CurrentTimeFrom:string
 }

@@ -101,7 +101,7 @@
                                             <form action="">
                                                 <input type="text" [(ngModel)]="this.inutUserName" name="email-login" placeholder="Email Address">
                                                 <input type="password" [(ngModel)]="this.passWord" name="pass-login" placeholder="Password">
-                                                <button class="btn-main btn-login" >LOG IN</button>
+                                                <button class="btn-main btn-login" (click)="userLogin()" >LOG IN</button>
                                                 <a href="02_Login_03_ForgotPassword.html" class="forgot-pass" [routerLink]="['/forgot-password']">Forgot your password?</a>
                                             </form>
                                         </div>
@@ -173,6 +173,13 @@
   <block-ui>
       <!-- Your app markup here -->
     </block-ui>
+    <div id="success-popup" class="success-popup mfp-hide" style="text-align: center">
+        <div class="" style="text-align: center">{{this.error.ResultDesc}}</div>
+        <!--<div style="cursor: pointer" class="text-center" (click)="trackerOrder()" 
+        ><img src="assets/images/ico-succsess.png" alt=""></div>-->
+        
+       
+</div>
 
                 
        

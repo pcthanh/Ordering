@@ -8,6 +8,8 @@ import { RequestLogOutModel } from "../models-request/request-log-out-customer";
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { CommonDataRequest } from "../models-request/request-comon-data";
 import { PickupService } from "../services/pickup.service";
+import { CheckLogonRequest } from "../models-request/check-logon";
+import { ErrorModel } from "../models/Error";
 declare var $: any
 @Component({
     selector: 'header-checkout',
@@ -23,12 +25,14 @@ export class HeaderCheckOutComponent implements OnInit {
     passWord:string=""
     signUp: SingUpModel;
     @BlockUI() blockUI: NgBlockUI;
+    error: ErrorModel;
     constructor(private _gof3rUtil: Gof3rUtil,private _route:Router,private _instanceService: EventSubscribeService,private _pickupService: PickupService) { 
         this._instanceService.$getEventSubject.subscribe(data=>{
             if(data==="UpdateProfile"){
                 this.checkLoginUser();
             }
         })
+        this.error= new ErrorModel()
         this.signUp = new SingUpModel();
     }
     
@@ -260,5 +264,61 @@ export class HeaderCheckOutComponent implements OnInit {
                 this._route.navigateByUrl('/home')
             }
         })
+    }
+    userLogin() {
+        if (this.inutUserName !== '' || this.passWord !== '') {
+            this.blockUI.start()
+            this.customerInfoMain = new CustomerInfoMainModel();
+            let common_data = new CommonDataRequest();
+            var _location = localStorage.getItem("la");
+            common_data.AppId = "3.6"
+            common_data.Location = _location
+            common_data.ServiceName = "CheckLogon";
+            let common_data_json = JSON.stringify(common_data);
+
+
+            let requestData = new CheckLogonRequest();
+            requestData.UserName = this.inutUserName
+            requestData.Password = this.passWord;
+            requestData.OTP = ""
+            let requestDataJson = JSON.stringify(requestData)
+            this._pickupService.CheckLogon(common_data_json, requestDataJson).then(data => {
+
+                this.customerInfoMain = data;
+                if (this.customerInfoMain.ResultCode === "000") {
+                    localStorage.setItem("cus", this._gof3rUtil.encryptParams(JSON.stringify(this.customerInfoMain)))
+                    this.isLogin = this.customerInfoMain.CustomerInfo[0].CustomerName;
+                    //this.checkUserLoginChangeAddress()
+                    $('.login-dropdown').hide();
+                    $('.login-overlay').removeClass('show');
+                    $('.login-wrap .login').removeClass('hide-form');
+                    $('body').css({
+                        overflow: '',
+                        height: ''
+                    });;
+                    this.blockUI.stop()
+
+                }
+                else {
+                    this.error.ResultDesc = this.customerInfoMain.ResultDesc;
+                    this.showPopupPaymentSuccess()
+                    this.blockUI.stop()
+                }
+
+
+            })
+        }
+
+    }
+    showPopupPaymentSuccess() {
+        var el = $('#success-popup');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el
+                },
+                type: 'inline'
+            });
+        }
     }
 }

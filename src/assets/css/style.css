@@ -2050,7 +2050,7 @@ blockquote {
   text-decoration: none;
 }
 .order-catalog ul li.active a {
-  color: #8e49fe;
+  color: #8e49fe !important;
 }
 .order-info-wrap .order-title {
   font-size: 24px;

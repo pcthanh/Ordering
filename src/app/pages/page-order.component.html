@@ -66,10 +66,10 @@
     overflow-y: scroll;"
                                             id="order-catalog" *ngIf="haveDataOutlet && this.haveDepartment==='Y'">
                                             <ul>
-                                                <li class="active" (click)="loadItemOfCategory('ALL',this.productList.IsHavingDepartment)"><a>All</a></li>
+                                                <li [ngClass]="{'active': this.addClass===-1}" style="color: #9f9f9f"> (click)="loadItemOfCategory('ALL',this.productList.IsHavingDepartment)"><a>All</a></li>
                                                 <li *ngFor="let item of this.outletInfo.OutletInfo[0].DepartmentCategoryList;let i = index"
                                                     id="{{item.DepartmentId}}" (click)="loadItemOfCategory(item.DepartmentId,this.productList.IsHavingDepartment,i)"
-                                                    [ngClass]="{'menu-item-all': this.addClass===i}"><a style="color: #9f9f9f">{{item.DepartmentName}}</a></li>
+                                                    [ngClass]="{'active': this.addClass===i}"><a style="color: #9f9f9f">{{item.DepartmentName}}</a></li>
 
                                             </ul>
                                         </div>
@@ -79,7 +79,7 @@
     overflow-y: scroll;"
                                             id="order-catalog" *ngIf="haveDataOutlet && this.haveDepartment==='N'">
                                             <ul>
-                                                <li class="active" (click)="loadItemOfCategory('ALL',this.productList.IsHavingDepartment)"><a>All</a></li>
+                                                <li [ngClass]="{'active': this.addClass===-1}" style="color: #9f9f9f" (click)="loadItemOfCategory('ALL',this.productList.IsHavingDepartment)"><a>All</a></li>
                                                 <li *ngFor="let item of this.outletInfo.OutletInfo[0].DepartmentCategoryList[0].CategoryList;let i = index"
                                                     id="{{item.CategoryId}}" (click)="loadItemOfCategory(item.CategoryId,this.productList.IsHavingDepartment,i)"
                                                     [ngClass]="{'active': this.addClass===i}"><a style="color: #9f9f9f">{{item.CategoryName}}</a></li>
@@ -188,7 +188,7 @@
                                                         <!--<a href="#" class="feedback">Send Menu Feeback</a>-->
                                                         <div class="handle-counter" id="handleCounter">
                                                             <button (click)="SubtractionItem()" class="counter-minus"><span>_</span></button>
-                                                            <input type="text" value="{{productDetailParse.Qty}}">
+                                                            <input readonly=true type="text" value="{{productDetailParse.Qty}}">
                                                             <button (click)="AdditionQtyItem()" class="counter-plus">+</button>
                                                         </div>
 
@@ -378,8 +378,8 @@
                                                 <div *ngFor="let itemOp of item.OptionList">
                                                     <div *ngFor="let itemOPD of itemOp.OptionItemList">
                                                         <div *ngIf="itemOPD.isCheck==true">
-                                                            <li><span class="inf">• {{itemOPD.OptionItemName}}</span><span
-                                                                    class="price">{{itemOPD.PriceDisplay}}</span></li>
+                                                            <li><span class="inf">• {{itemOPD.OptionItemName}} x {{itemOPD.Qty}}</span><span
+                                                                    class="price">{{itemOPD.TotalStr}}</span></li>
 
                                                         </div>
                                                     </div>
