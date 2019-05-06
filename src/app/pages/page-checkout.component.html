@@ -125,7 +125,7 @@
                                             <div *ngFor="let itemOp of item.OptionList">
                                                 <div *ngFor="let itemOPD of itemOp.OptionItemList">
                                                     <div *ngIf="itemOPD.isCheck==true">
-                                                        <li><span class="inf">• {{itemOPD.OptionItemName}}</span><span class="price">{{itemOPD.PriceDisplay}}</span></li>
+                                                        <li><span class="inf">• {{itemOPD.OptionItemName}} x {{itemOPD.Qty}}</span><span class="price">{{itemOPD.TotalStr}}</span></li>
                                                         
                                                     </div>
                                                 </div>

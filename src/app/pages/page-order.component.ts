@@ -853,7 +853,7 @@ export class PageOrderComponent implements OnInit {
             }
             let haveOutetInCart: boolean = false;
             if (this.cartNew.cartNew.length > 0) {//check cart not yet item
-                let flagFoodCenter: boolean = this.checkFoodCenter(this.outletInfo.OutletInfo[0].FoodCentreId)
+                let flagFoodCenter: boolean = this.checkFoodCenter(this.outletInfo.OutletInfo[0].FoodCentreId,this.outletInfo.OutletInfo[0].IsBuyAndPayOutlet)
                 if (!flagFoodCenter) {
                     $.magnificPopup.close()
                     // setTimeout(() => {
@@ -964,11 +964,11 @@ export class PageOrderComponent implements OnInit {
 
 
     }
-    checkFoodCenter(foodCenterId: string) {
+    checkFoodCenter(foodCenterId: string,isBuyAndPay:string) {
         let flagFoodCenter: boolean = false;
         if (foodCenterId) {
             for (let i = 0; i < this.cartNew.cartNew.length; i++) {
-                if (this.cartNew.cartNew[i].FoodCenterID === foodCenterId) {
+                if (this.cartNew.cartNew[i].FoodCenterID === foodCenterId && this.cartNew.cartNew[i].IsBuyAndPayOutlet===isBuyAndPay) {
                     flagFoodCenter = true;
                 }
             }

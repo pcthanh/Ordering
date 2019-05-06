@@ -740,7 +740,7 @@ export class PageCheckOutComponent implements OnInit {
 
 
             this.allPayment = data
-           
+           console.log("all:"+ JSON.stringify(this.allPayment))
             
             for(let i =0;i< this.allPayment.PointWalletListInfo.length; i++){
                 for(let j = 0; j< this.allPayment.PointWalletListInfo[i].RebateProgramInfo.length; j++){
