@@ -818,7 +818,7 @@ export class PageCheckOutComponent implements OnInit {
                             if (data.ResultCode === "000") {
                                 localStorage.setItem('addcard', JSON.stringify(data_request))
     
-                                this.makePayment()
+                                this.makePayment1()
                             }
                             else {
     
@@ -878,7 +878,7 @@ export class PageCheckOutComponent implements OnInit {
         data_request.CardHolderName = this.orderMain.CardHoldName
         data_request.StoreCardUniqueID = this.orderMain.PaymentGatewayToken;
         let data_request_json = JSON.stringify(data_request)
-    
+        console.log("makepayment:"+ data_request_json)
         this._pickupService.MakePayment(common_data_json, data_request_json).then(data => {
             
             this.makePaymentMain = data;
@@ -2121,6 +2121,167 @@ export class PageCheckOutComponent implements OnInit {
         this.soldOutArray[index].isCheck=true;
         this.soldOut=this.soldOutArray[index].name;
         $.magnificPopup.close()
+    }
+    makePayment1() {
+        let common_data = new CommonDataRequest();
+        var _location = localStorage.getItem("la");
+        common_data.Location = _location
+        common_data.ServiceName = "MakePayment";
+        let common_data_json = JSON.stringify(common_data);
+
+        let data_request = new PlaceOrderDeliveryModel()
+        data_request.App = "CUSTOMER"
+        data_request.PaperVoucherAmount = this._gof3rModule.ParseTo12(0)
+        if (this.orderMain.OrderType === ORDER_DELIVERY)
+            data_request.Description = "PAYMENT FOR DELIVERY ORDER"
+        else
+            data_request.Description = "PAYMENT FOR PICKUP ORDER"
+        data_request.DeliverOn = this.orderMain.DeliveryOn //this.orderMain.DeliveryOnRequest.trim()
+        data_request.DeliveryOnRequest = ""
+        data_request.ExpectedDeliveryTime = this.orderMain.DeliveryOnRequest
+        if (this.orderMain.OrderType === ORDER_DELIVERY) {
+            data_request.PickupDateTo = ""
+            data_request.PickupDateFrom = ""
+        }
+        else {
+            data_request.PickupDateFrom = this.orderMain.PickupDateFrom//"14/08/2018 10:00:00" //this.orderMain.PickupDate + " " + this.orderMain.PickupTimeFrom + " 00"
+            data_request.PickupDateTo = this.orderMain.PickupDateTo //"14/08/2018 10:45 :00"//this.orderMain.PickupDate + " " + this.orderMain.PickupTimeTo + " 00"
+
+        }
+
+        data_request.CreditAmount = this._gof3rModule.ParseTo12(this.orderMain.Credit)
+
+        data_request.PaymentAmount = this._gof3rModule.ParseTo12(this.orderMain.SubTotal)
+        data_request.OrderType = this.orderMain.OrderType
+        data_request.Surcharge = this._gof3rModule.ParseTo12(this.orderMain.Surcharge)
+        data_request.UsedPromotionCodeList = ""
+        data_request.DiscountProgramId = ""
+        data_request.TerminalId = this.orderMain.OrderingTerminalId
+        data_request.MaskedPAN = this.orderMain.MaskingCardNumber
+        data_request.PaymentQRCode = ""
+        data_request.PromoCodeId = this.orderMain.PrmoCodeID
+
+        data_request.RiderTipAmount = this._gof3rModule.ParseTo12(this.orderMain.RiderTip)
+        data_request.DiscountProgramAmount = this._gof3rModule.ParseTo12(this.orderMain.DiscountProgramAmount)
+        data_request.VoucherList = ""
+        data_request.UsedCouponVoucherList = ""
+        data_request.BIN = ""
+        //data_request.RefNo = RefNo
+        data_request.PaidBy = this.orderMain.CardTypeValue
+        //data_request.InvoiceNo = InvoiceNo
+        data_request.CustomerId = this.orderMain.CustomerId + ''
+        //data_request.uniqueTransactionCode = InvoiceNo
+        data_request.IsGroupOrder = this.orderMain.IsGroupOrder
+        data_request.Note = this.orderNote;
+        data_request.ActionForSoldOutItem=this.soldOut;
+        if (this.cartNew.cartNew.length > 1) {
+            data_request.MerchantId = ""
+            data_request.MerchantOutletId = ""
+            data_request.IsCombinedOrder = "Y"
+            data_request.CombinedOrderInfo = this.combinedOrderInfo();
+        }
+        else {
+            data_request.IsCombinedOrder = "N"
+            data_request.MerchantId = this.orderMain.MerchantId
+            data_request.MerchantOutletId = this.cartNew.cartNew[0].OuteletID
+        }
+       
+        if (this.PO === "PO_CARD")
+            data_request.PaymentOptions = "PO_CARD"
+        if (this.PO === "PO_POINT")
+            data_request.PaymentOptions = "PO_POINT"
+        if (this.PO === "PO_WALLET")
+            data_request.PaymentOptions = "PO_WALLET"
+        data_request.DiscountAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.PromoCodeValue + '') + parseFloat(this.orderMain.Credit + '') + parseFloat(this.orderMain.DiscountProgramAmount + ''))
+        //data_request.ApprovalCode = ApprovalCode
+        //"81,000000000050,1,^^^23,27,000000000050,1###35,000000000050,1,^^^21,21,000000000050,1===21,23,000000000050,1"
+        data_request.ProductList = this.listProduct()
+
+        data_request.ServiceFee = this._gof3rModule.ParseTo12(this.orderMain.ServiceFeeValue)
+        data_request.PaymentFee = this._gof3rModule.ParseTo12(this.orderMain.ServiceFeeValue + this.orderMain.DeliveryFee + this.orderMain.RiderTip)
+        data_request.TranxCurrency = "702"//this.orderMain.CurrencyCode
+        if (this.orderMain.OrderType === ORDER_DELIVERY)
+            data_request.DeliveryAddressId = this.orderMain.DeliveryId //this.orderMain.DeliveryId
+        else
+            data_request.DeliveryAddressId = ""
+        data_request.PromoCodeAmount = this._gof3rModule.ParseTo12(this.orderMain.PromoCodeValue)
+        data_request.DeliveryFee = this._gof3rModule.ParseTo12(this.orderMain.DeliveryFee)
+        data_request.PAN = this.orderMain.CardToken
+        data_request.TranxAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.Total.toFixed(2)))
+        data_request.CardHolderName = this.orderMain.CardHoldName
+        data_request.StoreCardUniqueID = this.orderMain.PaymentGatewayToken;
+        let data_request_json = JSON.stringify(data_request);
+        console.log("makepayment:"+ data_request_json)
+        console.log("makepayment1:"+ common_data_json)
+        this._pickupService.PlaceOrder(common_data_json, data_request_json).then(data => {
+
+            console.log("makepay:"+ JSON.stringify(data))
+            this.placeOrderMain = data;
+            localStorage.setItem('placeOrder', JSON.stringify(this.placeOrderMain));// save order payment success
+            if (data.ResultCode === "000") {
+                this.customerOrderId = this.placeOrderMain.CustomerOrderId;
+                if (this.PO === "PO_CARD") {
+                    this.addCradModel = JSON.parse(localStorage.getItem("addcard")) as AddTransactionRequestModel
+
+                    let common_data = new CommonDataRequest();
+                    var _location = localStorage.getItem("la");
+                    common_data.Location = _location
+                    common_data.ServiceName = "UpdateCardTransaction";
+                    let common_data_json = JSON.stringify(common_data);
+
+                    let data_request = new UpdateCardTransactionRequest();
+
+                    data_request.InvoiceNumber = this.addCradModel.InvoiceNumber
+                    data_request.MaskedPan = this.addCradModel.MaskedPan
+                    data_request.ResponseCode = "000"
+                    data_request.ResponseDesc = "Approved"
+                    let date = new Date()
+                    data_request.TransactionDate = moment_(date).format("DD/MM/YYYY HH:mm:ss")
+                    let data_request_json = JSON.stringify(data_request)
+
+                    this._pickupService.UpdateCardTransaction(common_data_json, data_request_json).then(data => {
+                      
+                        if (data.ResultCode === "000") {
+                            this.blockUI.stop(); //end block ui
+                            if (this.orderMain.OrderType === ORDER_DELIVERY) {
+                                this.cartNew = new CartOrderNew()
+                                localStorage.setItem('crtd', JSON.stringify(this.cartNew))
+                            }
+                            if (this.orderMain.OrderType === ORDER_PICKUP) {
+                                this.cartNew = new CartOrderNew()
+                                localStorage.setItem('crt', JSON.stringify(this.cartNew))
+                            }
+                            
+                            this.showPopupPaymentSuccess()
+                            //this._router.navigateByUrl("/payment-success")
+                        }
+                        else {
+                            this.checkError(data.ResultCode, data.ResultDesc, data.ServiceName);
+                        }
+                    })
+                }
+                if (this.orderMain.PaymentOptions === "PO_POINT" || this.orderMain.PaymentOptions === "PO_WALLET") {
+                    if (this.orderMain.OrderType === ORDER_DELIVERY) {
+                        this.cartNew = new CartOrderNew()
+                        localStorage.setItem('crtd', JSON.stringify(this.cartNew))
+
+                    }
+                    if (this.orderMain.OrderType === ORDER_PICKUP) {
+                        this.cartNew = new CartOrderNew()
+                        localStorage.setItem('crt', JSON.stringify(this.cartNew))
+                    }
+                    this.blockUI.stop();
+                    this.showPopupPaymentSuccess()
+                    //this._router.navigateByUrl("/payment-success")
+                }
+
+
+            }
+            else {
+                this.checkError(data.ResultCode, data.ResultDesc, data.ServiceName);
+            }
+        })
+
     }
     
 }

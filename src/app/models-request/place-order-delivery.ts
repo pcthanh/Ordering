@@ -46,4 +46,10 @@ export class PlaceOrderDeliveryModel{
     IsCombinedOrder:string=""
     CombinedOrderInfo:string=""
     ActionForSoldOutItem:string=""
+    CardHolderName:string=""
+    StoreCardUniqueID:string=""
+    EncryptedCardInfo:string="00acHPqVhuHNC0zqhLz/k1mEsPntaz5kh64pzu4TA/kBm61dL3sH1MGQiu50EIvzkPF/UJBrY30s2Te7gjkirVP4ZdsEvNc5GG8ejexrOPTZh6U+lyZ8eICqDDIRd6IkVjkLs9iUziw9xLBsjiKsi5LZ+EaNjrQ2yHAwbQ2O0iN9xy4=U2FsdGVkX1/UANNhzoAzi4RkHe+a3W3zc05mpn8JR3k="
+    RebateProgramId :string=""
+    TotalRebatePercentage:string=""
+    TotalRebateFixedAmount:string=""
 }

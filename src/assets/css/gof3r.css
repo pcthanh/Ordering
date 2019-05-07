@@ -270,7 +270,8 @@
   padding-left: 2rem;
 }
 .item-info .price{
-  float: right;
+  /* float: right; */
+  padding: 10px
 }
 .item-info li{
   color: #9f9f9f;
