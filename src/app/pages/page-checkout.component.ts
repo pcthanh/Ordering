@@ -807,18 +807,19 @@ export class PageCheckOutComponent implements OnInit {
                     data_request.CurrencyCode = this.orderMain.CurrencyCode
                     data_request.Amount = this._gof3rModule.ParseTo12(this.orderMain.Total)
                     data_request.MaskedPan = this.orderMain.MaskingCardNumber
-                    data_request.InvoiceNumber = this._gof3rModule.getRandom(12);
+                    // data_request.InvoiceNumber = this._gof3rModule.getRandom(12);
+                    // data_request.InvoiceNumber = "";
                     let date = new Date()
                     data_request.TransactionDate = moment_(date).format("DD/MM/YYYY HH:mm:ss")
                     let data_request_json = JSON.stringify(data_request)
-                    
+                    console.log("request:"+ data_request_json)
                     if (this.PO === "PO_CARD") {
                         this._pickupService.AddCardTransaction(common_data_json, data_request_json).then(data => {
-                            
+                            console.log("add:"+ JSON.stringify(data))
                             if (data.ResultCode === "000") {
                                 localStorage.setItem('addcard', JSON.stringify(data_request))
     
-                                this.makePayment1()
+                                this.makePayment1(data.InvoiceNumber)
                             }
                             else {
     
@@ -1262,7 +1263,7 @@ export class PageCheckOutComponent implements OnInit {
         }
     }
     showPopupPaymentSuccess() {
-        var el = $('#success-popup');
+        var el = $('#success-popup-order');
         if (el.length) {
             $.magnificPopup.open({
                 items: {
@@ -2122,7 +2123,7 @@ export class PageCheckOutComponent implements OnInit {
         this.soldOut=this.soldOutArray[index].name;
         $.magnificPopup.close()
     }
-    makePayment1() {
+    makePayment1(InvoiceNo:string) {
         let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
         common_data.Location = _location
@@ -2168,7 +2169,7 @@ export class PageCheckOutComponent implements OnInit {
         data_request.BIN = ""
         //data_request.RefNo = RefNo
         data_request.PaidBy = this.orderMain.CardTypeValue
-        //data_request.InvoiceNo = InvoiceNo
+        data_request.InvoiceNo = InvoiceNo
         data_request.CustomerId = this.orderMain.CustomerId + ''
         //data_request.uniqueTransactionCode = InvoiceNo
         data_request.IsGroupOrder = this.orderMain.IsGroupOrder
@@ -2221,44 +2222,54 @@ export class PageCheckOutComponent implements OnInit {
             if (data.ResultCode === "000") {
                 this.customerOrderId = this.placeOrderMain.CustomerOrderId;
                 if (this.PO === "PO_CARD") {
-                    this.addCradModel = JSON.parse(localStorage.getItem("addcard")) as AddTransactionRequestModel
+                    this.blockUI.stop();
+                    if (this.orderMain.OrderType === ORDER_DELIVERY) {
+                        this.cartNew = new CartOrderNew()
+                        localStorage.setItem('crtd', JSON.stringify(this.cartNew))
+                    }
+                    if (this.orderMain.OrderType === ORDER_PICKUP) {
+                        this.cartNew = new CartOrderNew()
+                        localStorage.setItem('crt', JSON.stringify(this.cartNew))
+                    }
+                    this.showPopupPaymentSuccess()
+                    // this.addCradModel = JSON.parse(localStorage.getItem("addcard")) as AddTransactionRequestModel
 
-                    let common_data = new CommonDataRequest();
-                    var _location = localStorage.getItem("la");
-                    common_data.Location = _location
-                    common_data.ServiceName = "UpdateCardTransaction";
-                    let common_data_json = JSON.stringify(common_data);
+                    // let common_data = new CommonDataRequest();
+                    // var _location = localStorage.getItem("la");
+                    // common_data.Location = _location
+                    // common_data.ServiceName = "UpdateCardTransaction";
+                    // let common_data_json = JSON.stringify(common_data);
 
-                    let data_request = new UpdateCardTransactionRequest();
+                    // let data_request = new UpdateCardTransactionRequest();
 
-                    data_request.InvoiceNumber = this.addCradModel.InvoiceNumber
-                    data_request.MaskedPan = this.addCradModel.MaskedPan
-                    data_request.ResponseCode = "000"
-                    data_request.ResponseDesc = "Approved"
-                    let date = new Date()
-                    data_request.TransactionDate = moment_(date).format("DD/MM/YYYY HH:mm:ss")
-                    let data_request_json = JSON.stringify(data_request)
+                    // data_request.InvoiceNumber = this.addCradModel.InvoiceNumber
+                    // data_request.MaskedPan = this.addCradModel.MaskedPan
+                    // data_request.ResponseCode = "000"
+                    // data_request.ResponseDesc = "Approved"
+                    // let date = new Date()
+                    // data_request.TransactionDate = moment_(date).format("DD/MM/YYYY HH:mm:ss")
+                    // let data_request_json = JSON.stringify(data_request)
 
-                    this._pickupService.UpdateCardTransaction(common_data_json, data_request_json).then(data => {
-                      
-                        if (data.ResultCode === "000") {
-                            this.blockUI.stop(); //end block ui
-                            if (this.orderMain.OrderType === ORDER_DELIVERY) {
-                                this.cartNew = new CartOrderNew()
-                                localStorage.setItem('crtd', JSON.stringify(this.cartNew))
-                            }
-                            if (this.orderMain.OrderType === ORDER_PICKUP) {
-                                this.cartNew = new CartOrderNew()
-                                localStorage.setItem('crt', JSON.stringify(this.cartNew))
-                            }
+                    // this._pickupService.UpdateCardTransaction(common_data_json, data_request_json).then(data => {
+                    //   console.log("update:"+ JSON.stringify(data))
+                    //     if (data.ResultCode === "000") {
+                    //         this.blockUI.stop(); //end block ui
+                    //         if (this.orderMain.OrderType === ORDER_DELIVERY) {
+                    //             this.cartNew = new CartOrderNew()
+                    //             localStorage.setItem('crtd', JSON.stringify(this.cartNew))
+                    //         }
+                    //         if (this.orderMain.OrderType === ORDER_PICKUP) {
+                    //             this.cartNew = new CartOrderNew()
+                    //             localStorage.setItem('crt', JSON.stringify(this.cartNew))
+                    //         }
                             
-                            this.showPopupPaymentSuccess()
-                            //this._router.navigateByUrl("/payment-success")
-                        }
-                        else {
-                            this.checkError(data.ResultCode, data.ResultDesc, data.ServiceName);
-                        }
-                    })
+                    //         this.showPopupPaymentSuccess()
+                    //         //this._router.navigateByUrl("/payment-success")
+                    //     }
+                    //     else {
+                    //         this.checkError(data.ResultCode, data.ResultDesc, data.ServiceName);
+                    //     }
+                    // })
                 }
                 if (this.orderMain.PaymentOptions === "PO_POINT" || this.orderMain.PaymentOptions === "PO_WALLET") {
                     if (this.orderMain.OrderType === ORDER_DELIVERY) {
