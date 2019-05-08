@@ -28,7 +28,7 @@ export class GrowsWithUsComponent implements OnInit {
     }
 
     showSuccess() {
-        var el = $('#success-popup');
+        var el = $('#success-popup-grow');
         if (el.length) {
             $.magnificPopup.open({
                 items: {
@@ -81,7 +81,7 @@ export class GrowsWithUsComponent implements OnInit {
         if (this.file && this.candidateModel.Email && this.candidateModel.Name && this.candidateModel.Phone) {
             this.blockUI.start();
             let fromData: FormData = new FormData();
-            var [filename, extension] = this.file.name.split('.').reduce((acc, val, i, arr) => (i == arr.length - 1) ? [acc[0].substring(1), val] : [[acc[0], val].join('.')], [])
+            let [filename, extension] = this.file.name.split('.').reduce((acc, val, i, arr) => (i == arr.length - 1) ? [acc[0].substring(1), val] : [[acc[0], val].join('.')], [])
             fromData.append(extension, this.file, filename);
             this._pickupService.UploadImage(fromData).then(data => {
                 let urlFile = data.trim();

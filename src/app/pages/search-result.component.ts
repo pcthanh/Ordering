@@ -96,14 +96,16 @@ export class SearchResultComponent implements OnInit {
             }
             if (dataParse.function === 'Delivery') {
                 this.initJQuery()
-                this.GetAllOutletListV2("", dataParse.type, "", "","","N");
+                //this.GetAllOutletListV2("", dataParse.type, "", "","","N");
+                this.GetCurrentSystemTime("")
                 //this.getTopOffers();
 
             }
             if (dataParse.function === 'Pickup') {
                 this.initJQuery()
-                this.GetAllOutletListV2("", dataParse.type, "", "","","N");
+                //this.GetAllOutletListV2("", dataParse.type, "", "","","N");
                 //this.getTopOffers();
+                this.GetCurrentSystemTime("")
 
             }
             if (dataParse.function === 'changeTime') {
@@ -220,11 +222,12 @@ export class SearchResultComponent implements OnInit {
             request_data.OrderType = orderMethod
         }
 
-        if (request_data.OrderType === ORDER_PICKUP) {
-            request_data.OrderFor = "";
-        } else if (request_data.OrderType === ORDER_DELIVERY) {
-            request_data.OrderFor = orderFor
-        }
+        // if (request_data.OrderType === ORDER_PICKUP) {
+        //     request_data.OrderFor = "";
+        // } else if (request_data.OrderType === ORDER_DELIVERY) {
+        //     request_data.OrderFor = orderFor
+        // }
+        request_data.OrderFor=orderFor
         //request_data.OrderFor = ""
 
         if (localStorage.getItem('cus') != null) {
@@ -243,7 +246,7 @@ export class SearchResultComponent implements OnInit {
             request_data.IsBuyAndPayOutlet=IsBuyAndPayOutlet
             request_data.OrderFor = orderFor
         }
-            
+        
         request_data.FoodCentreId=foodcenter;
         
        

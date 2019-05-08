@@ -1292,8 +1292,15 @@ export class PageCheckOutComponent implements OnInit {
     applyCredit() {
 
         if (this.creditAmount > 0) {
-            this.orderMain.Credit = this.creditAmount;
-            this.orderMain.CreditDisplay = this.creditDisplay;
+            if(this.creditAmount>this.orderMain.Total){
+                this.orderMain.Credit = this.orderMain.Total;
+                this.orderMain.CreditDisplay = this.creditDisplay;
+            }
+            else{
+                this.orderMain.Credit = this.creditAmount;
+                this.orderMain.CreditDisplay = this.creditDisplay;
+            }
+            
             //let creditDiscount = new ListDiscountItem();
 
             // creditDiscount.TypeDiscount="1";
@@ -2193,7 +2200,8 @@ export class PageCheckOutComponent implements OnInit {
             data_request.PaymentOptions = "PO_POINT"
         if (this.PO === "PO_WALLET")
             data_request.PaymentOptions = "PO_WALLET"
-        data_request.DiscountAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.PromoCodeValue + '') + parseFloat(this.orderMain.Credit + '') + parseFloat(this.orderMain.DiscountProgramAmount + ''))
+        data_request.DiscountAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.PromoCodeValue + '') + parseFloat(this.creditAmount + '') + parseFloat(this.orderMain.DiscountProgramAmount + ''))
+        //data_request.DiscountAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.PromoCodeValue + '')  + parseFloat(this.orderMain.DiscountProgramAmount + ''))
         //data_request.ApprovalCode = ApprovalCode
         //"81,000000000050,1,^^^23,27,000000000050,1###35,000000000050,1,^^^21,21,000000000050,1===21,23,000000000050,1"
         data_request.ProductList = this.listProduct()
@@ -2231,6 +2239,9 @@ export class PageCheckOutComponent implements OnInit {
                         this.cartNew = new CartOrderNew()
                         localStorage.setItem('crt', JSON.stringify(this.cartNew))
                     }
+                    this.customerInfo.CustomerInfo[0].SandboxCreditBalance=this.placeOrderMain.SandboxCreditBalance;
+                    this.customerInfo.CustomerInfo[0].SandboxCreditBalanceDisplay= this.placeOrderMain.SandboxCreditBalanceDisplay
+                    localStorage.setItem("cus",this._gof3rUtil.encryptParams(JSON.stringify(this.customerInfo)));
                     this.showPopupPaymentSuccess()
                     // this.addCradModel = JSON.parse(localStorage.getItem("addcard")) as AddTransactionRequestModel
 

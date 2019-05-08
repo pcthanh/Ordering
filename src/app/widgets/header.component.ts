@@ -98,7 +98,7 @@ export class HeaderGof3rComponent implements OnInit {
     routerThisPage: boolean = true;
     isSelectNewAddress: boolean;
     outletInfo: OutletInfoModel;
-    errorCart:string=""
+    errorCart: string = ""
     constructor(private _route: Router, private _gof3rModule: Gof3rModule, private _pickupService: PickupService, private _gof3rUtil: Gof3rUtil, private _instanceService: EventSubscribeService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private _homeservice: HomeService) {
         this.addressList = new AddressListModel();
         this.signUp = new SingUpModel();
@@ -126,7 +126,7 @@ export class HeaderGof3rComponent implements OnInit {
         })
         if (localStorage.getItem("ot") != null) {
             this.outletInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("ot")));
-
+            console.log(JSON.stringify(this.outletInfo))
         }
         if (localStorage.getItem("orderType") != null) {
 
@@ -988,7 +988,7 @@ export class HeaderGof3rComponent implements OnInit {
 
         let nowDateTemp = moment_(startTimes, "HH:mm:ss");
         let endDateTemp = moment_(endTimes, "HH:mm:ss")
-        //this.timesPickup=[]
+        this.timesPickup = []
         while (nowDateTemp.isBefore(endDateTemp)) {
 
             let dateAdd = moment_(nowDateTemp, "HH:mm");
@@ -1123,7 +1123,7 @@ export class HeaderGof3rComponent implements OnInit {
         });;
         this._instanceService.sendCustomEvent(dataSend);
     }
-    selectTimePickup(fromDate: string, toDate: string, fromDateDisplay: string, toDateDisplay: string, d: string, lable: string,index:number) {
+    selectTimePickup(fromDate: string, toDate: string, fromDateDisplay: string, toDateDisplay: string, d: string, lable: string, index: number) {
 
 
         this.checkPickUpTime(fromDate, toDate, fromDateDisplay, toDateDisplay, d, lable, index)
@@ -1326,7 +1326,7 @@ export class HeaderGof3rComponent implements OnInit {
         this.createTimesPickup(this.DateDeliveryList.DateList[0].arraydate[0].StartTime, this.DateDeliveryList.DateList[0].arraydate[0].EndTime, this.DateDeliveryList.DateList[0].arraydate[0].isToday, this.DateDeliveryList.DateList[0].arraydate[0].DateTtr)
 
     }
-    checkPickUpTime(fromDate: string, toDate: string, fromDateDisplay: string, toDateDisplay: string, dateSelect: string, lable: string,index:number) {
+    checkPickUpTime(fromDate: string, toDate: string, fromDateDisplay: string, toDateDisplay: string, dateSelect: string, lable: string, index: number) {
         this.getCurrentTime = new GetCurrentSystemTimeModel();
         let rs: boolean = false;
         let common_data = new CommonDataRequest();
@@ -1345,25 +1345,31 @@ export class HeaderGof3rComponent implements OnInit {
             let selectDate = moment_(dateSelect).format("DD/MM/YYYY")
             console.log("currentDateCompare1:" + date)
             console.log("selectDate:" + selectDate)
-            if (selectDate == this.currentDate) {
+            console.log("timePickup:" + JSON.stringify(this.timesPickup))
+            if (dateSelect == this.currentDate) {
                 let hoursCurrent = parseInt(moment_(d.getTime()).format("HH"));
+                let minutesCurrent = parseInt(moment_(d.getTime()).format("mm"));
+                console.log("hoursCurrent:" + hoursCurrent)
                 let [date, h, apm] = fromDate.split(" ")
                 let [hh, mm] = h.split(":");
-                let h1:number=0
-                if(apm=="PM"){
-                    if(parseInt(hh)>12){
-                        h1= parseInt(hh)+12
+                let h1: number = 0
+                let m: number = parseInt(mm);
+                if (apm == "PM") {
+                    if (parseInt(hh) > 12) {
+                        h1 = parseInt(hh) + 12
                     }
-                    else{
-                        h1=parseInt(hh)
+                    else {
+                        h1 = parseInt(hh)
                     }
                 }
-                else{
-                    h1=parseInt(hh)
+                else {
+                    h1 = parseInt(hh)
                 }
-                
-                console.log("hh1:"+ h1)
-                if (h1< hoursCurrent) {
+
+                console.log("hh1:" + h1)
+                console.log("hh1:" + m)
+                console.log("minutesCurrent:" + minutesCurrent)
+                if (h1 < hoursCurrent) {
                     rs = false;
                     this.errorCart = "Can not pickup this time"
                     $.magnificPopup.open({
@@ -1374,18 +1380,47 @@ export class HeaderGof3rComponent implements OnInit {
                     });
                 }
                 else {
-                    let dataSend = { function: 'updateTimePickup', fromDate: fromDate, toDate: toDate, fromDateDisplay: fromDateDisplay, toDateDisplay: toDateDisplay };
-                    let dcut = dateSelect.slice(0, dateSelect.length - 5)
-                    this.whenStr = dcut + " " + lable
-                    $('.login-dropdown').hide();
-                    $('.login-overlay').removeClass('show');
-                    $('.login-wrap .login').removeClass('hide-form');
-                    $('body').css({
-                        overflow: '',
-                        height: ''
-                    });;
-                    this._instanceService.sendCustomEvent(dataSend);
-                    rs = true
+                    if (h1 == hoursCurrent) {
+                        if (m < minutesCurrent) {
+                            rs = false;
+                            this.errorCart = "Can not pickup this time"
+                            $.magnificPopup.open({
+                                items: {
+                                    src: '#pickup-date-error'
+                                },
+                                type: 'inline'
+                            });
+                        }
+                        else{
+                            let dataSend = { function: 'updateTimePickup', fromDate: fromDate, toDate: toDate, fromDateDisplay: fromDateDisplay, toDateDisplay: toDateDisplay };
+                        let dcut = dateSelect.slice(0, dateSelect.length - 5)
+                        this.whenStr = dcut + " " + lable
+                        $('.login-dropdown').hide();
+                        $('.login-overlay').removeClass('show');
+                        $('.login-wrap .login').removeClass('hide-form');
+                        $('body').css({
+                            overflow: '',
+                            height: ''
+                        });;
+                        this._instanceService.sendCustomEvent(dataSend);
+                        rs = true
+                        }
+                    }
+                    else {
+                        let dataSend = { function: 'updateTimePickup', fromDate: fromDate, toDate: toDate, fromDateDisplay: fromDateDisplay, toDateDisplay: toDateDisplay };
+                        let dcut = dateSelect.slice(0, dateSelect.length - 5)
+                        this.whenStr = dcut + " " + lable
+                        $('.login-dropdown').hide();
+                        $('.login-overlay').removeClass('show');
+                        $('.login-wrap .login').removeClass('hide-form');
+                        $('body').css({
+                            overflow: '',
+                            height: ''
+                        });;
+                        this._instanceService.sendCustomEvent(dataSend);
+                        rs = true
+                    }
+
                 }
 
             }
