@@ -379,7 +379,7 @@
                                                     <div *ngFor="let itemOPD of itemOp.OptionItemList">
                                                         <div *ngIf="itemOPD.isCheck==true">
                                                             <li><span class="inf">• {{itemOPD.OptionItemName}} x {{itemOPD.Qty}}</span><span
-                                                                    class="price">{{itemOPD.TotalStr}}</span></li>
+                                                                    class="price" style="padding: 10px">{{itemOPD.TotalStr}}</span></li>
 
                                                         </div>
                                                     </div>
@@ -457,6 +457,10 @@
         
         <!--<input id="input-address-1" (keyup)="checkInputPostalCode($event)" class="new-address" type="text" placeholder="Enter your Address" #search [formControl]="searchControl">-->
         <input id="input-address-1"  class="new-address" type="text" [(ngModel)]="this.nameAddress" placeholder="Enter your Address" >
+        <input id="input-address-unit-number"  [(ngModel)]="this.addressAdd.AparmentNo" class="new-address-building" type="text" placeholder="Unit number" >
+        <input id="input-address-postal-code"  [(ngModel)]="this.addressAdd.PostalCode" class="new-address-postal" type="text" placeholder="Postal code" >
+        <input id="input-address-phone-number"   [(ngModel)]="this.addressAdd.PhoneNumber" class="new-address-phone" type="number" placeholder="Phone number">
+        <input id="input-address-intrustion-rider"  [(ngModel)]="this.addressAdd.InstructionForRider" class="new-address-noted" type="text" placeholder="Any instructions for rider" >
          <!-- <div *ngIf="showListSelectAddress" class="add-wrap">
 <ul class="list-group">
 <li style="cursor: pointer" *ngFor="let item of list.AddressList" (click)="selectAddress(item.Address,item.Latitude,item.Longitude)" class="list-group-item">{{item.Address}}</li>

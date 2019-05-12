@@ -33,7 +33,7 @@ import { MCCInfoModel } from "../models/MCCInfo";
 import { AddressListModel } from "../models/AddressList";
 import { AddeliveryAddressModel } from "../models-request/add-delivery-address";
 import { AddressIteModel } from "../models/AddressItem";
-
+import { AddressAdd } from "../models/AddressAdd";
 const ORDER_DELIVERY: string = "DELIVERY"
 const ORDER_PICKUP: string = "PICKUP"
 declare var $: any;
@@ -87,6 +87,7 @@ export class PageOrderComponent implements OnInit {
     lng:string="";
     nameAddress:string=""
     addressList: AddressListModel;
+    addressAdd: AddressAdd;
     constructor(private _router: Router, private _gof3rUtil: Gof3rUtil, private _gof3rModule: Gof3rModule, private _util: Gof3rUtil, private _pickupService: PickupService, private _instanceService: EventSubscribeService, private active_router: ActivatedRoute) {
         this.blockUI.start('loading ...'); // Start blocking
         this.productDetail = new ProductDetailMainModel();
@@ -100,6 +101,7 @@ export class PageOrderComponent implements OnInit {
         this.verifyOrderMain = new VerifyOrderMainModel();
         this.cartNew = new CartOrderNew();
         this.error = new ErrorModel()
+        this.addressAdd = new AddressAdd();
         //this.blockUI.start();
         if (localStorage.getItem("out") != null) {
             this.OutletId = localStorage.getItem("out");
@@ -333,7 +335,7 @@ export class PageOrderComponent implements OnInit {
             if (productMain.Qty >= 1) {
 
                 productMain.Total = productMain.Qty * (parseInt(productMain.Price) / 100) + (productMain.Qty * totalOfOptionItem);
-
+               
 
                 productMain.TotalStr = this._util.formatCurrency(productMain.Total, "S$");
             }
@@ -1360,6 +1362,7 @@ export class PageOrderComponent implements OnInit {
                         if (haveNew) {
                             if (localStorage.getItem("address") != null) {
                                 this.addressDeli = JSON.parse(localStorage.getItem("address"));
+                                console.log("add:"+ JSON.stringify(this.addressDeli))
                                 if (this.addressDeli.AddressListInfo[0].AddressId != "") {
                                     this._router.navigateByUrl('/check-out')
                                 }
@@ -1369,6 +1372,7 @@ export class PageOrderComponent implements OnInit {
                                     this.lat = this.addressDeli.AddressListInfo[0].lat;
                                     this.lng = this.addressDeli.AddressListInfo[0].long;
                                     this.nameAddress=this.addressDeli.AddressListInfo[0].Name
+                                    this.addressAdd.PostalCode=this.addressDeli.AddressListInfo[0].PostalCode
                                     this.showPopupAddAddreess()
                                 }
                             }
@@ -1938,11 +1942,11 @@ export class PageOrderComponent implements OnInit {
 
             
             data_request.Address = this.nameAddress
-            data_request.ApartmentNoBuildingName = ""
-            data_request.InstructionForRider = ""
-            data_request.Nickname = "";
-            data_request.PhoneNumber = ""
-            data_request.PostalCode = ""
+            data_request.ApartmentNoBuildingName = this.addressAdd.AparmentNo
+            data_request.InstructionForRider = this.addressAdd.InstructionForRider
+            data_request.Nickname =""
+            data_request.PhoneNumber =this.addressAdd.PhoneNumber;
+            data_request.PostalCode = this.addressAdd.PostalCode
             data_request.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + ''
             data_request.GeoLocation = this.lat + ',' + this.lng;
             let data_request_json = JSON.stringify(data_request);

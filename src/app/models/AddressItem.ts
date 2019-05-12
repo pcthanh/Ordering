@@ -1,3 +1,4 @@
+
 export class AddressIteModel{
     lat:string=""
     long:string=""
@@ -5,4 +6,5 @@ export class AddressIteModel{
     isCheck:boolean=false;
     Name:string="";
     AddressId:string=""
+    PostalCode:string=""
 }

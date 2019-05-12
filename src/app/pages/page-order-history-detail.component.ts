@@ -62,6 +62,7 @@ export class OrderHistoryDetailComponent implements OnInit {
         this._pickupService.GetDeliveryOrderDetail(common_data_json, data_request_json).then(data => {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.deliveryOrder = data
+            console.log("delivery:"+ JSON.stringify(this.deliveryOrder))
             //this.deliveryOrder.DeliveryOrderDetail[0].OrderStatus=ORDER_DELIVERED
           
             // this.subTotalItem(this.deliveryOrder)

@@ -44,9 +44,13 @@
                                     <div class="title">Add New Address</div>
                                     <!--<input id="input-address-1" (keyup)="checkInputPostalCode($event)" class="new-address" type="text" placeholder="Enter your Address" #search [formControl]="searchControl">-->
                                     <input id="input-address-1" (keyup)="checkInputPostalCode($event)" [(ngModel)]="inputAddress" class="new-address" type="text" placeholder="Enter your Address" >
-                                     <div *ngIf="showListSelectAddress" class="add-wrap">
+                                    <input id="input-address-unit-number"  [(ngModel)]="this.addressAdd.AparmentNo" class="new-address-building" type="text" placeholder="Unit number" >
+                                    <input id="input-address-postal-code"  [(ngModel)]="this.addressAdd.PostalCode" class="new-address-postal" type="text" placeholder="Postal code" >
+                                    <input id="input-address-phone-number"   [(ngModel)]="this.addressAdd.PhoneNumber" class="new-address-phone" type="number" placeholder="Phone number">
+                                    <input id="input-address-intrustion-rider"  [(ngModel)]="this.addressAdd.InstructionForRider" class="new-address-noted" type="text" placeholder="Any instructions for rider" >
+                                    <div *ngIf="showListSelectAddress" class="add-wrap">
                     <ul class="list-group">
-                        <li style="cursor: pointer" *ngFor="let item of list.AddressList" (click)="selectAddress(item.Address,item.Latitude,item.Longitude)" class="list-group-item">{{item.Address}}</li>
+                        <li style="cursor: pointer" *ngFor="let item of list.AddressList" (click)="selectAddress(item.Address,item.Latitude,item.Longitude,item.PostalCode)" class="list-group-item">{{item.Address}}</li>
                         
                     </ul>
                 </div>
@@ -64,7 +68,7 @@
                                 <div class="delivery-address-wrap">
                                     <div class="title">Saved Addresses</div>
                                     <div *ngFor="let item of this.listDeliveryAddress.DeliveryAddressList" class="saved-address">
-                                        <span>{{item.Address}}</span>
+                                        <span>{{item.Address}}</span> <span *ngIf="item.ApartmentNoBuildingName!=''"> - Unit Number: {{item.ApartmentNoBuildingName}}</span>
                                         <a (click)="deleteAddress(item.Address,item.AddressId)" class="remove"><img src="assets/images/ico-close.png" alt=""></a>
                                     </div>
                                     <!--<div class="saved-address">

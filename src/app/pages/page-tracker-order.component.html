@@ -106,9 +106,17 @@
                                                             <!--<li><span class="inf">• Garlic Paste</span></li>
                                                             <li><span class="inf">• Donair Sauce (Tzatziki)</span></li>
                                                             <li><span class="inf">• Lettuce</span></li>-->
-                                                            <li *ngFor="let itemO of item.OrderOptions">
-                                                                <span class="inf">• {{itemO.ProductOptionDetailName}}</span><span class="price">{{itemO.OrderOptionDtlDisplayPrice}}</span>
-                                                            </li>
+                                                            <div>
+                                                                <div *ngFor="let itemO of item.OrderOptions">
+                                                                    
+                                                                    <li >
+                                                                            <span class="inf">• {{itemO.ProductOptionDetailName}} x {{itemO.OrderOptionDetailQty}}</span><span class="price">{{itemO.OrderOptionDtlDisplayPrice}}</span>
+                                                                        </li>
+                                                                </div>
+                                                            </div>
+
+
+                                                            
                                                         </ul>
                                                     </div>
                                                 </div>

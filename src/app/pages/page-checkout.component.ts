@@ -329,7 +329,7 @@ export class PageCheckOutComponent implements OnInit {
         this.getInitParam = new GetInitialParams();
         this.cartNew = new CartOrderNew();
         this.addAppTransaction = new AddAppTransactionModel()
-        
+        this.creditAmount=0;
         if (localStorage.getItem("ot") != null) {
             this.outletInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("ot")));
             this.outletInfo.OutletInfo[0].Rating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100));
@@ -516,6 +516,7 @@ export class PageCheckOutComponent implements OnInit {
     subTotalOrder() {
 
         let subtotal = 0;
+        let _total=0;
         // for (let i = 0; i < this.orderMain.ArrayItem.length; i++) {
         //     subtotal = subtotal + this.orderMain.ArrayItem[i].Total;
         // }
@@ -526,7 +527,14 @@ export class PageCheckOutComponent implements OnInit {
         }
         this.orderMain.SubTotal = subtotal;
         this.orderMain.SubTotalStr = this._util.formatCurrency(this.orderMain.SubTotal, "S$")
-        let _total = (this.orderMain.SubTotal + this.orderMain.ServiceFeeValue + this.orderMain.Surcharge + this.orderMain.DeliveryFee + this.orderMain.RiderTip) - (parseFloat(this.orderMain.PromoCodeValue + '') + parseFloat(this.orderMain.Credit + '') + parseFloat(this.orderMain.Discount + ''));
+        this.orderMain.TotalBeforDiscount=this.orderMain.Total;
+        if(this.orderMain.Discount>this.orderMain.Total){
+            _total=0
+        }
+        else{
+             _total = (this.orderMain.SubTotal + this.orderMain.ServiceFeeValue + this.orderMain.Surcharge + this.orderMain.DeliveryFee + this.orderMain.RiderTip) - (parseFloat(this.orderMain.PromoCodeValue + '') + parseFloat(this.orderMain.Credit + '') + parseFloat(this.orderMain.Discount + ''));
+        }
+        
 
         this.orderMain.Total = _total;
         
@@ -637,7 +645,7 @@ export class PageCheckOutComponent implements OnInit {
 
             this._pickupService.VerifyOrder(common_data_json, requestDataJson).then(data => {
                 this.verifyOrderMain = data;
-                
+                console.log("veryfiOrder:"+ JSON.stringify(this.verifyOrderMain))
                 this.orderMain.ServiceFee = this.verifyOrderMain.OrderFeeAndDiscountInfo.ServiceFeeDisplay
                 this.orderMain.ServiceFeeValue = parseInt(this.verifyOrderMain.OrderFeeAndDiscountInfo.ServiceFee) / 100;
                 this.orderMain.DiscountDisplay = this.verifyOrderMain.OrderFeeAndDiscountInfo.DiscountAmountDisplay
@@ -728,19 +736,20 @@ export class PageCheckOutComponent implements OnInit {
         requestData.CustomerId = this.orderMain.CustomerId + '';
         requestData.MerchantOutletId = this.orderMain.MerchantOutletId;
 
-        requestData.PaymentAmount = this._gof3rModule.ParseTo12(this.orderMain.Total)
+        requestData.PaymentAmount = this._gof3rModule.ParseTo12(this.orderMain.SubTotal)
 
         requestData.DiscountAmount = this._gof3rModule.ParseTo12(this.orderMain.Discount)
         requestData.AwardType = "MAT_PORDER";
         let requestDataJson = JSON.stringify(requestData);
-        
+        console.log("request-all:"+ requestDataJson)
         this._pickupService.GetAllPaymentOptionsWithPromotion(common_data_json, requestDataJson).then(data => {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.getPromodeList()
 
 
             this.allPayment = data
-           console.log("all:"+ JSON.stringify(this.allPayment))
+            if(this.allPayment.ResultCode==="000"){
+                console.log("all:"+ JSON.stringify(this.allPayment))
             
             for(let i =0;i< this.allPayment.PointWalletListInfo.length; i++){
                 for(let j = 0; j< this.allPayment.PointWalletListInfo[i].RebateProgramInfo.length; j++){
@@ -757,6 +766,11 @@ export class PageCheckOutComponent implements OnInit {
             // this.orderMain.CardTypeValue = this.allPayment.CardListInfo[0].CardTypeIdValue + " " + (this.allPayment.CardListInfo[0].MaskedCardNumber.substring(0, 4))
 
             this.blockUI.stop()
+            }
+            else{
+                this.checkError(data.ResultCode, data.ResultDesc, data.ServiceName+'');
+            }
+           
 
         })
     }
@@ -2200,7 +2214,16 @@ export class PageCheckOutComponent implements OnInit {
             data_request.PaymentOptions = "PO_POINT"
         if (this.PO === "PO_WALLET")
             data_request.PaymentOptions = "PO_WALLET"
-        data_request.DiscountAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.PromoCodeValue + '') + parseFloat(this.creditAmount + '') + parseFloat(this.orderMain.DiscountProgramAmount + ''))
+        console.log("this.orderMain.PromoCodeValue:"+ this.orderMain.PromoCodeValue)
+        console.log("credit:"+ this.creditAmount)
+        console.log("creditAmount:"+ parseFloat(this.creditAmount + '') + parseFloat(this.orderMain.DiscountProgramAmount + ''))
+        if(this.selectCredit){
+            data_request.DiscountAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.PromoCodeValue + '') + parseFloat(this.creditAmount + '') + parseFloat(this.orderMain.DiscountProgramAmount + ''))
+        }
+        else{
+            data_request.DiscountAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.PromoCodeValue + '')  + parseFloat(this.orderMain.DiscountProgramAmount + ''))
+        }
+        
         //data_request.DiscountAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.PromoCodeValue + '')  + parseFloat(this.orderMain.DiscountProgramAmount + ''))
         //data_request.ApprovalCode = ApprovalCode
         //"81,000000000050,1,^^^23,27,000000000050,1###35,000000000050,1,^^^21,21,000000000050,1===21,23,000000000050,1"
@@ -2216,7 +2239,14 @@ export class PageCheckOutComponent implements OnInit {
         data_request.PromoCodeAmount = this._gof3rModule.ParseTo12(this.orderMain.PromoCodeValue)
         data_request.DeliveryFee = this._gof3rModule.ParseTo12(this.orderMain.DeliveryFee)
         data_request.PAN = this.orderMain.CardToken
-        data_request.TranxAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.Total.toFixed(2)))
+        if(this.orderMain.Total===0){
+            data_request.TranxAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.TotalBeforDiscount.toFixed(2)))
+        }
+        else{
+            data_request.TranxAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.Total.toFixed(2)))
+        }
+        
+        //data_request.TranxAmount="000000001750"
         data_request.CardHolderName = this.orderMain.CardHoldName
         data_request.StoreCardUniqueID = this.orderMain.PaymentGatewayToken;
         let data_request_json = JSON.stringify(data_request);

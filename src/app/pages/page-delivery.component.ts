@@ -32,6 +32,7 @@ export class DeliveryAddressComponent implements OnInit {
     showListSelectAddress: boolean = false;
     list: any[] = [];
     inputAddress: string = ""
+    isPhoneNumber:boolean=false;
     constructor(private _homeservice: HomeService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private _route: Router, private _instaneService: EventSubscribeService, private _gof3rModule: Gof3rModule, private _pickupService: PickupService, private _gof3rUtil: Gof3rUtil) {
         this.listDeliveryAddress = new ListDeliveryAddress();
         this.customerInfoMain = new CustomerInfoMainModel();
@@ -88,6 +89,7 @@ export class DeliveryAddressComponent implements OnInit {
         this._pickupService.SearchSingaporeAddress(common_data_json, request_data_json).then(data => {
 
             this.list = data;
+            console.log("postal:"+ JSON.stringify(this.list))
             this.showListSelectAddress = true;
             // for(let i = 0; i< data.AddressList.length; i++){
             //     this.list.push({name:data.AddressList[i].Address,postalCode:data.AddressList[i].PostalCode,lat:data.AddressList[i].Latitude,lng:data.AddressList[i].Longitude})
@@ -96,11 +98,12 @@ export class DeliveryAddressComponent implements OnInit {
 
         })
     }
-    selectAddress(addres: string, lat: string, lng: string) {
+    selectAddress(addres: string, lat: string, lng: string,postalCode:string) {
         this.inputAddress = addres;
         this.lat = parseFloat(lat);
         this.lng = parseFloat(lng)
         this.showListSelectAddress = false;
+        this.addressAdd.PostalCode=postalCode
     }
 
     DeliveryAddress() {
@@ -115,48 +118,59 @@ export class DeliveryAddressComponent implements OnInit {
 
         this._pickupService.GetDeliveryAddresses(common_data_json, data_request_json).then(data => {
             this.listDeliveryAddress = data;
+            console.log("list:"+ JSON.stringify(this.listDeliveryAddress))
             this._gof3rModule.checkInvalidSessionUser(this.listDeliveryAddress.ResultCode);
 
         })
     }
 
     addDeliveryAddress() {
-        if (this.lat > 0 && this.lng > 0) {
-            let common_data = new CommonDataRequest();
-            var _location = localStorage.getItem("la");
-            common_data.Location = _location
-            common_data.ServiceName = "AddDeliveryAddress";
-            let common_data_json = JSON.stringify(common_data);
-
-            let data_request = new AddeliveryAddressModel();
-
-
-
-
-            this.addressAdd.Location = this.inputAddress;
-            data_request.Address = this.addressAdd.Location;
-            data_request.ApartmentNoBuildingName = this.addressAdd.AparmentNo
-            data_request.InstructionForRider = this.addressAdd.InstructionForRider;
-            data_request.Nickname = "";
-            data_request.PhoneNumber = this.addressAdd.PhoneNumber
-            data_request.PostalCode = this.addressAdd.PostalCode
-            data_request.CustomerId = this.customerInfoMain.CustomerInfo[0].CustomerId + ''
-            data_request.GeoLocation = this.lat + ',' + this.lng;
-            let data_request_json = JSON.stringify(data_request);
-
-            this._pickupService.AddDeliveryAddress(common_data_json, data_request_json).then(data => {
-
-                if (data.ResultCode === '000') {
-
-                    this.DeliveryAddress()
-                    this.lat = 0;
-                    this.lng = 0;
-                    $("#input-address-1").val("");
-
-                }
-            })
+        if(this.addressAdd.PhoneNumber){
+            
+                if (this.lat > 0 && this.lng > 0) {
+                    let common_data = new CommonDataRequest();
+                    var _location = localStorage.getItem("la");
+                    common_data.Location = _location
+                    common_data.ServiceName = "AddDeliveryAddress";
+                    let common_data_json = JSON.stringify(common_data);
+        
+                    let data_request = new AddeliveryAddressModel();
+        
+        
+        
+        
+                    this.addressAdd.Location = this.inputAddress;
+                    data_request.Address = this.addressAdd.Location;
+                    data_request.ApartmentNoBuildingName = this.addressAdd.AparmentNo
+                    data_request.InstructionForRider = this.addressAdd.InstructionForRider;
+                    data_request.Nickname = "";
+                    data_request.PhoneNumber = this.addressAdd.PhoneNumber
+                    data_request.PostalCode = this.addressAdd.PostalCode
+                    data_request.CustomerId = this.customerInfoMain.CustomerInfo[0].CustomerId + ''
+                    data_request.GeoLocation = this.lat + ',' + this.lng;
+                    let data_request_json = JSON.stringify(data_request);
+        
+                    this._pickupService.AddDeliveryAddress(common_data_json, data_request_json).then(data => {
+        
+                        if (data.ResultCode === '000') {
+        
+                            this.DeliveryAddress()
+                            this.lat = 0;
+                            this.lng = 0;
+                            $("#input-address-1").val("");
+                            this.addressAdd = new AddressAdd();
+        
+                        }
+                    })
+        
+                
+            }
+           
+        }
+        else{
 
         }
+        
     }
     deleteAddress(name: string, id: string) {
         this.addressId = id;

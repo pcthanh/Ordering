@@ -54,4 +54,5 @@ export class OrderModel{
     PaymentOptions:string=""
     EstimatedPickupTime:string=""
     PaymentGatewayToken:string=""
+    TotalBeforDiscount :number=0;
 }

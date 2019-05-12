@@ -37,4 +37,5 @@ export class OtherParamsModel{
     NetsApiKey:string=""
     NetsSecretKey:string=""
     NetsMerchantId:string=""
+    MaxDateDeliveryOn:number=0;
 }

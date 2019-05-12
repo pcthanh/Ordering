@@ -2024,7 +2024,8 @@ blockquote {
   padding-right: 40px;
 }
 .cart-sidebar .item-checkout .item-info li .price {
-  float: right;
+  /* float: right; */
+  padding-left: 10px
 }
 .cart-sidebar .item-checkout .inf-add {
   color: #9f9f9f;
@@ -4079,4 +4080,41 @@ blockquote {
 }
 .map-address .location-add .btn-main {
     width: 100%;
+}
+
+.delivery-address-wrap .new-address-building {
+  height: 40px;
+  width: 100%;
+  padding-left: 50px;
+  background: #fff url('../images/icon-building.png') 15px center no-repeat;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  outline: none;
+}
+.delivery-address-wrap .new-address-postal {
+  height: 40px;
+  width: 100%;
+  padding-left: 50px;
+  background: #fff url('../images/icon-postal.png') 15px center no-repeat;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  outline: none;
+}
+.delivery-address-wrap .new-address-phone {
+  height: 40px;
+  width: 100%;
+  padding-left: 50px;
+  background: #fff url('../images/icon-phone.png') 15px center no-repeat;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  outline: none;
+}
+.delivery-address-wrap .new-address-noted {
+  height: 40px;
+  width: 100%;
+  padding-left: 50px;
+  background: #fff url('../images/icon-noted.png') 15px center no-repeat;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  outline: none;
 }

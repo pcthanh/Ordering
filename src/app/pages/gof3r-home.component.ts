@@ -389,7 +389,8 @@ export class Gof3rHomeComponent implements OnInit {
         this._homeservice.getServiceHome(jsonCommon, jsonRequest).then(data => {
 
             this.getInitialParams = data;
-            console.log("test:"+ this.getInitialParams.ActionsForSoldOutItem[0])
+            
+            console.log("test:"+JSON.stringify( this.getInitialParams))
             
             for (let i = 0; i < this.getInitialParams.CountryInfo.length; i++) {
 
@@ -995,7 +996,7 @@ export class Gof3rHomeComponent implements OnInit {
         this.autoCompleteService.setDynamicList(list);
         // this will log in console if your list is empty.
     }
-    selectAddress(addres: string, lat: string, lng: string) {
+    selectAddress(addres: string, lat: string, lng: string,postalCode:string) {
         this.addressList = new AddressListModel();
         this.list = [];
         this.showListSelectAddress = false;
@@ -1013,6 +1014,7 @@ export class Gof3rHomeComponent implements OnInit {
         item.long = this.lng + ''
         item.isCheck = true;
         item.AddressId="";
+        item.PostalCode=postalCode
         let arrayName = item.StreetAddress.split(',');
         item.Name = arrayName[0];
         this.addressList.AddressListInfo.push(item);

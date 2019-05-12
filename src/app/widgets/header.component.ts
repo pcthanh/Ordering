@@ -142,7 +142,7 @@ export class HeaderGof3rComponent implements OnInit {
             this.getInitialParams = new GetInitialParams();
 
             this.getInitialParams = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("IN")));
-
+            console.log("in:"+ JSON.stringify(this.getInitialParams))
 
             for (let i = 0; i < this.getInitialParams.CountryInfo.length; i++) {
 
@@ -915,47 +915,78 @@ export class HeaderGof3rComponent implements OnInit {
 
         let _date = new Date();
 
-        for (let i = 0; i < this.outletInfo.OutletInfo[0].PickupTimeInfo.length; i++) {
-            let itemDate = new DeliveryItemModel();
-            itemDate.DateTtr = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom, "DD/MM/YYYY HH:mm:SS").format("DD/MM/YYYY");
-            itemDate.DayStrs = arrayDays[moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom, "DD/MM/YYYY HH:mm:SS").days()];
-            itemDate.DayStr1 = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom, "DD/MM/YYYY HH:mm:SS").dates() + '';
-            itemDate.StartTime = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom, "DD/MM/YYYY HH:mm:SS").format("HH:mm:SS");
-            itemDate.EndTime = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingTo, "DD/MM/YYYY HH:mm:SS").format("HH:mm:SS");
-            // if (moment_(itemDate.DateTtr).date() === moment_(currentDate).date()) {
-            //     itemDate.isToday = true;
-            // }
-            if (i === 0) {
-                itemDate.isToday = true
+        if(this.orderType===ORDER_PICKUP){
+            for (let i = 0; i < this.outletInfo.OutletInfo[0].PickupTimeInfo.length; i++) {
+                let itemDate = new DeliveryItemModel();
+                itemDate.DateTtr = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom, "DD/MM/YYYY HH:mm:SS").format("DD/MM/YYYY");
+                itemDate.DayStrs = arrayDays[moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom, "DD/MM/YYYY HH:mm:SS").days()];
+                itemDate.DayStr1 = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom, "DD/MM/YYYY HH:mm:SS").dates() + '';
+                itemDate.StartTime = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingFrom, "DD/MM/YYYY HH:mm:SS").format("HH:mm:SS");
+                itemDate.EndTime = moment_(this.outletInfo.OutletInfo[0].PickupTimeInfo[i].FirstPickupTimingTo, "DD/MM/YYYY HH:mm:SS").format("HH:mm:SS");
+                // if (moment_(itemDate.DateTtr).date() === moment_(currentDate).date()) {
+                //     itemDate.isToday = true;
+                // }
+                if (i === 0) {
+                    itemDate.isToday = true
+                }
+                this.arrayDateDelivery1.arraydate.push(itemDate);
+    
             }
-            this.arrayDateDelivery1.arraydate.push(itemDate);
-
+            this.DateDeliveryList.DateList.push(this.arrayDateDelivery1)
+            
+            // for (let i = 0; i <= 6; i++) {
+            //     let itemDate = new DeliveryItemModel();
+            //     if (i == 0) {
+            //         _date = this.addDays(_date, 0);
+            //     }
+            //     else
+            //         _date = this.addDays(_date, 1);
+    
+            //         itemDate.DateTtr = moment_(_date).format("DD/MM/YYYY");
+            //         itemDate.DayStrs = arrayDays[moment_(_date).days()];
+            //         itemDate.DayStr1 = moment_(_date).date() + '';
+            //         if (moment_(_date).date() == moment_(currentDate).date()) {
+            //             itemDate.isToday = true;
+            //         }
+            //         this.arrayDateDelivery1.arraydate.push(itemDate);
+            //         this.arrayDateDelivery1.Month = moment_(_date).format("MMM")
+    
+    
+    
+            // }
+            // this.DateDeliveryList.DateList.push(this.arrayDateDelivery1)
+            // this.DateDeliveryList.DateList.push(this.arrayDateDelivery2)
+            this.haveDateList = true
         }
-        this.DateDeliveryList.DateList.push(this.arrayDateDelivery1)
-
-        // for (let i = 0; i <= 6; i++) {
-        //     let itemDate = new DeliveryItemModel();
-        //     if (i == 0) {
-        //         _date = this.addDays(_date, 0);
-        //     }
-        //     else
-        //         _date = this.addDays(_date, 1);
-
-        //         itemDate.DateTtr = moment_(_date).format("DD/MM/YYYY");
-        //         itemDate.DayStrs = arrayDays[moment_(_date).days()];
-        //         itemDate.DayStr1 = moment_(_date).date() + '';
-        //         if (moment_(_date).date() == moment_(currentDate).date()) {
-        //             itemDate.isToday = true;
-        //         }
-        //         this.arrayDateDelivery1.arraydate.push(itemDate);
-        //         this.arrayDateDelivery1.Month = moment_(_date).format("MMM")
-
-
-
-        // }
-        // this.DateDeliveryList.DateList.push(this.arrayDateDelivery1)
-        // this.DateDeliveryList.DateList.push(this.arrayDateDelivery2)
-        this.haveDateList = true
+        else{
+            
+           for (let i = 0; i <= this.getInitialParams.OtherParams[0].MaxDateDeliveryOn; i++) {
+                let itemDate = new DeliveryItemModel();
+                if (i == 0) {
+                    _date = this.addDays(_date, 0);
+                }
+                else
+                    _date = this.addDays(_date, 1);
+    
+                    itemDate.DateTtr = moment_(_date).format("DD/MM/YYYY");
+                    itemDate.DayStrs = arrayDays[moment_(_date).days()];
+                    itemDate.DayStr1 = moment_(_date).date() + '';
+                    itemDate.StartTime = "08:00:00";
+                    itemDate.EndTime="21:00:00"
+                    if (moment_(_date).date() == moment_(currentDate).date()) {
+                        itemDate.isToday = true;
+                    }
+                    this.arrayDateDelivery1.arraydate.push(itemDate);
+                    this.arrayDateDelivery1.Month = moment_(_date).format("MMM")
+    
+    
+    
+            }
+            this.DateDeliveryList.DateList.push(this.arrayDateDelivery1)
+            
+            this.haveDateList=true;
+        }
+        
 
 
     }
