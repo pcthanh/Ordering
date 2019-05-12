@@ -29,8 +29,11 @@
                                     alt=""></div>
                             <div *ngIf=" this.OrderType==='PICKUP'" class="time-rate">{{this.outletInfo.OutletInfo[0].EstimatedPickupTime}} <img src="assets/images/ico-more-top.png"
                                     alt=""></div>-->
-                            <div class="outlet-time">
+                            <div class="outlet-time" *ngIf="this.OrderType==='DELIVERY'">
                                 {{this.outletInfo.OutletInfo[0].EstimatedDeliveryTime}}
+                            </div>
+                            <div class="outlet-time" *ngIf="this.OrderType==='PICKUP'">
+                                {{this.outletInfo.OutletInfo[0].EstimatedPickupTime}}
                             </div>
                         </div>
                     </div>

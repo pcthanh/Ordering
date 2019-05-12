@@ -2217,12 +2217,13 @@ export class PageCheckOutComponent implements OnInit {
         console.log("this.orderMain.PromoCodeValue:"+ this.orderMain.PromoCodeValue)
         console.log("credit:"+ this.creditAmount)
         console.log("creditAmount:"+ parseFloat(this.creditAmount + '') + parseFloat(this.orderMain.DiscountProgramAmount + ''))
-        if(this.selectCredit){
-            data_request.DiscountAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.PromoCodeValue + '') + parseFloat(this.creditAmount + '') + parseFloat(this.orderMain.DiscountProgramAmount + ''))
-        }
-        else{
-            data_request.DiscountAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.PromoCodeValue + '')  + parseFloat(this.orderMain.DiscountProgramAmount + ''))
-        }
+        // if(this.selectCredit){
+        //     data_request.DiscountAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.PromoCodeValue + '') + parseFloat(this.creditAmount + '') + parseFloat(this.orderMain.DiscountProgramAmount + ''))
+        // }
+        // else{
+        //     data_request.DiscountAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.PromoCodeValue + '')  + parseFloat(this.orderMain.DiscountProgramAmount + ''))
+        // }
+        data_request.DiscountAmount=this._gof3rModule.ParseTo12(parseFloat(this.orderMain.DiscountProgramAmount + ''))
         
         //data_request.DiscountAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.PromoCodeValue + '')  + parseFloat(this.orderMain.DiscountProgramAmount + ''))
         //data_request.ApprovalCode = ApprovalCode
@@ -2239,12 +2240,13 @@ export class PageCheckOutComponent implements OnInit {
         data_request.PromoCodeAmount = this._gof3rModule.ParseTo12(this.orderMain.PromoCodeValue)
         data_request.DeliveryFee = this._gof3rModule.ParseTo12(this.orderMain.DeliveryFee)
         data_request.PAN = this.orderMain.CardToken
-        if(this.orderMain.Total===0){
-            data_request.TranxAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.TotalBeforDiscount.toFixed(2)))
-        }
-        else{
-            data_request.TranxAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.Total.toFixed(2)))
-        }
+        // if(this.orderMain.Total===0){
+        //     data_request.TranxAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.TotalBeforDiscount.toFixed(2)))
+        // }
+        // else{
+        //     data_request.TranxAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.Total.toFixed(2)))
+        // }
+        data_request.TranxAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.Total.toFixed(2)))
         
         //data_request.TranxAmount="000000001750"
         data_request.CardHolderName = this.orderMain.CardHoldName
