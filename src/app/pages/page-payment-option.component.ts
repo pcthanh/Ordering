@@ -200,7 +200,7 @@ export class PaymentOptionComponent implements OnInit {
         //let data_request = {IIN:}
     }
     showPopupPaymentSuccess() {
-        var el = $('#success-popup');
+        var el = $('#success-popup-add-card');
         if (el.length) {
             $.magnificPopup.open({
                 items: {

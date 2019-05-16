@@ -1321,7 +1321,9 @@ export class PageCheckOutComponent implements OnInit {
             // creditDiscount.CreditValue=this.creditDisplay
             // this.listDiscoutMain.ListDiscount.push(creditDiscount);
             // this.addCredit=false
-            this.creditDisplay = "S$0.00"
+            let _creditBal:number =this.creditAmount-this.orderMain.Total;
+            this.creditDisplay = this._gof3rUtil.formatCurrency(_creditBal,"S$");
+            //this.creditDisplay = "S$0.00"
             this.selectCredit = true;
             this.subTotalOrder();
         }
