@@ -1362,7 +1362,6 @@ export class PageOrderComponent implements OnInit {
                         if (haveNew) {
                             if (localStorage.getItem("address") != null) {
                                 this.addressDeli = JSON.parse(localStorage.getItem("address"));
-                                console.log("add:"+ JSON.stringify(this.addressDeli))
                                 if (this.addressDeli.AddressListInfo[0].AddressId != "") {
                                     this._router.navigateByUrl('/check-out')
                                 }

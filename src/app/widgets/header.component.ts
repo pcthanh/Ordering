@@ -126,7 +126,6 @@ export class HeaderGof3rComponent implements OnInit {
         })
         if (localStorage.getItem("ot") != null) {
             this.outletInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("ot")));
-            console.log(JSON.stringify(this.outletInfo))
         }
         if (localStorage.getItem("orderType") != null) {
 
@@ -142,8 +141,6 @@ export class HeaderGof3rComponent implements OnInit {
             this.getInitialParams = new GetInitialParams();
 
             this.getInitialParams = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("IN")));
-            console.log("in:"+ JSON.stringify(this.getInitialParams))
-
             for (let i = 0; i < this.getInitialParams.CountryInfo.length; i++) {
 
                 if (this.getInitialParams.CountryInfo[i].CountryCode === "65") {
@@ -579,6 +576,8 @@ export class HeaderGof3rComponent implements OnInit {
         this.selectOrderTypeDeivery = true;
         this.selectOrderTypePickup = false
         localStorage.setItem("orderType", this.orderType)
+        this.GetCurrentSystemTime()
+        this.loadDateDelivery(new Date())
         $('.login-dropdown').hide();
         $('.login-overlay').removeClass('show');
         $('.login-wrap .login').removeClass('hide-form');
@@ -595,6 +594,8 @@ export class HeaderGof3rComponent implements OnInit {
         this.selectOrderTypeDeivery = false;
         this.selectOrderTypePickup = true
         localStorage.setItem("orderType", this.orderType)
+        this.GetCurrentSystemTime()
+        this.loadDateDelivery(new Date())
         $('.login-dropdown').hide();
         $('.login-overlay').removeClass('show');
         $('.login-wrap .login').removeClass('hide-form');
@@ -982,8 +983,7 @@ export class HeaderGof3rComponent implements OnInit {
     
     
             }
-            this.DateDeliveryList.DateList.push(this.arrayDateDelivery1)
-            
+            this.DateDeliveryList.DateList.push(this.arrayDateDelivery1) 
             this.haveDateList=true;
         }
         
@@ -1039,7 +1039,7 @@ export class HeaderGof3rComponent implements OnInit {
 
 
     }
-    loadTimesDelivery(isToday: boolean, date: string) {
+    loadTimesDelivery(isToday: boolean, _dateSelect: string) {
         this.timesDelivery = [];
         this.getCurrentTime = new GetCurrentSystemTimeModel();
         let common_data = new CommonDataRequest();
@@ -1061,7 +1061,7 @@ export class HeaderGof3rComponent implements OnInit {
                 if (parseInt(h) < 8) {
                     startTime = "08:00:00";
                 }
-                this.createTimesDelivery(startTime, END_TIME_LIMIT, isToday, date)
+                this.createTimesDelivery(startTime, END_TIME_LIMIT, isToday, _dateSelect)
             }
             else {
                 let [h, m, s] = START_TIME_LIMINT.split(":");
@@ -1070,7 +1070,7 @@ export class HeaderGof3rComponent implements OnInit {
                 _date.setMinutes(parseInt(m));
                 _date.setSeconds(parseInt(s));
                 let startTime = moment_(_date).format("HH:mm:ss")
-                this.createTimesDelivery(startTime, END_TIME_LIMIT, isToday, date)
+                this.createTimesDelivery(startTime, END_TIME_LIMIT, isToday, _dateSelect)
             }
         })
 
@@ -1089,11 +1089,18 @@ export class HeaderGof3rComponent implements OnInit {
         let dataRequestJson = JSON.stringify(dataRequest);
         this._pickupService.GetCurrentSystemTime(common_data_json, dataRequestJson).then(data => {
             let d = new Date(+data.CurrentTimeMillis);
-            let startTime = "08:00:00"
+            let startTime = moment_(d).format("HH:mm:ss")
             let date = moment_(d).format("DD/MM/YYYY")
+            
+            
+                let [h, m, s] = startTime.split(":");
 
             if (isToday) {
-                this.createTimesPickup(startTime, END_TIME_LIMIT, isToday, date)
+                if(parseInt(h)<8){
+                    let _startTime="08:00:00"
+                    this.createTimesPickup(_startTime, END_TIME_LIMIT, isToday, date)
+                }
+                
             }
             else {
                 let [h, m, s] = START_TIME_LIMINT.split(":");
@@ -1109,40 +1116,45 @@ export class HeaderGof3rComponent implements OnInit {
     }
     loadTimesPickup(isToday: boolean, dateInput: string, StartTime: string, endTime: string) {
         this.timesPickup = [];
+        
+        
+        this.getCurrentTime = new GetCurrentSystemTimeModel();
+        let common_data = new CommonDataRequest();
+        var _location = localStorage.getItem("la");
+        common_data.Location = _location
+        common_data.ServiceName = "GetCurrentSystemTime";
+        let common_data_json = JSON.stringify(common_data);
 
-        this.createTimesPickup(StartTime, endTime, isToday, dateInput)
-        // this.getCurrentTime = new GetCurrentSystemTimeModel();
-        // let common_data = new CommonDataRequest();
-        // var _location = localStorage.getItem("la");
-        // common_data.Location = _location
-        // common_data.ServiceName = "GetCurrentSystemTime";
-        // let common_data_json = JSON.stringify(common_data);
-
-        // let dataRequest = new GetCurrentSystemTimeRequest();
-        // let dataRequestJson = JSON.stringify(dataRequest);
-        // this._pickupService.GetCurrentSystemTime(common_data_json, dataRequestJson).then(data => {
-        //     let d = new Date(+data.CurrentTimeMillis);
-        //     let startTime = "08:00:00"
-        //      let date = moment_(d).format("DD/MM/YYYY")
-
-        //     if (isToday){
-        //         this.createTimesPickup(startTime, END_TIME_LIMIT, isToday,date)
-        //     }
-        //     else {
-        //         let [h, m, s] = START_TIME_LIMINT.split(":");
-        //         let _date = new Date();
-        //         _date.setHours(parseInt(h));
-        //         _date.setMinutes(parseInt(m));
-        //         _date.setSeconds(parseInt(s));
-        //         let startTime = moment_(_date).format("HH:mm:ss")
-        //         this.createTimesPickup(startTime, END_TIME_LIMIT, isToday,dateInput)
-        //     }
-        // })
+        let dataRequest = new GetCurrentSystemTimeRequest();
+        let dataRequestJson = JSON.stringify(dataRequest);
+        this._pickupService.GetCurrentSystemTime(common_data_json, dataRequestJson).then(data => {
+            let d = new Date(+data.CurrentTimeMillis);
+            let startTime = moment_(d).format("HH:mm:ss")
+            let date = moment_(d).format("DD/MM/YYYY")
+            let [h, m, s] = startTime.split(":");
+            if (isToday){
+                if(parseInt(h)<8){
+                    let _startTime ="08:00:00";
+                    this.createTimesPickup(_startTime, END_TIME_LIMIT, isToday,date)
+                }
+                
+            }
+            else {
+                // let [h, m, s] = START_TIME_LIMINT.split(":");
+                // let _date = new Date();
+                // _date.setHours(parseInt(h));
+                // _date.setMinutes(parseInt(m));
+                // _date.setSeconds(parseInt(s));
+                // let startTime = moment_(_date).format("HH:mm:ss")
+                this.createTimesPickup(StartTime, endTime, isToday,dateInput)
+            }
+        })
 
     }
     selectTime(value: string, label: string) {
         let dataSend = { function: 'changeTime', date: value };
-        this.whenStr = this.tConvert(label);
+        let dcut = value.slice(0, value.length - 14)
+        this.whenStr =dcut+" "+ this.tConvert(label);
         localStorage.setItem("whenDelivery", value)
 
         $('.login-dropdown').hide();
@@ -1353,8 +1365,35 @@ export class HeaderGof3rComponent implements OnInit {
         $.magnificPopup.close()
     }
     loadTimePickupFirst() {
+        //this.timesDelivery = [];
+        this.getCurrentTime = new GetCurrentSystemTimeModel();
+        let common_data = new CommonDataRequest();
+        var _location = localStorage.getItem("la");
+        common_data.Location = _location
+        common_data.ServiceName = "GetCurrentSystemTime";
+        let common_data_json = JSON.stringify(common_data);
 
-        this.createTimesPickup(this.DateDeliveryList.DateList[0].arraydate[0].StartTime, this.DateDeliveryList.DateList[0].arraydate[0].EndTime, this.DateDeliveryList.DateList[0].arraydate[0].isToday, this.DateDeliveryList.DateList[0].arraydate[0].DateTtr)
+        let dataRequest = new GetCurrentSystemTimeRequest();
+        let dataRequestJson = JSON.stringify(dataRequest);
+        this._pickupService.GetCurrentSystemTime(common_data_json, dataRequestJson).then(data => {
+            let d = new Date(+data.CurrentTimeMillis);
+
+            let startTime = moment_(d).format("HH:mm:ss")
+            let date = moment_(d).format("DD/MM/YYYY")
+            
+            
+                let [h, m, s] = startTime.split(":");
+                if (parseInt(h) < 8) {
+                    this.createTimesPickup(this.DateDeliveryList.DateList[0].arraydate[0].StartTime, this.DateDeliveryList.DateList[0].arraydate[0].EndTime, this.DateDeliveryList.DateList[0].arraydate[0].isToday, this.DateDeliveryList.DateList[0].arraydate[0].DateTtr)
+                }
+                else{
+                    this.createTimesPickup(startTime, this.DateDeliveryList.DateList[0].arraydate[0].EndTime, this.DateDeliveryList.DateList[0].arraydate[0].isToday, this.DateDeliveryList.DateList[0].arraydate[0].DateTtr)
+                }
+                
+            
+            
+        })
+        
 
     }
     checkPickUpTime(fromDate: string, toDate: string, fromDateDisplay: string, toDateDisplay: string, dateSelect: string, lable: string, index: number) {
@@ -1374,13 +1413,9 @@ export class HeaderGof3rComponent implements OnInit {
             let date = moment_(d).format("DD/MM/YYYY")
 
             let selectDate = moment_(dateSelect).format("DD/MM/YYYY")
-            console.log("currentDateCompare1:" + date)
-            console.log("selectDate:" + selectDate)
-            console.log("timePickup:" + JSON.stringify(this.timesPickup))
             if (dateSelect == this.currentDate) {
                 let hoursCurrent = parseInt(moment_(d.getTime()).format("HH"));
                 let minutesCurrent = parseInt(moment_(d.getTime()).format("mm"));
-                console.log("hoursCurrent:" + hoursCurrent)
                 let [date, h, apm] = fromDate.split(" ")
                 let [hh, mm] = h.split(":");
                 let h1: number = 0
@@ -1396,10 +1431,6 @@ export class HeaderGof3rComponent implements OnInit {
                 else {
                     h1 = parseInt(hh)
                 }
-
-                console.log("hh1:" + h1)
-                console.log("hh1:" + m)
-                console.log("minutesCurrent:" + minutesCurrent)
                 if (h1 < hoursCurrent) {
                     rs = false;
                     this.errorCart = "Can not pickup this time"
@@ -1456,7 +1487,6 @@ export class HeaderGof3rComponent implements OnInit {
 
             }
             else {
-                console.log("true1:" + "jjjj")
                 let dataSend = { function: 'updateTimePickup', fromDate: fromDate, toDate: toDate, fromDateDisplay: fromDateDisplay, toDateDisplay: toDateDisplay };
                 let dcut = dateSelect.slice(0, dateSelect.length - 5)
                 this.whenStr = dcut + " " + lable

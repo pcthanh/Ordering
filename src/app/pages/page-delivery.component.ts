@@ -89,7 +89,6 @@ export class DeliveryAddressComponent implements OnInit {
         this._pickupService.SearchSingaporeAddress(common_data_json, request_data_json).then(data => {
 
             this.list = data;
-            console.log("postal:"+ JSON.stringify(this.list))
             this.showListSelectAddress = true;
             // for(let i = 0; i< data.AddressList.length; i++){
             //     this.list.push({name:data.AddressList[i].Address,postalCode:data.AddressList[i].PostalCode,lat:data.AddressList[i].Latitude,lng:data.AddressList[i].Longitude})
@@ -118,7 +117,6 @@ export class DeliveryAddressComponent implements OnInit {
 
         this._pickupService.GetDeliveryAddresses(common_data_json, data_request_json).then(data => {
             this.listDeliveryAddress = data;
-            console.log("list:"+ JSON.stringify(this.listDeliveryAddress))
             this._gof3rModule.checkInvalidSessionUser(this.listDeliveryAddress.ResultCode);
 
         })

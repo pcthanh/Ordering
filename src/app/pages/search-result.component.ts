@@ -251,7 +251,6 @@ export class SearchResultComponent implements OnInit {
         
        
         let request_data_json = JSON.stringify(request_data);
-        console.log("all:"+ request_data_json)
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
 

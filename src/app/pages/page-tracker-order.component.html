@@ -18,6 +18,9 @@
                             <agm-map *ngIf="isCombineOrder && isHaveData" style="height: 650px" #agmMap [latitude]="this.locations[0].lat" [longitude]="this.locations[0].lng" [zoom]="13" [styles]="styles">
                                 <agm-marker *ngFor="let item of locations" [latitude]="item.lat" [longitude]="item.lng" [iconUrl]="item.icon"></agm-marker>
                             </agm-map>
+                            <agm-map *ngIf="isHaveDataPickup" style="height: 650px" #agmMap [latitude]="this.lat" [longitude]="this.lng" [zoom]="13" [styles]="styles">
+                                <agm-marker  [latitude]="this.lat" [longitude]="this.lng" [iconUrl]="makeIconURL()"></agm-marker>
+                            </agm-map>
 
                     </div>
                 </div>
@@ -238,7 +241,7 @@
                                                 </div>
                                                 <div class="info">
                                                     <div class="title">{{pickupOrderDatail.PickupOrderDetail[0].MerchantOutletName}}</div>
-                                                    <div>Joined GOF3R: Nov 2014</div>
+                                                    <div>Joined GOF3R: {{pickupOrderDatail.PickupOrderDetail[0].OutletJoinedDate}}</div>
                                                     <div>The Restaurant confirmed your order</div>
                                                 </div>
                                             </div>

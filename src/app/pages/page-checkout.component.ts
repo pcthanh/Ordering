@@ -645,7 +645,6 @@ export class PageCheckOutComponent implements OnInit {
 
             this._pickupService.VerifyOrder(common_data_json, requestDataJson).then(data => {
                 this.verifyOrderMain = data;
-                console.log("veryfiOrder:"+ JSON.stringify(this.verifyOrderMain))
                 this.orderMain.ServiceFee = this.verifyOrderMain.OrderFeeAndDiscountInfo.ServiceFeeDisplay
                 this.orderMain.ServiceFeeValue = parseInt(this.verifyOrderMain.OrderFeeAndDiscountInfo.ServiceFee) / 100;
                 this.orderMain.DiscountDisplay = this.verifyOrderMain.OrderFeeAndDiscountInfo.DiscountAmountDisplay
@@ -741,7 +740,6 @@ export class PageCheckOutComponent implements OnInit {
         requestData.DiscountAmount = this._gof3rModule.ParseTo12(this.orderMain.Discount)
         requestData.AwardType = "MAT_PORDER";
         let requestDataJson = JSON.stringify(requestData);
-        console.log("request-all:"+ requestDataJson)
         this._pickupService.GetAllPaymentOptionsWithPromotion(common_data_json, requestDataJson).then(data => {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.getPromodeList()
@@ -749,8 +747,6 @@ export class PageCheckOutComponent implements OnInit {
 
             this.allPayment = data
             if(this.allPayment.ResultCode==="000"){
-                console.log("all:"+ JSON.stringify(this.allPayment))
-            
             for(let i =0;i< this.allPayment.PointWalletListInfo.length; i++){
                 for(let j = 0; j< this.allPayment.PointWalletListInfo[i].RebateProgramInfo.length; j++){
                     this.rebateProgramDesscription = this.allPayment.PointWalletListInfo[i].RebateProgramInfo[j].ProgramDescription
@@ -818,7 +814,7 @@ export class PageCheckOutComponent implements OnInit {
                     let common_data_json = JSON.stringify(common_data);
     
                     let data_request = new AddTransactionRequestModel();
-                    data_request.CurrencyCode = this.orderMain.CurrencyCode
+                    data_request.CurrencyCode ="702" //this.orderMain.CurrencyCode
                     data_request.Amount = this._gof3rModule.ParseTo12(this.orderMain.Total)
                     data_request.MaskedPan = this.orderMain.MaskingCardNumber
                     // data_request.InvoiceNumber = this._gof3rModule.getRandom(12);
@@ -826,10 +822,8 @@ export class PageCheckOutComponent implements OnInit {
                     let date = new Date()
                     data_request.TransactionDate = moment_(date).format("DD/MM/YYYY HH:mm:ss")
                     let data_request_json = JSON.stringify(data_request)
-                    console.log("request:"+ data_request_json)
                     if (this.PO === "PO_CARD") {
                         this._pickupService.AddCardTransaction(common_data_json, data_request_json).then(data => {
-                            console.log("add:"+ JSON.stringify(data))
                             if (data.ResultCode === "000") {
                                 localStorage.setItem('addcard', JSON.stringify(data_request))
     
@@ -893,7 +887,6 @@ export class PageCheckOutComponent implements OnInit {
         data_request.CardHolderName = this.orderMain.CardHoldName
         data_request.StoreCardUniqueID = this.orderMain.PaymentGatewayToken;
         let data_request_json = JSON.stringify(data_request)
-        console.log("makepayment:"+ data_request_json)
         this._pickupService.MakePayment(common_data_json, data_request_json).then(data => {
             
             this.makePaymentMain = data;
@@ -2216,9 +2209,6 @@ export class PageCheckOutComponent implements OnInit {
             data_request.PaymentOptions = "PO_POINT"
         if (this.PO === "PO_WALLET")
             data_request.PaymentOptions = "PO_WALLET"
-        console.log("this.orderMain.PromoCodeValue:"+ this.orderMain.PromoCodeValue)
-        console.log("credit:"+ this.creditAmount)
-        console.log("creditAmount:"+ parseFloat(this.creditAmount + '') + parseFloat(this.orderMain.DiscountProgramAmount + ''))
         // if(this.selectCredit){
         //     data_request.DiscountAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.PromoCodeValue + '') + parseFloat(this.creditAmount + '') + parseFloat(this.orderMain.DiscountProgramAmount + ''))
         // }
@@ -2254,11 +2244,8 @@ export class PageCheckOutComponent implements OnInit {
         data_request.CardHolderName = this.orderMain.CardHoldName
         data_request.StoreCardUniqueID = this.orderMain.PaymentGatewayToken;
         let data_request_json = JSON.stringify(data_request);
-        console.log("makepayment:"+ data_request_json)
-        console.log("makepayment1:"+ common_data_json)
         this._pickupService.PlaceOrder(common_data_json, data_request_json).then(data => {
 
-            console.log("makepay:"+ JSON.stringify(data))
             this.placeOrderMain = data;
             localStorage.setItem('placeOrder', JSON.stringify(this.placeOrderMain));// save order payment success
             if (data.ResultCode === "000") {

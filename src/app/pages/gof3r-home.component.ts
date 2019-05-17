@@ -389,9 +389,6 @@ export class Gof3rHomeComponent implements OnInit {
         this._homeservice.getServiceHome(jsonCommon, jsonRequest).then(data => {
 
             this.getInitialParams = data;
-            
-            console.log("test:"+JSON.stringify( this.getInitialParams))
-            
             for (let i = 0; i < this.getInitialParams.CountryInfo.length; i++) {
 
                 if (this.getInitialParams.CountryInfo[i].CountryCode === "65") {

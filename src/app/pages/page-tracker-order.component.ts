@@ -54,6 +54,8 @@ export class TrackerOrderComponent implements OnInit {
     geoHome: string = ""
     error: ErrorModel
     isError: boolean = false
+    latPickup:number=0;
+    lngPuckup:number=0
     customStyle = [
         { elementType: 'geometry', stylers: [{ color: '#ebe3cd' }] },
         { elementType: 'labels.text.fill', stylers: [{ color: '#523735' }] },
@@ -391,7 +393,7 @@ export class TrackerOrderComponent implements OnInit {
         this._pickupService.GetDeliveryOrderDetail(common_data_json, data_request_json).then(data => {
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode)
             this.deliveryOrder = data
-            console.log("detail:"+ JSON.stringify(this.deliveryOrder))
+            
             //console.log("detail:" + JSON.stringify(this.deliveryOrder))
             //this.deliveryOrder.DeliveryOrderDetail[0].OrderStatus=ORDER_DELIVERED
             if(this.deliveryOrder.ResultCode==="000"){
@@ -458,6 +460,7 @@ export class TrackerOrderComponent implements OnInit {
             }
 
             this.isHaveDataPickup = true
+            
             this.blockUI.stop();
             // this.subTotalItem(this.pickupOrderDatail)
             // this.groupOptionItem(this.pickupOrderDatail)
@@ -487,5 +490,9 @@ export class TrackerOrderComponent implements OnInit {
         this.error.ResultDesc = ErrorDesc
         this.error.ServiceName = serviceName
         this.showPopupddCardError()
+    }
+    makeIconURL() {
+
+        return require('../../assets/images/pin_food.png')
     }
 }
