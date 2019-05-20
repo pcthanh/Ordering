@@ -319,7 +319,8 @@
   display: block;
   margin: auto;
   padding-top: 15px;
-  box-shadow: 0 0 0 5px #8E49FF
+  box-shadow: 0 0 0 5px #8E49FF;
+  text-transform: uppercase
 }
 .sticky {
   position: fixed;

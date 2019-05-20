@@ -308,6 +308,7 @@ export class SearchResultComponent implements OnInit {
             // this.getCurrentTime.CurrentData = date;
             // this.getCurrentTime.CurrentTime = moment_(d.getTime()).format("HH:mm:ss")
             strDatime = date + " " + moment_(d.getTime()).format("HH:mm:ss")
+            localStorage.setItem("orderFor",strDatime);
             if(!this.foodCenter)
             {
                 

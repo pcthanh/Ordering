@@ -862,7 +862,7 @@ export class HeaderGof3rComponent implements OnInit {
             let roundTime = this.roundTime(dateAdd.hours(), dateAdd.minutes(), 15);
 
             this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
-            localStorage.setItem("whenDelivery", moment_(roundTime).format("DD/MM/YYYY :HH:mm:ss"))
+            localStorage.setItem("whenDelivery", moment_(roundTime).format("DD/MM/YYYY HH:mm:ss"))
             this.loadDateDelivery(d);
 
         })
@@ -1156,7 +1156,7 @@ export class HeaderGof3rComponent implements OnInit {
         let dcut = value.slice(0, value.length - 14)
         this.whenStr =dcut+" "+ this.tConvert(label);
         localStorage.setItem("whenDelivery", value)
-
+        localStorage.setItem("orderFor",value);
         $('.login-dropdown').hide();
         $('.login-overlay').removeClass('show');
         $('.login-wrap .login').removeClass('hide-form');
@@ -1168,7 +1168,7 @@ export class HeaderGof3rComponent implements OnInit {
     }
     selectTimePickup(fromDate: string, toDate: string, fromDateDisplay: string, toDateDisplay: string, d: string, lable: string, index: number) {
 
-
+        
         this.checkPickUpTime(fromDate, toDate, fromDateDisplay, toDateDisplay, d, lable, index)
 
 

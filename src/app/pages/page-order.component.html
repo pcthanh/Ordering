@@ -480,6 +480,13 @@
         </div>
     </div>
 </div>
+<div id="popup-delivery-hours"  class="success-popup mfp-hide" style="text-align: center">
+    <div *ngIf="this.checkEstimateTime" class="title" style="font-size: 14px" >The next avaiable delivery time for this order is {{this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeDisplay}}. Would you like to proceed?</div>
+    <!--<div style="cursor: pointer" class="text-center" (click)="trackerOrder()" 
+            ><img src="assets/images/ico-succsess.png" alt=""></div>-->
+    <button type="button" class="btn-main btn-select-payment" style="background: #ffad4c" (click)="closePopupSelectTimes()">CANCEL</button>
+    <button type="button" class="btn-main btn-select-payment" style="padding: 0 45px" (click)="setNewTimeDelivery()">OK</button>
+</div>
 
 <!--end popup add address info-->
 <block-ui>

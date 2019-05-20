@@ -498,9 +498,10 @@ export class PageCheckOutComponent implements OnInit {
             request_data.SubCategoryId = "";
             let request_data_json = JSON.stringify(request_data);
 
-           
+           console.log("request:"+ request_data_json)
             this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
                 this.getAllOutletListV2 = data;
+                console.log("delvery:"+ JSON.stringify(this.getAllOutletListV2))
                 this.getAllPaymentOptionsWithPromotion()
                 this.orderMain.DeliveryOn = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
                 this.orderMain.DeliveryOnRequest = this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeDisplay
@@ -2001,21 +2002,44 @@ export class PageCheckOutComponent implements OnInit {
         
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             this.getAllOutletListV2CheckDelivery = data;
+            if(request_data.OrderFor===this.getAllOutletListV2CheckDelivery.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue){
+                if (this.getAllOutletListV2CheckDelivery.MerchantOutletListInfo.length == 0) {
+                    this.locationDelivery = false;
+                    this.checkError('', this.getAllOutletListV2CheckDelivery.NoMessageDataForChangingLocation, '');
+                    return;
+                }
+                else {
+                    this.placeOrder();
+    
+                }
+            }
+            else{
+                this.showPopupDeliveryHours()
+            }
             
-            if (this.getAllOutletListV2CheckDelivery.MerchantOutletListInfo.length == 0) {
-                this.locationDelivery = false;
-                this.checkError('', this.getAllOutletListV2CheckDelivery.NoMessageDataForChangingLocation, '');
-                return;
-            }
-            else {
-                this.placeOrder();
-
-            }
 
         })
     }
-        
-
+    
+    }
+    showPopupDeliveryHours() {
+        var el = $('#popup-delivery-hours');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el,
+                    showCloseBtn: false,
+                },
+                type: 'inline',
+                modal: true,
+            });
+        }
+    }
+    setNewTimeDelivery()
+    {
+        this.orderMain.DeliveryOn= this.getAllOutletListV2CheckDelivery.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
+        //localStorage.setItem("whenDelivery",this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue)
+       this.closePopup()
     }
     closePopup(){
         $.magnificPopup.close()

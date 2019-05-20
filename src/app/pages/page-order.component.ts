@@ -88,6 +88,9 @@ export class PageOrderComponent implements OnInit {
     nameAddress:string=""
     addressList: AddressListModel;
     addressAdd: AddressAdd;
+    orderFor:string="";
+    estimateDeliveryTime:string=""
+    checkEstimateTime:boolean
     constructor(private _router: Router, private _gof3rUtil: Gof3rUtil, private _gof3rModule: Gof3rModule, private _util: Gof3rUtil, private _pickupService: PickupService, private _instanceService: EventSubscribeService, private active_router: ActivatedRoute) {
         this.blockUI.start('loading ...'); // Start blocking
         this.productDetail = new ProductDetailMainModel();
@@ -153,6 +156,12 @@ export class PageOrderComponent implements OnInit {
             //     this.dataFromOutletMap = data.msg
             // }
         })
+        if (localStorage.getItem("orderFor") != null) {
+            this.orderFor = localStorage.getItem("orderFor")
+        }
+        if(localStorage.getItem("whenDelivery")!=null){
+            this.estimateDeliveryTime= localStorage.getItem("whenDelivery");
+        }
     }
     ngOnInit() {
         //this.initJquery()
@@ -222,22 +231,21 @@ export class PageOrderComponent implements OnInit {
 
         let requestData = new GetOutletInfoRequest();
         requestData.CustomerId = "";
-        requestData.OrderFor = "";
+        requestData.OrderFor = this.orderFor;
         requestData.OrderType = this.OrderType;
         requestData.MerchantOutletId = this.OutletId;
         let requestJson = JSON.stringify(requestData);
-
+        console.log("ot:"+ requestJson)
         this._pickupService.GetOutletInfo(commonDataJson, requestJson).then(data => {
 
             this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
             localStorage.setItem('ot', this._util.encryptParams(JSON.stringify(data)));//set outlet info
             this.outletInfo = data;
+            console.log("ot:"+ JSON.stringify(this.outletInfo));
             this.outletInfo.OutletInfo[0].Rating = this.getStars((parseInt(this.outletInfo.OutletInfo[0].MerchantOutletRating) / 100));
             this.haveDataOutlet = true
             this.loadCart();
             this.GetProductList("", "");
-            
-
         })
 
     }
@@ -1250,7 +1258,8 @@ export class PageOrderComponent implements OnInit {
             }
             else {
                
-                this.DeliveryAddress()
+                //this.DeliveryAddress()
+                this.getAllOutletV2()
                 // if(this.orderMain.DeliveryId===""){
                 //      this.errorCart="please select address delivery"
                 //      $.magnificPopup.open({
@@ -1976,6 +1985,78 @@ export class PageOrderComponent implements OnInit {
             })
 
         }
+    }
+    getAllOutletV2() {
+        if (this.cartNew.cartNew.length > 0) {
+            let common_data = new CommonDataRequest();
+            var _location = localStorage.getItem("la");
+            common_data.Location = _location
+            common_data.ServiceName = "GetAllOutletListV2";
+            let common_data_json = JSON.stringify(common_data);
+
+            let request_data = new GetAllOutletListV2Request();
+            request_data.OrderType = this.OrderType
+            if (this.OrderType === ORDER_PICKUP || !this.OrderType) {
+                request_data.OrderFor = "";
+            } else if (this.OrderType === ORDER_DELIVERY) {
+
+                request_data.OrderFor = localStorage.getItem("whenDelivery")
+
+
+            }
+
+            request_data.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + '';
+            request_data.FromRow = 0;
+            request_data.MCC = this.mccGobal;
+            request_data.KeyWords = "";
+            // if(this.cartNew.cartNew.length>1){
+            //     request_data.MerchantOutletId = ""
+            //     request_data.FoodCentreId=this.cartNew.cartNew[0].FoodCenterID
+            // }
+            // else{
+            //     request_data.MerchantOutletId = this.cartNew.cartNew[0].OuteletID;
+            // }
+            request_data.MerchantOutletId = this.cartNew.cartNew[0].OuteletID;
+
+            request_data.SubCategoryId = "";
+            let request_data_json = JSON.stringify(request_data);
+
+           
+            this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
+                this.getAllOutletListV2 = data;
+                this.checkEstimateTime=true
+                console.log("de:"+ JSON.stringify(this.getAllOutletListV2))
+                if(this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue===this.estimateDeliveryTime){
+                    this.DeliveryAddress();
+                }
+                else{
+                    console.log("show")
+                    this.showPopupDeliveryHours();
+                }
+            })
+        }
+        
+
+
+    }
+    showPopupDeliveryHours() {
+        var el = $('#popup-delivery-hours');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el,
+                    showCloseBtn: false,
+                },
+                type: 'inline',
+                modal: true,
+            });
+        }
+    }
+    setNewTimeDelivery()
+    {
+        this.estimateDeliveryTime= this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
+        localStorage.setItem("whenDelivery",this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue)
+        this.closePopupSelectTimes()
     }
 
 }
