@@ -1255,6 +1255,8 @@ export class PageOrderComponent implements OnInit {
                 else {
                     this._router.navigateByUrl('/check-out')
                 }
+                
+                //this._instanceService.sendCustomEvent(dataSend)
             }
             else {
                

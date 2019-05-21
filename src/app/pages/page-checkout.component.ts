@@ -148,6 +148,7 @@ export class PageCheckOutComponent implements OnInit {
     soldOut:string=""
     soldOutArray :SoldOutModel[]=[];
     soldItem:SoldOutModel;
+    checkEstimateTime:boolean=false
     styles = [{
         featureType: "landscape",
         elementType: "geometry.fill",
@@ -2002,6 +2003,7 @@ export class PageCheckOutComponent implements OnInit {
         
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             this.getAllOutletListV2CheckDelivery = data;
+            this.checkEstimateTime=true
             if(request_data.OrderFor===this.getAllOutletListV2CheckDelivery.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue){
                 if (this.getAllOutletListV2CheckDelivery.MerchantOutletListInfo.length == 0) {
                     this.locationDelivery = false;
@@ -2350,5 +2352,6 @@ export class PageCheckOutComponent implements OnInit {
         })
 
     }
+    
     
 }

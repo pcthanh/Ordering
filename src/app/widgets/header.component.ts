@@ -99,6 +99,7 @@ export class HeaderGof3rComponent implements OnInit {
     isSelectNewAddress: boolean;
     outletInfo: OutletInfoModel;
     errorCart: string = ""
+    isShowWhen:boolean= true;
     constructor(private _route: Router, private _gof3rModule: Gof3rModule, private _pickupService: PickupService, private _gof3rUtil: Gof3rUtil, private _instanceService: EventSubscribeService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private _homeservice: HomeService) {
         this.addressList = new AddressListModel();
         this.signUp = new SingUpModel();
@@ -106,11 +107,25 @@ export class HeaderGof3rComponent implements OnInit {
         this.listDeliveryAddressShow = new ListDeliveryAddress();
         this.error = new ErrorModel();
         this.getInitialParams = new GetInitialParams();
+        if (localStorage.getItem("orderType") != null) {
+
+            this.orderType = localStorage.getItem("orderType");
+            if (this.orderType === ORDER_DELIVERY) {
+                this.selectOrderTypeDeivery = true
+                this.isShowWhen=true;
+            }
+            else if (this.orderType === ORDER_PICKUP) {
+                this.selectOrderTypePickup = true;
+                this.isShowWhen=false;
+            }
+        }
         this._instanceService.$getEventSubject.subscribe(data => {
 
-            if (data === "CheckOut") {
+            if (data.function === "PCKCO") {
 
                 //this.checkOut=false;
+                console.log("PCKCO:"+ data.function)
+                this.isShowWhen=true;
             }
             if (data === "About" || data === "FAQ" || data === "PRIVACY" || data === "TERMS" || data === "ContactUS" || data === "Grows") {
                 this.showDetail = false;
@@ -127,16 +142,7 @@ export class HeaderGof3rComponent implements OnInit {
         if (localStorage.getItem("ot") != null) {
             this.outletInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem("ot")));
         }
-        if (localStorage.getItem("orderType") != null) {
-
-            this.orderType = localStorage.getItem("orderType");
-            if (this.orderType === ORDER_DELIVERY) {
-                this.selectOrderTypeDeivery = true
-            }
-            else if (this.orderType === ORDER_PICKUP) {
-                this.selectOrderTypePickup = true;
-            }
-        }
+        
         if (localStorage.getItem("IN") != null) {
             this.getInitialParams = new GetInitialParams();
 
@@ -153,6 +159,9 @@ export class HeaderGof3rComponent implements OnInit {
         if (localStorage.getItem("haveNewAddress") != null) {
             this.isSelectNewAddress = JSON.parse(localStorage.getItem("haveNewAddress"));
         }
+        if(this._route.url==="/order"){
+            this.isShowWhen=true;
+        }
 
     }
 
@@ -161,7 +170,7 @@ export class HeaderGof3rComponent implements OnInit {
 
         this.checkLoginUser();
         this.GetCurrentSystemTime()
-        this.loadTimesDelivery(true, this.currentDate);
+        //this.loadTimesDelivery(true, this.currentDate);
         //this.loadTimesDeliveryPickup(true,this.currentDate)
         //this.createTimesPickup(this.DateDeliveryList.DateList[0].arraydate[0].StartTime,this.DateDeliveryList.DateList[0].arraydate[0].EndTime,this.DateDeliveryList.DateList[0].arraydate[0].isToday,this.DateDeliveryList.DateList[0].arraydate[0].DateTtr)
         //this.checkUserLoginChangeAddress()
@@ -576,6 +585,7 @@ export class HeaderGof3rComponent implements OnInit {
         this.selectOrderTypeDeivery = true;
         this.selectOrderTypePickup = false
         localStorage.setItem("orderType", this.orderType)
+        this.isShowWhen=true;
         this.GetCurrentSystemTime()
         this.loadDateDelivery(new Date())
         $('.login-dropdown').hide();
@@ -594,8 +604,9 @@ export class HeaderGof3rComponent implements OnInit {
         this.selectOrderTypeDeivery = false;
         this.selectOrderTypePickup = true
         localStorage.setItem("orderType", this.orderType)
+        this.isShowWhen=false;
         this.GetCurrentSystemTime()
-        this.loadDateDelivery(new Date())
+        //this.loadDateDelivery(new Date())
         $('.login-dropdown').hide();
         $('.login-overlay').removeClass('show');
         $('.login-wrap .login').removeClass('hide-form');
@@ -864,6 +875,7 @@ export class HeaderGof3rComponent implements OnInit {
             this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
             localStorage.setItem("whenDelivery", moment_(roundTime).format("DD/MM/YYYY HH:mm:ss"))
             this.loadDateDelivery(d);
+            this.loadTimesDelivery(true, this.currentDate);
 
         })
     }
@@ -1032,6 +1044,7 @@ export class HeaderGof3rComponent implements OnInit {
 
 
         }
+        console.log("timesPickup:"+JSON.stringify(this.timesPickup))
 
         this.showWhen = true
 
@@ -1152,6 +1165,7 @@ export class HeaderGof3rComponent implements OnInit {
 
     }
     selectTime(value: string, label: string) {
+        console.log(value +"- "+ label)
         let dataSend = { function: 'changeTime', date: value };
         let dcut = value.slice(0, value.length - 14)
         this.whenStr =dcut+" "+ this.tConvert(label);
@@ -1384,6 +1398,7 @@ export class HeaderGof3rComponent implements OnInit {
             
                 let [h, m, s] = startTime.split(":");
                 if (parseInt(h) < 8) {
+                    console.log(this.DateDeliveryList.DateList[0].arraydate[0].StartTime)
                     this.createTimesPickup(this.DateDeliveryList.DateList[0].arraydate[0].StartTime, this.DateDeliveryList.DateList[0].arraydate[0].EndTime, this.DateDeliveryList.DateList[0].arraydate[0].isToday, this.DateDeliveryList.DateList[0].arraydate[0].DateTtr)
                 }
                 else{
