@@ -227,6 +227,7 @@ export class SearchResultComponent implements OnInit {
         // } else if (request_data.OrderType === ORDER_DELIVERY) {
         //     request_data.OrderFor = orderFor
         // }
+        
         request_data.OrderFor=orderFor
         //request_data.OrderFor = ""
 
@@ -309,7 +310,13 @@ export class SearchResultComponent implements OnInit {
             // this.getCurrentTime.CurrentData = date;
             // this.getCurrentTime.CurrentTime = moment_(d.getTime()).format("HH:mm:ss")
             strDatime = date + " " + moment_(d.getTime()).format("HH:mm:ss")
-            localStorage.setItem("orderFor",strDatime);
+            if(localStorage.getItem("orderFor")!=null){
+                strDatime = localStorage.getItem("orderFor");
+            }
+            else{
+                localStorage.setItem("orderFor",strDatime);
+            }
+            
             if(!this.foodCenter)
             {
                 

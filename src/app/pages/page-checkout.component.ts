@@ -1057,7 +1057,7 @@ export class PageCheckOutComponent implements OnInit {
                 this.checkError(data.ResultCode, data.ResultDesc, data.ServiceName);
             }
         })
-
+        localStorage.setItem("selectTimeClick",'false')
     }
     paresProductList(): string {
         let array = new Array();
@@ -2350,7 +2350,7 @@ export class PageCheckOutComponent implements OnInit {
                 this.checkError(data.ResultCode, data.ResultDesc, data.ServiceName);
             }
         })
-
+        localStorage.setItem("selectTimeClick",'false')
     }
     
     

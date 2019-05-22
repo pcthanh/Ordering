@@ -36,6 +36,7 @@ import { GetInitParamRequest } from "../models-request/get-init-param-request";
 import { RequestNull } from "../models-request/request-null";
 import { GetDeliveryAddress } from "../models/GetDeliveryAddress";
 import { OutletInfoModel } from "../models/OutletInfo";
+import { GetOutletInfoRequest } from "../models-request/get-outlet-info";
 declare var $: any
 const ORDER_DELIVERY = "DELIVERY"
 const ORDER_PICKUP = "PICKUP";
@@ -100,6 +101,9 @@ export class HeaderGof3rComponent implements OnInit {
     outletInfo: OutletInfoModel;
     errorCart: string = ""
     isShowWhen:boolean= true;
+    orderFor:string="";
+    OutletId: string;
+    selectTimeClick:boolean=false;
     constructor(private _route: Router, private _gof3rModule: Gof3rModule, private _pickupService: PickupService, private _gof3rUtil: Gof3rUtil, private _instanceService: EventSubscribeService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private _homeservice: HomeService) {
         this.addressList = new AddressListModel();
         this.signUp = new SingUpModel();
@@ -162,6 +166,12 @@ export class HeaderGof3rComponent implements OnInit {
         if(this._route.url==="/order"){
             this.isShowWhen=true;
         }
+        if (localStorage.getItem("orderFor") != null) {
+            this.orderFor = localStorage.getItem("orderFor")
+        }
+        if (localStorage.getItem("out") != null) {
+            this.OutletId = localStorage.getItem("out");
+        }
 
     }
 
@@ -169,7 +179,8 @@ export class HeaderGof3rComponent implements OnInit {
         this.searchControl = new FormControl();
 
         this.checkLoginUser();
-        this.GetCurrentSystemTime()
+        
+        this.GetOutletInfo();
         //this.loadTimesDelivery(true, this.currentDate);
         //this.loadTimesDeliveryPickup(true,this.currentDate)
         //this.createTimesPickup(this.DateDeliveryList.DateList[0].arraydate[0].StartTime,this.DateDeliveryList.DateList[0].arraydate[0].EndTime,this.DateDeliveryList.DateList[0].arraydate[0].isToday,this.DateDeliveryList.DateList[0].arraydate[0].DateTtr)
@@ -872,7 +883,29 @@ export class HeaderGof3rComponent implements OnInit {
             let dateAdd = moment_(this.getCurrentTime.CurrentTime, "HH:mm").add(ADD_MINUTE_TIME_FROM_SERVER, "minutes");
             let roundTime = this.roundTime(dateAdd.hours(), dateAdd.minutes(), 15);
 
-            this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
+            if(this.orderType===ORDER_DELIVERY){
+                if(localStorage.getItem("selectTimeClick")!=null){
+                    if(localStorage.getItem("selectTimeClick")==="true"){
+                        if(localStorage.getItem("selectTime")!=null){
+                            this.whenStr =localStorage.getItem("selectTime");
+                        }
+                        else{
+                            this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
+                        }
+                    }
+                    else{
+                        this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
+                    }
+                }
+                else{
+                    this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
+                }
+                
+            }
+            else{
+                this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
+            }
+            
             localStorage.setItem("whenDelivery", moment_(roundTime).format("DD/MM/YYYY HH:mm:ss"))
             this.loadDateDelivery(d);
             this.loadTimesDelivery(true, this.currentDate);
@@ -1011,7 +1044,7 @@ export class HeaderGof3rComponent implements OnInit {
                 let dateAdd = moment_(nowDateTemp, "HH:mm").add(ADD_MINUTE_TIME_FROM_SERVER, "minutes");
 
                 let roundTime = this.roundTime(dateAdd.hours(), dateAdd.minutes(), 15);
-                let jsonDate = { label: moment_(roundTime).format('HH:mm'), value: date + " " + moment_(roundTime).format('HH:mm:ss') }
+                let jsonDate = { label: moment_(roundTime).format('HH:mm'), value: date + " " + moment_(roundTime).format('HH:mm')+":00" }
                 this.timesDelivery.push(jsonDate);
                 nowDateTemp = moment_(nowDateTemp, "HH:mm").add(ADD_MINUTE_TIME_AFTER_FROM_SERVER, "minutes")
             }
@@ -1171,6 +1204,9 @@ export class HeaderGof3rComponent implements OnInit {
         this.whenStr =dcut+" "+ this.tConvert(label);
         localStorage.setItem("whenDelivery", value)
         localStorage.setItem("orderFor",value);
+        localStorage.setItem("selectTime",dcut+" "+ this.tConvert(label))
+        this.selectTimeClick=true;
+        localStorage.setItem("selectTimeClick",this.selectTimeClick+'')
         $('.login-dropdown').hide();
         $('.login-overlay').removeClass('show');
         $('.login-wrap .login').removeClass('hide-form');
@@ -1520,5 +1556,29 @@ export class HeaderGof3rComponent implements OnInit {
     }
     closePopupSelectTimes() {
         $.magnificPopup.close()
+    }
+    GetOutletInfo() {
+        let commonData = new CommonDataRequest();
+        let _location = localStorage.getItem('la');
+        commonData.Location = _location;
+        commonData.ServiceName = "GetOutletInfo";
+        let commonDataJson = JSON.stringify(commonData);
+
+        let requestData = new GetOutletInfoRequest();
+        requestData.CustomerId = "";
+        requestData.OrderFor = this.orderFor;
+        requestData.OrderType = this.orderType;
+        requestData.MerchantOutletId = this.OutletId;
+        let requestJson = JSON.stringify(requestData);
+        console.log("ot:"+ requestJson)
+        this._pickupService.GetOutletInfo(commonDataJson, requestJson).then(data => {
+
+            this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
+           
+            this.outletInfo = data;
+            this.GetCurrentSystemTime()
+            
+        })
+
     }
 }

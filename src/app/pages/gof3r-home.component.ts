@@ -134,6 +134,7 @@ export class Gof3rHomeComponent implements OnInit {
         if (localStorage.getItem("orderType") != null) {
             this.orderType = localStorage.getItem("orderType");
         }
+        localStorage.setItem("selectTimeClick",'false')
         this.blockUI.stop()
     }
     ngOnInit() {
