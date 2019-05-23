@@ -478,7 +478,7 @@ export class PageCheckOutComponent implements OnInit {
                 request_data.OrderFor = "";
             } else if (this.OrderType === ORDER_DELIVERY) {
 
-                request_data.OrderFor = localStorage.getItem("whenDelivery")
+                request_data.OrderFor = localStorage.getItem("orderFor")
 
 
             }

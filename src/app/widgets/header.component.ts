@@ -884,18 +884,24 @@ export class HeaderGof3rComponent implements OnInit {
             let roundTime = this.roundTime(dateAdd.hours(), dateAdd.minutes(), 15);
 
             if(this.orderType===ORDER_DELIVERY){
-                if(localStorage.getItem("selectTimeClick")!=null){
-                    if(localStorage.getItem("selectTimeClick")==="true"){
-                        if(localStorage.getItem("selectTime")!=null){
-                            this.whenStr =localStorage.getItem("selectTime");
-                        }
-                        else{
-                            this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
-                        }
-                    }
-                    else{
-                        this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
-                    }
+                // if(localStorage.getItem("selectTimeClick")!=null){
+                //     if(localStorage.getItem("selectTimeClick")==="true"){
+                //         if(localStorage.getItem("selectTime")!=null){
+                //             this.whenStr =localStorage.getItem("selectTime");
+                //         }
+                //         else{
+                //             this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
+                //         }
+                //     }
+                //     else{
+                //         this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
+                //     }
+                // }
+                // else{
+                //     this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
+                // }
+                if(localStorage.getItem("selectTime")!=null){
+                    this.whenStr =localStorage.getItem("selectTime");
                 }
                 else{
                     this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
@@ -903,7 +909,13 @@ export class HeaderGof3rComponent implements OnInit {
                 
             }
             else{
-                this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
+                if(localStorage.getItem("selectPickupTime")!=null){
+                    this.whenStr =localStorage.getItem("selectPickupTime");
+                }
+                else{
+                    this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
+                }
+                
             }
             
             localStorage.setItem("whenDelivery", moment_(roundTime).format("DD/MM/YYYY HH:mm:ss"))
@@ -1508,6 +1520,7 @@ export class HeaderGof3rComponent implements OnInit {
                             let dataSend = { function: 'updateTimePickup', fromDate: fromDate, toDate: toDate, fromDateDisplay: fromDateDisplay, toDateDisplay: toDateDisplay };
                         let dcut = dateSelect.slice(0, dateSelect.length - 5)
                         this.whenStr = dcut + " " + lable
+                        localStorage.setItem("selectPickupTime",this.whenStr)
                         $('.login-dropdown').hide();
                         $('.login-overlay').removeClass('show');
                         $('.login-wrap .login').removeClass('hide-form');
@@ -1523,6 +1536,7 @@ export class HeaderGof3rComponent implements OnInit {
                         let dataSend = { function: 'updateTimePickup', fromDate: fromDate, toDate: toDate, fromDateDisplay: fromDateDisplay, toDateDisplay: toDateDisplay };
                         let dcut = dateSelect.slice(0, dateSelect.length - 5)
                         this.whenStr = dcut + " " + lable
+                        localStorage.setItem("selectPickupTime",this.whenStr)
                         $('.login-dropdown').hide();
                         $('.login-overlay').removeClass('show');
                         $('.login-wrap .login').removeClass('hide-form');
@@ -1541,6 +1555,7 @@ export class HeaderGof3rComponent implements OnInit {
                 let dataSend = { function: 'updateTimePickup', fromDate: fromDate, toDate: toDate, fromDateDisplay: fromDateDisplay, toDateDisplay: toDateDisplay };
                 let dcut = dateSelect.slice(0, dateSelect.length - 5)
                 this.whenStr = dcut + " " + lable
+                localStorage.setItem("selectPickupTime",this.whenStr)
                 $('.login-dropdown').hide();
                 $('.login-overlay').removeClass('show');
                 $('.login-wrap .login').removeClass('hide-form');

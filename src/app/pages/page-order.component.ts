@@ -2002,11 +2002,13 @@ export class PageOrderComponent implements OnInit {
                 request_data.OrderFor = "";
             } else if (this.OrderType === ORDER_DELIVERY) {
 
-                request_data.OrderFor = localStorage.getItem("whenDelivery")
-
+                request_data.OrderFor = localStorage.getItem("orderFor")
 
             }
-
+            if (localStorage.getItem('cus') != null) {
+                this.customerInfo = JSON.parse(this._gof3rUtil.decryptByDESParams(localStorage.getItem('cus')));
+    
+            }
             request_data.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + '';
             request_data.FromRow = 0;
             request_data.MCC = this.mccGobal;
@@ -2023,12 +2025,15 @@ export class PageOrderComponent implements OnInit {
             request_data.SubCategoryId = "";
             let request_data_json = JSON.stringify(request_data);
 
-           
+           console.log("get:"+ request_data_json)
             this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
                 this.getAllOutletListV2 = data;
                 this.checkEstimateTime=true
+                if (localStorage.getItem("orderFor") != null) {
+                    this.orderFor = localStorage.getItem("orderFor")
+                }
                 console.log("de:"+ JSON.stringify(this.getAllOutletListV2))
-                if(this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue===this.estimateDeliveryTime){
+                if(this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue===this.orderFor){
                     this.DeliveryAddress();
                 }
                 else{
@@ -2056,7 +2061,7 @@ export class PageOrderComponent implements OnInit {
     }
     setNewTimeDelivery()
     {
-        this.estimateDeliveryTime= this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
+        this.orderFor= this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
         localStorage.setItem("whenDelivery",this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue)
         this.closePopupSelectTimes()
     }

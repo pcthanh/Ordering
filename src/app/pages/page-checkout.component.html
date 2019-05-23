@@ -18,7 +18,7 @@
                             <a [routerLink]="['/order']" class="right">GO BACK</a>
                         </div>
                         <div *ngIf="this.orderMain.OrderType==='DELIVERY'" class="info">
-                            <div class="time"><img src="assets/images/clock-2.png" alt=""> <span>{{this.orderMain.DeliveryOn}}</span></div>
+                            <div class="time"><img src="assets/images/clock-2.png" alt=""> <span>{{this.orderMain.DeliveryOnRequest}}</span></div>
                             <div class="addr"><img src="assets/images/home-1.png" alt=""> <span>{{this.orderMain.DeliveryTo}}</span></div>
                         </div>
                         <div *ngIf="this.orderMain.OrderType==='PICKUP'" class="info">
