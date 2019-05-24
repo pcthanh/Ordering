@@ -309,7 +309,7 @@ export class SearchResultComponent implements OnInit {
             let time = d.toLocaleTimeString();
             // this.getCurrentTime.CurrentData = date;
             // this.getCurrentTime.CurrentTime = moment_(d.getTime()).format("HH:mm:ss")
-            strDatime = date + " " + moment_(d.getTime()).format("HH:mm:ss")
+            strDatime = date + " " + moment_(d.getTime()).format("HH:mm"+":00")
             if(localStorage.getItem("orderFor")!=null){
                 strDatime = localStorage.getItem("orderFor");
             }

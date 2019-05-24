@@ -918,7 +918,8 @@ export class HeaderGof3rComponent implements OnInit {
                 
             }
             
-            localStorage.setItem("whenDelivery", moment_(roundTime).format("DD/MM/YYYY HH:mm:ss"))
+            localStorage.setItem("whenDelivery", moment_(roundTime).format("DD/MM/YYYY HH:mm")+":00")
+            localStorage.setItem("orderFor", moment_(roundTime).format("DD/MM/YYYY HH:mm")+":00")
             this.loadDateDelivery(d);
             this.loadTimesDelivery(true, this.currentDate);
 

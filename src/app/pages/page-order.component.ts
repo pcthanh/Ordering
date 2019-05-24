@@ -2063,6 +2063,7 @@ export class PageOrderComponent implements OnInit {
     {
         this.orderFor= this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
         localStorage.setItem("whenDelivery",this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue)
+        localStorage.setItem("orderFor",this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue)
         this.closePopupSelectTimes()
     }
 
