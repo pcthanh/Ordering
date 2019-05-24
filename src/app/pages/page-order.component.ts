@@ -2033,7 +2033,7 @@ export class PageOrderComponent implements OnInit {
                     this.orderFor = localStorage.getItem("orderFor")
                 }
                 console.log("de:"+ JSON.stringify(this.getAllOutletListV2))
-                if(this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue===this.orderFor){
+                if(this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue===this.estimateDeliveryTime){
                     this.DeliveryAddress();
                 }
                 else{
@@ -2061,9 +2061,9 @@ export class PageOrderComponent implements OnInit {
     }
     setNewTimeDelivery()
     {
-        this.orderFor= this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
-        localStorage.setItem("whenDelivery",this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue)
-        localStorage.setItem("orderFor",this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue)
+        this.estimateDeliveryTime= this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
+        // localStorage.setItem("whenDelivery",this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue)
+        // localStorage.setItem("orderFor",this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue)
         this.closePopupSelectTimes()
     }
 

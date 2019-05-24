@@ -906,6 +906,11 @@ export class HeaderGof3rComponent implements OnInit {
                 else{
                     this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
                 }
+                if(localStorage.getItem("orderFor")==null)
+                {
+                    localStorage.setItem("orderFor", moment_(roundTime).format("DD/MM/YYYY HH:mm")+":00")
+                }
+                
                 
             }
             else{
@@ -919,7 +924,7 @@ export class HeaderGof3rComponent implements OnInit {
             }
             
             localStorage.setItem("whenDelivery", moment_(roundTime).format("DD/MM/YYYY HH:mm")+":00")
-            localStorage.setItem("orderFor", moment_(roundTime).format("DD/MM/YYYY HH:mm")+":00")
+           
             this.loadDateDelivery(d);
             this.loadTimesDelivery(true, this.currentDate);
 
