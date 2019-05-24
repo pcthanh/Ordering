@@ -478,7 +478,7 @@ export class PageCheckOutComponent implements OnInit {
                 request_data.OrderFor = "";
             } else if (this.OrderType === ORDER_DELIVERY) {
 
-                request_data.OrderFor = localStorage.getItem("orderFor")
+                request_data.OrderFor = localStorage.getItem("whenDelivery")
 
 
             }
@@ -1980,8 +1980,6 @@ export class PageCheckOutComponent implements OnInit {
         } else if (this.OrderType === ORDER_DELIVERY) {
 
             request_data.OrderFor = localStorage.getItem("whenDelivery")
-
-
         }
 
         request_data.CustomerId = this.customerInfo.CustomerInfo[0].CustomerId + '';
@@ -1999,28 +1997,44 @@ export class PageCheckOutComponent implements OnInit {
 
         request_data.SubCategoryId = "";
         let request_data_json = JSON.stringify(request_data);
-
-        
-        this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
-            this.getAllOutletListV2CheckDelivery = data;
-            this.checkEstimateTime=true
-            if(request_data.OrderFor===this.getAllOutletListV2CheckDelivery.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue){
-                if (this.getAllOutletListV2CheckDelivery.MerchantOutletListInfo.length == 0) {
-                    this.locationDelivery = false;
-                    this.checkError('', this.getAllOutletListV2CheckDelivery.NoMessageDataForChangingLocation, '');
+        // Begin ThanhPC 24/05/2019
+        if(this.OrderType===ORDER_DELIVERY){
+            this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
+                this.getAllOutletListV2CheckDelivery = data;
+                this.checkEstimateTime=true
+                if(localStorage.getItem("Estimatedelivery")!=null){
+                    if(localStorage.getItem("Estimatedelivery")===this.getAllOutletListV2CheckDelivery.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue){
+                        if (this.getAllOutletListV2CheckDelivery.MerchantOutletListInfo.length == 0) {
+                            this.locationDelivery = false;
+                            this.checkError('', this.getAllOutletListV2CheckDelivery.NoMessageDataForChangingLocation, '');
+                            return;
+                        }
+                        else {
+                            this.placeOrder();
+            
+                        }
+                    }
+                    else{
+                        this.showPopupDeliveryHours()
+                    }
+                }
+                else{
+                    this.blockUI.stop()
                     return;
                 }
-                else {
-                    this.placeOrder();
+                
+                
     
-                }
-            }
-            else{
-                this.showPopupDeliveryHours()
-            }
-            
-
-        })
+            })
+        }
+        else{
+            this.placeOrder()
+        }
+        if(this.OrderType===ORDER_PICKUP){
+            localStorage.removeItem("selectPickupTime")
+        }
+        // End ThanhPC 24/05/2019
+        
     }
     
     }

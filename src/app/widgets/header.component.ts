@@ -884,34 +884,19 @@ export class HeaderGof3rComponent implements OnInit {
             let roundTime = this.roundTime(dateAdd.hours(), dateAdd.minutes(), 15);
 
             if(this.orderType===ORDER_DELIVERY){
-                // if(localStorage.getItem("selectTimeClick")!=null){
-                //     if(localStorage.getItem("selectTimeClick")==="true"){
-                //         if(localStorage.getItem("selectTime")!=null){
-                //             this.whenStr =localStorage.getItem("selectTime");
-                //         }
-                //         else{
-                //             this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
-                //         }
-                //     }
-                //     else{
-                //         this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
-                //     }
-                // }
-                // else{
-                //     this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
-                // }
+                
                 if(localStorage.getItem("selectTime")!=null){
                     this.whenStr =localStorage.getItem("selectTime");
                 }
                 else{
                     this.whenStr = this.tConvert(moment_(roundTime).format('HH:mm'));
                 }
-                if(localStorage.getItem("orderFor")==null)
-                {
-                    localStorage.setItem("orderFor", moment_(roundTime).format("DD/MM/YYYY HH:mm")+":00")
+                if(localStorage.getItem("whenDelivery")==null){
+                    localStorage.setItem("whenDelivery", moment_(roundTime).format("DD/MM/YYYY HH:mm")+":00")
                 }
+               
                 
-                
+                    
             }
             else{
                 if(localStorage.getItem("selectPickupTime")!=null){
@@ -923,7 +908,7 @@ export class HeaderGof3rComponent implements OnInit {
                 
             }
             
-            localStorage.setItem("whenDelivery", moment_(roundTime).format("DD/MM/YYYY HH:mm")+":00")
+            
            
             this.loadDateDelivery(d);
             this.loadTimesDelivery(true, this.currentDate);
@@ -1221,10 +1206,7 @@ export class HeaderGof3rComponent implements OnInit {
         let dcut = value.slice(0, value.length - 14)
         this.whenStr =dcut+" "+ this.tConvert(label);
         localStorage.setItem("whenDelivery", value)
-        localStorage.setItem("orderFor",value);
         localStorage.setItem("selectTime",dcut+" "+ this.tConvert(label))
-        this.selectTimeClick=true;
-        localStorage.setItem("selectTimeClick",this.selectTimeClick+'')
         $('.login-dropdown').hide();
         $('.login-overlay').removeClass('show');
         $('.login-wrap .login').removeClass('hide-form');

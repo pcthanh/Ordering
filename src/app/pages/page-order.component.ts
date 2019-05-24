@@ -91,6 +91,9 @@ export class PageOrderComponent implements OnInit {
     orderFor:string="";
     estimateDeliveryTime:string=""
     checkEstimateTime:boolean
+    // Begin ThanhPC 24/05/2019
+    isSetEstimateDelivery:boolean=false;
+    // End ThanhPC 24/05/2019
     constructor(private _router: Router, private _gof3rUtil: Gof3rUtil, private _gof3rModule: Gof3rModule, private _util: Gof3rUtil, private _pickupService: PickupService, private _instanceService: EventSubscribeService, private active_router: ActivatedRoute) {
         this.blockUI.start('loading ...'); // Start blocking
         this.productDetail = new ProductDetailMainModel();
@@ -2002,7 +2005,7 @@ export class PageOrderComponent implements OnInit {
                 request_data.OrderFor = "";
             } else if (this.OrderType === ORDER_DELIVERY) {
 
-                request_data.OrderFor = localStorage.getItem("orderFor")
+                request_data.OrderFor = localStorage.getItem("whenDelivery")
 
             }
             if (localStorage.getItem('cus') != null) {
@@ -2029,11 +2032,18 @@ export class PageOrderComponent implements OnInit {
             this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
                 this.getAllOutletListV2 = data;
                 this.checkEstimateTime=true
-                if (localStorage.getItem("orderFor") != null) {
-                    this.orderFor = localStorage.getItem("orderFor")
+                // Begin ThanhPC 24/05/2019
+                if(!this.isSetEstimateDelivery)
+                {
+                    if(localStorage.getItem("whenDelivery")!=null){
+                        this.estimateDeliveryTime=localStorage.getItem("whenDelivery")
+                    }
                 }
+                
+                // End ThanhPC 24/05/2019
                 console.log("de:"+ JSON.stringify(this.getAllOutletListV2))
                 if(this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue===this.estimateDeliveryTime){
+                    localStorage.setItem("Estimatedelivery",this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue)
                     this.DeliveryAddress();
                 }
                 else{
@@ -2062,8 +2072,11 @@ export class PageOrderComponent implements OnInit {
     setNewTimeDelivery()
     {
         this.estimateDeliveryTime= this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
+        // Begin ThanhPC 24/05/2019
+        this.isSetEstimateDelivery= true;
+        localStorage.setItem("Estimatedelivery",this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue)
+        // End ThanhPC 24/05/2019
         // localStorage.setItem("whenDelivery",this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue)
-        // localStorage.setItem("orderFor",this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue)
         this.closePopupSelectTimes()
     }
 

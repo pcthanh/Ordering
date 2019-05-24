@@ -310,12 +310,10 @@ export class SearchResultComponent implements OnInit {
             // this.getCurrentTime.CurrentData = date;
             // this.getCurrentTime.CurrentTime = moment_(d.getTime()).format("HH:mm:ss")
             strDatime = date + " " + moment_(d.getTime()).format("HH:mm"+":00")
-            if(localStorage.getItem("orderFor")!=null){
-                strDatime = localStorage.getItem("orderFor");
+            if(localStorage.getItem("whenDelivery")!=null){
+                strDatime = localStorage.getItem("whenDelivery");
             }
-            else{
-                localStorage.setItem("orderFor",strDatime);
-            }
+            
             
             if(!this.foodCenter)
             {
