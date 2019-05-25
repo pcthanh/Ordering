@@ -26,6 +26,9 @@ import { OrderHistoryPickupComponent } from "./pages/page-order-history-pickup.c
 import { OrderHistoryDetailComponent } from "./pages/page-order-history-detail.component";
 import { GrowsWithUsComponent } from "./pages/page-grows-with-us.component";
 import { ChangePasswordComponent } from "./pages/page-change-password.component";
+// Begin ThanhPC 25/05/2019
+import { NetPaymentComponent } from "./pages/page.netPayment.component";
+// End ThanhPC 25/05/2019
 const routes: Routes = [
     
     { path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -54,6 +57,9 @@ const routes: Routes = [
     { path: 'order-history-detail/:orderType/:customerOrderId',component:OrderHistoryDetailComponent},
     { path: 'grows-with-us',component:GrowsWithUsComponent},
     { path: 'change-password',component:ChangePasswordComponent},
+    // Begin ThanhPC 25/05/2019
+    { path: 'netpayment',component:NetPaymentComponent},
+    // ENd ThanhPC 25/05/2019
     { path: 'hoc', component: HocComponent },
     
 ]

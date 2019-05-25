@@ -71,7 +71,9 @@ import {
     FacebookLoginProvider,
 } from "angular5-social-login";
 import { ChangePasswordComponent } from "./pages/page-change-password.component";
-
+// Begin ThanhPC 25/05/2019
+import { NetPaymentComponent  } from "./pages/page.netPayment.component";
+// End ThanhPC 25/05/2019
 // let config = new AuthServiceConfig([
 //   {
 //     id: GoogleLoginProvider.PROVIDER_ID,
@@ -132,7 +134,10 @@ export function getAuthServiceConfigs() {
     OrderHistoryPickupComponent,
     OrderHistoryDetailComponent,
     GrowsWithUsComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    // Begin ThanhPC 25/05/2019
+    NetPaymentComponent
+    // ENd ThanhPC 25/05/2019
     //Import Component
 
     

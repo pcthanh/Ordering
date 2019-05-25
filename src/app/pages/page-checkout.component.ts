@@ -791,14 +791,21 @@ export class PageCheckOutComponent implements OnInit {
                this._pickupService.AddAppTransaction(common_data_json,data_request_json).then(data=>{
                     this.addAppTransaction = data;
                     if(this.addAppTransaction.ResultCode==="000"){
-                        this.netPaysRequest() 
-                        this.blockUI.stop()
+                        //Begin ThanhPC 25/05/2019
+                        // this.netPaysRequest() 
                         
-                        setTimeout(()=>{
-                            $('html, body').animate({
-                                scrollTop: $(".payment-section").offset().top
-                            }, 1000);
-                        },3000)
+                        // this.blockUI.stop()
+                        
+                        // setTimeout(()=>{
+                        //     $('html, body').animate({
+                        //         scrollTop: $(".payment-section").offset().top
+                        //     }, 1000);
+                        // },3000)
+                        this.blockUI.stop()
+ 
+                        window.open(location.origin +'#/netpayment','_blank');
+                        
+                        //End ThanhPC 25/05/2019
                             }
                })
                 
@@ -2015,6 +2022,7 @@ export class PageCheckOutComponent implements OnInit {
                         }
                     }
                     else{
+                        this.blockUI.stop();
                         this.showPopupDeliveryHours()
                     }
                 }
@@ -2054,6 +2062,11 @@ export class PageCheckOutComponent implements OnInit {
     setNewTimeDelivery()
     {
         this.orderMain.DeliveryOn= this.getAllOutletListV2CheckDelivery.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
+        this.orderMain.DeliveryOnRequest=this.getAllOutletListV2CheckDelivery.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeDisplay
+        //this.estimateDeliveryTime= this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue
+        // Begin ThanhPC 24/05/2019
+        //this.isSetEstimateDelivery= true;
+        localStorage.setItem("Estimatedelivery",this.getAllOutletListV2CheckDelivery.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue)
         //localStorage.setItem("whenDelivery",this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue)
        this.closePopup()
     }
@@ -2067,14 +2080,14 @@ export class PageCheckOutComponent implements OnInit {
         net_request.merchantTxnRef=this.addAppTransaction.InvoiceNumber //moment_(date).format("YYYYMMDD HH:mm:ss")
         //net_request.b2sTxnEndURL="#/check-out"
         //net_request.s2sTxnEndURL="http://171.248.158.185:8080/Carrot/CarrotService/s2sTxnEnd"
-        
+        net_request.b2sTxnEndURL="https://httpbin.org/post"
         net_request.s2sTxnEndURL="https://test.sandbox-technology.com:82/GOF3R/Gof3rService/s2sTxnEnd"
         net_request.netsMid= this.getInitParam.OtherParams[0].NetsMerchantId//"UMID_877772003"
         net_request.merchantTxnDtm= this.addAppTransaction.TransactionDate//moment_(date).format("YYYYMMDD HH:mm:ss.SSS")
         net_request.submissionMode="B"
         net_request.paymentType="SALE"
         net_request.paymentMode=""
-        net_request.clientType="W"
+        net_request.clientType="w"
         net_request.currencyCode=this.getInitParam.CurrencyInfo[0].CurrencyName
         net_request.merchantTimeZone=this.addAppTransaction.TimeZone
         net_request.netsMidIndicator="U"
