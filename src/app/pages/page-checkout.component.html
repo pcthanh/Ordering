@@ -279,19 +279,7 @@
                         </div>
 
                     </div>
-                    <!-- <div *ngIf="this.allPayment.NetsPayEnabled=='Y'" class="payment-otpion-wrap">
-                        <div class="title">NETPays</div>
-                        <div class="payment-item" >
-                            <input type="radio" (click)="selectPaymentNetPays('PO_NETS')" id="member-net" name="payment">
-                            <label for="member-net">
-                                                <span class="img"><img src="assets/images/eNETS_DD.png" alt="" width="63" height="50"></span>
-                                                
-                                                
-                                            </label>
-                        </div>
-
-                    </div> -->
-                    <div  class="payment-otpion-wrap">
+                    <div *ngIf="this.allPayment.NetsPayEnabled=='Y'" class="payment-otpion-wrap">
                         <div class="title">NETPays</div>
                         <div class="payment-item" >
                             <input type="radio" (click)="selectPaymentNetPays('PO_NETS')" id="member-net" name="payment">
@@ -303,6 +291,18 @@
                         </div>
 
                     </div>
+                    <!-- <div  class="payment-otpion-wrap">
+                        <div class="title">NETPays</div>
+                        <div class="payment-item" >
+                            <input type="radio" (click)="selectPaymentNetPays('PO_NETS')" id="member-net" name="payment">
+                            <label for="member-net">
+                                                <span class="img"><img src="assets/images/eNETS_DD.png" alt="" width="63" height="50"></span>
+                                                
+                                                
+                                            </label>
+                        </div>
+
+                    </div> -->
                 </div>
                 <div class="btn-selection-wrap">
                     <button (click)="confirmSelectPayment()" class="btn-main btn-selection"><span>Confirm</span></button>
