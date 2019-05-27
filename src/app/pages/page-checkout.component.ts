@@ -792,7 +792,7 @@ export class PageCheckOutComponent implements OnInit {
                     this.addAppTransaction = data;
                     if(this.addAppTransaction.ResultCode==="000"){
                         //Begin ThanhPC 25/05/2019
-                        // this.netPaysRequest() 
+                         //this.netPaysRequest() 
                         
                         // this.blockUI.stop()
                         
@@ -801,6 +801,8 @@ export class PageCheckOutComponent implements OnInit {
                         //         scrollTop: $(".payment-section").offset().top
                         //     }, 1000);
                         // },3000)
+                        let requestNet={InvoiceNo:this.addAppTransaction.InvoiceNumber,TransactionDate:this.addAppTransaction.TransactionDate,TimeZone:this.addAppTransaction.TimeZone,TxnAmount:(this.orderMain.Total*100).toString()}
+                        localStorage.setItem("request_net",JSON.stringify (requestNet));
                         this.blockUI.stop()
  
                         window.open(location.origin +'#/netpayment','_blank');
@@ -2080,14 +2082,14 @@ export class PageCheckOutComponent implements OnInit {
         net_request.merchantTxnRef=this.addAppTransaction.InvoiceNumber //moment_(date).format("YYYYMMDD HH:mm:ss")
         //net_request.b2sTxnEndURL="#/check-out"
         //net_request.s2sTxnEndURL="http://171.248.158.185:8080/Carrot/CarrotService/s2sTxnEnd"
-        net_request.b2sTxnEndURL="https://httpbin.org/post"
+        net_request.b2sTxnEndURL=""
         net_request.s2sTxnEndURL="https://test.sandbox-technology.com:82/GOF3R/Gof3rService/s2sTxnEnd"
         net_request.netsMid= this.getInitParam.OtherParams[0].NetsMerchantId//"UMID_877772003"
         net_request.merchantTxnDtm= this.addAppTransaction.TransactionDate//moment_(date).format("YYYYMMDD HH:mm:ss.SSS")
         net_request.submissionMode="B"
         net_request.paymentType="SALE"
         net_request.paymentMode=""
-        net_request.clientType="w"
+        net_request.clientType="W"
         net_request.currencyCode=this.getInitParam.CurrencyInfo[0].CurrencyName
         net_request.merchantTimeZone=this.addAppTransaction.TimeZone
         net_request.netsMidIndicator="U"

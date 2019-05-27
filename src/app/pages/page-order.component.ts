@@ -2078,6 +2078,7 @@ export class PageOrderComponent implements OnInit {
         // End ThanhPC 24/05/2019
         // localStorage.setItem("whenDelivery",this.getAllOutletListV2.MerchantOutletListInfo[0].EstimatedDeliveryDateTimeValue)
         this.closePopupSelectTimes()
+        this.DeliveryAddress();
     }
 
 }
