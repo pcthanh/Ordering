@@ -151,7 +151,7 @@ export class FotgotPasswordComponent implements OnInit {
             }
             else{
                 this.showErrorStep3=true;
-                this.response.ResultDesc="The password is not match"
+                this.response.ResultDesc="The passwords you entered do not match."
                 this.blockUI.stop();
                 // password not match.
             }

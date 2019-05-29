@@ -748,6 +748,7 @@ export class PageCheckOutComponent implements OnInit {
 
 
             this.allPayment = data
+            console.log("all:"+JSON.stringify(this.allPayment));
             if(this.allPayment.ResultCode==="000"){
             for(let i =0;i< this.allPayment.PointWalletListInfo.length; i++){
                 for(let j = 0; j< this.allPayment.PointWalletListInfo[i].RebateProgramInfo.length; j++){
@@ -998,6 +999,7 @@ export class PageCheckOutComponent implements OnInit {
         data_request.TranxAmount = this._gof3rModule.ParseTo12(parseFloat(this.orderMain.Total.toFixed(2)))
 
         let data_request_json = JSON.stringify(data_request);
+        console.log("pyament:"+ data_request_json)
         this._pickupService.PlaceOrder(common_data_json, data_request_json).then(data => {
 
 
@@ -1176,14 +1178,14 @@ export class PageCheckOutComponent implements OnInit {
         this.showPopupddCardError()
     }
     selectCardPayment(MaskedCardNumber: string, CardToken: string, CardHolderName: string, CardTypeIdValue: string, CardTypeIdImg: string, PaymentGatewayToken: string) {
-
+        console.log("MaskedCardNumber:"+MaskedCardNumber)
         this.selectMethod.Method = "CARD"
         this.selectMethod.MaskingCardNumber = MaskedCardNumber;
         this.selectMethod.CardToken = CardToken;
         this.selectMethod.CardHoldName = CardHolderName;
         this.selectMethod.CardTypeIdImg = CardTypeIdImg
         this.PO = "PO_CARD"
-        this.selectMethod.CardTypeValue = CardTypeIdValue + " " + (MaskedCardNumber.substring(0, 4))
+        this.selectMethod.CardTypeValue = CardTypeIdValue + " " + MaskedCardNumber.substring(MaskedCardNumber.length, MaskedCardNumber.length-4)
         this.selectMethod.PaymentGatewayToken = PaymentGatewayToken
     }
     selectPaymentNetPays(po_net:string)
@@ -1196,7 +1198,7 @@ export class PageCheckOutComponent implements OnInit {
     confirmSelectPayment() {
         if (this.selectMethod.Method === "CARD") {
 
-            this.orderMain.MaskingCardNumber = this.allPayment.CardListInfo[0].MaskedCardNumber
+            this.orderMain.MaskingCardNumber =this.selectMethod.MaskingCardNumber
             this.orderMain.CardToken = this.selectMethod.CardToken
             this.orderMain.CardHoldName = this.selectMethod.CardHoldName
             this.orderMain.CardTypeValue = this.selectMethod.CardTypeValue
@@ -2299,6 +2301,7 @@ export class PageCheckOutComponent implements OnInit {
         data_request.CardHolderName = this.orderMain.CardHoldName
         data_request.StoreCardUniqueID = this.orderMain.PaymentGatewayToken;
         let data_request_json = JSON.stringify(data_request);
+        console.log("request:"+ data_request_json)
         this._pickupService.PlaceOrder(common_data_json, data_request_json).then(data => {
 
             this.placeOrderMain = data;

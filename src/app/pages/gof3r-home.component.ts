@@ -845,7 +845,7 @@ export class Gof3rHomeComponent implements OnInit {
             })
         }
         else {
-            this.error.ResultDesc = "The password is not match"
+            this.error.ResultDesc = "The passwords you entered do not match."
             this.showPopupPaymentSuccess();
         }
 

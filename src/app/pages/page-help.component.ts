@@ -52,7 +52,7 @@ export class HelpComponent implements OnInit {
         }
     }
     showSuccess() {
-        var el = $('#success-popup');
+        var el = $('#success-popup-help');
         if (el.length) {
             $.magnificPopup.open({
                 items: {

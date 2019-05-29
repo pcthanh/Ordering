@@ -234,7 +234,7 @@ export class PageOrderComponent implements OnInit {
 
         let requestData = new GetOutletInfoRequest();
         requestData.CustomerId = "";
-        requestData.OrderFor = this.orderFor;
+        requestData.OrderFor = this.estimateDeliveryTime;
         requestData.OrderType = this.OrderType;
         requestData.MerchantOutletId = this.OutletId;
         let requestJson = JSON.stringify(requestData);
