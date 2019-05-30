@@ -58,7 +58,7 @@ export class ContactUsComponent implements OnInit {
         }
     }
     showSuccess() {
-        var el = $('#success-popup');
+        var el = $('#success-popup-contact');
         if (el.length) {
             $.magnificPopup.open({
                 items: {
