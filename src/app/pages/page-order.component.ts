@@ -146,6 +146,13 @@ export class PageOrderComponent implements OnInit {
 
 
         }
+        
+        if (localStorage.getItem("orderFor") != null) {
+            this.orderFor = localStorage.getItem("orderFor")
+        }
+        if(localStorage.getItem("whenDelivery")!=null){
+            this.estimateDeliveryTime= localStorage.getItem("whenDelivery");
+        }
         this._instanceService.$getEventSubject.subscribe(data => {
             if (data.function === "updateTimePickup") {
                 this.orderMain.PickupDateFrom = data.fromDate;
@@ -154,17 +161,11 @@ export class PageOrderComponent implements OnInit {
                 localStorage.setItem("datePickup", JSON.stringify(datePikcup))
 
             }
-            // if(data.function==="outletMap"){
-            //     this.haveOuteFromMap=data.haveOutlet;
-            //     this.dataFromOutletMap = data.msg
-            // }
+            if(data.function==="changeTime"){
+                this.estimateDeliveryTime=data.date;
+                this.GetOutletInfo()
+            }
         })
-        if (localStorage.getItem("orderFor") != null) {
-            this.orderFor = localStorage.getItem("orderFor")
-        }
-        if(localStorage.getItem("whenDelivery")!=null){
-            this.estimateDeliveryTime= localStorage.getItem("whenDelivery");
-        }
     }
     ngOnInit() {
         //this.initJquery()

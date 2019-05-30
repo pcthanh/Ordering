@@ -116,6 +116,12 @@
                                                                             <span class="inf">• {{itemO.ProductOptionDetailName}} x {{itemO.OrderOptionDetailQty}}</span><span class="price">{{itemO.OrderOptionDtlDisplayPrice}}</span>
                                                                         </li>
                                                                 </div>
+                                                                <div *ngIf="item.SpecialRequest!=''">
+                                                                    
+                                                                    <li style="color: red" >
+                                                                        SpecialRequest: <span class="inf">{{item.SpecialRequest}}</span>
+                                                                        </li>
+                                                                </div>
                                                             </div>
 
 
