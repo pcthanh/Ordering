@@ -1185,7 +1185,7 @@ export class PageCheckOutComponent implements OnInit {
         this.selectMethod.CardHoldName = CardHolderName;
         this.selectMethod.CardTypeIdImg = CardTypeIdImg
         this.PO = "PO_CARD"
-        this.selectMethod.CardTypeValue = CardTypeIdValue + " " + MaskedCardNumber.substring(MaskedCardNumber.length, MaskedCardNumber.length-4)
+        this.selectMethod.CardTypeValue = CardTypeIdValue + " ... " + MaskedCardNumber.substring(MaskedCardNumber.length, MaskedCardNumber.length-4)
         this.selectMethod.PaymentGatewayToken = PaymentGatewayToken
     }
     selectPaymentNetPays(po_net:string)
