@@ -38,6 +38,7 @@ import { MapLocation } from "../models/MapLocation";
 import { Area } from "../models/Area";
 import { ParseOutletListArea1 } from "../models/ParseOutletListArea1";
 import { OutletListArea } from "../models/OutletListArea";
+import { DeviceDetectorService } from 'ngx-device-detector';
 import {
     AuthService,
     FacebookLoginProvider,
@@ -46,6 +47,7 @@ import {
 import { SocialUser } from "angular4-social-login";
 import { GetCurrentSystemTimeRequest } from "../models-request/get-current-system-time";
 import * as moment_ from 'moment';
+import { Window } from 'selenium-webdriver';
 
 declare var $: any;
 const ORDER_DELIVERY = "DELIVERY"
@@ -105,25 +107,25 @@ export class Gof3rHomeComponent implements OnInit {
     areaName: string = ""
     parseOutlet: ParseOutletListArea1;
     shortArrays = []
-    mccGobal:string=''
-    errormsg:string=''
-    isSelectNewAddress:boolean;
+    mccGobal: string = ''
+    errormsg: string = ''
+    isSelectNewAddress: boolean;
     public list1 =
 
-    [
-        { name: 'Option 1', id: '1' },
-        { name: 'Option 2', id: '2' },
-        { name: 'Option 3', id: '3' },
-        { name: 'Option 4', id: '4' },
-        { name: 'Option 5', id: '5' },
-    ];
+        [
+            { name: 'Option 1', id: '1' },
+            { name: 'Option 2', id: '2' },
+            { name: 'Option 3', id: '3' },
+            { name: 'Option 4', id: '4' },
+            { name: 'Option 5', id: '5' },
+        ];
 
     list: any[] = [];
     private userFb: SocialUser;
     private userGG: SocialUser;
     private loggedIn: boolean;
     fbClick: boolean = false;
-    constructor(private _instanceService: EventSubscribeService, private _gof3rModule: Gof3rModule, private router: Router, private active_router: ActivatedRoute, private _pickupService: PickupService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private _homeservice: HomeService, private _gof3rUtil: Gof3rUtil, private gof3rModule: Gof3rModule, public autoCompleteService: AutoCompleteService, private socialAuthService: AuthService) {
+    constructor(private _instanceService: EventSubscribeService, private _gof3rModule: Gof3rModule, private router: Router, private active_router: ActivatedRoute, private _pickupService: PickupService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private _homeservice: HomeService, private _gof3rUtil: Gof3rUtil, private gof3rModule: Gof3rModule, public autoCompleteService: AutoCompleteService, private socialAuthService: AuthService, private deviceService: DeviceDetectorService) {
         this.signUp = new SingUpModel();
         this.listDeliveryAddress = new ListDeliveryAddress();
         this.listDeliveryAddressShow = new ListDeliveryAddress();
@@ -134,17 +136,17 @@ export class Gof3rHomeComponent implements OnInit {
         if (localStorage.getItem("orderType") != null) {
             this.orderType = localStorage.getItem("orderType");
         }
-        localStorage.setItem("selectTimeClick",'false')
+        localStorage.setItem("selectTimeClick", 'false')
         this.blockUI.stop()
     }
     ngOnInit() {
-        
+
         this.loadAddress()
         this.checkLoginUser();
         this.initJQuery()
         this.registerDeviceRequest()
         this.isSelectNewAddress = false;
-        localStorage.setItem("haveNewAddress",JSON.stringify(this.isSelectNewAddress));
+        localStorage.setItem("haveNewAddress", JSON.stringify(this.isSelectNewAddress));
 
 
         var elements = document.getElementsByClassName("gof3r-map");
@@ -152,7 +154,7 @@ export class Gof3rHomeComponent implements OnInit {
             this.names.push(elements[i].id);
         }
 
-       
+
 
         //     this.authService.authState.subscribe((user) => {
         //     if(this.fbClick){
@@ -351,7 +353,7 @@ export class Gof3rHomeComponent implements OnInit {
         this._homeservice.registerDevice(jsonRequest).then(data => {
 
             this.registerDevice = (data);
-            
+
             localStorage.setItem('KEK', (this.registerDevice.KEKWorkingKey));
             localStorage.setItem('WK', (this.registerDevice.APIWorkingKey));
 
@@ -382,11 +384,11 @@ export class Gof3rHomeComponent implements OnInit {
 
         var requestData = new RequestNull();
         var jsonCommon = JSON.stringify(comomrequest);
-        
+
 
         var jsonRequest = JSON.stringify(requestData);
 
-       
+
         this._homeservice.getServiceHome(jsonCommon, jsonRequest).then(data => {
 
             this.getInitialParams = data;
@@ -403,7 +405,7 @@ export class Gof3rHomeComponent implements OnInit {
             //this.blockUI.stop()
         });
     }
-    GetAllOutletListV2(orderFor:string,outletID:string) {
+    GetAllOutletListV2(orderFor: string, outletID: string) {
         let common_data = new CommonDataRequest();
         var _location = localStorage.getItem("la");
         common_data.Location = _location
@@ -417,9 +419,9 @@ export class Gof3rHomeComponent implements OnInit {
         request_data.FromRow = 0;
         if (this.getInitialParams.MCCInfo.length > 0) {
             for (let i = 0; i < this.getInitialParams.MCCInfo.length; i++) {
-                
+
                 if (this.getInitialParams.MCCInfo[i].Value == "Food") {
-                    
+
                     this.mccGobal = this.getInitialParams.MCCInfo[i].Id + '';
                 }
             }
@@ -430,34 +432,40 @@ export class Gof3rHomeComponent implements OnInit {
         request_data.SubCategoryId = "";
         let request_data_json = JSON.stringify(request_data);
 
-       
+
         this._pickupService.GetAllOutletListV2(common_data_json, request_data_json).then(data => {
             //this._gof3rModule.checkInvalidSessionUser(data.ResultCode);
 
             this.getAllOutletListV2 = data;
-            
-            
-            if (this.getAllOutletListV2.MerchantOutletListInfo.length >0) {
+
+
+            if (this.getAllOutletListV2.MerchantOutletListInfo.length > 0) {
                 // this.noData=true;
                 // this.haveData=false;
-                let data ={function:"outletMap",haveOutlet:1}
-               this._instanceService.sendCustomEvent(data)
+                let data = { function: "outletMap", haveOutlet: 1 }
+                this._instanceService.sendCustomEvent(data)
             }
-            
+
             else {
-                let data ={function:"outletMap",haveOutlet:0,msg:this.getAllOutletListV2.NoMessageDataForOutletList}
-               this._instanceService.sendCustomEvent(data)
+                let data = { function: "outletMap", haveOutlet: 0, msg: this.getAllOutletListV2.NoMessageDataForOutletList }
+                this._instanceService.sendCustomEvent(data)
             }
-            localStorage.setItem("out",outletID);
+            localStorage.setItem("out", outletID);
             //localStorage.setItem("orderType",ORDER_DELIVERY)
-            localStorage.setItem("orderType",this.orderType)
+            localStorage.setItem("orderType", this.orderType)
             this.router.navigateByUrl("/order")
 
         })
     }
     findRestaurants() {
         //this.GetAllOutletListV2();
-        this.router.navigateByUrl('search-result')
+        if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+            this.showPopupIsMobile();
+        }
+        else {
+            this.router.navigateByUrl('search-result')
+        }
+
     }
     initJQuery() {
 
@@ -666,7 +674,7 @@ export class Gof3rHomeComponent implements OnInit {
 
                 this.customerInfoMain = data;
                 if (this.customerInfoMain.ResultCode === "000") {
-                    
+
                     localStorage.setItem("cus", this._gof3rUtil.encryptParams(JSON.stringify(this.customerInfoMain)))
 
                     this.isLogin = this.customerInfoMain.CustomerInfo[0].CustomerName;
@@ -730,17 +738,17 @@ export class Gof3rHomeComponent implements OnInit {
                             this.list = [];
                             this.showListSelectAddress = false;
                             this.isSelectNewAddress = true;
-                            localStorage.setItem("haveNewAddress",JSON.stringify(this.isSelectNewAddress));
+                            localStorage.setItem("haveNewAddress", JSON.stringify(this.isSelectNewAddress));
                             let item = new AddressIteModel();
                             item.lat = this.lat + ''
                             item.long = this.lng + ''
                             item.isCheck = true;
                             let arrayName = item.StreetAddress.split(',');
                             item.Name = address
-                            item.StreetAddress= address;
+                            item.StreetAddress = address;
                             this.addressList.AddressListInfo.push(item);
                             this.isSelectNewAddress = true;
-                            localStorage.setItem("haveNewAddress",JSON.stringify(this.isSelectNewAddress));
+                            localStorage.setItem("haveNewAddress", JSON.stringify(this.isSelectNewAddress));
                             localStorage.setItem('address', JSON.stringify(this.addressList));
                             this.blockUI.stop();
                             //this.locationrequest =this.lang+","+this.long+"#_#_";
@@ -816,11 +824,11 @@ export class Gof3rHomeComponent implements OnInit {
 
             let requestData = new RequestRegisterOTP();
             requestData.Email = this.signUp.Email;
-            requestData.Mobile =this.signUp.PhoneCode+ this.signUp.PhoneNumber;
+            requestData.Mobile = this.signUp.PhoneCode + this.signUp.PhoneNumber;
             let request_data_json = JSON.stringify(requestData);
             this._pickupService.RequestRegistrationOTP(common_data_json, request_data_json).then(data => {
                 this.responseData = data;
-                
+
                 if (this.responseData.ResultCode == "000") {
                     let requestRegister = new RequestRegisterCustomerModel();
                     requestRegister.CustomerName = this.signUp.FullName;
@@ -994,7 +1002,7 @@ export class Gof3rHomeComponent implements OnInit {
         this.autoCompleteService.setDynamicList(list);
         // this will log in console if your list is empty.
     }
-    selectAddress(addres: string, lat: string, lng: string,postalCode:string) {
+    selectAddress(addres: string, lat: string, lng: string, postalCode: string) {
         this.addressList = new AddressListModel();
         this.list = [];
         this.showListSelectAddress = false;
@@ -1011,13 +1019,13 @@ export class Gof3rHomeComponent implements OnInit {
         item.lat = this.lat + ''
         item.long = this.lng + ''
         item.isCheck = true;
-        item.AddressId="";
-        item.PostalCode=postalCode
+        item.AddressId = "";
+        item.PostalCode = postalCode
         let arrayName = item.StreetAddress.split(',');
         item.Name = arrayName[0];
         this.addressList.AddressListInfo.push(item);
         this.isSelectNewAddress = true;
-        localStorage.setItem("haveNewAddress",JSON.stringify(this.isSelectNewAddress));
+        localStorage.setItem("haveNewAddress", JSON.stringify(this.isSelectNewAddress));
         localStorage.setItem('address', JSON.stringify(this.addressList));
     }
     GetOutletListByLocation() {
@@ -1029,11 +1037,11 @@ export class Gof3rHomeComponent implements OnInit {
         let common_data_json = JSON.stringify(common_data);
         let data_request = { Lang: "en" };
         let data_request_json = JSON.stringify(data_request);
-       
+
         this._pickupService.GetOutletListByLocation(common_data_json, data_request_json).then(data => {
 
             this.mapLocation = data;
-           
+
             //this.mapLocation.MerchantOutletList[0].Enabled="N"
             let isMatch: boolean = true;
             for (let i = 0; i < this.names.length; i++) {
@@ -1061,12 +1069,12 @@ export class Gof3rHomeComponent implements OnInit {
     }
     getOutlet(name: string) {
         this.areaName = name
-        
+
         this.shortArrays = []
-        
+
         for (let i = 0; i < this.mapLocation.MerchantOutletList.length; i++) {
             if (this.mapLocation.MerchantOutletList[i].LocationName.toLocaleLowerCase().indexOf(name.toLocaleLowerCase()) > -1) {
-                
+
                 this.outletLocation.MerchantOutletList[0] = this.mapLocation.MerchantOutletList[i];
                 this.shortArrays = this.chunkArray(this.mapLocation.MerchantOutletList[i].OutletList, 5);
                 break;
@@ -1127,12 +1135,12 @@ export class Gof3rHomeComponent implements OnInit {
             socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
         } else if (socialPlatform == "google") {
             socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
-            
+
         }
 
         this.socialAuthService.signIn(socialPlatformProvider).then(
             (userData) => {
-                
+
                 //this.signUp.Email = userData.email
                 //console.log(socialPlatform + " sign in data : ", userData);
                 // Now sign-in with userData
@@ -1151,13 +1159,13 @@ export class Gof3rHomeComponent implements OnInit {
                 requestData.Password = "";
                 requestData.OTP = ""
                 let requestDataJson = JSON.stringify(requestData)
-                
+
                 this._pickupService.CheckLogon(common_data_json, requestDataJson).then(data => {
 
                     this.customerInfoMain = data;
-                    
+
                     if (this.customerInfoMain.ResultCode === "000") {
-                        
+
                         localStorage.setItem("cus", this._gof3rUtil.encryptParams(JSON.stringify(this.customerInfoMain)))
 
                         this.isLogin = this.customerInfoMain.CustomerInfo[0].CustomerName;
@@ -1196,7 +1204,7 @@ export class Gof3rHomeComponent implements OnInit {
             }
         );
     }
-    GetCurrentSystemTime(merchantOutletID:string) {
+    GetCurrentSystemTime(merchantOutletID: string) {
 
 
         let common_data = new CommonDataRequest();
@@ -1215,27 +1223,27 @@ export class Gof3rHomeComponent implements OnInit {
             // this.getCurrentTime.CurrentData = date;
             // this.getCurrentTime.CurrentTime = moment_(d.getTime()).format("HH:mm:ss")
             strDatime = date + " " + moment_(d.getTime()).format("HH:mm:ss")
-            
-                this.GetAllOutletListV2(strDatime,merchantOutletID)
-          
+
+            this.GetAllOutletListV2(strDatime, merchantOutletID)
+
 
         })
 
     }
-    goToOrder(merchantOutletID:string){
+    goToOrder(merchantOutletID: string) {
         if (this.inputAddress) {
             this.blockUI.start()
-        this.GetCurrentSystemTime(merchantOutletID)
+            this.GetCurrentSystemTime(merchantOutletID)
         }
-        else{
+        else {
             this.scroll()
-        } 
+        }
     }
     scroll() {
-            $('html, body').animate({
-                scrollTop: $(".header-content").offset().top
-            }, 1000);
-        
+        $('html, body').animate({
+            scrollTop: $(".header-content").offset().top
+        }, 1000);
+
     }
     showPopupddCardError() {
         var el = $('#add-card');
@@ -1247,5 +1255,32 @@ export class Gof3rHomeComponent implements OnInit {
                 type: 'inline'
             });
         }
+    }
+    showPopupIsMobile() {
+        var el = $('#popup-ismobile');
+        if (el.length) {
+            $.magnificPopup.open({
+                items: {
+                    src: el,
+                    showCloseBtn: false,
+                },
+                type: 'inline',
+                modal: true,
+            });
+        }
+    }
+    okay() {
+        //window.location.replace("fb://myfacepage/");
+        if (navigator.userAgent.toLowerCase().indexOf("android") > -1) {
+            window.location.href = "market://details?id=com.sb.carrot";
+
+        } else {
+            if (navigator.userAgent.toLowerCase().indexOf("iphone") > -1 || navigator.userAgent.toLowerCase().indexOf("ipad") > -1) {
+                window.location.href = "itms-apps://itunes.apple.com/app/id1196135801";
+
+            }
+
+        }
+        $.magnificPopup.close()
     }
 }

@@ -74,6 +74,9 @@ import { ChangePasswordComponent } from "./pages/page-change-password.component"
 // Begin ThanhPC 25/05/2019
 import { NetPaymentComponent  } from "./pages/page.netPayment.component";
 // End ThanhPC 25/05/2019
+//Begin ThanhPC 01/06/2019
+import { DeviceDetectorModule } from 'ngx-device-detector';
+//End Thanh 01/06/2019
 // let config = new AuthServiceConfig([
 //   {
 //     id: GoogleLoginProvider.PROVIDER_ID,
@@ -138,6 +141,7 @@ export function getAuthServiceConfigs() {
     // Begin ThanhPC 25/05/2019
     NetPaymentComponent
     // ENd ThanhPC 25/05/2019
+    
     //Import Component
 
     
@@ -169,7 +173,10 @@ export function getAuthServiceConfigs() {
     AutoCompleteModule,
     SocialLoginModule,
     OwlModule,
-    NgxMaskModule.forRoot()
+    NgxMaskModule.forRoot(),
+    //Begin ThanhPC 01/06/2019
+    DeviceDetectorModule.forRoot()
+    //ENd ThanhPC 01/06/2019
   ],
   providers: [
     EventSubscribeService,
