@@ -1272,11 +1272,17 @@ export class Gof3rHomeComponent implements OnInit {
     okay() {
         //window.location.replace("fb://myfacepage/");
         if (navigator.userAgent.toLowerCase().indexOf("android") > -1) {
-            window.location.href = "market://details?id=com.sb.carrot";
+            // window.location.href = "market://details?id=com.sb.carrot";
+            
+            window.location.href=("gof3r://gof3r.com/user");
+            setTimeout(function () { window.location.href = "market://details?id=com.sb.carrot"; }, 25);
 
         } else {
             if (navigator.userAgent.toLowerCase().indexOf("iphone") > -1 || navigator.userAgent.toLowerCase().indexOf("ipad") > -1) {
-                window.location.href = "itms-apps://itunes.apple.com/app/id1196135801";
+                
+                
+                window.location.href=("GOF3R://");
+                setTimeout(function () { window.location.href = "itms-apps://itunes.apple.com/app/id1196135801"; }, 25);
 
             }
 
